@@ -148,7 +148,7 @@ class NeverlandHome extends Component {
 							<p>This easy-to-care-for tropical plant is the stuff of stylish design blogs and enviable social media feeds. It grows fast, and quickly can become a floor-standing focal point, its grandeur imbuing your indoor space with a sense of peace and calm. 
 							  The Monstera originates from the tropical rainforests of southern Mexico and is extremely adaptable to indoor conditions. It’s heart-shaped leaves develop holes as it matures and it loves bright, indirect light.
 							  </p>
-
+							<input onChange={this.onChangeInput} className="neverland-input neverland-input-yellow" value={this.state.emailInput}/>
 							<button onClick={this.onClickWaitlist} className="neverland-button-yellow"> JOIN THE WAITLIST </button><br/>
 						</div>
 					</div>
@@ -161,6 +161,7 @@ class NeverlandHome extends Component {
 							<p>
 With its bright green fragrant leaves, clean bright flavor, and stimulating scent, mint is as pretty as useful in the kitchen. Make soothing teas, desserts, drinks, and chilled soups. Mint can help boost energy levels as well as lift our mood.
 							  </p>
+							<input onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
 						<div className="col-md-6"><img style={{width:'100%', marginLeft: '-10%'}}src="images/mintobe.png"/></div>
@@ -176,6 +177,7 @@ With its bright green fragrant leaves, clean bright flavor, and stimulating scen
 							<p>
 							This delicate continuously flowering beauty was first discovered by the British in Tanzania. Its flowers come in a variety of shades of violet, although it can grow white in the wild and feel velvety to the touch. It’s thick fleshy leaves have fine, hair-like soft fur. 
 							  </p>
+							<input onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
 					</div>
@@ -189,6 +191,8 @@ With its bright green fragrant leaves, clean bright flavor, and stimulating scen
 							<p>
 							The snake plant is native to the arid deserts of West Africa and has stiff, upright, sword-like leaves. It’s a natural choice for people who love modern and contemporary design. If you were to choose just one plant to aid respiratory problems, this is the one to pick. NASA research has shown that snake plants purifies and cleans indoor areas by removing toxins such as formaldehyde and benzene. Since it produces oxygen mainly at night, it makes an excellent bedroom companion. It’s also one of the easiest plants to grow successfully.
 							  </p>
+
+							<input onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
 						<div className="col-md-6"><img style={{width:'100%', marginLeft: '-10%'}}src="images/snakeplantpot.png"/></div>
