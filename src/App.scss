@@ -142,7 +142,9 @@ h2 {
   background-size: cover;
   padding-bottom: 6em;
 }
-
+.chairplant_small {
+  display: none;
+}
 .neverland-header-nav {
   display: flex; 
   flex-direction: row;
@@ -381,10 +383,46 @@ h2 {
     font-size: calc(1.75rem + (4 * (100vw - 360px)) / 407) !important;
   }
   .neverland-header {
-    height: 100vh;
+    height: 120vh;
   }
   .neverland-header-img {
     width: 100%;
+  }
+  .neverland-header {
+    background-color: $theme-yellow;
+  }
+  .neverland-header-container {
+    max-width: 80vw;
+  }
+  .cloud_two {
+    position: absolute;
+    height: 10vh;
+    left: 35vw;
+    top: 70vh;
+    right: 0;
+    z-index: 100;
+  }
+  .mist {
+
+  }
+  .chairplant {
+
+  } 
+  .chairplant_small {
+    display: block;
+    width: 90vw;
+    z-index:100;
+    right: 0;
+  }
+  .door {
+    z-index: 10;
+    height: 40vh;
+    top: 65vh;
+    left: 20vw;
+  }
+  .chairplant, 
+  .cloud {
+    display: none;
   }
 }
 

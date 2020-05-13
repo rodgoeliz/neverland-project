@@ -98,22 +98,23 @@ class NeverlandHome extends Component {
 							<input onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button style={{marginTop: '4px'}} onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 							<span>{this.state.emailError}</span>
+							<img className="chairplant_small" src="/images/chairandplant.png" />
 					</div>
 				</div>
 				<div className="row-nm" style={{marginLeft: '2em', marginRight: '2em'}}>
 					<h2 className="h2-cognace" style={{margin: 'auto'}}> How it works </h2>
 					<div className="row-nm">
-						<div className="col-sm-4">
+						<div className="col-md-4">
 							<img className="step-pick" src="/images/pickplant.gif"/>
 							<h4 className='h4-cognace' style={{textAlign: 'center'}}><span className="swash">P</span>ick</h4>
 							<p>We're mint to be. Choose a plant you'd like to grow and we'll send you a pack with everything you need delivered to your door.</p>
 						</div>
-						<div className="col-sm-4">
+						<div className="col-md-4">
 							<img className="step-pick" src="/images/step-plant.png"/>
 							<h4 className="h4-cognace" style={{textAlign: 'center'}}><span className="swash">P</span>lant</h4>
 							<p>Unbox your plant pack and follow our easy breezy instructions for planting your new friend. Make sure to pot it like it's hot.</p>
 						</div>
-						<div className="col-sm-4">
+						<div className="col-md-4">
 							<img className="step-pick" src="/images/step-grow.gif"/>
 							<h4 className="h4-cognace" style={{textAlign: 'center'}}><span className="swash">G</span>row</h4>
 							<p>Romaine calm, we're here to kelp. Text us at 1800PartyThyme for a good time and any questions you have. We'll send text reminders, plant puns and tips to keep your plant happy. We're rooting for you.</p>
@@ -124,11 +125,11 @@ class NeverlandHome extends Component {
 					<img  className="neverland-divider" src="images/neverlandivider.png" />
 				</div>
 				<div className="row-nm">
-					<div className="romaine-calm-container col-sm-6" style={{paddingLeft: '4em'}}>
+					<div className="romaine-calm-container col-md-6" style={{paddingLeft: '4em'}}>
 						<h2 className="h2-cognace">Romaine calm, we're here to kelp.</h2>
 						<p>Never kill a plant again with our plant hotline. Reminders to water, fertilize, and repot your plants. Text us with any questions. Keep track of your plants in one place.</p>
 					</div>
-					<div className="col-sm-6"><img style={{width: '80%'}}src="/images/neverland_textline.png"/></div>
+					<div className="col-md-6"><img style={{width: '80%'}}src="/images/neverland_textline.png"/></div>
 				</div>
 				<div>
 					<img className="neverland-paintbrush" src="/images/neverlandpaintbrush.png"	 />
@@ -173,7 +174,7 @@ With its bright green fragrant leaves, clean bright flavor, and stimulating scen
 							<p>African Violet | <i>Saintpaulia</i></p>
 							<h4 className="h4-secondary">Pleasantly fuzzy leaves and perky flowers.</h4>
 							<p>
-							This delicate continuously flowering beauty was first discovered by the British in Tanzania. It’s flowers come in a variety of shades of violet, although it can grow white in the wild and feel velvety to the touch. It’s thick fleshy leaves have fine, hair-like soft fur. 
+							This delicate continuously flowering beauty was first discovered by the British in Tanzania. Its flowers come in a variety of shades of violet, although it can grow white in the wild and feel velvety to the touch. It’s thick fleshy leaves have fine, hair-like soft fur. 
 							  </p>
 							<button onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
