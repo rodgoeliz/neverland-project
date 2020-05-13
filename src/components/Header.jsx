@@ -16,7 +16,6 @@ class Header extends Component {
 						<div className="neverland-header-nav">
 						        <a class="nav-link" href="/story">Our Story<span class="sr-only">(current)</span></a>
 						        <a class="nav-link" href="#plants">Plants</a>
-								<button style={{marginTop: '4px'}} onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
 						</div>
 			</div>);
