@@ -1,0 +1,538 @@
+$theme-blue: #061283;
+$theme-dark-blue: #030c5a;
+$theme-light-orange: #F1D3BC;
+$theme-pink: #FF9898;
+$theme-green: #138D90;
+$theme-yellow: #FFB74C;
+$theme-olive: #b3b060;
+$theme-red: #FD3C3C;
+
+@import url('https://fonts.googleapis.com/css?family=Baloo|Poppins&display=swap');
+
+
+.row-nmc,
+.row-nm {
+  display: flex;
+  flex-wrap: wrap;
+}
+.row-nmc {
+  justify-content: center
+}
+p {
+  font-family: 'Poppins';
+  font-size: calc(1rem + (8 * (100vw - 360px)) / 807);
+}
+
+h1 {
+  font-family: 'Baloo';
+  font-size: calc(2rem + (16 * (100vw - 360px)) / 407) !important;
+}
+h2 {
+  font-family: 'Baloo';
+  font-size: calc(2.0rem + (4 * (100vw - 360px)) / 407) !important;
+}
+.ingredient-container {
+  height: 150px;
+}
+.App {
+  text-align: center;
+  color: $theme-blue;
+  font-family: 'Poppins';
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.header {
+}
+.hero-container {
+  height: 90vh;
+  position: relative;
+  margin: auto;
+}
+
+.hero-content {
+  margin: auto;
+}
+.hero-leafrg-container {
+  display:inline-block;
+  height: 500px;
+  position:absolute;
+  overflow: hidden;
+}
+.hero-monstera {
+  position: absolute;
+  left: 0;
+  top: -10%;
+  height: 45%;
+  max-height: 600px;
+}
+.hero-beaker-container {
+  display: inline-block;
+  height: 40vw;
+  position: absolute;
+  overflow: hidden;
+  bottom: 0;
+  left: 0;
+}
+
+.how-to-tonic-container {
+  justify-content: center
+}
+
+.howto-label {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.howto-icon {
+  width: 65px;
+}
+.hero-beaker {
+  position: absolute;
+  height: 45%;
+  left: 0%;
+  top: 400px;
+  max-height: 400px;
+}
+.solution-link:hover,
+.solution-link:active {
+  background-color: $theme-dark-blue;
+  color: $theme-light-orange;
+  text-decoration: none;
+}
+.solution-link {
+  font-size: 14px;
+  background-color: $theme-blue;
+  color: $theme-light-orange;
+  padding: 4px;
+  border-radius: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-weight: bold;
+  margin: 8px;
+}
+.hero-images-container {
+  position: absolute;
+  width: 100vw;
+  height: 80vh;
+}
+.aeon-footer-hero-image-container {
+  position: absolute;
+  height: 80vh;
+  width: 100vw;
+}
+
+.aeon-footer-oil-image {
+  position: absolute;
+  width: 30%;
+  left: 10%;
+  bottom: 0;
+}
+
+.aeon-footer-caviar-trio {
+  right: 0;
+  position: absolute;
+  width: 20%;
+}
+
+.aeon-footer-leaves-green {
+  position: absolute;
+  left: 0;
+  width: 20%;
+}
+.botanica-header:hover {
+  text-decoration: none
+}
+.hero-leafrg {
+  height: 80%;
+  top: -20%;
+  right: 0;
+  position: absolute;
+}
+.aeon-caviar-image {
+  width: 100%;
+}
+.aeon-caviar-image-vertical-center{
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.aeon-caviar {
+  position: absolute;
+  transform: translate(-25%, -22%);
+  width: 100%;
+}
+
+.hero-plantybg-container {
+  display:inline-block;
+  height: 80vh;
+  position:absolute;
+  overflow: hidden;
+}
+.hero-plantybg {
+  position: absolute;
+  right: 0;
+  top: 30%;
+  height: 100%;
+  max-height: 600px;
+}
+.caviar-oil-container {
+  position: relative;
+  max-height: 400px;
+  margin-top: -100px;
+}
+.caviar-oil-image {
+  max-width: 45%;
+}
+.aeon-plant-footer-hero-text {
+  width: 50%;
+}
+.aeon-plant-text {
+  width: 100%;
+}
+.vp-icon {
+    max-height: 150px;
+}
+.vp-ingredient {
+  height: 100%;
+}
+.vertical-center {
+   margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.botanica-button {
+  background-color: $theme-blue; 
+  color: $theme-light-orange;
+}
+
+.botanica-button:hover,
+.botanica-button:active {
+  background-color: $theme-dark-blue; 
+  font-color: $theme-light-orange;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+.hero-text-container {
+  margin: auto;
+}
+.hero-background-small,
+.hero-background {
+  background: url('images/hero_image_one.png') no-repeat;
+  background-size: 150%;
+}
+
+.hero-background-small {
+  background-size: contain;
+  background-position: center;
+}
+.App-link {
+  color: #61dafb;
+}
+
+.aeon-tonic-image {
+  width: 100%;
+}
+.aeon-tonic-image-container {
+  max-width: 600px;
+  margin: auto;
+}
+
+body {
+  background-color: $theme-light-orange;
+  font-size: 1.25rem !important;
+}
+.aeon-first {
+  top: -100px;
+  margin-top: -50px;
+}
+
+.gut-support {
+  background-color: $theme-blue;  
+  color: $theme-light-orange;
+}
+
+.function-tag {
+  border-radius: 16px;
+  border: 2px solid $theme-light-orange;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right: 16px;
+    font-size: 16px;
+    padding-left: 16px;
+    font-weight: bold;
+    margin: 8px;
+}
+
+.function-subtag {
+    font-weight: bold;
+    padding: 4px;
+    text-transform: uppercase;
+    border-radius: 16px;
+    font-size: 12px;
+  color: #061283;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin: 4px;
+}
+.immunity-subtag {
+    background-color: #148d90;
+  color: #061283;
+}
+.hormonal-subtag {
+  background-color: $theme-pink;
+}
+
+.brain-subtag {
+  background-color: $theme-olive;
+}
+.gut-subtag {
+  background-color: $theme-blue;
+  color: $theme-light-orange;
+}
+.beauty-subtag {
+  background-color: $theme-red;
+}
+.cellular-subtag {
+  background-color: $theme-yellow;
+}
+.function-tag:active {
+
+}
+
+.function-tag:hover {
+  cursor: pointer;
+  border: 2px solid $theme-blue;
+}
+.hormonal-support {
+  background-color: $theme-pink;
+}
+.immunity-support {
+  background-color: $theme-green; 
+}
+.cellular-support {
+  background-color: $theme-yellow; 
+}
+.beauty-support {
+  background-color: $theme-red;
+  color: $theme-light-orange;
+}
+.brain-support {
+  background-color: $theme-olive;
+}
+
+.hero-fun-wrap span {
+  font-size: calc(2rem + (8 * (100vw - 360px)) / 407);
+  font-family: 'Baloo';
+}
+.hero-fun-wrap {
+  display: inline;
+}
+.hero-fun-span:nth-child(5) {
+  animation-delay: 8s;
+}
+
+.hero-fun-span:nth-child(4) {
+  animation-delay: 6s;
+}
+
+.hero-fun-span:nth-child(3) {
+  animation-delay: 4s;
+}
+
+.hero-fun-span:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.hero-fun-wrap span {
+  position: absolute;
+  animation: rotateWord 10s linear infinite 0s;
+  overflow: hidden;
+  opacity: 0;
+  font-family: 'Baloo';
+}
+
+@keyframes rotateWord {
+    0% { opacity: 1; animation-timing-function: ease-in; height: 0px; }
+    8% { opacity: 1; height: calc(2rem + (32 * (100vw - 360px)) / 407); }
+    19% { opacity: 1; height: calc(2rem + (32 * (100vw - 360px)) / 407); }
+  25% { opacity: 0; height: calc(2rem + (32 * (100vw - 360px)) / 407); }
+    100% { opacity: 0; }
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.aeon-small-display {
+  display: none;
+}
+.aeon-large-display {
+  display: block;
+  min-height: 40vh;
+}
+.whole-activator-container {
+  min-height: 500px;
+}
+.for-all-container {
+  min-height: 700px;
+  margin-top: 4em;
+}
+.botanica-section {
+  margin: 2em;
+}
+
+.hero-func-content { 
+  display: flex;
+  justify-content: center;
+  margin-left: -10%;
+}
+
+.hero-func-content .hero-fun-wrap span {
+  margin-top: -10px;
+  font-size: calc(2rem + (6 * (100vw - 360px)) / 407);
+  color: $theme-green;
+}
+
+@media (max-width: 800px) {
+  h1 {
+    font-size: calc(2rem + (6 * (100vw - 360px)) / 407);
+  }
+  .botanica-section {
+    margin: 1em;
+  }
+  .hero-text-container {
+    margin: unset;
+  }
+  .aeon-first {
+    margin-top: 10px;
+    top: 0px;
+  }
+  .hero-fun-wrap {
+    display: block;
+    text-align: center;
+    margin-left: -100px;
+    transform: translateY(-15px);
+  }
+  .for-all-container {
+    min-height: 300px;
+    margin: 1em;
+  }
+  .whole-activator-container {
+    min-height: 300px;
+  }
+
+  .hero-content {
+    padding: 64px;
+  }
+  .hero-func-content {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100px;
+    margin: auto;
+    h1 {
+      font-size: 1.75rem;
+    }
+  }
+  .hero-func-content .hero-fun-wrap span {
+    font-size: calc(2rem + (6 * (100vw - 360px)) / 407);
+  }
+  .hero-monstera {
+    height: 50%;
+    left: -100px;
+  }
+  .hero-content {
+    margin : 0;
+  }
+  .hero-leafrg {
+    height: 50%;
+    z-index: -100;
+  }
+  .hero-plantybg {
+    height: 50%;
+    bottom: 0
+    ;
+  }
+  .aeon-small-display {
+    display: block;
+  }
+  .aeon-large-display {
+    display: none;
+  }
+  .caviar-oil-container {
+    display: none;
+  }
+  .aeon-caviar-image-vertical-center {
+    position: relative;
+    top: 0;
+    transform: translate(0%, 0%);
+  }
+  .aeon-footer-hero-image-container {
+    height: 90vh;
+  }
+  .aeon-plant-footer-hero-text {
+    width: 90%;
+    z-index: 100;
+    padding-top: 50%;
+  }
+  .aeon-footer-oil-image {
+    width: 50%;
+    z-index: -100;
+  }
+  .aeon-footer-caviar-trio {
+    width: 40%;
+    z-index: -100;
+  }
+  .aeon-footer-leaves-green {
+    width: 30%;
+    z-index: -100;
+  }
+  .hero-beaker {
+    display: none;
+  }
+
+@keyframes rotateWordTwo {
+    0% { opacity: 1; animation-timing-function: ease-in; height: 0px; }
+    8% { opacity: 1; height: calc(2rem + (38 * (100vw - 360px)) / 407); }
+    19% { opacity: 1; height: calc(2rem + (38 * (100vw - 360px)) / 407); }
+  25% { opacity: 0; height: calc(2rem + (38 * (100vw - 360px)) / 407); }
+    100% { opacity: 0; }
+}
+}

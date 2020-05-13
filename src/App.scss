@@ -1,0 +1,346 @@
+$theme-blue: #1E1DCD;
+$theme-green: #477138;
+$theme-yellow: #DCBC4D;
+$theme-purple: #6227AD;
+$theme-maroon: #9F2458;
+$theme-black: #312A2D;
+$theme-beige: #EFE6D8;
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+@font-face {
+  font-family: Cognace;
+  src: url("fonts/Cognace-Regular.otf") format('opentype');
+}
+
+body {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 24px !important;
+  background-color: $theme-beige !important;
+}
+
+p {
+  font-size: 24px
+}
+
+h1 {
+  font-family: 'Cognace';
+  font-size: 4.5rem !important;
+}
+
+.h2-cognace {
+  font-family: 'Cognace';
+  font-size: 3.5rem !important;
+}
+
+.h3-cognace {
+  font-family: 'Cognace';
+  font-size: 2.5rem !important;
+}
+
+.h4-cognace {
+  font-family: 'Cognace';
+  font-size: 2.0rem !important;
+}
+.h4-secondary{
+  font-family: 'Open Sans';
+  font-size: 1.5rem !important;
+  font-weight: bold
+}
+
+h2 {
+  font-size: 2.5rem !important;
+}
+
+.swash {
+  font-feature-settings: 'swsh'
+}
+.ss-n {
+  font-feature-settings: 'ss03'
+}
+.ss-h {
+  font-feature-settings: 'ss01'
+}
+.ss-v {
+  font-feature-settings: 'ss06'
+}
+
+.plant-pack-row {
+  padding-top: 4em;
+  padding-bottom: 4em;
+}
+
+.plant-pack-row-yellow{
+  background-color: $theme-yellow;
+  color: $theme-black;
+  position: relative;
+  background: url('./images/plantpackyellow.png') no-repeat;
+  background-size: cover;
+  padding-bottom: 6em;
+  z-index: 500;
+  margin-top: -6em;
+}
+
+.neverland-divider {
+  width: 100%;
+}
+
+.plant-pack-row-green {
+  background-color: $theme-green;
+  color: $theme-beige;
+  position: relative;
+  background: url('./images/plantpackgreen.png') no-repeat;
+  background-size: cover;
+  padding-bottom: 6em;
+  z-index: 200;
+  margin-top: -6em;
+  padding-top: 6em;
+  padding-bottom: 6em;
+}
+.plant-pack-row-maroon {
+  background-color: $theme-maroon;
+  color: $theme-beige;
+  position: relative;
+  background: url('./images/plantpackmaroon.png') no-repeat;
+  background-size: cover;
+  padding-bottom: 6em;
+  z-index: 400;
+  margin-top: -5em;
+  padding-top: 6em;
+  padding-bottom: 6em;
+}
+
+.plant-pack-row-blue {
+  z-index:1000;
+  background-color: $theme-blue;
+  position: relative;
+  color: $theme-beige;
+  background: url('./images/plantpackblue.png') no-repeat;
+  background-size: cover;
+  padding-bottom: 6em;
+}
+
+.neverland-input {
+  border: 4px solid $theme-blue;
+  border-radius: 8px;
+  background-color: $theme-yellow;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.neverland-button-yellow {
+  background-color: $theme-yellow;
+  color: $theme-blue;
+  font-weight: bold;
+  font-size: 18px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 8px;
+}
+.neverland-button {
+  background-color: $theme-blue;
+  color: $theme-beige;
+  font-weight: bold;
+  font-size: 18px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 8px;
+}
+
+.row-nmc,
+.row-nm {
+  display: flex;
+  flex-wrap: wrap;
+}
+.row-nmc {
+  justify-content: center
+}
+.romaine-calm-container {
+  margin: auto;
+  padding-left: '2em' !important;
+}
+
+.neverland-paintbrush {
+  width: 40%;
+}
+
+.header {
+  background-color: $theme-yellow;
+}
+
+.neverland-header {
+ // background: url('/images/neverlandheader.png') no-repeat;
+ // height: 120vh;
+  //background-size: 100%;
+  height : 110vh
+}
+.cloud_two {
+  position: absolute;
+  height: 30vh;
+  left: 55vw;
+  top: 20vw;
+  animation: float_two 6s ease-in-out infinite;
+  z-index:100
+}
+.step-pick {
+  height: 300px;
+  display: flex;
+  margin: auto;
+}
+.door {
+  position: absolute;
+  height: 80vh;
+  top: 20vh;
+  left: 50vw;
+}
+.chairplant {
+  position: absolute;
+  height: 80vh; 
+  right: 0;
+  top: 30vh;
+  z-index: 150
+}
+.mist {
+  position: absolute;
+  top: 80%;
+  right: 20%;
+  height: 40vh;
+  animation: float_hor 15s ease-in-out infinite;
+
+}
+.cloud {
+  height: 20vw;
+  position: absolute;
+  top: 80%;
+  right: 0;
+  z-index: 300;
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float_two {
+  0% {
+    transform: translatey(0px) translatex(0px);
+  }
+  50% {
+    transform: translatey(-20px) translatex(20px);
+  }
+  75% {
+    transform: translatey(10px) translatex(-10px);
+  }
+  100% {
+    transform: translatey(0px) translatex(0px);
+  }
+}
+@keyframes float {
+  0% {
+    transform: translatey(0px);
+  }
+  50% {
+    transform: translatey(-20px);
+  }
+  100% {
+    transform: translatey(0px);
+  }
+}
+
+@keyframes float_hor {
+  0% {
+    transform: translatex(0px);
+  }
+  50% {
+    transform: translatex(-400px);
+  }
+  100% {
+    transform: translatex(0px);
+  }
+}
+
+.neverland-header-container {
+  display: flex;
+  max-width: 40vw;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 2em;
+}
+.neverland-header-img {
+      width: 100%;
+    position: absolute;
+    z-index: -1000;
+}
+
+.padding-right {
+  padding-right: 4em !important;
+}
+
+.padding-left {
+  padding-left: 4em !important;
+}
+
+@media (max-width:1000px){
+  body {
+    font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407);
+  }
+  p {
+    font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407) !important;
+  }
+
+  h1 {
+    font-size: calc(3.25rem + (4 * (100vw - 360px)) / 407) !important;
+  }
+
+  h2 {
+    font-size: calc(2.25rem + (4 * (100vw - 360px)) / 407) !important;
+  }
+
+  h3 {
+    font-size: calc(1.75rem + (4 * (100vw - 360px)) / 407) !important;
+  }
+  .neverland-header {
+    height: 100vh;
+  }
+  .neverland-header-img {
+    width: 100%;
+  }
+}
+
+@media(min-width:1200px) {
+  body {
+    font-size: calc(1.5rem + (8 * (100vw - 1440px)) / 1119) !important;
+  }
+  p {
+    font-size: calc(1.5rem + (8 * (100vw - 1440px)) / 1119) !important;
+  }
+
+  h1 {
+    font-size: calc(4.0rem + (8 * (100vw - 1440px)) / 1119) !important;
+  }
+
+  h2 {
+    font-size: calc(3.5rem + (8 * (100vw - 1440px)) / 1119) !important;
+  }
+
+  h3 {
+    font-size: calc(2.5rem + (8 * (100vw - 1440px)) / 1119) !important;
+  }
+  .neverland-header-img {
+    width: 100%;
+  }
+}
+
+@media(min-width:1400px) and (max-width:1800px) {
+  .neverland-header {
+    height: 125vh;
+  }
+
+}
+
+@media(min-width:1800px) {
+  .neverland-header {
+    height: 140vh;
+  }
+}
