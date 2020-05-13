@@ -22,6 +22,7 @@ router.get('/user', async function(req, res, next) {
 }) 
 
 router.post('/join', async function(req, res, next) {
+	console.log("in join route")
 	let email = req.body.email;
 	let inviter = req.body.inviter;
 	let allUsers = await WaitlistUser.find({}).count();

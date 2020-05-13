@@ -152,13 +152,36 @@ h2 {
   margin-left: auto;
   margin-right: 4em;
 }
+.neverland-input-referral {
+  border: 4px solid $theme-blue;
+  border-radius: 8px;
+  background-color: $theme-beige;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+  max-width: 400px;
+  width: 100%;
+  font-size: 18px;
 
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+     color: $theme-black;
+     font-size: 18px;
+     padding: 8px;
+  }
+}
 .neverland-input-footer,
 .neverland-input {
   border: 4px solid $theme-blue;
   border-radius: 8px;
   background-color: $theme-yellow;
-
+  padding-top:8px;
+  padding-bottom: 8px;
+  padding-left: 8px;
+  
   &:focus {
     outline: none;
   }
@@ -186,6 +209,11 @@ h2 {
   padding-right: 16px;
   cursor: url("images/cloud_cursor.png"), auto !important;
   border-radius: 8px;
+}
+
+.neverland-button-lg {
+  padding-top: 16px;
+  padding-bottom: 16px;
 }
 .neverland-button-black,
 .neverland-button {
@@ -363,6 +391,33 @@ h2 {
   padding-left: 4em !important;
 }
 
+.waitlist-hero {
+  display: flex;
+  width: 50%;
+  margin: auto;
+}
+
+.waitlist-status-container {
+  margin-top: 4em;
+  margin-bottom: 4em;
+  text-align: center
+}
+
+.waitlist-referral-rewards {
+  text-align: center;
+}
+
+.referral-rewards-number {
+  width: 75px;
+}
+
+.waitlist-referral-reward-info {
+  margin: 4em;
+}
+
+.referral-rewards-desc {
+  margin-top: 1em
+}
 @media (max-width:1000px){
   body {
     font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407);

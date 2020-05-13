@@ -19,7 +19,7 @@ class App extends Component {
             <div className="App">
               <Route exact path="/" component={NeverlandHome} />
               <Route exact path="/story" component={NeverlandOurStory} />
-              <Route exact path="/waitlist" component={NeverlandWaitlist} />
+              <Route exact path="/waitlist/user" component={NeverlandWaitlist} />
             </div>
           </Layout>
         </BrowserRouter>

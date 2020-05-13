@@ -75,7 +75,7 @@ class NeverlandHome extends Component {
 			message = this.props.waitlist.message;
 		}
 		if (this.state.redirect) {
-			return (<Redirect to="/immunity/blue/waitlist" />);
+			return (<Redirect to="/waitlist/user" />);
 		}
 		if (this.state.isSubmitting) {
 			return <div>Joining the waitlist...</div>;

@@ -8,7 +8,7 @@ class Footer extends Component {
 				<div className="row-nm">
 					<div className="col-sm-6">
 						<div className="row">
-							<img className="footer-logo" src="images/neverland_monologo_black.png" />
+							<img className="footer-logo" src="/images/neverland_monologo_black.png" />
 							<div className="footer-nav">
 								<a className="col" href="">Join the waitlist</a>
 								<a className="col" href="/story">Our story</a>

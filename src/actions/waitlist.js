@@ -11,6 +11,7 @@ export const joinWaitlist = (email, inviter) => {
 			body: JSON.stringify({"email": email, "inviter": inviter})
 		});
 		const body = await response.json();
+		console.log(body)
 		dispatch({
 			type: WAITLIST_SUBMIT_SUCCESS,
 			payload: body
@@ -22,7 +23,6 @@ export const fetchWaitlistUser = (referralCode) => {
 	return async(dispatch) => {
 		const response = await fetch('/waitlist/user?referralCode='+referralCode);
 		const body = await response.json();
-		console.log(body)
 		dispatch({
 			type: WAITLIST_USER_FETCH_SUCCESS,
 			payload: body

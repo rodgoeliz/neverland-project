@@ -1,36 +1,115 @@
 import React, { Component } from 'react';
 import Header from '../Header.jsx';
 import Footer from '../Footer.jsx';
+import {Redirect} from "react-router-dom";
+import queryString from 'query-string';
+import { connect } from 'react-redux';
+import { fetchWaitlistUser } from "../../actions/waitlist";
 
 class NeverlandWaitlist extends Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {
+		}
+	}
+	componentDidMount() {
+	if (this.props && this.props.location) {
+			const values = queryString.parse(this.props.location.search);
+			console.log(values)
+			if (values && values.referralCode) {
+				this.setState({
+				    referralCode: values.referralCode	
+				});
+				this.props.fetchWaitlistUser(values.referralCode);
+			}
+			this.setState({
+				inviter: values.invite
+			});
+		}
+
+	}
+	onClickCopy() {
+		this.referralUrl.select();
+		document.execCommand('copy');
+		this.setState({
+			copyMessage: 'Copied!'
+		});
+	}
+	renderStatus() {
+		let status = [];
+		if (this.props && this.props.waitlist.invitedUsers && this.props.waitlist.invitedUsers.length != 0)	 {
+			this.props.waitlist.invitedUsers.map((user) => {
+				status.push(<div>{user.email}</div>);
+			});
+			return (<div>{status}</div>);
+		} else {
+			return (<div>No referrals yet. Share the link to get started.</div>)
+		}
+	}
+	renderInvitedUsers() {
+		let addresses = []
+		if (!this.props.waitlist || !this.props.waitlist.invitedUsers || (this.props.waitlist.invitedUsers &&this.props.waitlist.invitedUsers.length == 0)) {
+			return (<div></div>)
+		}
+		if (this.props.waitlist.invitedUsers) {
+			this.props.waitlist.invitedUsers.map((user) => {
+				addresses.push(<div className="inviter-item">{user.email}</div>);
+			})
+		}
+		return (
+			<div className="row-nm" style={{display: 'flex', flexDirection: 'column'}}>
+				<div style={{margin: 'auto', marginTop: '4em'}}>
+					<h5><b>Invited Signups</b></h5>
+					{addresses}
+				</div>
+			</div>);
+	}
+
 	render() {
+		let referralCode = this.state.referralCode;
+		if (this.props.waitlist.waitlistUser && !referralCode) {
+			referralCode = this.props.waitlist.waitlistUser.referralCode;
+			if (!referralCode && !this.props.waitlist.waitlistUser) {
+				return (<Redirect to="/" />);
+			}
+		}
+		let referralUrl = "http://www.enterneverland.com?invite=" + referralCode;	
 		return (
 			<div>
-				<img src="images/n_waitlist_hero.png" />
-				<div>
-					You are in 
-					Group 1
-					<input/> <button> copy</button>
+				<div style={{marginTop: '4em'}}>
+					<img className="waitlist-hero" src="/images/n_waitlist_hero.png" />
 				</div>
-				<div>
+				<div className="col waitlist-status-container">
+					<p>You are in </p>
+					<h1>Group 1</h1>
+					<input className="neverland-input-referral" ref={(referralurl) => this.referralUrl=referralurl} value={referralUrl} />
+					<button style={{marginLeft: '4px'}} onClick={this.onClickCopy.bind(this)} className="neverland-button"> COPY </button><br/>
+				</div>
+				<div className="waitlist-referral-rewards">
 					<h1 className="h1-cognace">Referral Rewards</h1>
-					<div className="row-nm">
+					<p>Share the love with you friends and get free plants.</p>
+					<div className="row-nm waitlist-referral-reward-info">
 						<div className="col-sm-3">
-							<div>Image of One</div>
-							<div>Get an invite to our VIP community</div>
+							<div><img className="referral-rewards-number" src="/images/referral_one.png" /></div>
+							<div className="referral-rewards-desc">Get an invite to our VIP community</div>
 						</div>	
 						<div className="col-sm-3">
-							<div>Image of Five</div>
-							<div>Get an invite to our VIP community</div>
+							<div><img  className="referral-rewards-number"  src="/images/referral_five.png" /></div>
+							<div className="referral-rewards-desc">Get bumped up by 5 groups</div>
 						</div>	
 						<div className="col-sm-3">
-							<div>Image of Ten</div>
-							<div>Get an invite to our VIP community</div>
+							<div><img className="referral-rewards-number" src="/images/referral_ten.png" /></div>
+							<div className="referral-rewards-desc">Get bumped up to group 1</div>
 						</div>	
 						<div className="col-sm-3">
-							<div>Image of Fifty</div>
-							<div>Get an invite to our VIP community</div>
+							<div><img className="referral-rewards-number" src="/images/referral_fifty.png" /></div>
+							<div className="referral-rewards-desc">Get two free plant packs</div>
 						</div>	
+					</div>
+					<div>
+						<a href="">See your status</a>	
+						{this.renderStatus()}
 					</div>
 				</div>			
 				<div>
@@ -67,4 +146,10 @@ class NeverlandWaitlist extends Component {
 	}
 }
 
-export default NeverlandWaitlist;
+const mapStateToProps = state => {
+	return {
+		waitlist: state.waitlist
+	}
+}
+
+export default connect(mapStateToProps, {fetchWaitlistUser})(NeverlandWaitlist);
