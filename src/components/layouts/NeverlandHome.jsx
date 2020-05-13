@@ -83,7 +83,7 @@ class NeverlandHome extends Component {
 		return (
 			<div style={{marginTop: '-5em'}}> 	
 				<div className="row-nm neverland-header">
-					<div>
+					<div className="graphics">
 						<img className="neverland-header-img" src="/images/neverlandheader.png"/>
 						<img className="cloud" src="/images/cloud_one.png" />
 						<img className="mist" src="/images/mist.png" />
@@ -125,7 +125,7 @@ class NeverlandHome extends Component {
 					<img  className="neverland-divider" src="images/neverlandivider.png" />
 				</div>
 				<div className="row-nm">
-					<div className="romaine-calm-container col-md-6" style={{paddingLeft: '4em'}}>
+					<div className="romaine-calm-container col-md-6">
 						<h2 className="h2-cognace">Romaine calm, we're here to kelp.</h2>
 						<p>Never kill a plant again with our plant hotline. Reminders to water, fertilize, and repot your plants. Text us with any questions. Keep track of your plants in one place.</p>
 					</div>

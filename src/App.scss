@@ -281,6 +281,7 @@ h2 {
 .romaine-calm-container {
   margin: auto;
   padding-left: '2em' !important;
+  max-width: 500px;
 }
 
 .neverland-paintbrush {
@@ -508,6 +509,14 @@ h2 {
 
   .padding-left-small {
     padding-left: 2em !important;
+  }
+
+  .neverland-paintbrush {
+    width: 70%;
+  }
+
+  .neverland-input {
+    width: 100%;
   }
 }
 
