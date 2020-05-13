@@ -5,7 +5,8 @@ $theme-purple: #6227AD;
 $theme-maroon: #9F2458;
 $theme-black: #312A2D;
 $theme-beige: #EFE6D8;
-
+$theme-dark-blue: #11109c;
+$theme-dark-yellow: #a98d2e;
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
 @font-face {
@@ -26,6 +27,17 @@ p {
 h1 {
   font-family: 'Cognace';
   font-size: 4.5rem !important;
+}
+
+a {
+  color: $theme-black !important;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+a:hover,
+a:focus {
+  color: $theme-blue !important;
 }
 
 .h2-cognace {
@@ -84,7 +96,18 @@ h2 {
 .neverland-divider {
   width: 100%;
 }
-
+.neverland-icon {
+  color: $theme-black;
+  width: 35px;
+}
+.footer-logo {
+  max-width: 125px;
+  margin-right: 2em;
+}
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+}
 .plant-pack-row-green {
   background-color: $theme-green;
   color: $theme-beige;
@@ -120,6 +143,15 @@ h2 {
   padding-bottom: 6em;
 }
 
+.neverland-header-nav {
+  display: flex; 
+  flex-direction: row;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 4em;
+}
+
+.neverland-input-footer,
 .neverland-input {
   border: 4px solid $theme-blue;
   border-radius: 8px;
@@ -128,21 +160,35 @@ h2 {
   &:focus {
     outline: none;
   }
+
+  &::placeholder {
+     color: $theme-black;
+     font-size: 18px;
+     padding: 8px;
+  }
 }
 
+.neverland-input-footer {
+  border-color: $theme-black;
+  background-color: $theme-beige;
+}
 .neverland-button-yellow {
   background-color: $theme-yellow;
   color: $theme-blue;
+  border: 2px solid $theme-yellow;
   font-weight: bold;
   font-size: 18px;
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 16px;
   padding-right: 16px;
+  cursor: url("images/cloud_cursor.png"), auto !important;
   border-radius: 8px;
 }
+.neverland-button-black,
 .neverland-button {
   background-color: $theme-blue;
+  border: 2px solid $theme-blue;
   color: $theme-beige;
   font-weight: bold;
   font-size: 18px;
@@ -151,8 +197,38 @@ h2 {
   padding-left: 16px;
   padding-right: 16px;
   border-radius: 8px;
+  cursor: url("images/cloud_cursor.png"), auto !important;
 }
 
+.neverland-button:active,
+.neverland-button:hover {
+  background-color: $theme-dark-blue;
+  border: 2px solid $theme-dark-blue;
+  cursor: url("images/cloud_cursor.png"), auto !important;
+}
+.neverland-button-yellow:active,
+.neverland-button-yellow:hover {
+  background-color: $theme-dark-yellow;
+  border: 2px solid $theme-dark-yellow;
+  cursor: url("images/cloud_cursor.png"), auto !important;
+}
+.neverland-button-black {
+  background-color: $theme-black;
+}
+.our-story-parent-container {
+  margin-top: -4em;
+  background-color: $theme-yellow;
+  padding: 4em;
+}
+.our-story-container {
+  margin: auto;
+  max-width: 800px
+}
+.our-story-monologo {
+  max-width: 300px;
+  margin: auto;
+  display: flex;
+}
 .row-nmc,
 .row-nm {
   display: flex;
@@ -171,9 +247,13 @@ h2 {
 }
 
 .header {
+}
+.header-bg-yellow {
   background-color: $theme-yellow;
 }
-
+.header-bg-beige {
+  background-color: $theme-beige;
+}
 .neverland-header {
  // background: url('/images/neverlandheader.png') no-repeat;
  // height: 120vh;

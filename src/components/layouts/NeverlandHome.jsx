@@ -137,7 +137,7 @@ class NeverlandHome extends Component {
 				<div>
 				<br/>
 				<br/>
-					<h1 className="h1-cognace" style={{textAlign: 'center'}}>Our Plant Packs</h1>
+					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Our Plant Packs</h1>
 					<div className="row-nm plant-pack-row plant-pack-row-blue">
 						<div className="col-md-6"><img style={{width:'100%', marginLeft: '-10%'}}src="images/neverland_monty.png"/></div>
 						<div className="col-md-6 padding-right">
