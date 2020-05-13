@@ -4,6 +4,7 @@ import {Navbar, NavDropdown, Form, Button, FormControl} from 'react-bootstrap';
 class Footer extends Component {
 	render() {
 		return (
+			<div>
 			<div className="footer" style={{margin: '4em'}}>
 				<div className="row-nm">
 					<div className="col-sm-6">
@@ -17,9 +18,9 @@ class Footer extends Component {
 						</div>
 					</div>
 					<div className="col-sm-6">
-						<div className="col">
+						<div className="">
 							<p style={{fontSize: '12px', fontWeight: 'bold'}}>Get in on the grapevine</p>
-							<div style={{display: 'flex'}}>
+							<div style={{display: 'flex', flexDirection: 'column'}}>
 								<input className="neverland-input-footer" placeholder="Slide into my emails!"/>
 								<button style={{marginLeft: '4px'}} onClick={this.onClickWaitlist} className="neverland-button-black"> SIGNUP </button><br/>
 							</div>
@@ -30,7 +31,12 @@ class Footer extends Component {
 						</div>
 					</div>
 				</div>
-			</div>);
+			</div>
+				<div style={{textAlign: 'center'}}>
+					<span style={{fontSize: 10}}> &copy; www.enterneverland.com | Mango Labs, Inc | 2020</span>
+				</div>
+		</div>
+			);
 	}
 }
 

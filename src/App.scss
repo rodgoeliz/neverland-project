@@ -254,6 +254,7 @@ h2 {
 }
 .neverland-button-black {
   background-color: $theme-black;
+  border: 2px solid $theme-black;
 }
 .our-story-parent-container {
   margin-top: -4em;
@@ -428,6 +429,12 @@ h2 {
 .referral-rewards-desc {
   margin-top: 1em
 }
+
+.padding-left-small {
+  padding-left: 0em !important;
+
+}
+
 @media (max-width:1000px){
   body {
     font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407);
@@ -446,6 +453,12 @@ h2 {
 
   h3 {
     font-size: calc(1.75rem + (4 * (100vw - 360px)) / 407) !important;
+  }
+  .plant-container-blue {
+    padding-bottom: 8em;
+  }
+  .plant-container-yellow {
+    margin-top: -12em;
   }
   .neverland-header {
     height: 120vh;
@@ -488,6 +501,13 @@ h2 {
   .chairplant, 
   .cloud {
     display: none;
+  }
+  .padding-left {
+    padding-left: 2em !important;
+  }
+
+  .padding-left-small {
+    padding-left: 2em !important;
   }
 }
 

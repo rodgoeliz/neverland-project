@@ -141,7 +141,7 @@ class NeverlandHome extends Component {
 					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Our Plant Packs</h1>
 					<div className="row-nm plant-pack-row plant-pack-row-blue">
 						<div className="col-md-6"><img style={{width:'100%', marginLeft: '-10%'}}src="images/neverland_monty.png"/></div>
-						<div className="col-md-6 padding-right">
+						<div className="col-md-6 padding-right plant-container-blue padding-left-small">
 							<h2 className="h2-cognace"><span className="swash">M</span>onty</h2>
 							<p>Monstera | <i>Monstera Deliciousa</i></p>
 							<h4 className="h4-secondary">Instant jungle vibes. This tropical plant is lively and wild.</h4>
@@ -153,8 +153,8 @@ class NeverlandHome extends Component {
 						</div>
 					</div>
 
-					<div className="row-nm plant-pack-row plant-pack-row-yellow">
-						<div className="col-md-6 padding-left padding-right">
+					<div className="row-nm plant-pack-row plant-pack-row-yellow plant-container-yellow">
+						<div className="col-md-6 padding-left padding-right ">
 							<h2 className="h2-cognace"><span className="swash">M</span>inty</h2>
 							<p>Mint | <i>Mentha</i></p>
 							<h4 className="h4-secondary">Bright green and stimulating. This fragrant herb boosts energy.</h4>
@@ -170,7 +170,7 @@ With its bright green fragrant leaves, clean bright flavor, and stimulating scen
 
 					<div className="row-nm plant-pack-row plant-pack-row-maroon">
 						<div className="col-md-6"><img style={{width:'110%', marginLeft: '-10%'}}src="images/african_violet.png"/></div>
-						<div className="col-md-6 padding-right">
+						<div className="col-md-6 padding-right plant-container-blue padding-left-small">
 							<h2 className="h2-cognace"><span className="swash">A</span>lfie</h2>
 							<p>African Violet | <i>Saintpaulia</i></p>
 							<h4 className="h4-secondary">Pleasantly fuzzy leaves and perky flowers.</h4>
@@ -183,7 +183,7 @@ With its bright green fragrant leaves, clean bright flavor, and stimulating scen
 					</div>
 
 
-					<div className="row-nm plant-pack-row plant-pack-row-green">
+					<div className="row-nm plant-pack-row plant-pack-row-green plant-container-yellow">
 						<div className="col-md-6 padding-left padding-right">
 							<h2 className="h2-cognace"><span className="swash">S</span>oozy</h2>
 							<p>Snake Plant | <i>Sansevieria</i></p>
