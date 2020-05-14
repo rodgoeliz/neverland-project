@@ -173,6 +173,9 @@ With its bright green fragrant leaves, clean bright flavor, and stimulating scen
 						</div>
 						<div className="col-md-6"><img style={{width:'100%', marginLeft: '-10%'}}src="images/mintobe.png"/></div>
 					</div>
+					<br/>
+					<br/>
+					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Our Seed Grow Packs</h1>
 					<div className="row-nm plant-pack-row plant-pack-row-maroon">
 						<div className="col-md-6"><img style={{width:'110%', marginLeft: '-10%'}}src="images/african_violet.png"/></div>
 						<div className="col-md-6 padding-right plant-container-blue padding-left-small">

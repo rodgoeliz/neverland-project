@@ -18,8 +18,8 @@ class Footer extends Component {
 						</div>
 					</div>
 					<div className="col-sm-6">
-						<div className="">
-							<p style={{fontSize: '12px', fontWeight: 'bold'}}>Get in on the grapevine</p>
+						<div className="" style={{marginTop: '1em'}}>
+							<p style={{fontSize: '12px', fontWeight: 'bold', color: '#1e1dcd', marginBottom: -2}}>Get in on the grapevine</p>
 							<div style={{display: 'flex', flexDirection: 'column'}}>
 								<input className="neverland-input-footer" placeholder="Slide into my emails!"/>
 								<button style={{marginLeft: '4px'}} onClick={this.onClickWaitlist} className="neverland-button-black"> SIGNUP </button><br/>
