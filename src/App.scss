@@ -113,6 +113,7 @@ h2 {
 }
 .footer-logo {
   max-width: 125px;
+  max-height: 134px;
   margin-right: 2em;
 }
 .footer-nav {
@@ -474,6 +475,11 @@ h2 {
 
 .mobile-nav-logo {
   width: 70px;
+  height: 78px;
+}
+
+.footer {
+  margin: 4em;
 }
 
 @media (max-width: 900px){
@@ -517,7 +523,16 @@ h2 {
 .display-mobile {
   display: flex;
 }
-  .neverland-header {
+
+.footer-logo {
+  max-width: 70px;
+  max-height: 78px;
+  margin-right: 2em;
+}
+  .footer {
+    margin: 1em;
+  }
+    .neverland-header {
     background-color: $theme-yellow;
   }
   .desktop-menu {
