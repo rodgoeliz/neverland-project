@@ -8,22 +8,25 @@ import NeverlandHome from './components/layouts/NeverlandHome';
 import NeverlandOurStory from './components/layouts/NeverlandOurStory';
 import NeverlandWaitlist from "./components/layouts/NeverlandWaitlist";
 import Layout from './components/layouts/Layout';
+import {ParallaxProvider} from "react-scroll-parallax";
 
 class App extends Component {
   render() {
     console.log(process.env)
     return (
-      <Provider store={store}>
-        <BrowserRouter>
-          <Layout className="App">
-            <div className="App">
-              <Route exact path="/" component={NeverlandHome} />
-              <Route exact path="/story" component={NeverlandOurStory} />
-              <Route exact path="/waitlist/user" component={NeverlandWaitlist} />
-            </div>
-          </Layout>
-        </BrowserRouter>
-      </Provider>
+      <ParallaxProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <Layout className="App">
+              <div className="App">
+                <Route exact path="/" component={NeverlandHome} />
+                <Route exact path="/story" component={NeverlandOurStory} />
+                <Route exact path="/waitlist/user" component={NeverlandWaitlist} />
+              </div>
+            </Layout>
+          </BrowserRouter>
+        </Provider>
+      </ParallaxProvider>
         );
   }
 }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {Redirect} from "react-router-dom";
+import {Parallax} from 'react-scroll-parallax';
 import queryString from 'query-string';
 import { joinWaitlist } from "../../actions/waitlist";
 
@@ -104,25 +105,28 @@ class NeverlandHome extends Component {
 				<div className="row-nm" style={{marginLeft: '2em', marginRight: '2em'}}>
 					<h2 className="h2-cognace" style={{margin: 'auto'}}> How it works </h2>
 					<div className="row-nm">
-						<div className="col-md-4">
+						<div className="col-md-4 step-container">
 							<img className="step-pick" src="/images/pickplant.gif"/>
-							<h4 className='h4-cognace' style={{textAlign: 'center'}}><span className="swash">P</span>ick</h4>
-							<p>We're mint to be. Choose a plant you'd like to grow and we'll send you a pack with everything you need delivered to your door.</p>
+							<span className="step-subtitle">STEP 1</span>
+							<h4 className='h4-cognace step-title' style={{textAlign: 'center'}}><span className="swash">P</span>ick</h4>
+							<p className="step-desc">We're mint to be. Choose a plant you'd like to grow and we'll send you a pack with everything you need delivered to your door.</p>
 						</div>
-						<div className="col-md-4">
+						<div className="col-md-4 step-container">
 							<img className="step-pick" src="/images/step-plant.png"/>
-							<h4 className="h4-cognace" style={{textAlign: 'center'}}><span className="swash">P</span>lant</h4>
-							<p>Unbox your plant pack and follow our easy breezy instructions for planting your new friend. Make sure to pot it like it's hot.</p>
+							<span className="step-subtitle">STEP 2</span>
+							<h4 className="h4-cognace step-title" style={{textAlign: 'center'}}><span className="swash">P</span>lant</h4>
+							<p className="step-desc">Unbox your plant pack and follow our easy breezy instructions for planting your new friend. Make sure to pot it like it's hot.</p>
 						</div>
-						<div className="col-md-4">
+						<div className="col-md-4 step-container">
 							<img className="step-pick" src="/images/step-grow.gif"/>
-							<h4 className="h4-cognace" style={{textAlign: 'center'}}><span className="swash">G</span>row</h4>
-							<p>Romaine calm, we're here to kelp. Text us at 1800PartyThyme for a good time and any questions you have. We'll send text reminders, plant puns and tips to keep your plant happy. We're rooting for you.</p>
+							<span className="step-subtitle">STEP 3</span>
+							<h4 className="h4-cognace step-title" style={{textAlign: 'center'}}><span className="swash">G</span>row</h4>
+							<p className="step-desc">Romaine calm, we're here to kelp. Text us at 1800PartyThyme for a good time and any questions you have. We'll send text reminders, plant puns and tips to keep your plant happy. We're rooting for you.</p>
 						</div>
 					</div>
 				</div>
 				<div>
-					<img  className="neverland-divider" src="images/neverlandivider.png" />
+					<img className="neverland-divider" src="images/neverlandivider.png" />
 				</div>
 				<div className="row-nm">
 					<div className="romaine-calm-container col-md-6">
@@ -131,9 +135,10 @@ class NeverlandHome extends Component {
 					</div>
 					<div className="col-md-6"><img style={{width: '80%'}}src="/images/neverland_textline.png"/></div>
 				</div>
-				<div>
-					<img className="neverland-paintbrush" src="/images/neverlandpaintbrush.png"	 />
-
+				<div style={{position: 'absolute'}}>
+					<Parallax  y={[30, -160]} tagOuter="figure">
+						<img width={300}src="/images/tulip.png" />
+					</Parallax>
 				</div>
 				<div>
 				<br/>
@@ -148,8 +153,10 @@ class NeverlandHome extends Component {
 							<p>This easy-to-care-for tropical plant is the stuff of stylish design blogs and enviable social media feeds. It grows fast, and quickly can become a floor-standing focal point, its grandeur imbuing your indoor space with a sense of peace and calm. 
 							  The Monstera originates from the tropical rainforests of southern Mexico and is extremely adaptable to indoor conditions. It’s heart-shaped leaves develop holes as it matures and it loves bright, indirect light.
 							  </p>
-							<input onChange={this.onChangeInput} className="neverland-input neverland-input-yellow" value={this.state.emailInput}/>
-							<button onClick={this.onClickWaitlist} className="neverland-button-yellow"> JOIN THE WAITLIST </button><br/>
+							  	<div className="input-group">
+									<input onChange={this.onChangeInput} className="input-group-prepend neverland-input neverland-input-yellow" value={this.state.emailInput}/>
+									<button onClick={this.onClickWaitlist} className="neverland-button-yellow"> JOIN THE WAITLIST </button><br/>
+								</div>
 						</div>
 					</div>
 
@@ -166,8 +173,6 @@ With its bright green fragrant leaves, clean bright flavor, and stimulating scen
 						</div>
 						<div className="col-md-6"><img style={{width:'100%', marginLeft: '-10%'}}src="images/mintobe.png"/></div>
 					</div>
-
-
 					<div className="row-nm plant-pack-row plant-pack-row-maroon">
 						<div className="col-md-6"><img style={{width:'110%', marginLeft: '-10%'}}src="images/african_violet.png"/></div>
 						<div className="col-md-6 padding-right plant-container-blue padding-left-small">

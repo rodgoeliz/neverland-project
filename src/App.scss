@@ -42,18 +42,19 @@ a:focus {
 
 .h2-cognace {
   font-family: 'Cognace';
-  font-size: 3.5rem !important;
+  font-size: calc(2.75rem + (4 * (100vw - 360px)) / 407) !important;
 }
 
 .h3-cognace {
   font-family: 'Cognace';
-  font-size: 2.5rem !important;
+  font-size: calc(2.25rem + (4 * (100vw - 360px)) / 407) !important;
 }
 
 .h4-cognace {
   font-family: 'Cognace';
-  font-size: 2.0rem !important;
+  font-size: calc(1.75rem + (4 * (100vw - 360px)) / 407) !important;
 }
+
 .h4-secondary{
   font-family: 'Open Sans';
   font-size: 1.5rem !important;
@@ -76,7 +77,17 @@ h2 {
 .ss-v {
   font-feature-settings: 'ss06'
 }
-
+.step-subtitle {
+  font-size: 14px;
+  text-align: 'center';
+  font-weight: bold;
+  display: flex;
+  margin: auto;
+  justify-content: center;
+}
+.step-title {
+  color: $theme-blue;
+}
 .plant-pack-row {
   padding-top: 4em;
   padding-bottom: 4em;
@@ -283,7 +294,9 @@ h2 {
   padding-left: '2em' !important;
   max-width: 500px;
 }
-
+.step-desc {
+  font-size: calc(1.5rem + (8 * (100vw - 1440px)) / 1119) !important;
+}
 .neverland-paintbrush {
   width: 40%;
 }
@@ -311,7 +324,7 @@ h2 {
   z-index:100
 }
 .step-pick {
-  height: 300px;
+  height: 350px;
   display: flex;
   margin: auto;
 }
@@ -436,7 +449,34 @@ h2 {
 
 }
 
-@media (max-width:1000px){
+.graphics {
+
+}
+.mobile-menu {
+  display: none;
+}
+
+.desktop-menu {
+  display: flex;
+}
+.display-desktop {
+  display: flex;
+}
+.display-mobile {
+  display: none;
+}
+.mobile-menu-logo-container {
+  text-align: center;
+}
+.mobile-menu-logo {
+  width: 100px;
+}
+
+.mobile-nav-logo {
+  width: 70px;
+}
+
+@media (max-width: 900px){
   body {
     font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407);
   }
@@ -455,6 +495,9 @@ h2 {
   h3 {
     font-size: calc(1.75rem + (4 * (100vw - 360px)) / 407) !important;
   }
+  .mobile-menu {
+    display: block;
+  }
   .plant-container-blue {
     padding-bottom: 8em;
   }
@@ -467,9 +510,20 @@ h2 {
   .neverland-header-img {
     width: 100%;
   }
+
+.display-desktop {
+  display: none;
+}
+.display-mobile {
+  display: flex;
+}
   .neverland-header {
     background-color: $theme-yellow;
   }
+  .desktop-menu {
+    display: none;
+  } 
+
   .neverland-header-container {
     max-width: 80vw;
   }
@@ -522,10 +576,10 @@ h2 {
 
 @media(min-width:1200px) {
   body {
-    font-size: calc(1.5rem + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(1.25srem + (8 * (100vw - 1440px)) / 1119) !important;
   }
   p {
-    font-size: calc(1.5rem + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(1.25rem + (8 * (100vw - 1440px)) / 1119) !important;
   }
 
   h1 {

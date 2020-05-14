@@ -27,10 +27,12 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
+    "react-scroll-parallax": "^2.3.2",
     "react-share": "^4.1.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "session": "^0.1.0",
+    "styled-components": "^5.1.0",
     "yarn": "^1.22.4"
   },
   "scripts": {
@@ -44,7 +46,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
- "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5000",
   "browserslist": {
     "production": [
       ">0.2%",
