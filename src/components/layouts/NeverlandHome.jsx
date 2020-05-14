@@ -141,18 +141,14 @@ class NeverlandHome extends Component {
 					</div>
 					<div className="col-md-6"><img style={{width: '80%'}}src="/images/neverland_textline.png"/></div>
 				</div>
-				<div style={{position: 'absolute'}}>
-					<Parallax  y={[30, -160]} tagOuter="figure">
-					</Parallax>
-				</div>
 				<div>
 				<br/>
 				<br/>
 					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Our Plant Packs</h1>
 					<p style={{textAlign: 'center', marginBottom: '2em'}}>Delight in growing by starting with one of our young plant packs.</p>
-					<div className="row-nm plant-pack-row plant-pack-row-blue">
+					<div className="row-nm plant-pack-row plant-pack-row-blue" style={{margin: 'auto'}}>
 						<div className="col-md-6"><img style={{width:'100%', marginLeft: '-10%'}}src="images/neverland_monty.png"/></div>
-						<div className="col-md-6 padding-right plant-container-blue padding-left-small">
+						<div className="col-md-6 padding-right plant-container-blue padding-left-small" style={{margin: 'auto'}}>
 							<h2 className="h2-cognace"><span className="swash">M</span>onty</h2>
 							<p>Monstera | <i>Monstera Deliciousa</i></p>
 							<h4 className="h4-secondary">Instant jungle vibes. This tropical plant is lively and wild.</h4>
@@ -168,7 +164,7 @@ class NeverlandHome extends Component {
 
 					<div className="row-nm plant-pack-row plant-pack-row-green plant-container-yellow">
 						<div className="col-md-6 display-mobile"><img style={{width:'100%', marginLeft: '-10%'}}src="images/snakeplantpot.png"/></div>
-						<div className="col-md-6 padding-left padding-right">
+						<div className="col-md-6 padding-left padding-right" style={{margin: 'auto'}}>
 							<h2 className="h2-cognace"><span className="swash">S</span>oozy</h2>
 							<p>Snake Plant | <i>Sansevieria</i></p>
 							<h4 className="h4-secondary">A bulletproof succulent and the queen of air purifying plants.</h4>
@@ -185,9 +181,9 @@ class NeverlandHome extends Component {
 					<br/>
 					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Our Seed Starter Packs</h1>
 					<p style={{textAlign: 'center', marginBottom: '2em'}}>Delight in growing from the roots up with our easy breezy seed starter packs.</p>
-					<div className="row-nm plant-pack-row plant-pack-row-maroon">
+					<div className="row-nm plant-pack-row plant-pack-row-maroon"> 
 						<div className="col-md-6"><img style={{width:'110%', marginLeft: '-10%'}}src="images/african_violet.png"/></div>
-						<div className="col-md-6 padding-right plant-container-blue padding-left-small">
+						<div className="col-md-6 padding-right plant-container-blue padding-left-small" style={{margin: 'auto'}}>
 							<h2 className="h2-cognace"><span className="swash">A</span>lfie</h2>
 							<p>African Violet | <i>Saintpaulia</i></p>
 							<h4 className="h4-secondary">Pleasantly fuzzy leaves and perky flowers.</h4>
@@ -202,7 +198,7 @@ class NeverlandHome extends Component {
 
 					<div className="row-nm plant-pack-row plant-pack-row-yellow plant-container-yellow">
 						<div className="col-md-6 display-mobile"><img style={{width:'100%', marginLeft: '-10%'}}src="images/mintobe.png"/></div>
-						<div className="col-md-6 padding-left padding-right ">
+						<div className="col-md-6 padding-left padding-right " style={{margin: 'auto'}}>
 							<h2 className="h2-cognace"><span className="swash">M</span>inty</h2>
 							<p>Mint | <i>Mentha</i></p>
 							<h4 className="h4-secondary">Bright green and stimulating. This fragrant herb boosts energy.</h4>
@@ -213,6 +209,24 @@ With its bright green fragrant leaves, clean bright flavor, and stimulating scen
 							<button onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
 						<div className="col-md-6 display-desktop"><img style={{width:'100%', marginLeft: '-10%'}}src="images/mintobe.png"/></div>
+					</div>
+
+					<div>
+						<div style={{position: 'absolute'}}>
+							<Parallax  y={[50, -100]} tagOuter="figure">
+								<img width={300} src="/images/tulip.png"/>
+							</Parallax>
+						</div>
+						<div className="guarantee-container">
+						<h2 className="h2-cognace">Our <span className="swash">G</span>uarantee</h2>	
+						<p> We want you to succeed, which is why we offer 100% satisfaction guarantee. If your seeds don't sprout or something goes
+						wrong with the plant by the time it gets to you, we'll replace everything, free of charge.</p>
+						</div>
+						<div style={{position: 'absolute', left: '70vw', marginTop: '-30vh'}}>
+							<Parallax  y={[50, -150]} tagOuter="figure">
+								<img width={400} src="/images/cloud_two.png"/>
+							</Parallax>
+						</div>
 					</div>
 				</div>
 			</div>

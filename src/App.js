@@ -7,6 +7,7 @@ import './App.scss';
 import NeverlandHome from './components/layouts/NeverlandHome';
 import NeverlandOurStory from './components/layouts/NeverlandOurStory';
 import NeverlandWaitlist from "./components/layouts/NeverlandWaitlist";
+import NeverlandFAQ from "./components/layouts/NeverlandFAQ";
 import Layout from './components/layouts/Layout';
 import {ParallaxProvider} from "react-scroll-parallax";
 
@@ -22,6 +23,7 @@ class App extends Component {
                 <Route exact path="/" component={NeverlandHome} />
                 <Route exact path="/story" component={NeverlandOurStory} />
                 <Route exact path="/waitlist/user" component={NeverlandWaitlist} />
+                <Route exact path="/faq" component={NeverlandFAQ} />
               </div>
             </Layout>
           </BrowserRouter>
