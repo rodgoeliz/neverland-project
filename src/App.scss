@@ -27,6 +27,7 @@ p {
 h1 {
   font-family: 'Cognace';
   font-size: 4.5rem !important;
+  line-height: 1.0 !important;
 }
 
 a {
@@ -545,7 +546,7 @@ h2 {
     position: absolute;
     height: 10vh;
     left: 35vw;
-    top: 70vh;
+    top: 75vh;
     right: 0;
     z-index: 100;
   }
@@ -556,15 +557,17 @@ h2 {
 
   } 
   .chairplant_small {
-    display: block;
-    width: 90vw;
+    display: flex;
+    position: absolute;
+    width: 85vw;
     z-index:100;
-    right: 0;
+    top: 85vh;
   }
+
   .door {
     z-index: 10;
     height: 40vh;
-    top: 65vh;
+    top: 75vh;
     left: 20vw;
   }
   .chairplant, 
@@ -577,6 +580,10 @@ h2 {
 
   .padding-left-small {
     padding-left: 2em !important;
+  }
+
+  .padding-right {
+    padding-right: 2em !important;
   }
 
   .neverland-paintbrush {

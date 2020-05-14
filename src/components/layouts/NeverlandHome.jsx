@@ -93,16 +93,20 @@ class NeverlandHome extends Component {
 						<img className="chairplant" src="/images/chairandplant.png" />
 					</div>
 					<div className="neverland-header-container">
+						<br/>
+						<br/>
 							<h1><span className="swash">G</span>row an oasis that <span className="ss-n">n</span>e<span className="ss-v">v</span>e<span className="swash">r</span> sta<span className="ss-n">n</span>ds still</h1>
 							<h4><span className="swash">D</span>elight in growi<span className="ss-n">n</span>g with our plant packs.</h4>
 							<br/>
 							<input onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button style={{marginTop: '4px'}} onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 							<span>{this.state.emailError}</span>
-							<img className="chairplant_small" src="/images/chairandplant.png" />
+							<div className="display-mobile" style={{minHeight: 300}}>
+								<img className="chairplant_small" src="/images/chairandplant.png" />
+							</div>
 					</div>
 				</div>
-				<div className="row-nm" style={{marginLeft: '2em', marginRight: '2em'}}>
+				<div className="row-nm" style={{marginLeft: '2em', marginTop: '2em', marginRight: '2em'}}>
 					<h2 className="h2-cognace" style={{margin: 'auto'}}> How it works </h2>
 					<div className="row-nm">
 						<div className="col-md-4 step-container">
