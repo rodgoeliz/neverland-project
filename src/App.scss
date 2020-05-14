@@ -576,7 +576,7 @@ h2 {
 
 @media(min-width:1200px) {
   body {
-    font-size: calc(1.25srem + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(1.25em + (8 * (100vw - 1440px)) / 1119) !important;
   }
   p {
     font-size: calc(1.25rem + (8 * (100vw - 1440px)) / 1119) !important;
