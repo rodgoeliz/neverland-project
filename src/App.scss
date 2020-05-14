@@ -21,6 +21,7 @@ body {
 }
 
 p {
+    line-height: 1.15;
   font-size: 24px
 }
 
@@ -487,6 +488,7 @@ h2 {
     font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407);
   }
   p {
+    line-height: 1.15;
     font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407) !important;
   }
 
@@ -521,7 +523,7 @@ h2 {
   display: none;
 }
 .display-mobile {
-  display: flex;
+  display: block;
 }
 
 .footer-logo {
@@ -575,15 +577,15 @@ h2 {
     display: none;
   }
   .padding-left {
-    padding-left: 2em !important;
+    padding-left: 1.35em !important;
   }
 
   .padding-left-small {
-    padding-left: 2em !important;
+    padding-left: 1.35em !important;
   }
 
   .padding-right {
-    padding-right: 2em !important;
+    padding-right: 1.35em !important;
   }
 
   .neverland-paintbrush {
@@ -601,6 +603,7 @@ h2 {
   }
   p {
     font-size: calc(1.25rem + (8 * (100vw - 1440px)) / 1119) !important;
+    line-height: 1.15;
   }
 
   h1 {
