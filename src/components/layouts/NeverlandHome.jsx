@@ -134,20 +134,22 @@ class NeverlandHome extends Component {
 				</div>
 				<div className="row-nm">
 					<div className="romaine-calm-container col-md-6">
-						<h2 className="h2-cognace">Romaine calm, we're here to kelp.</h2>
-						<p>Never kill a plant again with our plant hotline. Reminders to water, fertilize, and repot your plants. Text us with any questions. Keep track of your plants in one place.</p>
+						<div style={{maxWidth: 500, margin: 'auto'}}>
+							<h2 className="h2-cognace">Romaine calm, we're here to kelp.</h2>
+							<p>Never kill a plant again with our plant hotline. Reminders to water, fertilize, and repot your plants. Text us with any questions. Keep track of your plants in one place.</p>
+						</div>
 					</div>
 					<div className="col-md-6"><img style={{width: '80%'}}src="/images/neverland_textline.png"/></div>
 				</div>
 				<div style={{position: 'absolute'}}>
 					<Parallax  y={[30, -160]} tagOuter="figure">
-						<img width={300}src="/images/tulip.png" />
 					</Parallax>
 				</div>
 				<div>
 				<br/>
 				<br/>
 					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Our Plant Packs</h1>
+					<p style={{textAlign: 'center', marginBottom: '2em'}}>Delight in growing by starting with one of our young plant packs.</p>
 					<div className="row-nm plant-pack-row plant-pack-row-blue">
 						<div className="col-md-6"><img style={{width:'100%', marginLeft: '-10%'}}src="images/neverland_monty.png"/></div>
 						<div className="col-md-6 padding-right plant-container-blue padding-left-small">
@@ -164,22 +166,25 @@ class NeverlandHome extends Component {
 						</div>
 					</div>
 
-					<div className="row-nm plant-pack-row plant-pack-row-yellow plant-container-yellow">
-						<div className="col-md-6 padding-left padding-right ">
-							<h2 className="h2-cognace"><span className="swash">M</span>inty</h2>
-							<p>Mint | <i>Mentha</i></p>
-							<h4 className="h4-secondary">Bright green and stimulating. This fragrant herb boosts energy.</h4>
+					<div className="row-nm plant-pack-row plant-pack-row-green plant-container-yellow">
+						<div className="col-md-6 display-mobile"><img style={{width:'100%', marginLeft: '-10%'}}src="images/snakeplantpot.png"/></div>
+						<div className="col-md-6 padding-left padding-right">
+							<h2 className="h2-cognace"><span className="swash">S</span>oozy</h2>
+							<p>Snake Plant | <i>Sansevieria</i></p>
+							<h4 className="h4-secondary">A bulletproof succulent and the queen of air purifying plants.</h4>
 							<p>
-With its bright green fragrant leaves, clean bright flavor, and stimulating scent, mint is as pretty as useful in the kitchen. Make soothing teas, desserts, drinks, and chilled soups. Mint can help boost energy levels as well as lift our mood.
+							The snake plant is native to the arid deserts of West Africa and has stiff, upright, sword-like leaves. It’s a natural choice for people who love modern and contemporary design. If you were to choose just one plant to aid respiratory problems, this is the one to pick. NASA research has shown that snake plants purifies and cleans indoor areas by removing toxins such as formaldehyde and benzene. Since it produces oxygen mainly at night, it makes an excellent bedroom companion. It’s also one of the easiest plants to grow successfully.
 							  </p>
+
 							<input onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
-						<div className="col-md-6"><img style={{width:'100%', marginLeft: '-10%'}}src="images/mintobe.png"/></div>
+						<div className="col-md-6 display-desktop"><img style={{width:'100%', marginLeft: '-10%'}}src="images/snakeplantpot.png"/></div>
 					</div>
 					<br/>
 					<br/>
-					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Our Seed Grow Packs</h1>
+					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Our Seed Starter Packs</h1>
+					<p style={{textAlign: 'center', marginBottom: '2em'}}>Delight in growing from the roots up with our easy breezy seed starter packs.</p>
 					<div className="row-nm plant-pack-row plant-pack-row-maroon">
 						<div className="col-md-6"><img style={{width:'110%', marginLeft: '-10%'}}src="images/african_violet.png"/></div>
 						<div className="col-md-6 padding-right plant-container-blue padding-left-small">
@@ -195,19 +200,19 @@ With its bright green fragrant leaves, clean bright flavor, and stimulating scen
 					</div>
 
 
-					<div className="row-nm plant-pack-row plant-pack-row-green plant-container-yellow">
-						<div className="col-md-6 padding-left padding-right">
-							<h2 className="h2-cognace"><span className="swash">S</span>oozy</h2>
-							<p>Snake Plant | <i>Sansevieria</i></p>
-							<h4 className="h4-secondary">A bulletproof succulent and the queen of air purifying plants.</h4>
+					<div className="row-nm plant-pack-row plant-pack-row-yellow plant-container-yellow">
+						<div className="col-md-6 display-mobile"><img style={{width:'100%', marginLeft: '-10%'}}src="images/mintobe.png"/></div>
+						<div className="col-md-6 padding-left padding-right ">
+							<h2 className="h2-cognace"><span className="swash">M</span>inty</h2>
+							<p>Mint | <i>Mentha</i></p>
+							<h4 className="h4-secondary">Bright green and stimulating. This fragrant herb boosts energy.</h4>
 							<p>
-							The snake plant is native to the arid deserts of West Africa and has stiff, upright, sword-like leaves. It’s a natural choice for people who love modern and contemporary design. If you were to choose just one plant to aid respiratory problems, this is the one to pick. NASA research has shown that snake plants purifies and cleans indoor areas by removing toxins such as formaldehyde and benzene. Since it produces oxygen mainly at night, it makes an excellent bedroom companion. It’s also one of the easiest plants to grow successfully.
+With its bright green fragrant leaves, clean bright flavor, and stimulating scent, mint is as pretty as useful in the kitchen. Make soothing teas, desserts, drinks, and chilled soups. Mint can help boost energy levels as well as lift our mood.
 							  </p>
-
 							<input onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
-						<div className="col-md-6"><img style={{width:'100%', marginLeft: '-10%'}}src="images/snakeplantpot.png"/></div>
+						<div className="col-md-6 display-desktop"><img style={{width:'100%', marginLeft: '-10%'}}src="images/mintobe.png"/></div>
 					</div>
 				</div>
 			</div>
