@@ -10,10 +10,11 @@ import NeverlandWaitlist from "./components/layouts/NeverlandWaitlist";
 import NeverlandFAQ from "./components/layouts/NeverlandFAQ";
 import Layout from './components/layouts/Layout';
 import {ParallaxProvider} from "react-scroll-parallax";
+import AOS from 'aos';
 
 class App extends Component {
   render() {
-    console.log(process.env)
+    AOS.init();
     return (
       <ParallaxProvider>
         <Provider store={store}>

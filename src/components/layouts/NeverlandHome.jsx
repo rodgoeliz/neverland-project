@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {Redirect} from "react-router-dom";
-import {Parallax} from 'react-scroll-parallax';
+//import Parallax from "react-rellax";
 import queryString from 'query-string';
 import { joinWaitlist } from "../../actions/waitlist";
+import {Parallax, ParallaxLayer} from 'react-spring/renderprops-addons'
+
 
 class NeverlandHome extends Component {
 	constructor(props) {
@@ -82,7 +84,7 @@ class NeverlandHome extends Component {
 			return <div>Joining the waitlist...</div>;
 		}
 		return (
-			<div style={{marginTop: '-5em'}}> 	
+			<div className="testest" style={{marginTop: '-5em'}}> 	
 				<div className="row-nm neverland-header">
 					<div className="graphics">
 						<img className="neverland-header-img" src="/images/neverlandheader.png"/>
@@ -139,15 +141,17 @@ class NeverlandHome extends Component {
 							<p>Never kill a plant again with our plant hotline. Reminders to water, fertilize, and repot your plants. Text us with any questions. Keep track of your plants in one place.</p>
 						</div>
 					</div>
-					<div className="col-md-6"><img style={{width: '80%'}}src="/images/neverland_textline.png"/></div>
+					<div data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000" className="col-md-6"><img style={{width: '80%'}}src="/images/neverland_textline.png"/></div>
 				</div>
 				<div>
 				<br/>
+					<br/>
+					<br/>
 				<br/>
 					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Our Plant Packs</h1>
 					<p style={{textAlign: 'center', marginBottom: '2em'}}>Delight in growing by starting with one of our young plant packs.</p>
 					<div className="row-nm plant-pack-row plant-pack-row-blue" style={{margin: 'auto'}}>
-						<div className="col-md-6"><img style={{width:'100%', marginLeft: '-10%'}}src="images/neverland_monty.png"/></div>
+						<div className="col-md-6" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000"><img data-aos="fade-right" style={{width:'100%', marginLeft: '-10%'}}src="images/neverland_monty.png"/></div>
 						<div className="col-md-6 padding-right plant-container-blue padding-left-small" style={{margin: 'auto'}}>
 							<h2 className="h2-cognace"><span className="swash">M</span>onty</h2>
 							<p>Monstera | <i>Monstera Deliciousa</i></p>
@@ -175,14 +179,17 @@ class NeverlandHome extends Component {
 							<input onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
-						<div className="col-md-6 display-desktop"><img style={{width:'100%', marginLeft: '-10%'}}src="images/snakeplantpot.png"/></div>
+						<div className="col-md-6 display-desktop" data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000"><img style={{width:'100%', marginLeft: '-10%'}}src="images/snakeplantpot.png"/></div>
 					</div>
+					<br/>
+					<br/>
+					<br/>
 					<br/>
 					<br/>
 					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Our Seed Starter Packs</h1>
 					<p style={{textAlign: 'center', marginBottom: '2em'}}>Delight in growing from the roots up with our easy breezy seed starter packs.</p>
 					<div className="row-nm plant-pack-row plant-pack-row-maroon"> 
-						<div className="col-md-6"><img style={{width:'110%', marginLeft: '-10%'}}src="images/african_violet.png"/></div>
+						<div className="col-md-6" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000"><img style={{width:'110%', marginLeft: '-10%'}}src="images/african_violet.png"/></div>
 						<div className="col-md-6 padding-right plant-container-blue padding-left-small" style={{margin: 'auto'}}>
 							<h2 className="h2-cognace"><span className="swash">A</span>lfie</h2>
 							<p>African Violet | <i>Saintpaulia</i></p>
@@ -208,24 +215,13 @@ With its bright green fragrant leaves, clean bright flavor, and stimulating scen
 							<input onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
-						<div className="col-md-6 display-desktop"><img style={{width:'100%', marginLeft: '-10%'}}src="images/mintobe.png"/></div>
+						<div className="col-md-6 display-desktop" data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000"><img style={{width:'100%', marginLeft: '-10%'}}src="images/mintobe.png"/></div>
 					</div>
-
-					<div>
-						<div style={{position: 'absolute'}}>
-							<Parallax  y={[50, -100]} tagOuter="figure">
-								<img width={300} src="/images/tulip.png"/>
-							</Parallax>
-						</div>
+					<div className="guarantee">
 						<div className="guarantee-container">
 						<h2 className="h2-cognace">Our <span className="swash">G</span>uarantee</h2>	
 						<p> We want you to succeed, which is why we offer 100% satisfaction guarantee. If your seeds don't sprout or something goes
 						wrong with the plant by the time it gets to you, we'll replace everything, free of charge.</p>
-						</div>
-						<div style={{position: 'absolute', left: '70vw', marginTop: '-30vh'}}>
-							<Parallax  y={[50, -150]} tagOuter="figure">
-								<img width={400} src="/images/cloud_two.png"/>
-							</Parallax>
 						</div>
 					</div>
 				</div>

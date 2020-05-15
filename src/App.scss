@@ -109,10 +109,14 @@ h2 {
 .neverland-divider {
   width: 100%;
 }
+
 .neverland-icon {
   color: $theme-black;
   width: 35px;
+  margin-left: 8px;
+  margin-right: 8px;
 }
+
 .footer-logo {
   max-width: 125px;
   max-height: 134px;
@@ -207,15 +211,22 @@ h2 {
      padding: 8px;
   }
 }
-
+.neverland-input-footer,
 .neverland-input-yellow {
   border: 4px solid $theme-yellow;
 }
 
 .neverland-input-footer {
-  border-color: $theme-black;
-  background-color: $theme-beige;
+  &::placeholder {
+    color: $theme-yellow;
+    font-weight: bold
+  }
+  &:focus {
+    color: $theme-yellow;
+    font-weight: bold;
+  }
 }
+
 .neverland-button-yellow {
   background-color: $theme-yellow;
   color: $theme-blue;
@@ -484,6 +495,25 @@ h2 {
 
 .footer {
   margin: 4em;
+  color: $theme-yellow !important;
+
+  a {
+    color: $theme-yellow !important;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: $theme-dark-yellow!important;
+    }
+  }
+
+}
+
+.footer-container {
+  background-color: $theme-blue;
+  display: flex;
+  flex-direction: column;
+  padding-top: 2em;
 }
 
 .faq-section {
@@ -523,6 +553,30 @@ h2 {
     }
   }
 }
+.gim {
+   display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background: #fff;
+  height: 200px;
+  width: 300px;
+  margin: 20px;
+  transform: translateY(var(--translateY));
+  will-change: transform;
+}
+.guarantee {
+  position: relative;
+  overflow: auto;
+  height: 100%;
+  overflow: auto;
+  padding-bottom: 2em;
+}
+
+.faq-container {
+  padding-bottom: 4em;
+}
+
 @media (max-width: 900px){
   body {
     font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407);
@@ -559,6 +613,10 @@ h2 {
     width: 100%;
   }
 
+.faq-section {
+    padding-left: .5em;
+    padding-right: .5em;
+  }
 .display-desktop {
   display: none;
 }

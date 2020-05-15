@@ -7,6 +7,7 @@ import AccordionCard from '../AccordionCard';
 class NeverlandFAQ extends Component {
 	render() {
 		return (
+			<div className="faq-container">
 			<div className="row-nm">
 				<div className="col-md-8">
 					<div className="faq-section">
@@ -54,6 +55,7 @@ class NeverlandFAQ extends Component {
 						</div>
 					</div>
 				</div>
+			</div>
 			</div>
 			);
 	}
