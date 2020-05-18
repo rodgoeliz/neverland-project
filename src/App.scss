@@ -591,6 +591,13 @@ h2 {
   h3 {
     font-size: calc(1.75rem + (4 * (100vw - 360px)) / 407) !important;
   }
+
+  .our-story-parent-container {
+    margin-top: -4em;
+    background-color: $theme-yellow;
+    padding: 2em;
+    padding-top: 4em;
+  }
   .mobile-menu {
     display: block;
   }
