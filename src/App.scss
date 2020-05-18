@@ -99,7 +99,7 @@ h2 {
   background-size: cover;
   padding-bottom: 6em;
   z-index: 500;
-  margin-top: -6.5em;
+  margin-top: -8em;
 }
 
 .neverland-divider {
@@ -130,7 +130,7 @@ h2 {
   background-size: cover;
   padding-bottom: 6em;
   z-index: 200;
-  margin-top: -6.5em;
+  margin-top: -8em;
   padding-top: 6em;
   padding-bottom: 6em;
 }
@@ -400,7 +400,7 @@ h2 {
     transform: translatex(0px);
   }
   50% {
-    transform: translatex(-400px);
+    transform: translatex(-10vw);
   }
   100% {
     transform: translatex(0px);

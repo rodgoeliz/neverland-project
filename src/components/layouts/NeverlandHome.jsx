@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {Redirect} from "react-router-dom";
-//import Parallax from "react-rellax";
 import queryString from 'query-string';
 import { joinWaitlist } from "../../actions/waitlist";
-import {Parallax, ParallaxLayer} from 'react-spring/renderprops-addons'
 
 
 class NeverlandHome extends Component {
@@ -29,13 +27,6 @@ class NeverlandHome extends Component {
 				inviter: values.invite
 			});
 		}
-	}
-
-	genFunction() {
-		let functions = ["aging", "life", "stress", "sleep"];
-		return (
-				<span>{functions[this.state.fIndex]}</span>
-		);
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -127,7 +118,7 @@ class NeverlandHome extends Component {
 							<img className="step-pick" src="/images/vp_grow.gif"/>
 							<span className="step-subtitle">STEP 3</span>
 							<h4 className="h4-cognace step-title" style={{textAlign: 'center'}}><span className="swash">G</span>row</h4>
-							<p className="step-desc">Romaine calm, we're here to kelp. Text us at 1800PartyThyme for a good time and any questions you have. We'll send text reminders, plant puns and tips to keep your plant happy. We're rooting for you.</p>
+							<p className="step-desc">Romaine calm, we're here to kelp. Text our plantline for a good time and any questions you have. We'll send text reminders, plant puns and tips to keep your plant happy. We're rooting for you.</p>
 						</div>
 					</div>
 				</div>

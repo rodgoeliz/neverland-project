@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 var WaitlistUser = require('../models/waitlistUser');
+const {sendEmail} = require("../email/emailClient");
+
 router.get('/', function(req, res, next) {
 
 });
@@ -14,7 +16,6 @@ router.get('/user', async function(req, res, next) {
 		res.json({user: {}})
 	}
 	let invitedUsers = await WaitlistUser.find({inviter: user.referralCode});
-	console.log(invitedUsers)
 	res.json({
 		user: user,
 		invitedUsers: invitedUsers
@@ -22,7 +23,6 @@ router.get('/user', async function(req, res, next) {
 }) 
 
 router.post('/join', async function(req, res, next) {
-	console.log("in join route")
 	let email = req.body.email;
 	let inviter = req.body.inviter;
 	let allUsers = await WaitlistUser.find({}).count();
@@ -38,13 +38,13 @@ router.post('/join', async function(req, res, next) {
 	    }
 	    return a.join("");
 	}
-	console.log("INVITER")
-	console.log(inviter)
 	var firstPart = (Math.random() * 46656) | 0;
 	var secondPart = shuffle(email.substring(0, 3));
+	let referralCode = firstPart + "_" + secondPart;
+	sendEmail(email, "Welcome to Neverland!", "templates/waitlist.hbs", {referralCode: referralCode})
 	var newUser = new WaitlistUser({
 		email: req.body.email,
-		referralCode: firstPart + "_" + secondPart,
+		referralCode: referralCode,
 		position: allUsers + 1,
 		inviter: inviter
 	});

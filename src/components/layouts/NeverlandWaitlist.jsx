@@ -108,7 +108,7 @@ class NeverlandWaitlist extends Component {
 						</div>	
 					</div>
 					<div>
-						<a href="">See your status</a>	
+						<a href="">Current Referrals</a>	
 						{this.renderStatus()}
 					</div>
 				</div>			

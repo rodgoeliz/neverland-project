@@ -82,8 +82,8 @@ class Footer extends Component {
 								<button style={{marginLeft: '4px'}} onClick={this.onClickWaitlist} className="neverland-button-yellow"> SIGNUP </button><br/>
 							</div>
 							<div> 
-								<a href=""><img className="neverland-icon" src="/images/fb_icon.svg"/></a>
-								<a href=""><img className="neverland-icon" src="/images/ig_icon.svg"/></a>
+								<a href="https://www.facebook.com/Neverland-106231717763721"><img className="neverland-icon" src="/images/fb_icon.svg"/></a>
+								<a href="https://www.instagram.com/enterneverland"><img className="neverland-icon" src="/images/ig_icon.svg"/></a>
 							</div>
 						</div>
 					</div>

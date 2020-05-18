@@ -35,7 +35,7 @@ class Header extends Component {
 						<div className="row-nm">
 								<div className="desktop-menu row-nm" style={{margin: 'auto'}}>
 							        <a class="nav-link" href="/story">Our Story<span class="sr-only">(current)</span></a>
-							        <a class="nav-link" href="#plants">Plants</a>
+							        <a class="nav-link" href="/#plants">Plants</a>
 							        <a class="nav-link" href="/faq">FAQ<span class="sr-only">(current)</span></a>
 						        </div>
 						        <div className="mobile-menu">
