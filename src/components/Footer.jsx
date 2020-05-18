@@ -15,7 +15,7 @@ class Footer extends Component {
 		this.onClickWaitlist = this.onClickWaitlist.bind(this);
 		this.onChangeInput= this.onChangeInput.bind(this);
 	}
-	
+
 	componentDidMount() {
 		if (this.props && this.props.location) {
 			const values = queryString.parse(this.props.location.search);
@@ -68,9 +68,9 @@ class Footer extends Component {
 						<div className="row">
 							<img className="footer-logo" src="/images/neverland_monologo_yellow.png" />
 							<div className="footer-nav">
-								<a className="col" href="">Join the waitlist</a>
+								<a className="col" href="/faq">FAQ</a>
 								<a className="col" href="/story">Our story</a>
-								<a className="col" href="">Contact us</a>
+								<a className="col" href="mailto:help@enterneverland.com">Contact us</a>
 							</div>
 						</div>
 					</div>

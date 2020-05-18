@@ -22,7 +22,7 @@ class AccordionCard extends Component {
 		return (
 				<Card>
 					<Card.Header>
-						<Accordion.Toggle onClick={this.onClick.bind(this)} style={{width: '100%'}} variant="link" eventKey={this.props.eventKey}>
+						<Accordion.Toggle as={Card.Header} onClick={this.onClick.bind(this)} style={{width: '100%', backgroundColor: 'transparent', border: 'none'}} variant="link" eventKey={this.props.eventKey}>
 							<div className="accordion-title-container">
 								<span className="question">{this.props.title}</span>
 								<span className={"fas " + iconClass}></span>
