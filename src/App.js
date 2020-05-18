@@ -21,7 +21,6 @@ class App extends Component {
           <BrowserRouter>
             <Layout className="App">
               <div>
-                <Route exact path="/" component={NeverlandHome} />
                 <Route exact path="/story" component={NeverlandOurStory} />
                 <Route exact path="/waitlist/user" component={NeverlandWaitlist} />
                 <Route exact path="/faq" component={NeverlandFAQ} />
