@@ -567,6 +567,11 @@ h2 {
   padding-bottom: 4em;
 }
 
+.green-bold {
+  font-weight: bold;
+  color: $theme-green;
+}
+
 @media (max-width: 900px){
   body {
     font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407);

@@ -89,7 +89,7 @@ class NeverlandHome extends Component {
 						<br/>
 						<br/>
 							<h1><span className="swash">G</span>row an urban oasis that <span className="ss-n">n</span>e<span className="ss-v">v</span>e<span className="swash">r</span> sta<span className="ss-n">n</span>ds still</h1>
-							<h4><span className="swash">D</span>elight in growi<span className="ss-n">n</span>g with our starter plant packs.</h4>
+							<h4><span className="swash">G</span>ardening reimagined and made easy for modern city life.</h4>
 							<br/>
 							<input onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button style={{marginTop: '4px'}} onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
@@ -106,19 +106,21 @@ class NeverlandHome extends Component {
 							<img className="step-pick" src="/images/vp_pick.gif"/>
 							<span className="step-subtitle">STEP 1</span>
 							<h4 className='h4-cognace step-title' style={{textAlign: 'center'}}><span className="swash">P</span>ick</h4>
-							<p className="step-desc">We're mint to be. Choose a plant you'd like to grow and we'll send you a pack with everything you need delivered to your door.</p>
+							<p className="step-desc">
+								We’re <span className="green-bold">mint</span> to be. Choose a plant you’d like to grow and we’ll send you a seed pack with everything you need delivered right to your doorstep. 💌
+							</p>
 						</div>
 						<div className="col-md-4 step-container">
 							<img className="step-pick" src="/images/vp_plant.png"/>
 							<span className="step-subtitle">STEP 2</span>
 							<h4 className="h4-cognace step-title" style={{textAlign: 'center'}}><span className="swash">P</span>lant</h4>
-							<p className="step-desc">Unbox your plant pack and follow our easy breezy instructions for planting your new friend. Make sure to pot it like it's hot.</p>
+							<p className="step-desc">Unbox your plant pack and follow our easy breezy instructions for planting your new friend. Make sure to pot it like it's hot.🔥</p>
 						</div>
 						<div className="col-md-4 step-container">
 							<img className="step-pick" src="/images/vp_grow.gif"/>
 							<span className="step-subtitle">STEP 3</span>
 							<h4 className="h4-cognace step-title" style={{textAlign: 'center'}}><span className="swash">G</span>row</h4>
-							<p className="step-desc">Romaine calm, we're here to kelp. Text our plantline for a good time and any questions you have. We'll send text reminders, plant puns and tips to keep your plant happy. We're rooting for you.</p>
+							<p className="step-desc">Romaine calm, we’re here to kelp. We’ll send personalized plant-specific reminders, plant puns, and tips to keep your plants happy and thriving. Our app is sprouting soon, until then text our plantline at 1-NVR-LAND for a good time and any questions you have. We’re rootin’ for ya! 🌱</p>
 						</div>
 					</div>
 				</div>
@@ -129,8 +131,11 @@ class NeverlandHome extends Component {
 					<div className="romaine-calm-container col-md-6">
 						<div style={{maxWidth: 500, margin: 'auto'}}>
 							<h2 className="h2-cognace">Romaine calm, we're here to kelp.</h2>
-							<p>Never kill a plant again with our plant hotline. Reminders to water, fertilize, and repot your plants. Text us with any questions. Keep track of your plants in one place.</p>
-						</div>
+							<p>
+							Plantline is a free, direct text messaging line to Neverland. 
+It’s open to all—not just Neverland customers. We send personalized and plant-specific reminders to help your plants thrive. We keep track of your plants so you don’t have to. Questions? We’re here to help and take you step-by-step. No sweat.
+							</p>
+					</div>
 					</div>
 					<div data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000" className="col-md-6"><img style={{width: '80%'}}src="/images/neverland_textline.png"/></div>
 				</div>
@@ -139,8 +144,9 @@ class NeverlandHome extends Component {
 					<br/>
 					<br/>
 				<br/>
-					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Our Organic Grow Plant Packs</h1>
-					<p style={{textAlign: 'center', marginBottom: '2em'}}>Delight in growing by starting with one of our seed plant packs.</p>
+					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Let’s Grow Together</h1>
+					<p style={{textAlign: 'center'}}>Delight in growing with our Organic Seed Packs </p>
+					<p style={{textAlign: 'center', marginBottom: '2em'}}>Coming Soon</p>
 					<div className="row-nm plant-pack-row plant-pack-row-blue" style={{margin: 'auto'}}>
 						<div className="col-md-6" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000"><img data-aos="fade-right" style={{width:'100%', marginLeft: '-10%'}}src="images/blue_tomato.png"/></div>
 						<div className="col-md-6 padding-right plant-container-blue padding-left-small" style={{margin: 'auto'}}>
