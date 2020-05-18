@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import queryString from 'query-string';
 import {Navbar, NavDropdown, Form, Button, FormControl} from 'react-bootstrap';
+import { joinNewsletter } from "../actions/waitlist";
 
 class Footer extends Component {
 	constructor(props) {
@@ -43,7 +45,7 @@ class Footer extends Component {
 	onClickWaitlist() {
 		//validate email
 		if (this.validateEmail(this.state.emailInput)) {
-			this.props.joinWaitlist(this.state.emailInput, this.state.inviter);
+			this.props.joinNewsletter(this.state.emailInput, this.state.inviter);
 			this.setState({
 				"emailError": "",
 				isSubmitting: true
@@ -60,6 +62,11 @@ class Footer extends Component {
 		});
 	}
 	render() {
+		let successMessage = "";
+		if (this.props.waitlist && this.props.waitlist.newsletterSubmitSuccess) {
+			successMessage = <span className="fas fa-check"> You're in!</span>;
+		}
+		console.log(this.props.waitlist)
 		return (
 			<div className="footer-container">
 			<div className="footer">
@@ -78,8 +85,10 @@ class Footer extends Component {
 						<div className="" style={{marginTop: '1em'}}>
 							<p style={{fontSize: '12px', fontWeight: 'bold', color: '#1e1dcd', marginBottom: -2}}>Get in on the grapevine</p>
 							<div style={{display: 'flex', flexDirection: 'column'}}>
-								<input className="neverland-input-footer" placeholder="Slide into my emails!"/>
+								<input className="neverland-input-footer" onChange={this.onChangeInput} placeholder="Slide into my emails!"/>
+								{successMessage}
 								<button style={{marginLeft: '4px'}} onClick={this.onClickWaitlist} className="neverland-button-yellow"> SIGNUP </button><br/>
+								{this.state.emailError}	
 							</div>
 							<div> 
 								<a href="https://www.facebook.com/Neverland-106231717763721"><img className="neverland-icon" src="/images/fb_icon.svg"/></a>
@@ -96,5 +105,10 @@ class Footer extends Component {
 			);
 	}
 }
+const mapStateToProps = state => {
+	return {
+		waitlist: state.waitlist
+	}
+}
 
-export default Footer;
+export default connect(mapStateToProps, {joinNewsletter})(Footer);

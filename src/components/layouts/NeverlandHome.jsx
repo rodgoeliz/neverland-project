@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {Redirect} from "react-router-dom";
 import queryString from 'query-string';
-import { joinWaitlist } from "../../actions/waitlist";
+import { joinWaitlist, joinNewsletter } from "../../actions/waitlist";
 
 
 class NeverlandHome extends Component {
@@ -234,4 +234,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, {joinWaitlist})(NeverlandHome);
+export default connect(mapStateToProps, {joinWaitlist, joinNewsletter})(NeverlandHome);

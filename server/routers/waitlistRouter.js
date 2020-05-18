@@ -1,17 +1,28 @@
 var express = require("express");
+require('dotenv').config();
 var router = express.Router();
 var WaitlistUser = require('../models/waitlistUser');
 const {sendEmail} = require("../email/emailClient");
+var Mailchimp = require('mailchimp-api-v3')
+var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
 
-router.get('/', function(req, res, next) {
-
+router.post('/join-newsletter', function(req, res, next) {
+	let email = req.body.email;
+	mailchimp.post('/lists/0867674d72/members', 
+	{
+		email_address: email,
+		status: 'subscribed'
+	})
+	.then(function(reuslts) {
+		res.json({success: true});
+	})
+	.catch(function(err) {
+		res.json({success: false})
+	})
 });
 
 router.get('/user', async function(req, res, next) {
-	console.log("fetch user info")
-	console.log(req.query)
 	let user = await WaitlistUser.findOne({referralCode: req.query.referralCode});
-	console.log(user)
 	if (!user) {
 		res.json({user: {}})
 	}

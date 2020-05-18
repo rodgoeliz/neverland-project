@@ -12,7 +12,8 @@ const MongoStore = require('connect-mongo')(session);
 var waitlistRouter = require('./routers/waitlistRouter');
 const dotenv = require('dotenv');
 dotenv.config();
-
+console.log("hello")
+console.log(process.env.REACT_APP_MONGODB_URI);
 mongoose.connect(process.env.REACT_APP_MONGODB_URI, {useNewUrlParser: true});
 mongoose.connection.on('error', (err) => {
 	console.error(err);

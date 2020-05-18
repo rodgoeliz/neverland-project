@@ -1,9 +1,14 @@
-import {WAITLIST_SUBMIT_SUCCESS, WAITLIST_USER_FETCH_SUCCESS} from '../constants/actionTypes';
+import {
+	WAITLIST_SUBMIT_SUCCESS, 
+	WAITLIST_USER_FETCH_SUCCESS, 
+	NEWSLETTER_SUBMIT_SUCCESS
+} from '../constants/actionTypes';
 
 var initialState = {
 	success:  false,
 	message: '',
-	waitlistUser: {}
+	waitlistUser: {},
+	newsletterSubmitSuccess: false
 }
 
 export default (state = initialState, action) => {
@@ -12,6 +17,8 @@ export default (state = initialState, action) => {
 			return {...state, waitlistUser: action.payload};
 		case WAITLIST_USER_FETCH_SUCCESS:
 			return {...state, waitlistUser: action.payload.user, invitedUsers: action.payload.invitedUsers}
+		case NEWSLETTER_SUBMIT_SUCCESS:
+			return {...state, newsletterSubmitSuccess: true}
 		default:
 			return state;
 	}

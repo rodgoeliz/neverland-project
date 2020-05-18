@@ -1,3 +1,4 @@
+require('dotenv').config();
 var nodemailer = require('nodemailer');
 const Email = require('email-templates');
 const mg = require('nodemailer-mailgun-transport');
@@ -8,7 +9,7 @@ var path = require('path');
 var FROM_ADDRESS = "vera@mail.enterneverland.com";
 const auth = {
   auth: {
-    api_key: '0e69cc889a59252e1190137c17067eb5-3e51f8d2-8cb10b34',
+    api_key: process.env.MAILGUN_API_KEY,
     domain: 'mail.enterneverland.com'
   },
   proxy: false

@@ -20,6 +20,7 @@
     "express-session": "^1.17.0",
     "handlebars": "^4.7.6",
     "http-errors": "^1.7.3",
+    "mailchimp-api-v3": "^1.13.1",
     "mongoose": "^5.9.6",
     "node-sass": "^4.13.1",
     "nodemailer": "^6.4.6",
