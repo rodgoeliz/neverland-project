@@ -85,11 +85,11 @@ class NeverlandHome extends Component {
 						<img className="door" src="/images/door.png" />
 						<img className="chairplant" src="/images/heroimage.png" />
 					</div>
-					<div className="neverland-header-container">
+					<div className="neverland-header-container" style={{paddingTop: '1em'}}>
 						<br/>
 						<br/>
 							<h1><span className="swash">G</span>row an urban oasis that <span className="ss-n">n</span>e<span className="ss-v">v</span>e<span className="swash">r</span> sta<span className="ss-n">n</span>ds still</h1>
-							<h4><span className="swash">D</span>elight in growi<span className="ss-n">n</span>g with our grow plant packs.</h4>
+							<h4><span className="swash">D</span>elight in growi<span className="ss-n">n</span>g with our starter plant packs.</h4>
 							<br/>
 							<input onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button style={{marginTop: '4px'}} onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
