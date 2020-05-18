@@ -20,10 +20,6 @@ body {
   background-color: $theme-beige !important;
 }
 
-p {
-    line-height: 1.15;
-  font-size: 24px
-}
 
 h1 {
   font-family: 'Cognace';
@@ -333,40 +329,40 @@ h2 {
 }
 .cloud_two {
   position: absolute;
-  height: 30vh;
+  height: 20vh;
   left: 55vw;
   top: 20vw;
   animation: float_two 6s ease-in-out infinite;
   z-index:100
 }
 .step-pick {
-  height: 350px;
+  height: 250px;
   display: flex;
   margin: auto;
 }
 .door {
   position: absolute;
-  height: 80vh;
+  height: 60vh;
   top: 20vh;
   left: 50vw;
 }
 .chairplant {
   position: absolute;
-  height: 80vh; 
+  height: 50vh; 
   right: 0;
-  top: 30vh;
+  top: 35vh;
   z-index: 150
 }
 .mist {
   position: absolute;
-  top: 80%;
-  right: 20%;
+  top: 60%;
+  right: 0%;
   height: 40vh;
   animation: float_hor 15s ease-in-out infinite;
 
 }
 .cloud {
-  height: 20vw;
+  height: 10vw;
   position: absolute;
   top: 80%;
   right: 0;
@@ -553,18 +549,12 @@ h2 {
     }
   }
 }
-.gim {
-   display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  background: #fff;
-  height: 200px;
-  width: 300px;
-  margin: 20px;
-  transform: translateY(var(--translateY));
-  will-change: transform;
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100vw;
 }
+
 .guarantee {
   position: relative;
   overflow: auto;
@@ -580,6 +570,10 @@ h2 {
 @media (max-width: 900px){
   body {
     font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407);
+  }
+  li {
+    line-height: 1.15;
+    font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407) !important;
   }
   p {
     line-height: 1.15;
@@ -609,7 +603,7 @@ h2 {
   .neverland-header {
     height: 120vh;
   }
-  .neverland-header-img {
+  .neverland-he 0ader-img {
     width: 100%;
   }
 
@@ -662,13 +656,14 @@ h2 {
     width: 85vw;
     z-index:100;
     top: 85vh;
+    right: 0;
   }
 
   .door {
     z-index: 10;
     height: 40vh;
     top: 75vh;
-    left: 20vw;
+    left: 10vw;
   }
   .chairplant, 
   .cloud {
@@ -700,6 +695,10 @@ h2 {
     font-size: calc(1.25em + (8 * (100vw - 1440px)) / 1119) !important;
   }
   p {
+    font-size: calc(1.25rem + (8 * (100vw - 1440px)) / 1119) !important;
+    line-height: 1.15;
+  }
+  li {
     font-size: calc(1.25rem + (8 * (100vw - 1440px)) / 1119) !important;
     line-height: 1.15;
   }

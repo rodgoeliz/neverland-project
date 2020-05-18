@@ -33,12 +33,25 @@ class NeverlandFAQ extends Component {
 						<div><h3 className="h3-cognace faq-section-title">Shipping & Product</h3></div>
 						<Accordion> 
 							<AccordionCard eventKey="5" title="Where does Neverland ship?">
+							We currently ship within the contiguous US to all 48 states.
 							</AccordionCard>
 							<AccordionCard eventKey="6" title="How much does shipping cost?">
+
+							<ul>
+								<li>Orders under $30: $2.99 flat shipping fee</li>
+								<li>Orders over $30: free shipping. </li>
+								Please note shipping rates and options can differ during holiday seasons and poor weather conditions.
+							</ul>
+
 							</AccordionCard>
-							<AccordionCard eventKey="2" title="What is your return policy?">
+							<AccordionCard eventKey="7" title="What is your return policy?">
+								At this time, Neverland does not accept returns, but we do guarantee that every product will arrive in great condition and germinate. If your seeds do not germinate, email us at help@enterneverland.com to get a replacement. 
 							</AccordionCard>
-							<AccordionCard eventKey="3" title="How does the satisfaction guarantee work?">
+							<AccordionCard eventKey="8" title="My order arrived damaged, what do I do?">
+								Every product is fragile and the shipping process is not always kind (or easy!). When this happens, we fix it whether it’s a damaged product or due to shipping carrier mishandling. If any of your products arrive damaged and your purchase was made less than 30 days ago, please have your order number and photo of your damaged product ready. Then, let us know via help@enterneverland.com so we can ship a replacement for you as soon as possible.
+							</AccordionCard>
+							<AccordionCard eventKey="9" title="How does the satisfaction guarantee work?">
+								We guarantee your plant will sprout within each plant-specific maturity timeline or you will qualify for an exchange. All of our seeds have a 99% germination rate. Please contact us at help@enterneverland.com with any further questions. 
 							</AccordionCard>
 						</Accordion>
 					</div>

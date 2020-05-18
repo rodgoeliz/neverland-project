@@ -24,12 +24,12 @@ class Header extends Component {
 		return (
 			<div className={"header " + backgroundClass}>
 				<div className="row-nm" style={{justifyContent: 'space-between'}}>
-						<div className="navbar-brand" style={{paddingLeft: '2em', paddingTop: '1em'}}>
+						<div className="navbar-brand" style={{paddingLeft: '2em', paddingTop: '1em', paddingBottom: '1em'}}>
 							<div className="display-desktop">
 								<a href="/"><h1><span className="swash">N</span>e<span className="ss-v">v</span>erla<span className="ss-n">n</span>d</h1></a>
 							</div>
 							<div className="display-mobile">
-								<img className="mobile-nav-logo" src="/images/neverland_monologo_black.png" />
+								<a href="/"><img className="mobile-nav-logo" src="/images/neverland_monologo_black.png" /></a>
 							</div>
 						</div>
 						<div className="row-nm">

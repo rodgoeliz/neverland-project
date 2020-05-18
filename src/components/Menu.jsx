@@ -14,6 +14,7 @@ const Menu = ({open}) => {
       <a href="#plants">
         Plants
         </a>
+      <a href="/faq">FAQ<span class="sr-only">(current)</span></a>
     </StyledMenu>
   )
 }
