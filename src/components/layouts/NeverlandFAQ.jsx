@@ -26,6 +26,7 @@ class NeverlandFAQ extends Component {
 							Overwatering. Almost no plant wants to sit in soggy soil; it can lead to a fungal infection called root rot that will eventually kill your plant. Inconsistent watering can also stress out a plant, making it more vulnerable to pests and other diseases. 
 							</AccordionCard>
 							<AccordionCard eventKey="4" title="What is the Plantline?">
+							Plantline is a free, direct text messaging line to Neverland. It’s open to all—not just Neverland customers. We send personalized and plant-specific reminders to help your plants thrive. We also keep track of your plants so you don’t have to. Questions? We’re here to help and take you step-by-step. No sweat. 
 							</AccordionCard>
 						</Accordion>
 					</div>
