@@ -20,7 +20,7 @@ class App extends Component {
         <Provider store={store}>
           <BrowserRouter>
             <Layout className="App">
-              <div className="App">
+              <div>
                 <Route exact path="/" component={NeverlandHome} />
                 <Route exact path="/story" component={NeverlandOurStory} />
                 <Route exact path="/waitlist/user" component={NeverlandWaitlist} />

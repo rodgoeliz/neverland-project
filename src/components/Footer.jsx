@@ -1,7 +1,64 @@
 import React, { Component } from 'react';
+import queryString from 'query-string';
 import {Navbar, NavDropdown, Form, Button, FormControl} from 'react-bootstrap';
 
 class Footer extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			emailInput: '',
+			emailError: "",
+			isSubmitting: false,
+			inviter: ""
+
+		}
+		this.onClickWaitlist = this.onClickWaitlist.bind(this);
+		this.onChangeInput= this.onChangeInput.bind(this);
+	}
+	
+	componentDidMount() {
+		if (this.props && this.props.location) {
+			const values = queryString.parse(this.props.location.search);
+			this.setState({
+				inviter: values.invite
+			});
+		}
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		let waitlistUser = this.props.waitlist.waitlistUser;
+		if (waitlistUser && waitlistUser.referralCode) {
+			this.setState({
+				redirect: true
+			})
+		}
+	}
+
+
+	validateEmail(email) {
+    	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    	return re.test(String(email).toLowerCase());
+	}
+
+	onClickWaitlist() {
+		//validate email
+		if (this.validateEmail(this.state.emailInput)) {
+			this.props.joinWaitlist(this.state.emailInput, this.state.inviter);
+			this.setState({
+				"emailError": "",
+				isSubmitting: true
+			});
+		} else {
+			this.setState({"emailError": "Please enter valid email"})
+		}
+		//window.location = "https://docs.google.com/forms/d/e/1FAIpQLSeZcRVCsn-_cOXdcMyjEfR7PQ9N536zi0NGdVZRbcfE4KUCpg/viewform"
+	}
+
+	onChangeInput(event) {
+		this.setState({
+			emailInput: event.target.value 
+		});
+	}
 	render() {
 		return (
 			<div className="footer-container">
