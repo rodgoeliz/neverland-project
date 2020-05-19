@@ -80,8 +80,8 @@ class NeverlandHome extends Component {
 					<div className="graphics">
 						<img className="neverland-header-img" src="/images/neverlandheader.png"/>
 						<img className="cloud" src="/images/cloud_one.png" />
-						<img className="mist" src="/images/mist.png" />
-						<img className="cloud_two" src="/images/cloud_two.png" />
+						<img className="mist display-desktop" src="/images/mist.png" />
+						<img className="cloud_two display-desktop" src="/images/cloud_two.png" />
 						<img className="door" src="/images/door.png" />
 						<img className="chairplant" src="/images/heroimage.png" />
 					</div>
@@ -137,7 +137,7 @@ It’s open to all—not just Neverland customers. We send personalized and plan
 							</p>
 					</div>
 					</div>
-					<div data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000" className="col-md-6"><img style={{width: '80%'}}src="/images/neverland_textline.png"/></div>
+					<div data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000" className="col-md-6"><img style={{width: '90%'}}src="/images/neverland_textline.png"/></div>
 				</div>
 				<div>
 				<br/>
@@ -224,8 +224,9 @@ It’s open to all—not just Neverland customers. We send personalized and plan
 					<div className="guarantee">
 						<div className="guarantee-container">
 						<h3 className="h3-cognace">Our <span className="swash">G</span>row <span className="swash">G</span>uarantee</h3>	
-						<p> We want you to succeed, which is why we offer 100% satisfaction guarantee. If your seeds don't sprout or something goes
-						wrong with the plant by the time it gets to you, we'll replace everything, free of charge.</p>
+						<p> 
+						We want you to succeed, which is why we offer 100% satisfaction guarantee. If your seeds don't sprout or something goes wrong with the plant by the time it gets to you, we'll replace everything, free of charge. 
+						</p>
 						</div>
 					</div>
 				</div>
