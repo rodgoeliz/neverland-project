@@ -117,7 +117,7 @@ class NeverlandHome extends Component {
 							<p className="step-desc">Unbox your plant pack and follow our easy breezy instructions for planting your new friend. Make sure to pot it like it's hot.🔥</p>
 						</div>
 						<div className="col-md-4 step-container">
-							<img className="step-pick" src="/images/vp_grow.gif"/>
+							<img className="step-pick" src="/images/vp_grow.png"/>
 							<span className="step-subtitle">STEP 3</span>
 							<h4 className="h4-cognace step-title" style={{textAlign: 'center'}}><span className="swash">G</span>row</h4>
 							<p className="step-desc">Romaine calm, we’re here to kelp. We’ll send personalized plant-specific reminders, plant puns, and tips to keep your plants happy and thriving. Our app is sprouting soon, until then text our plantline at 1-NVR-LAND for a good time and any questions you have. We’re rootin’ for ya! 🌱</p>
