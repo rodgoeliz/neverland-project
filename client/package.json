@@ -49,8 +49,7 @@
     "build": "react-scripts build",
     "start": "react-scripts start",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "heroku-postbuild": "npm install && npm run build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
