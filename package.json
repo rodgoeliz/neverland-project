@@ -2,6 +2,9 @@
   "name": "neverland",
   "version": "0.1.0",
   "private": true,
+"engines": {
+    "node": "13.10.x"
+},
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@testing-library/jest-dom": "^4.2.4",
