@@ -1,0 +1,72 @@
+{
+  "name": "botanica",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "aos": "^2.3.4",
+    "babel-loader": "8.0.6",
+    "body-parser": "^1.19.0",
+    "bootstrap": "^4.4.1",
+    "chalk": "^3.0.0",
+    "connect-mongo": "^3.2.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "email-templates": "^7.0.5",
+    "express-session": "^1.17.0",
+    "handlebars": "^4.7.6",
+    "http-errors": "^1.7.3",
+    "mailchimp-api-v3": "^1.13.1",
+    "mongoose": "^5.9.6",
+    "node-sass": "^4.13.1",
+    "nodemailer": "^6.4.6",
+    "nodemailer-mailgun-transport": "^2.0.0",
+    "path": "^0.12.7",
+    "query-string": "^6.11.1",
+    "react": "^16.13.0",
+    "react-bootstrap": "^1.0.0",
+    "react-dom": "^16.13.0",
+    "react-parallax": "^3.0.3",
+    "react-parallax-component": "^1.0.6",
+    "react-redux": "^7.2.0",
+    "react-rellax": "^1.0.3",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.0",
+    "react-scroll-parallax": "^2.3.2",
+    "react-share": "^4.1.0",
+    "react-spring": "^8.0.27",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "session": "^0.1.0",
+    "styled-components": "^5.1.0",
+    "yarn": "^1.22.4"
+  },
+  "scripts": {
+    "build": "react-scripts build",
+    "client-start": "react-scripts start",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "start": "node ./server/server.js",
+    "heroku-postbuild": "npm install && npm run build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "proxy": "http://localhost:5000",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
