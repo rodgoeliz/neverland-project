@@ -96,11 +96,11 @@ class NeverlandWaitlist extends Component {
 						</div>	
 						<div className="col-sm-3">
 							<div><img  className="referral-rewards-number"  src="/images/referral_five.png" /></div>
-							<div className="referral-rewards-desc">Get bumped up by 5 groups</div>
+							<div className="referral-rewards-desc">Get bumped up by 1 group</div>
 						</div>	
 						<div className="col-sm-3">
 							<div><img className="referral-rewards-number" src="/images/referral_ten.png" /></div>
-							<div className="referral-rewards-desc">Get bumped up to group 1</div>
+							<div className="referral-rewards-desc">Get a free plant pack</div>
 						</div>	
 						<div className="col-sm-3">
 							<div><img className="referral-rewards-number" src="/images/referral_fifty.png" /></div>
