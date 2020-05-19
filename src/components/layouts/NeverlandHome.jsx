@@ -225,7 +225,7 @@ It’s open to all—not just Neverland customers. We send personalized and plan
 						<div className="guarantee-container">
 						<h3 className="h3-cognace">Our <span className="swash">G</span>row <span className="swash">G</span>uarantee</h3>	
 						<p> 
-						We offer a 100% satisfaction guarantee. Check out our FAQ page for more information.
+						We offer a 100% satisfaction guarantee. Check out our <a href="/faq">FAQ</a> page for more information.
 						</p>
 						</div>
 					</div>
