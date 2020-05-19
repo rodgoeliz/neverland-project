@@ -1,5 +1,5 @@
 {
-  "name": "botanica",
+  "name": "neverland-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -47,10 +47,9 @@
   },
   "scripts": {
     "build": "react-scripts build",
-    "client-start": "react-scripts start",
+    "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "node ./server/server.js",
     "heroku-postbuild": "npm install && npm run build"
   },
   "eslintConfig": {
