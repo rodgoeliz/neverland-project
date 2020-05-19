@@ -22,7 +22,7 @@ mongoose.connection.on('error', (err) => {
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "../client/build")));
+app.use(express.static(path.join(__dirname, "client/build")));
 
 app.use("/waitlist", waitlistRouter);
 app.use(function(req, res, next) {
@@ -36,6 +36,6 @@ app.use(function(err, req, res, next) {
 	res.json(err);
 });
 app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname,'..', 'client/build', 'index.html'));
+	res.sendFile(path.join(__dirname,'client', 'build', 'index.html'));
 })
 app.listen(port, () => console.log(`Listening on port ${port}`));
