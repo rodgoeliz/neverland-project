@@ -47,7 +47,7 @@
     "yarn": "^1.22.4"
   },
   "scripts": {
-    "start": "node ./server/server.js",
+    "start": "node server.js",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "eslintConfig": {

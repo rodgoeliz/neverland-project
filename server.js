@@ -9,7 +9,7 @@ var path = require("path");
 const session = require('express-session');
 var mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
-var waitlistRouter = require('./routers/waitlistRouter');
+var waitlistRouter = require('./server/routers/waitlistRouter');
 const dotenv = require('dotenv');
 dotenv.config();
 app.use(cors());
@@ -22,7 +22,7 @@ mongoose.connection.on('error', (err) => {
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "client/build")));
+app.use(express.static(path.join(__dirname, "/client/build")));
 
 app.use("/waitlist", waitlistRouter);
 app.use(function(req, res, next) {
