@@ -225,7 +225,7 @@ It’s open to all—not just Neverland customers. We send personalized and plan
 						<div className="guarantee-container">
 						<h3 className="h3-cognace">Our <span className="swash">G</span>row <span className="swash">G</span>uarantee</h3>	
 						<p> 
-						We want you to succeed, which is why we offer 100% satisfaction guarantee. If your seeds don't sprout or something goes wrong with the plant by the time it gets to you, we'll replace everything, free of charge. 
+						We offer a 100% satisfaction guarantee. Check out our FAQ page for more information.
 						</p>
 						</div>
 					</div>

@@ -28,12 +28,6 @@ class Footer extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		let waitlistUser = this.props.waitlist.waitlistUser;
-		if (waitlistUser && waitlistUser.referralCode) {
-			this.setState({
-				redirect: true
-			})
-		}
 	}
 
 
