@@ -15,16 +15,18 @@ dotenv.config();
 //app.use(cors());
 mongoose.connect(process.env.REACT_APP_MONGODB_URI, {useNewUrlParser: true});
 mongoose.connection.on('error', (err) => {
-	console.error(err);
-	console.log("MONGODB CONNECTION ERROR: " + err)
 	process.exit();
 });
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "client/build")));
-
+	console.log('static path');
+	console.log(path.join(__dirname,'client/build/'));
 app.use("/waitlist", waitlistRouter);
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname + '/client/build/index.html'));
+})
 app.use(function(req, res, next) {
 	next(createError(404));
 });
@@ -35,7 +37,4 @@ app.use(function(err, req, res, next) {
 	res.status(err.status || 500);
 	res.json(err);
 });
-app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname + '/client/build/index.html'));
-})
 app.listen(port, () => console.log(`Listening on port ${port}`));
