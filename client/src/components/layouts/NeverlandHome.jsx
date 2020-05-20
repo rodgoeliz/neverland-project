@@ -69,6 +69,7 @@ class NeverlandHome extends Component {
 			message = this.props.waitlist.message;
 		}
 		if (this.state.redirect) {
+			window.scrollTo(0,0);
 			return (<Redirect to="/waitlist/user" />);
 		}
 		if (this.state.isSubmitting) {
