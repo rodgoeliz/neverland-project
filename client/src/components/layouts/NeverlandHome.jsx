@@ -72,7 +72,7 @@ class NeverlandHome extends Component {
 			return (<Redirect to="/waitlist/user" />);
 		}
 		if (this.state.isSubmitting) {
-			return <div>Joining the waitlist...</div>;
+			return <div className="join-waitlist-loading">Joining the waitlist...</div>;
 		}
 		return (
 			<div className="testest" style={{marginTop: '-5em'}}> 	
@@ -186,15 +186,15 @@ It’s open to all—not just Neverland customers. We send personalized and plan
 						<div className="col-md-6 display-desktop" data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000"><img style={{width:'100%', marginLeft: '-10%'}}src="images/green_strawberry.png"/></div>
 					</div>
 					<div className="row-nm plant-pack-row plant-pack-row-maroon"> 
-						<div className="col-md-6" data-aos="fade-right" data-aos-delay="200" data-aos-duration="2000"><img style={{width:'110%', marginLeft: '-10%'}}src="images/red_chili.png"/></div>
+						<div className="col-md-6" data-aos="fade-right" data-aos-delay="200" data-aos-duration="2000"><img style={{width:'110%', marginLeft: '-10%'}}src="images/peacelily.png"/></div>
 						<div className="col-md-6 padding-right plant-container-blue padding-left-small" style={{margin: 'auto'}}>
 							<h2 className="h2-cognace"><span className="swash">C</span>allie</h2>
-							<p>Cayenne Pepper| <i>Capsicum annuum</i></p>
-							<h4 className="h4-secondary"> These dark-green spicy peppers ripen to red and are perfect for pickling and cooking.</h4>
+							<p>Peace Lily | <i>Spathiphyllum</i></p>
+							<h4 className="h4-secondary"> This low-maintenance houseplant produces gorgeous white blossoms and glossy leaves.</h4>
 							<ul>
-								<li> Likes full sun and germinates in 6-15 days.</li>
-								<li> Days to maturity: 72 days.</li>
-								<li> Non-GMO and USDA Certified Organic</li>
+								<li> Named by NASA as one of the top air-purifying plants.</li>
+								<li> Likes bright light and tolerates low light. Germinates in 15 days.</li>
+								<li> Days to maturity: 100 days.</li>
 							</ul>
 							<p> One kit includes: Pot, Seed Starter Pod, Seeds, Soil, Pamphlet, Access to our app. </p>
 							<input placeholder="Enter your email" onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>

@@ -62,7 +62,10 @@ a:focus {
 h2 {
   font-size: 2.5rem !important;
 }
-
+.join-waitlist-loading {
+  height: 80vh;
+  display: flex;
+}
 .swash {
   font-feature-settings: 'swsh'
 }
