@@ -36,6 +36,6 @@ app.use(function(err, req, res, next) {
 	res.json(err);
 });
 app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname + '/app/client/build/index.html'));
+	res.sendFile(path.join(__dirname + '/client/build/index.html'));
 })
 app.listen(port, () => console.log(`Listening on port ${port}`));
