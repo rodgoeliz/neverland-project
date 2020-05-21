@@ -144,6 +144,17 @@ It’s open to all—not just Neverland customers. We send personalized and plan
 				<br/>
 					<br/>
 					<br/>
+				<div className="row-nm">
+					<div className="col-md-6" style={{margin: 'auto'}}><img className="app-img" src="/images/neverland_app.png"/></div>	
+					<div className="col-md-6" style={{margin: 'auto', textAlign: 'center'}}>
+						<h2 className="h2-cognace"> Our app is sprouting soon! </h2>
+						<p>Making growing plants easy. Keep track of your plants, get reminders to water, fertilize and plant, and diagnose problems.  </p>
+					</div>	
+
+				</div>
+				<br/>
+					<br/>
+					<br/>
 				<br/>
 					<h1 id="plants" className="h1-cognace" style={{textAlign: 'center'}}>Let’s Grow Together</h1>
 					<p style={{textAlign: 'center'}}>Delight in growing with our Organic Seed Packs </p>

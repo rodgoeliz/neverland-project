@@ -69,7 +69,9 @@ h2 {
   align-items: center;
   font-weight: bold
 }
-
+.app-img {
+  width: 40vw;
+}
 .swash {
   font-feature-settings: 'swsh'
 }
@@ -612,6 +614,10 @@ h2 {
 
   h3 {
     font-size: calc(1.75rem + (4 * (100vw - 360px)) / 407) !important;
+  }
+
+  .app-img {
+    width: 90vw;
   }
 
   .our-story-parent-container {
