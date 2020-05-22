@@ -21,7 +21,7 @@ exports.sendEmail = function(toAddress, subject, templateUrl, locals) {
 	var source = fs.readFileSync(templatePath, 'utf8');
 	var template = Handlebars.compile(source);
 	let mailOptions = {
-		from: "Vera From Neverland<" + FROM_ADDRESS + ">",
+		from: "Vera & Hayley From Neverland<" + FROM_ADDRESS + ">",
 		to: toAddress,
 		replyTo: "vera@enterneverland.com",
 		subject: subject,
