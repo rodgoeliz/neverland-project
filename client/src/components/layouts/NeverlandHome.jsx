@@ -121,7 +121,7 @@ class NeverlandHome extends Component {
 							<img className="step-pick" src="/images/vp_grow.png"/>
 							<span className="step-subtitle">STEP 3</span>
 							<h4 className="h4-cognace step-title" style={{textAlign: 'center'}}><span className="swash">G</span>row</h4>
-							<p className="step-desc">Romaine calm, we’re here to kelp. We’ll send personalized plant-specific reminders, plant puns, and tips to keep your plants happy and thriving. Our app is sprouting soon, until then text our plantline at 1-NVR-LAND for a good time and any questions you have. We’re rootin’ for ya! 🌱</p>
+							<p className="step-desc">Romaine calm, we’re here to kelp. We’ll send personalized plant-specific reminders, plant puns, and tips to keep your plants happy and thriving. Our app is sprouting soon to help you grow your new besties! We’re rootin’ for ya! 🌱</p>
 						</div>
 					</div>
 				</div>
@@ -133,7 +133,7 @@ class NeverlandHome extends Component {
 						<div style={{maxWidth: 500, margin: 'auto'}}>
 							<h2 className="h2-cognace">Romaine calm, we're here to kelp.</h2>
 							<p>
-							Plantline is a free, direct text messaging line to Neverland. 
+							Through our app you get direct messaging line to Neverland. 
 It’s open to all—not just Neverland customers. We send personalized and plant-specific reminders to help your plants thrive. We keep track of your plants so you don’t have to. Questions? We’re here to help and take you step-by-step. No sweat.
 							</p>
 					</div>
