@@ -10,6 +10,7 @@ const session = require('express-session');
 var mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 var waitlistRouter = require('./server/routers/waitlistRouter');
+var userRouter = require('./server/routers/loginOrSignUpRouter');
 const dotenv = require('dotenv');
 dotenv.config();
 //app.use(cors());
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, "client/build")));
 	console.log('static path');
 	console.log(path.join(__dirname,'client/build/'));
 app.use("/waitlist", waitlistRouter);
+app.use("/api/user", userRouter)
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname + '/client/build/index.html'));
 })

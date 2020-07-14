@@ -22,7 +22,7 @@ class NeverlandFAQ extends Component {
 							<AccordionCard eventKey="2" title="How do plants improve well-being?">
 							A study in 2015 found that interacting with indoor plants can measurably reduce psychological and physiological stress, and a 2009 study found that plants enhanced the outcomes of surgery patients. In prisons, retirement homes, juvenile detention centers, and veterans’ homes, horticultural therapy is growing as a practice to help those dealing with post-traumatic stress disorder, anxiety, depression, and other issues.
 							</AccordionCard>
-							<AccordionCard eventKey="3" title="What is the number on killer of plants?">
+							<AccordionCard eventKey="3" title="What is the number one killer of plants?">
 							Overwatering. Almost no plant wants to sit in soggy soil; it can lead to a fungal infection called root rot that will eventually kill your plant. Inconsistent watering can also stress out a plant, making it more vulnerable to pests and other diseases. 
 							</AccordionCard>
 							<AccordionCard eventKey="4" title="What is the Neverland app?">

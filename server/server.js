@@ -10,6 +10,7 @@ const session = require('express-session');
 var mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 var waitlistRouter = require('./routers/waitlistRouter');
+var loginOrSignUpRouter = require('./routers/loginOrSignUpRouter');
 const dotenv = require('dotenv');
 dotenv.config();
 app.use(cors());
@@ -25,9 +26,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../client/build")));
 
 app.use("/waitlist", waitlistRouter);
+app.use("/user", loginOrSignUpRouter);
 app.use(function(req, res, next) {
 	next(createError(404));
 });
+console.log("HEY SERVER")
 app.use(function(err, req, res, next) {
 	res.locals.message = err.message;
 	res.locals.error = req.app.get("env") === "development" ? err: {};
