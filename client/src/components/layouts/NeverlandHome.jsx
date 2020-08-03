@@ -174,7 +174,7 @@ class NeverlandHome extends Component {
 
 					<div className="row-nm" style={{margin: 'auto'}}>
 						<div className="col-md-6 plant-pack-square-blue">
-							<div className="col-md-6" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000"><img data-aos="fade-right" style={{height:'15em', marginLeft: '-10%'}}src="images/blue_tomato.png"/></div>
+							<div className="col-md-6" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000"><img data-aos="fade-right" style={{width:'100%'}}src="images/blue_tomato.png"/></div>
 							<h2 className="h2-cognace"><span className="swash">C</span>herie</h2>
 							<p>Cherry Tomato| <i>Lycoperiscon esculentum</i></p>
 							<h4 className="h4-secondary">Truly tasty cherry tomatoes perfect for salads or snacking. </h4>
@@ -191,7 +191,7 @@ class NeverlandHome extends Component {
 								</div>
 						</div>
 						<div className="col-md-6 plant-pack-square-green">
-							<div className="col-md-6 " data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000"><img style={{width:'100%', marginLeft: '-10%'}}src="images/green_strawberry.png"/></div>
+							<div className="col-md-6 " data-aos="fade-left" data-aos-delay="200" data-aos-duration="1000"><img style={{width:'100%'}}src="images/green_strawberry.png"/></div>
 							<h2 className="h2-cognace"><span className="swash">S</span>oozy</h2>
 							<p>Strawberries | <i>Fragaria ananassa</i></p>
 							<h4 className="h4-secondary">Sweet, flavorful berries to savor all summer long.</h4>
@@ -209,7 +209,7 @@ class NeverlandHome extends Component {
 
 					<div className="row-nm" style={{margin: 'auto'}}>
 						<div className="col-md-6 plant-pack-square-maroon">
-						<div className="col-md-6" data-aos="fade-right" data-aos-delay="200" data-aos-duration="2000"><img style={{width:'100%', marginLeft: '-10%'}}src="images/peacelily.png"/></div>
+						<div className="col-md-6" data-aos="fade-right" data-aos-delay="200" data-aos-duration="2000"><img style={{width:'100%'}}src="images/peacelily.png"/></div>
 							<h2 className="h2-cognace"><span className="swash">C</span>allie</h2>
 							<p>Peace Lily | <i>Spathiphyllum</i></p>
 							<h4 className="h4-secondary"> This low-maintenance houseplant produces gorgeous white blossoms and glossy leaves.</h4>
@@ -242,8 +242,8 @@ class NeverlandHome extends Component {
 					<br />
 					<br />
 				<div className="row-nm" style={{minHeight: '100vh'}}>
-					<div className="col-md-6 display-mobile"><img className="app-img" src="/images/neverland_app.png"/></div>	
-					<div className="col-md-6" style={{margin: 'auto', textAlign: 'center', paddingLeft: '4em', paddingRight: '4em'}}>
+					<div className="col-md-6 display-mobile" style={{margin: 'auto'}}><img className="app-img" src="/images/neverland_app.png"/></div>	
+					<div className="col-md-6 app-container">
 						<h2 className="h2-cognace">Romaine calm, we're here to kelp.</h2>
 							<p>						
 							Through our app you get direct messaging line to Neverland. 

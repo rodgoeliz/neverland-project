@@ -645,12 +645,21 @@ h2 {
 }
 
 .new-take-description {
-  margin: 'auto'; 
-  padding-top: '1em';
-  padding-right: '4em';
+  margin: auto; 
+  padding-top: 1em;
+  padding-right: 4em;
 }
-
+.app-container {
+  margin: auto;
+  text-align: center;
+  padding-left: 4em !important;
+  padding-right: 4em !important;
+}
 @media (max-width: 900px){
+  .app-container {
+    padding-left: 2em !important;
+    padding-right: 2em !important;
+  }
   body {
     font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407) !important;
   }
@@ -717,7 +726,7 @@ h2 {
   .new-take-description {
     margin: auto; 
     padding-top: 1em;
-    padding-right: 4em;
+    padding-right: 2em;
   }
 
   .our-story-parent-container {
