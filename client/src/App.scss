@@ -16,7 +16,7 @@ $theme-dark-yellow: #a98d2e;
 
 body {
   font-family: 'Open Sans', sans-serif !important;
-  font-size: 24px !important;
+  font-size: 24px ;
   background-color: $theme-beige !important;
 }
 
@@ -92,6 +92,15 @@ h2 {
   margin: auto;
   justify-content: center;
 }
+
+.mist {
+  position: absolute;
+  top: 60%;
+  right: 0%;
+  height: 40vh;
+  animation: float_hor 15s ease-in-out infinite;
+
+}
 .step-title {
   color: $theme-blue;
 }
@@ -99,7 +108,32 @@ h2 {
   padding-top: 4em;
   padding-bottom: 4em;
 }
+.plant-pack-square-green {
+  background-color: $theme-green;
+}
+.plant-pack-square-blue {
+  background-color: $theme-blue;
+  color: $theme-beige;
+}
+.plant-pack-square-maroon {
+  background-color: $theme-maroon;
+  color: $theme-beige;
+}
+.plant-pack-square-yellow {
+  background-color: $theme-yellow;
+  color: $theme-black;
+}
 
+
+.plant-pack-square-green,
+.plant-pack-square-blue,
+.plant-pack-square-maroon,
+.plant-pack-square-yellow {
+  padding-left: 4em !important;
+  padding-right: 4em !important;
+  padding-bottom: 3em !important;
+  padding-top: 3em !important;
+}
 .plant-pack-row-yellow{
   background-color: $theme-yellow;
   color: $theme-black;
@@ -154,7 +188,9 @@ h2 {
   padding-top: 6em;
   padding-bottom: 6em;
 }
-
+.elevate-container {
+  padding-left: 4em !important;
+}
 .plant-pack-row-blue {
   z-index:1000;
   background-color: $theme-blue;
@@ -244,7 +280,7 @@ h2 {
 
 .neverland-button-yellow {
   background-color: $theme-yellow;
-  color: $theme-blue;
+  color: $theme-black;
   border: 2px solid $theme-yellow;
   font-weight: bold;
   height: 58px;
@@ -278,7 +314,10 @@ h2 {
   border-radius: 8px;
   cursor: url("images/cloud_cursor.png"), auto !important;
 }
-
+.satisfaction-container {
+  margin: auto;
+  padding-right: 4em;
+}
 .neverland-button:active,
 .neverland-button:hover {
   background-color: $theme-dark-blue;
@@ -359,6 +398,12 @@ h2 {
   display: flex;
   margin: auto;
 }
+.elevate-img-lg {
+    display: block;
+}
+.elevate-img-sm {
+    display: none;
+}
 .door {
   position: absolute;
   height: 60vh;
@@ -371,14 +416,6 @@ h2 {
   right: 0;
   top: 35vh;
   z-index: 150
-}
-.mist {
-  position: absolute;
-  top: 60%;
-  right: 0%;
-  height: 40vh;
-  animation: float_hor 15s ease-in-out infinite;
-
 }
 .cloud {
   height: 10vw;
@@ -441,6 +478,10 @@ h2 {
 
 .padding-right {
   padding-right: 4em !important;
+}
+
+.new-take-container {
+  padding: 4em;
 }
 
 .padding-left {
@@ -510,10 +551,10 @@ h2 {
 
 .footer {
   margin: 4em;
-  color: $theme-yellow !important;
+  color: $theme-beige!important;
 
   a {
-    color: $theme-yellow !important;
+    color: $theme-beige!important;
 
     &:hover,
     &:focus,
@@ -525,7 +566,7 @@ h2 {
 }
 
 .footer-container {
-  background-color: $theme-blue;
+  background-color: $theme-black;
   display: flex;
   flex-direction: column;
   padding-top: 2em;
@@ -591,16 +632,30 @@ h2 {
   color: $theme-green;
 }
 
+.new-take-title {
+  width: 200px; 
+}
+.new-take-title-container {
+  margin: 'auto';
+  padding-left: '4em';
+}
+
+.new-take-description {
+  margin: 'auto'; 
+  padding-top: '1em';
+  padding-right: '4em';
+}
+
 @media (max-width: 900px){
   body {
-    font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407);
+    font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407) !important;
   }
   li {
     line-height: 1.15;
     font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407) !important;
   }
   p {
-    line-height: 1.15;
+    line-height: 1.25;
     font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407) !important;
   }
 
@@ -615,9 +670,40 @@ h2 {
   h3 {
     font-size: calc(1.75rem + (4 * (100vw - 360px)) / 407) !important;
   }
+  .elevate-img-lg {
+    display: none;
+  }
+  .elevate-img-sm {
+    display: block;
+  }
+  .elevate-container {
+    padding: 2em !important;
+  }
+
+  .satisfaction-container {
+    margin: auto;
+    text-align: center;
+    padding-right: 0em;
+  }
 
   .app-img {
-    width: 90vw;
+    width: 80vw;
+  }
+
+  .new-take-title {
+    width: 100%; 
+  }
+  .new-take-title-container {
+    margin: 'auto';
+    padding-left: '0em';
+  }
+  .new-take-container {
+    padding: 2em;
+  }
+  .new-take-description {
+    margin: auto; 
+    padding-top: 1em;
+    padding-right: 4em;
   }
 
   .our-story-parent-container {
@@ -636,7 +722,7 @@ h2 {
     margin-top: -12.5em;
   }
   .neverland-header {
-    height: 120vh;
+    height: 150vh;
   }
   .neverland-he 0ader-img {
     width: 100%;
@@ -690,14 +776,14 @@ h2 {
     position: absolute;
     width: 85vw;
     z-index:100;
-    top: 85vh;
+    top: 105vh;
     right: 0;
   }
 
   .door {
     z-index: 10;
     height: 40vh;
-    top: 75vh;
+    top: 100vh;
     left: 10vw;
   }
   .chairplant, 
@@ -724,6 +810,20 @@ h2 {
     width: 100%;
   }
 }
+@media(min-width: 900px) and (max-width: 1200px) {
+  .mist {
+    display: none;
+  }
+  .chairplant {
+    height: 45vh;
+  }
+  .door {
+    height: 55vh;
+  }
+  .cloud {
+    top: 60%;
+  }
+}
 
 @media(min-width:1200px) {
   body {
@@ -731,7 +831,7 @@ h2 {
   }
   p {
     font-size: calc(1.25rem + (8 * (100vw - 1440px)) / 1119) !important;
-    line-height: 1.15;
+    line-height: 1.25;
   }
   li {
     font-size: calc(1.25rem + (8 * (100vw - 1440px)) / 1119) !important;
@@ -751,6 +851,9 @@ h2 {
   }
   .neverland-header-img {
     width: 100%;
+  }
+  .mist {
+    width: 300;
   }
 }
 

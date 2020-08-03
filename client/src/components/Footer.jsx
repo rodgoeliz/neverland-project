@@ -77,7 +77,7 @@ class Footer extends Component {
 					</div>
 					<div className="col-sm-6">
 						<div className="" style={{marginTop: '1em'}}>
-							<p style={{fontSize: '12px', fontWeight: 'bold', color: '#1e1dcd', marginBottom: -2}}>Get in on the grapevine</p>
+							<p style={{fontSize: '12px', fontWeight: 'bold', color: '#efe6d8', marginBottom: -2}}>Get in on the grapevine</p>
 							<div style={{display: 'flex', flexDirection: 'column'}}>
 								<input className="neverland-input-footer" onChange={this.onChangeInput} placeholder="Slide into my emails!"/>
 								{successMessage}

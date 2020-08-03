@@ -28,7 +28,7 @@ class Home extends Component {
 	}
 
 	render() {
-		let message = "hello";
+		let message = "";
 		if (this.props.waitlist) {
 			message = this.props.waitlist.message;
 		}
