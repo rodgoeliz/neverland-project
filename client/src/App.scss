@@ -93,6 +93,10 @@ h2 {
   justify-content: center;
 }
 
+.step-container {
+  padding-top: 4em;
+}
+
 .mist {
   position: absolute;
   top: 60%;
@@ -669,6 +673,16 @@ h2 {
 
   h3 {
     font-size: calc(1.75rem + (4 * (100vw - 360px)) / 407) !important;
+  }
+
+  .plant-pack-square-green,
+  .plant-pack-square-blue,
+  .plant-pack-square-maroon,
+  .plant-pack-square-yellow {
+    padding-left: 2em !important;
+    padding-right: 2em !important;
+    padding-bottom: 2em !important;
+    padding-top: 2em !important;
   }
   .elevate-img-lg {
     display: none;

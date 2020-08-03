@@ -223,7 +223,7 @@ class NeverlandHome extends Component {
 							<button onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
 						<div className="col-md-6 plant-pack-square-yellow">
-							<div className="col-md-6 " data-aos="fade-left" data-aos-delay="200" data-aos-duration="2000"><img style={{width:'100%', marginLeft: '-10%'}}src="images/yellow_basil.png"/></div>
+							<div className="col-md-6 " data-aos="fade-left" data-aos-delay="200" data-aos-duration="2000"><img style={{width:'100%'}}src="images/yellow_basil.png"/></div>
 							<h2 className="h2-cognace"><span className="swash">B</span>anjo</h2>
 							<p>Italian Basil | <i>Ocimum basilicum</i></p>
 							<h4 className="h4-secondary">Sweet and fragrant classic Italian Basil</h4>
