@@ -127,8 +127,15 @@ h2 {
   background-color: $theme-yellow;
   color: $theme-black;
 }
-
-
+.our-team-image {
+  position: relative;
+  width: 100%;
+  z-index:-1000;
+}
+.our-team-container {
+  margin-top: -15em;
+  z-index:200;
+}
 .plant-pack-square-green,
 .plant-pack-square-blue,
 .plant-pack-square-maroon,
@@ -342,6 +349,8 @@ h2 {
   margin-top: -4em;
   background-color: $theme-yellow;
   padding: 4em;
+  border-radius: 32px;
+  margin-bottom: 4em;
 }
 .our-story-container {
   margin: auto;
@@ -351,6 +360,12 @@ h2 {
   max-width: 300px;
   margin: auto;
   display: flex;
+}
+.our-story-test {
+  border-radius: 32px;
+  margin-bottom: 4em;
+  max-width: 1000px;
+  margin: auto;
 }
 .row-nmc,
 .row-nm {
@@ -733,6 +748,7 @@ h2 {
     margin-top: -4em;
     background-color: $theme-yellow;
     padding: 2em;
+    border-radius: 32px; 
     padding-top: 4em;
   }
   .mobile-menu {
@@ -845,6 +861,10 @@ h2 {
   }
   .cloud {
     top: 60%;
+  }
+  p {
+    font-size: calc(1.25rem + (8 * (100vw - 1440px)) / 1119) !important;
+    line-height: 1.25;
   }
 }
 

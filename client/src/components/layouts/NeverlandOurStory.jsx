@@ -13,6 +13,8 @@ class NeverlandOurStory extends Component {
 	render() {
 		return (
 			<div>
+				<div><img className="our-team-image" src="/images/hayleyverateam.jpg" /></div>
+				<div className="our-team-container">
 				<img className="our-story-monologo" src="/images/neverland_splash_logo.png" />
 				<div className="wrapper our-story-test">
 					<div className="our-story-parent-container">
@@ -69,6 +71,7 @@ class NeverlandOurStory extends Component {
 							<br/>
 							<h1> <span className="swash ss-v">V</span>era & <span className="swash">H</span>ayley </h1>
 						</div>
+					</div>
 					</div>
 					</div>
 			</div>);
