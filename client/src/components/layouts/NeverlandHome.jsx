@@ -100,6 +100,7 @@ class NeverlandHome extends Component {
 							</div>
 					</div>
 				</div>
+				{/*}
 				<div className="row-nm" style={{marginLeft: '2em', marginTop: '2em', marginRight: '2em'}}>
 					<h2 className="h2-cognace" style={{margin: 'auto'}}> How it works </h2>
 					<div className="row-nm">
@@ -144,7 +145,8 @@ class NeverlandHome extends Component {
 				</div>
 				<hr />
 				<br />
-				<br />
+				<br />*/}
+				{/*}
 				<div className="row-nm">
 					<div className="col-md-8 elevate-img-sm" style={{textAlign: 'center', margin: 'auto'}}> <img width="90%" src="/images/nvlnd_gif"/></div>
 					<div className="col-md-4 elevate-container">
@@ -237,11 +239,8 @@ class NeverlandHome extends Component {
 							<input placeholder="Enter your email" onChange={this.onChangeInput} className="neverland-input" value={this.state.emailInput}/>
 							<button onClick={this.onClickWaitlist} className="neverland-button"> JOIN THE WAITLIST </button><br/>
 						</div>
-					</div>
-					<br />
-					<br />
-					<br />
-				<div className="row-nm" style={{minHeight: '100vh'}}>
+					</div>*/}
+				<div className="row-nm" style={{minHeight: '80vh'}}>
 					<div className="col-md-6 display-mobile" style={{margin: 'auto'}}><img className="app-img" src="/images/neverland_app.png"/></div>	
 					<div className="col-md-6 app-container">
 						<h2 className="h2-cognace">Romaine calm, we're here to kelp.</h2>
@@ -329,6 +328,7 @@ It’s open to all—not just Neverland customers. We send personalized and plan
 						</div>
 						<div className="col-md-6 display-desktop" data-aos="fade-left" data-aos-delay="200" data-aos-duration="2000"><img style={{width:'100%', marginLeft: '-10%'}}src="images/yellow_basil.png"/></div>
 					</div>*/}
+				{/*
 					<div className="guarantee row-nm" style={{paddingBottom: '6em'}}>
 						<div className="col-md-8" style={{margin: 'auto', textAlign: 'center'}}>
 							<img width="90%" src="/images/nvlnd_growguarantee.png"/>
@@ -339,10 +339,10 @@ It’s open to all—not just Neverland customers. We send personalized and plan
 								<p> 
 								We offer a 100% satisfaction guarantee. Check out our <a href="/faq">FAQ</a> page for more information.
 								</p>
-							</div>
 						</div>
 					</div>
 				</div>
+					*/}
 			</div>
 		);
 	}
