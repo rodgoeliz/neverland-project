@@ -69,9 +69,11 @@ class Footer extends Component {
 						<div className="row">
 							<a href="/"><img className="footer-logo" src="/images/neverland_monologo_yellow.png" /></a>
 							<div className="footer-nav">
+								{/*
 								<a className="col" href="/faq">FAQ</a>
 								<a className="col" href="/story">Our story</a>
 								<a className="col" href="mailto:help@enterneverland.com">Contact us</a>
+							    */}
 							</div>
 						</div>
 					</div>
