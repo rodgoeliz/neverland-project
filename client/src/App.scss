@@ -37,7 +37,25 @@ a:hover,
 a:focus {
   color: $theme-blue !important;
 }
-
+.nvlnd-about-main-background-box-bottom {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    background-color: $theme-blue;
+    margin-left: -16px;
+    margin-bottom: -16px;
+    bottom: 0;
+    z-index: -100;
+}
+.nvlnd-about-main-background-box {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    background-color: $theme-blue;
+    margin-left: -16px;
+    margin-top: -16px;
+    z-index: -100;
+}
 .h2-cognace {
   font-family: 'Cognace';
   font-size: calc(2.75rem + (4 * (100vw - 360px)) / 407) !important;

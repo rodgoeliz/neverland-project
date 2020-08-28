@@ -241,7 +241,27 @@ class NeverlandHome extends Component {
 						</div>
 					</div>*/}
 				<div className="row-nm" style={{minHeight: '80vh'}}>
-					<div className="col-md-6 display-mobile" style={{margin: 'auto'}}><img className="app-img" src="/images/neverland_app.png"/></div>	
+					<div className="col-md-6 display-mobile" style={{margin: 'auto'}}>
+						<div className="nvlnd-about-main-background-box" />
+						<div className="nvlnd-about-main-background-box-bottom" />
+						<div className="nvlnd-about-main-background-box" />
+						<div className="nvlnd-about-main-background-box" />
+						<img className="app-img" src="/images/neverland_about_main.jpeg"/></div>	
+					<div className="col-md-6 app-container">
+						<h2 className="h2-cognace">About Neverland</h2>
+							<p>						
+						Neverland is the online destination for plants and gardening. Buyers can discover new plants and gardening products, book gardening services online, and get inspired. Plant and gardening professionals can sell their products, connect with new buyers, and build their business. 	
+							</p>
+					</div>	
+					<div className="col-md-6 display-desktop" style={{margin: 'auto'}}>
+						<div className="nvlnd-about-main-background-box" />
+						<div className="nvlnd-about-main-background-box-bottom" />
+					<img className="app-img" src="/images/neverland_about_main.jpeg"/></div>	
+				</div>
+				<br/>
+					<br/>
+				<div className="row-nm" style={{minHeight: '80vh'}}>
+					<div className="col-md-6 display-desktop" style={{margin: 'auto'}}><img className="app-img" src="/images/neverland_app.png"/></div>	
 					<div className="col-md-6 app-container">
 						<h2 className="h2-cognace">Romaine calm, we're here to kelp.</h2>
 							<p>						
@@ -249,7 +269,7 @@ class NeverlandHome extends Component {
 It’s open to all—not just Neverland customers. We send personalized and plant-specific reminders to help your plants thrive. We keep track of your plants so you don’t have to. Questions? We’re here to help and take you step-by-step. No sweat.
 							</p>
 					</div>	
-					<div className="col-md-6 display-desktop" style={{margin: 'auto'}}><img className="app-img" src="/images/neverland_app.png"/></div>	
+					<div className="col-md-6 display-mobile" style={{margin: 'auto'}}><img className="app-img" src="/images/neverland_app.png"/></div>	
 				</div>
 				<br/>
 					<br/>
