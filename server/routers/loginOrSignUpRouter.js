@@ -1,4 +1,5 @@
 var express = require("express");
+var crypto = require("crypto");
 require('dotenv').config();
 var router = express.Router();
 var WaitlistUser = require('../models/waitlistUser');
@@ -18,6 +19,39 @@ router.post('/update', async function(req, res, next){
 	user.save(function(err, result) {
 		res.json({success: true})
 	});
+});
+
+router.post('/login', async function(req, res, next) {
+	console.log("LOG IN");
+	let email = req.body.email;
+	let password = req.body.password;
+	// find user by email and check if password matches
+	let existingUser = await User.findOne({email: email});
+	if (existingUser) {
+		// if matches generate an authToken and send back user info
+		if (existingUser.comparePassword(password))	{
+			const authToken = crypto.randomBytes(64).toString('base64');
+			res.json({
+				success: true,
+				authToken: authToken,
+				user: existingUser
+			});
+			return;
+		} else {
+			res.json({
+				success:false,
+				error: "Wrong input. Please try again."
+			});
+			return;
+		}
+	} else {
+		res.json({
+			success: false,
+			error: 'Wrong input. Please try again.'
+		});
+		return;
+	}
+
 });
 
 router.post('/createOrUpdate', async function(req, res, next) {
