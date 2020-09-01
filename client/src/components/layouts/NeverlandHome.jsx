@@ -73,7 +73,7 @@ class NeverlandHome extends Component {
 			return (<Redirect to="/waitlist/user" />);
 		}
 		if (this.state.isSubmitting) {
-			return <div className="join-waitlist-loading">Joining the waitlist...</div>;
+			return <div style={{justifyContent: 'center'}} className="join-waitlist-loading">Joining the waitlist...</div>;
 		}
 		return (
 			<div className="testest" style={{marginTop: '-5em'}}> 	
