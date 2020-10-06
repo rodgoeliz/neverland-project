@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
 const plantSchema = new mongoose.Schema({
 	createdAt: Date,
 	title: String,
-	hardinessZone: String,
+	hardinessZone: {
+		min: String,
+		max: String
+	},
 	description: String,
 	scientificName: String,
 	temperature: {

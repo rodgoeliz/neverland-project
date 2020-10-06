@@ -1,0 +1,44 @@
+{
+	"fulfillmentOptions": {
+		"usps" : 
+			{
+				"priority": {
+					"length": 
+						{
+							"min": 1,
+							"max": 3
+						},
+					"price": 7.11
+				},
+			 	"ground": {
+					"length": 
+						{
+							"min": 2,
+							"max":5
+						},
+					"price": 4.11
+				}
+			}
+	},
+	"surchargeRules": 
+		{
+			"buyerProtection": [
+				{
+					"minThreshold": 0,
+					"maxThreshold": 10,
+					"surcharge": {
+						"value": 1,
+						"type": "currency"
+					}
+				},
+				{
+					"minThreshold": 10,
+					"maxThreshold": 10000000,
+					"surcharge": {
+						"value": 5,
+						"type": "percent"
+					}
+				}
+			]
+		}
+}

@@ -9,6 +9,9 @@ import NeverlandOurStory from './components/layouts/NeverlandOurStory';
 import NeverlandWaitlist from "./components/layouts/NeverlandWaitlist";
 import NeverlandFAQ from "./components/layouts/NeverlandFAQ";
 import Layout from './components/layouts/Layout';
+import AdminPage from "./components/layouts/AdminPage";
+import AdminProductEdit from "./components/layouts/AdminProductEdit";
+import SellerOnboardingReAuth from "./components/layouts/SellerOnboardingReAuth";
 import {ParallaxProvider} from "react-scroll-parallax";
 import AOS from 'aos';
 
@@ -22,9 +25,14 @@ class App extends Component {
             <Layout className="App">
               <div>
                 <Route exact path="/" component={NeverlandHome} />
+                <Route exact path="/admin" component={AdminPage} />
+                <Route exact path="/adminTwo" component={NeverlandOurStory} />
                 <Route exact path="/story" component={NeverlandOurStory} />
                 <Route exact path="/waitlist/user" component={NeverlandWaitlist} />
                 <Route exact path="/faq" component={NeverlandFAQ} />
+                <Route exact path="/seller-onboarding/reauth/:accountId" component={SellerOnboardingReAuth} />
+                <Route exact path="/seller-onboarding/return/:accountId" component={SellerOnboardingReAuth} />
+                <Route path="/edit/product/:productId" component={AdminProductEdit} />
               </div>
             </Layout>
           </BrowserRouter>

@@ -11,6 +11,19 @@ var mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 var waitlistRouter = require('./server/routers/waitlistRouter');
 var userRouter = require('./server/routers/loginOrSignUpRouter');
+var bundleRouter = require('./server/routers/bundleRouter');
+var couponRouter = require('./server/routers/couponRouter');
+var paymentRouter = require('./server/routers/paymentRouter');
+var addressRouter = require('./server/routers/addressRouter');
+var plantRouter = require('./server/routers/plantRouter');
+var productRouter = require('./server/routers/productRouter');
+var storeRouter = require('./server/routers/storeRouter');
+var navigationRouter = require('./server/routers/navigationRouter');
+var rootRouter = require('./server/routers/rootRouter');
+var orderRouter = require('./server/routers/orderRouter');
+var sellerRouter = require('./server/routers/sellerRouter');
+const formData = require('express-form-data');
+
 const dotenv = require('dotenv');
 dotenv.config();
 //app.use(cors());
@@ -18,6 +31,7 @@ mongoose.connect(process.env.REACT_APP_MONGODB_URI, {useNewUrlParser: true});
 mongoose.connection.on('error', (err) => {
 	process.exit();
 });
+app.use(formData.parse());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -25,7 +39,16 @@ app.use(express.static(path.join(__dirname, "client/build")));
 	console.log('static path');
 	console.log(path.join(__dirname,'client/build/'));
 app.use("/waitlist", waitlistRouter);
-app.use("/api/user", userRouter)
+app.use("/api/user", userRouter);
+app.use("/api/product", productRouter);
+app.use("/api/plant", plantRouter);
+app.use("/api/store", storeRouter);
+app.use("/api/navigation", navigationRouter);
+app.use("/api/address", addressRouter);
+app.use("/api/payment", paymentRouter);
+app.use("/api/root", rootRouter);
+app.use("/api/order", orderRouter);
+app.use("/api/seller", sellerRouter);
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname + '/client/build/index.html'));
 })

@@ -1,10 +1,12 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import waitlist from "../reducers/waitlist";
+import admin from "../reducers/admin";
 
 const store = createStore(
 	combineReducers({
-		waitlist
+		waitlist,
+		admin
 	}),
 	applyMiddleware(thunk)
 );

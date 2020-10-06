@@ -1,0 +1,206 @@
+{
+	"title": "Main Menu",
+	"handle": "main_menu",
+	"navigationItemsTopLevel":
+	[
+		{
+			"title": "Indoor Houseplants",
+			"handle": "indoor_houseplants",
+			"tagIds": [],
+			"children": []
+		},
+		{
+			"title": "Annuals",
+			"handle": "annuals",
+			"tagIds": [],
+			"children": []
+		},
+		{
+			"title": "Perennials",
+			"handle": "perennials",
+			"tagIds": [],
+			"children": []
+		},
+		{
+			"title": "Vegetable Plants",
+			"handle": "vegetable_plants",
+			"tagIds": [],
+			"children": []
+		},
+		{
+			"title"	: "Cacti & Succulents",
+			"handle" : "cacti_succulents",
+			"tagIds": [],
+			"children": []
+		},
+		{
+			"title"	: "Bulbs",
+			"handle" : "bulbs",
+			"tagIds": [],
+			"children": []
+		},
+		{
+			"title"	: "Garden Tools",
+			"handle" : "garden_tools",
+			"tagIds": [],
+			"children": []
+		},
+		{
+			"title"	: "Plant Care",
+			"handle" : "plant_care",
+			"tagIds": [],
+			"children": [{
+				"title"	: "Soil",
+				"handle": "soil",
+				"tagIds": [],
+				"children": []
+			},
+			{
+				"title"	: "Plant Food & Fertilizer",
+				"handle": "plant_food_fertilizer",
+				"tagIds": [],
+				"children": []
+			},
+			{
+				"title": "Plant & Soil Monitoring",
+				"handle": "plant_soil_monitoring",
+				"tagIds": [],
+				"children": []
+			},
+			{
+				"title": "Plant Disease Control",
+				"handle": "plant_disease_control",
+				"tagIds": [],
+				"children": []
+			}
+			]
+		},
+		{
+			"title": "Seeds",
+			"handle": "seeds",
+			"tagIds": [],
+			"children": [
+				{
+					"title": "Seed Starters",
+					"handle" : "seed_starters",
+					"tagIds": [],
+					"children": []
+				},
+				{
+					"title": "Vegetable Seeds",
+					"handle" : "vegetable_seeds",
+					"tagIds": [],
+					"children": []
+				},
+				{
+					"title": "Herb Seeds",
+					"handle" : "herb_seeds",
+					"tagIds": [],
+					"children": []
+				},
+				{
+					"title": "Fruit Seeds",
+					"handle" : "fruit_seeds",
+					"tagIds": [],
+					"children": []
+				},
+				{
+					"title": "Flower Seeds",
+					"handle" : "flower_seeds",
+					"tagIds": [],
+					"children": []
+				}
+			]
+		},
+		{
+			"title": "Edible Garden",
+			"handle": "edible_garden",
+			"tagIds": [],
+			"children": []
+		},
+		{
+			"title": "Accessories",
+			"handle": "accessories",
+			"tagIds": [],
+			"children": []
+		},
+		{
+			"title": "Soil",
+			"handle": "soil",
+			"tagIds": [],
+			"children": [{
+				"title": "Potting Soil",
+				"handle": "potting_soil",
+				"tagIds": [],
+				"children": []
+
+			},
+			{
+				"title": "Garden Soil",
+				"handle": "garden_soil",
+				"tagIds": [],
+				"children": []
+			},
+			{
+				"title": "Seed Starters",
+				"handle": "seed_starters",
+				"tagIds": [],
+				"children": []
+			}
+			]
+		},
+		{
+			"title": "Planters & Stands",
+			"handle": "plants_and_stands",
+			"tagIds": [],
+			"children": [{
+				"title": "Outdoor planters & pots",
+				"handle": "outdoor_planters_pots",
+				"tagIds": [],
+				"children": []
+			},
+			{
+				"title": " Indoor planters & pots",
+				"handle": "indoor_planters_pots",
+				"tagIds": [],
+				"children": []
+			}, {
+				"title": "Window Planters",
+				"handle": "window_planters",
+				"tagIds": [],
+				"children": []
+			}, {
+				"title"	: "Raised Garden Beds & Planter Boxes",
+				"handle": "raised_garden_beds_planter_boxes",
+				"tagIds": [],
+				"children": []
+			}, {
+				"title": "Plant Stands",
+				"handle": "plant_stands",
+				"tagIds": [],
+				"children": []
+			}, {
+				"title": "Wall Planters",
+				"handle": "wall_planters",
+				"tagIds": [],
+				"children": []
+			}, {
+				"title": "Self-watering Planters",
+				"handle": "self_watering_planters",
+				"tagIds": [],
+				"children": []
+			}, {
+				"title": "Large planters",
+				"handle": "large_planters",
+				"tagIds": [],
+				"children": []
+			}, {
+				"title": "Medium Planters",
+				"handle": "medium_planters",
+				"tagIds": [],
+				"children": []
+			}]
+		}
+
+	]
+}
