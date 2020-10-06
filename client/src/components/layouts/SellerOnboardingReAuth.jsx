@@ -14,6 +14,7 @@ class SellerOnboardingReAuth extends Component {
 		}
 	}
 	componentDidMount() {
+		const { match: {params}} = this.props;
 		window.open('nvlnd://seller-onboarding/reauth/' + params.accountId);
 	}
 
