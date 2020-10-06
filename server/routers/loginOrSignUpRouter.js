@@ -15,8 +15,8 @@ router.get('/all', async function(req, res, next) {
 });
 
 router.get('/get', async function(req, res, next) {
-	let id = req.body.id;
-	let email = req.body.email;
+	let id = req.query.id;
+	let email = req.query.email;
 	let query = {};
 	if (id) {
 		query = { _id: id};

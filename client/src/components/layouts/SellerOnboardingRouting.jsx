@@ -15,7 +15,7 @@ class SellerOnboardingRouting extends Component {
 	
 	async componentDidMount() {
 		const { match: {params}} = this.props;
-		window.open('nvlnd://seller-onboarding/return/' + params.accountId);
+		window.location = 'nvlnd://seller-onboarding/return/' + params.accountId;
 	}
 
 	render() {

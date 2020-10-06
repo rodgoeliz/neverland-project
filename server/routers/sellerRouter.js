@@ -95,6 +95,7 @@ router.post('/onboarding/submit', async function(req, res, next) {
 	if (stepId == BASICS_STEP_ID) {
 		console.log("BASICS_STEP_ID")
 		let email = formData.email;
+		let firebaseUser = formData.firebaseUser;
 		let user = await User.findOne({email: email}).populate("seller");
 		let newSellerAddress = new Address({
 			createdAt: now,
@@ -126,11 +127,12 @@ router.post('/onboarding/submit', async function(req, res, next) {
 		console.log("Create account link....")
 		const accountLinks = await stripe.accountLinks.create({
 		  account: account.id,
-		  refresh_url: 'https://www.enterneverland.com/seller-onboarding/reauth/' + stripeUID,
-		  return_url: 'https://www.enterneverland.com/seller-onboarding/return/' + stripeUID,
+		  refresh_url: 'https://www.enterneverland.com/seller-onboarding/reauth/' + account.id,
+		  return_url: 'https://www.enterneverland.com/seller-onboarding/return/' + account.id,
 		  type: 'account_onboarding',
 		});
-
+		console.log("ACCOUNT LINKS CREATED...")
+		console.log(accountLinks)
 		if (!account) {
 			res.json({
 				success: false,
@@ -152,12 +154,12 @@ router.post('/onboarding/submit', async function(req, res, next) {
 			productCategoriesSold: formData.productSelectedItems,
 			storesSellerSellsAt: formData.sellerStoreSelectedItems,
 			productSource: formData.selelrProductSource,
-			packingDetails: formData.sellerPacking
-
+			packingDetails: formData.sellerPacking,
 		});
 		let newSellerProfile = await sellerProfile.save();	
 		if (user) {
 			user.isSeller = true;
+			user.firebaseUID = firebaseUser.uid;
 			user.isProfileComplete = false;
 			user.sellerProfile = newSellerProfile;
 			user.password = formData.password;
@@ -166,6 +168,7 @@ router.post('/onboarding/submit', async function(req, res, next) {
 		} else {
 			let newUser = new User({
 				name: formData.fullName,
+				firebaseUID: firebaseUser.uid,
 				email: email,
 				password: formData.password,
 				sellerProfile: newSellerProfile,
@@ -173,7 +176,8 @@ router.post('/onboarding/submit', async function(req, res, next) {
 			});
 			sellerUser = await newUser.save();
 		}
-
+		console.log("Created sller user...")
+		console.log(sellerUser)
 		res.json({
 			success: true,
 			payload: {
