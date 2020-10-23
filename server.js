@@ -22,6 +22,8 @@ var navigationRouter = require('./server/routers/navigationRouter');
 var rootRouter = require('./server/routers/rootRouter');
 var orderRouter = require('./server/routers/orderRouter');
 var sellerRouter = require('./server/routers/sellerRouter');
+var bundleRouter = require('./server/routers/bundleRouter');
+var marketplaceRouter = require('./server/routers/marketplaceRouter');
 const formData = require('express-form-data');
 
 const dotenv = require('dotenv');
@@ -31,13 +33,12 @@ mongoose.connect(process.env.REACT_APP_MONGODB_URI, {useNewUrlParser: true});
 mongoose.connection.on('error', (err) => {
 	process.exit();
 });
-app.use(formData.parse());
+app.use(formData.parse({limit: '20mb'}));
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '20mb'}));
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "client/build")));
-	console.log('static path');
-	console.log(path.join(__dirname,'client/build/'));
 app.use("/waitlist", waitlistRouter);
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
@@ -49,6 +50,8 @@ app.use("/api/payment", paymentRouter);
 app.use("/api/root", rootRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/seller", sellerRouter);
+app.use("/api/bundle", bundleRouter);
+app.use("/api/marketplace", marketplaceRouter)
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname + '/client/build/index.html'));
 })

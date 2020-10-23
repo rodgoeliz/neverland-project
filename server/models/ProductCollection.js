@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema; 
 
 const productCollectionsSchema = new mongoose.Schema({
 	createdAt: Date,
@@ -10,5 +11,5 @@ const productCollectionsSchema = new mongoose.Schema({
 	}
 });
 
-const ProductCollection = mongoose.model('ProductCollection', productSchema);
+const ProductCollection = mongoose.model('ProductCollection', productCollectionsSchema);
 module.exports = ProductCollection;

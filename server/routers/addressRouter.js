@@ -33,9 +33,11 @@ router.post('/update', async function(req, res, next) {
 			addressZip: addressInfo.addressZip,
 			userId: userId
 	}, {new: true, useFindAndModify: true}).then((address) => {
-		res.json({
-			success: true,
-			payload: address
+		Address.populate(address, { path: 'userId'}).then((address) => {
+			res.json({
+				success: true,
+				payload: address
+			});
 		})
 	}).catch((error) => {
 		res.json({
@@ -66,10 +68,12 @@ router.post('/create', async function(req, res, next) {
 	});
 	await address.save()
 		.then((address) => {
-			res.json({
-				success: true,
-				payload: address
-			});
+			Address.populate(address, { path: 'userId'}).then((address) => {
+				res.json({
+					success: true,
+					payload: address
+				});
+			})
 		}).catch((error) => {
 			res.json({
 				success: false,
@@ -109,10 +113,12 @@ router.post('/setDefault', async function(req, res, next) {
 			address.isDefault = true;
 			address.save()
 				.then((address) => {
-					res.json({
-						success: true,
-						payload: address
-					});
+					Address.populate(address, { path: 'userId'}).then((address) => {
+						res.json({
+							success: true,
+							payload: address
+						});
+					})
 				})
 				.catch((error) => {
 					res.json({
@@ -145,6 +151,7 @@ router.get('/get', async function(req, res, next) {
 
 	let address = await Address
 		.find(query)
+		.populate('userId')
 		.then((address) => {
 			res.json({
 				success: true,

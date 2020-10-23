@@ -8,6 +8,7 @@ const {sendEmail} = require("../email/emailClient");
 var Mailchimp = require('mailchimp-api-v3')
 const mongoose = require('mongoose');
 var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
+const { createStripeAccountForUser } = require("../utils/paymentProcessor");
 
 router.get('/all', async function(req, res, next) {
 	let allUsers = await User.find({});
@@ -23,7 +24,6 @@ router.get('/get', async function(req, res, next) {
 	}  else if (email) {
 		query = {email}	;
 	}
-
 	let user = await User.findOne(query);
 	if (user) {
 		res.json({
@@ -40,9 +40,17 @@ router.get('/get', async function(req, res, next) {
 router.post('/update', async function(req, res, next){
 	let email = req.body.email;
 	let user = await User.findOne({email: email});
-	for (var key in req.body) {
-		user[key] = req.body[key];
+	if (!user) {
+		res.json({success: false, error: "Failed to find user"})	
+		return;
+	}
+	for (var key in req.body.data) {
+		user[key] = req.body.data[key];
 	};
+	user.onboardingStepId = req.body.stepId;
+	if (user.onboardingStepId == "signup_notifications") {
+		user.isProfileComplete = true;
+	}
 	user.save(function(err, result) {
 		res.json({success: true})
 	});
@@ -50,11 +58,7 @@ router.post('/update', async function(req, res, next){
 
 router.post('/authorize-firebase', async function(req, res, next) {
 	let firebaseUID = req.body.firebaseUID;
-	console.log("Trying to authorize user based on firebase uid");
-	console.log(firebaseUID)
 	let existingUser = await User.findOne({firebaseUID: firebaseUID});
-	console.log("FOUND USER? ")
-	console.log(existingUser)
 	if (existingUser) {
 		res.json({
 			success: true,
@@ -154,24 +158,23 @@ router.post('/signup', async function(req, res, next) {
 	let facebookId = req.body.facebookId ? req.body.facebookId : "";
 	let name = req.body.name ? req.body.name : "";
 	let avatarURL = req.body.avatarURL ? req.body.avatarURL : "";
-
 	// add them to mailchimp	
-	let defaultLogin = "default";
-	if (facebookId) {
-		defaultLogin: "facebook";
-	}
+	let defaultLogin =  req.body.defaultLogin;
 	let existingUser = await User.findOne({email: email});
 	if (!existingUser) {
 		const authToken = crypto.randomBytes(64).toString('base64');
 		let now = Date.now();
 		let authExpirationDate = new Date();
-		authExpirationDate.setDate(authExpirationDate.getDate() + 7);
 
-		var newUser = new User({
+		authExpirationDate.setDate(authExpirationDate.getDate() + 7);
+		let stripeCustomerId = await createStripeAccountForUser(email);
+		let userSchema = {
 			email: email,
-			password: password,
+			isProfileComplete: false,
+			onboardingStepId: "signup_start",
 			facebookId: facebookId,
 			firebaseUID: firebaseUID,
+			stripeCustomerID: stripeCustomerId.id,
 			name: name,
 			avatarURL: avatarURL,
 			defaultLogin,
@@ -180,8 +183,11 @@ router.post('/signup', async function(req, res, next) {
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
 			tokenExpiration: authExpirationDate
-		});
-
+		};
+		if (password) {
+			userSchema.password = password
+		}
+		var newUser = new User(userSchema);
 		newUser.save(function(err, result) {
 			if (err) {
 				res.json({
@@ -190,21 +196,18 @@ router.post('/signup', async function(req, res, next) {
 				});
 				return; 
 			}
-			mailchimp.post('/lists/0867674d72/members', 
-			{
-				email_address: email,
-				status: 'subscribed'
-			});
 			res.json({
 				success: true,
 				data: newUser	
 			});
 		});
 	} else {
-		res.json({
-			success: false,
-			error: "This account already exists."
-		});
+		if (existingUser.defaultLogin == defaultLogin) {
+			res.json({
+				success: false,
+				error: "This account already exists."
+			});
+		}
 	}
 });
 
@@ -271,7 +274,6 @@ router.post('/upload/file', async function(req, res, next) {
 		files = files[0]
 	}
 	parseFileAndSave = async (file, type) => {
-		console.log("parseFileAndSave")
 		createUser = async ( userJson ) => {
 			let username = userJson.username;
 
@@ -328,7 +330,6 @@ router.post('/upload/file', async function(req, res, next) {
 							let newStore = createUser(userJson);
 							newStore.save((err, data) => {
 								console.log(err)
-								console.log("Saved user")	
 							});
 						});
 					});
@@ -339,11 +340,9 @@ router.post('/upload/file', async function(req, res, next) {
 
 	let allFilePromises = [];
 	for (var i = 0; i < files.length;i++) {
-		console.log("add promise")
 		allFilePromises.push(parseFileAndSave(files[i], type));
 	}
 	Promise.allSettled(allFilePromises).then(function(date, err) {
-		console.log("Finished processing files;")
 	});
 });
 router.post('/join', async function(req, res, next) {

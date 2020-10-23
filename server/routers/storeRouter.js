@@ -34,7 +34,6 @@ router.post('/upload/file', async function(req, res, next) {
 		files = files[0]
 	}
 	parseFileAndSave = async (file, type) => {
-		console.log("parseFileAndSave")
 		createStore = async ( storeJson ) => {
 			let username = storeJson.username;
 			//find all the tag ids
@@ -92,11 +91,9 @@ router.post('/upload/file', async function(req, res, next) {
 
 	let allFilePromises = [];
 	for (var i = 0; i < files.length;i++) {
-		console.log("add promise")
 		allFilePromises.push(parseFileAndSave(files[i], type));
 	}
 	Promise.allSettled(allFilePromises).then(function(date, err) {
-		console.log("Finished processing files;")
 	});
 });
 router.post('/create', function(req, res, next) {

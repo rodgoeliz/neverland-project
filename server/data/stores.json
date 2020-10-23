@@ -1,0 +1,67 @@
+[
+   {
+      "handle": "veras-store-one",
+      "title": "Vera's Store One",
+      "collectionIds": [],
+      "userId": "user_one",
+      "productIds": [
+         "product_one",
+         "product_two"
+      ],
+      "username": "verakutsenko",
+      "isActive": true
+   },
+   {
+      "handle": "veras-store-two",
+      "title": "Vera's Store Two",
+      "collectionIds": [],
+      "userId": "user_two",
+      "productIds": [
+         "product_three",
+         "product_four"
+      ],
+      "username": "verakutsenkotwo",
+      "isActive": true
+   },
+   {
+      "handle": "veras-store-three",
+      "title": "Vera's Store Three",
+      "collectionIds": [],
+      "userId": "user_three",
+      "productIds": [
+         "product_five",
+         "product_six",
+         "product_thirteen"
+      ],
+      "username": "verakutsenkothree",
+      "isActive": true
+   },
+   {
+      "handle": "veras-store-four",
+      "title": "Vera's Store Four",
+      "collectionIds": [],
+      "userId": "user_four",
+      "productIds": [
+         "product_seven",
+         "product_eight",
+         "product_ten",
+         "product_eleven",
+         "product_twelve"
+      ],
+      "username": "staceykutsenko1",
+      "isActive": true
+   },
+   {
+      "handle": "veras-store-five",
+      "title": "Vera's Store Five",
+      "collectionIds": [],
+      "userId": "user_five",
+      "username": "staceykutsenko2",
+      "productIds": [
+         "product_seven",
+         "product_eight",
+         "product_nine"
+      ],
+      "isActive": true
+   }
+]

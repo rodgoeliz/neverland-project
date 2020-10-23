@@ -3,17 +3,16 @@ const Taxjar = require('taxjar');
 const taxjarClient = new Taxjar({
 	apiKey: process.env.TAXJAR_API_TOKEN
 });
+
 module.exports.getBuyerProtectionSurcharge = async (subtotal) => {
 	let buyerProtectionRules = rootConfig.surchargeRules.buyerProtection;
 	for (var i = 0; i < buyerProtectionRules.length; i++) {
 		let rule = buyerProtectionRules[i];
 		if (subtotal > rule.minThreshold && subtotal < rule.maxThreshold) {
-			console.log("Hit a rule")
 			let surcharge = rule.surcharge;
 			if (surcharge.type == "currency") {
 				return subtotal + surcharge.value;
 			} else if (surcharge.type = "percent") {
-				console.log(subtotal * (surcharge.value/100));
 				return subtotal * (surcharge.value/100);
 			}
 		}
@@ -28,7 +27,9 @@ module.exports.getFulfillmentMethod = async (carrier, type) => {
 module.exports.calculateBundleSubTotal = async (bundle) => {
 	let subtotal = 0;
 	bundle.productIds.map((product) => {
-		let value = parseFloat(product.price)
+    console.log("PRICE FOR : " + product._id)
+    console.log(product.price)
+		let value = parseFloat(product.price.value)
 		subtotal += value;
 	});
 	return subtotal;
@@ -36,7 +37,7 @@ module.exports.calculateBundleSubTotal = async (bundle) => {
 
 module.exports.calculateTaxSurcharge = async (bundleSubtotal, shippingAddress, shippingCharge) => {
 	//get tax rate through taxjar api
-
+return 0;
 	let taxSurcharge = await taxjarClient.taxForOrder({
 		from_country: 'US',
 		from_state: 'CA',

@@ -1,0 +1,792 @@
+[
+   {
+      "_id": "product_one_artificial",
+      "title": "Artificial Monstera Albo Variagata",
+      "description": "Artificial Monstera. This monstera is one for your collection. Small size",
+      "handle": "monstera-albo-variegata-artificial",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "beginner",
+      "colors": [
+         "white",
+         "green",
+         "yellow"
+      ],
+      "lightLevel": "low-light",
+      "benefit": [],
+      "isOrganic": false,
+      "isArtificial": true,
+      "style": [
+         "waterfall",
+         "striated"
+      ],
+      "storeId": "veras-store-four",
+      "imageURLs": [
+         "https://i.etsystatic.com/18458600/r/il/15d39e/2502983884/il_1588xN.2502983884_dewe.jpg",
+         "https://i.etsystatic.com/18458600/r/il/37b687/2550648289/il_1588xN.2550648289_fty2.jpg",
+         "https://i.etsystatic.com/18458600/r/il/9b0067/2550648181/il_1588xN.2550648181_br4u.jpg",
+         "https://i.etsystatic.com/18458600/r/il/096023/2502983792/il_1588xN.2502983792_id9i.jpg"
+      ],
+      "vendorId": "user_one",
+      "sku": "monstera-albo",
+      "width": 10,
+      "potSize": 6,
+      "height": 10,
+      "weight": 10,
+      "price": {
+         "value": 10999,
+         "currency": "usd"
+      },
+      "tagIds": [
+         "annuals",
+         "perennials",
+         "indoor-houseplants",
+         "balcony",
+         "beginner",
+         "pet-friendly"
+      ]
+   },
+   {
+      "_id": "product_one",
+      "title": "Monstera Albo Variagata",
+      "description": "This monstera is one for your collection. Small size",
+      "handle": "monstera-albo-variegata",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "beginner",
+      "colors": [
+         "white",
+         "green",
+         "yellow"
+      ],
+      "lightLevel": "low-light",
+      "benefit": [],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": {
+         "value": 2999,
+         "currency": "usd"
+      },
+      "style": [
+         "waterfall",
+         "striated"
+      ],
+      "imageURLs": [
+         "https://i.etsystatic.com/18458600/r/il/15d39e/2502983884/il_1588xN.2502983884_dewe.jpg",
+         "https://i.etsystatic.com/18458600/r/il/37b687/2550648289/il_1588xN.2550648289_fty2.jpg",
+         "https://i.etsystatic.com/18458600/r/il/9b0067/2550648181/il_1588xN.2550648181_br4u.jpg",
+         "https://i.etsystatic.com/18458600/r/il/096023/2502983792/il_1588xN.2502983792_id9i.jpg"
+      ],
+      "vendorId": "user_one",
+      "sku": "monstera-albo",
+      "width": 10,
+      "potSize": 6,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "annuals",
+         "perennials",
+         "indoor-houseplants",
+         "balcony",
+         "beginner",
+         "pet-friendly"
+      ],
+      "storeId": "veras-store-one"
+   },
+   {
+      "_id": "string_of_pearls_one",
+      "title": "String of Pearls",
+      "description": "Senecio rowleyanus, native to Namibia, Africa, has pendant stems to 3 feet or more with unusual round leaves giving the impression of beads, peas, or pearls. String of pearls is a superb subject for a hanging basket, and can be in the house in a bright airy room, or outside in a protected patio. Consider hanging several to create a sense of verdant greenery.",
+      "handle": "string-of-pearls-12334",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "beginner",
+      "colors": [
+         "green",
+         "yellow"
+      ],
+      "lightLevel": "low-light",
+      "benefit": [],
+      "style": [
+         "waterfall"
+      ],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": {
+         "value": 1200,
+         "currency": "USD"
+      },
+      "imageURLs": [
+         "https://i.etsystatic.com/22361832/r/il/dfeb59/2390260270/il_794xN.2390260270_35jb.jpg",
+         "https://i.etsystatic.com/22361832/r/il/a49e85/2390259956/il_794xN.2390259956_tknd.jpg",
+         "https://i.etsystatic.com/22361832/r/il/5ae697/2290400142/il_794xN.2290400142_j2c4.jpg",
+         "https://i.etsystatic.com/22361832/r/il/50e8a1/2338007211/il_794xN.2338007211_67lu.jpg"
+      ],
+      "vendorId": "user_one",
+      "sku": "string-of-pearls-12334",
+      "width": 10,
+      "potSize": 6,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "indoor-houseplants",
+         "balcony",
+         "beginner",
+         "pet-friendly"
+      ],
+      "storeId": "veras-store-two"
+   },
+   {
+      "_id": "product_two",
+      "title": "Marble Queen Pothos - 6inch",
+      "description": "The Marble Queen Pothos, with its long cascading vines, makes a beautiful table or hanging plant. It has glossy, heart-shaped, leathery leaves that are green and white.-Pothos plants are some of the easiest plants to Care for. They thrive and grow quickly without much attention. --A NASA study has identified Pothos as being excellent at REMOVING INDOOR AIR POLLUTANTS. Particularly adept at removing formaldehyde, benzene and carbon monoxide. -Complete Satisfaction Guarantee**Please note that some plants are more delicate to the shipping process, as it can cause shock, and may arrive with browning or damaged leaves. Plants that arrive a little stressed can bounce back quickly with a little watering and placement in indirect sunlight/ partial shade. **",
+      "handle": "marble-queen-pothos",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "beginner",
+      "colors": [
+         "green",
+         "yellow"
+      ],
+      "lightLevel": "low-light",
+      "benefit": [],
+      "style": [
+         "waterfall"
+      ],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": {
+         "value": 1999,
+         "currency": "USD"
+      },
+      "imageURLs": [
+         "https://i.etsystatic.com/18139571/r/il/b00d75/1710523534/il_1588xN.1710523534_jfdj.jpg",
+         "https://i.etsystatic.com/18139571/r/il/967d00/1757986055/il_1588xN.1757986055_nyzj.jpg",
+         "https://i.etsystatic.com/18139571/r/il/fdba16/1710523680/il_1588xN.1710523680_4fq8.jpg"
+      ],
+      "vendorId": "user_one",
+      "sku": "marble-pothos",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "perennials",
+         "indoor-houseplants",
+         "pet-friendly"
+      ],
+      "storeId": "veras-store-one"
+   },
+   {
+      "_id": "product_three",
+      "title": "Fiddle Leaf Fig Tree",
+      "description": "The Ficus lyrata, more commonly known as the Fiddle Leaf Fig, is one of today’s “it” plants. Its iconic, fiddle-like leaves and dainty veins earned this plant Its unique name. It is known for its graceful silhouette.Can live on shelves, Table and counter tops while they are young. As they grow older they will become a floor plant as they can Tower to 6 feet tall indoors.",
+      "handle": "fiddle-leaf-fig",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "advanced",
+      "colors": [
+         "green",
+         "brown"
+      ],
+      "lightLevel": "medium-light",
+      "benefit": [],
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": {
+         "value": 4999,
+         "currency": "USD"
+      },
+      "imageURLs": [
+         "https://i.etsystatic.com/18139571/r/il/dd0103/2565804253/il_1588xN.2565804253_9i6t.jpg",
+         "https://i.etsystatic.com/18139571/r/il/9eb85c/2565804327/il_1588xN.2565804327_2vzk.jpg",
+         "https://i.etsystatic.com/18139571/r/il/15979d/2518143092/il_1588xN.2518143092_bzs5.jpg"
+      ],
+      "vendorId": "user_three",
+      "sku": "fiddle-leaf-fig",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "indoor-houseplants",
+         "advanced"
+      ],
+      "storeId": "veras-store-two"
+   },
+   {
+      "_id": "product_four",
+      "title": "Green Sansevieria Trifasciata",
+      "description": "Sansevieria, or the mother-in-law's Tongue/ snake plant as it's commonly known, is a truly remarkable and striking easy Care houseplant. They seem to be indestructible house plants that never seem to die, need fertilizer or water.",
+      "handle": "green_sansvieria_trifeasciata",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "intermediate",
+      "colors": [
+         "green",
+         "yellow",
+         "dark-green",
+         "light-green"
+      ],
+      "lightLevel": "low-light",
+      "benefit": [
+         "air-purifying"
+      ],
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": 
+         {
+            "value": 3999,
+            "currency": "USD"
+         },
+      "imageURLs": [
+         "https://i.etsystatic.com/18139571/r/il/020aa0/2207565488/il_1588xN.2207565488_r2pp.jpg",
+         "https://i.etsystatic.com/18139571/r/il/a01e28/2255165045/il_1588xN.2255165045_71jp.jpg",
+         "https://i.etsystatic.com/18139571/r/il/8fc8a8/2207563916/il_1588xN.2207563916_isei.jpg"
+      ],
+      "vendorId": "user_three",
+      "sku": "green-sanseviera",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "indoor-houseplants",
+         "pet-friendly",
+         "air-purifying",
+         "indoor-houseplant"
+      ],
+      "storeId": "veras-store-two"
+   },
+   {
+      "_id": "product_five",
+      "title": "Tricolor Stromanthe Prayer Plant",
+      "description": "Sansevieria, or the mother-in-law's Tongue/ snake plant as it's commonly known, is a truly remarkable and striking easy Care houseplant. They seem to be indestructible house plants that never seem to die, need fertilizer or water.",
+      "handle": "tricolor-stromante",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "intermediate",
+      "colors": [
+         "green",
+         "pink",
+         "dark-green",
+         "light-green"
+      ],
+      "lightLevel": "medium-light",
+      "benefit": [
+         "air-purifying"
+      ],
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": 
+         {
+            "value": 2499,
+            "currency": "USD"
+         },
+      "imageURLs": [
+         "https://i.etsystatic.com/18139571/r/il/caf046/2121007007/il_1588xN.2121007007_npdm.jpg",
+         "https://i.etsystatic.com/18139571/r/il/521c49/2121007013/il_794xN.2121007013_932d.jpg",
+         "https://i.etsystatic.com/18139571/r/il/d8ca8a/2121006991/il_794xN.2121006991_phfb.jpg",
+         "https://i.etsystatic.com/18139571/r/il/190803/2464179466/il_794xN.2464179466_qg40.jpg"
+      ],
+      "vendorId": "user_two",
+      "sku": "tricolor-start",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "indoor-houseplants",
+         "pet-friendly"
+      ],
+      "storeId": "veras-store-three"
+   },
+   {
+      "_id": "product_six",
+      "title": "Calathea Ornata",
+      "description": "Sansevieria, or the mother-in-law's Tongue/ snake plant as it's commonly known, is a truly remarkable and striking easy Care houseplant. They seem to be indestructible house plants that never seem to die, need fertilizer or water.",
+      "handle": "calathea-ornata",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "beginner",
+      "colors": [
+         "green",
+         "pink",
+         "dark-green",
+         "light-pink"
+      ],
+      "lightLevel": "low-light",
+      "benefit": [
+         "air-purifying"
+      ],
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": 
+         {
+            "value": 3399,
+            "currency": "USD"
+         }
+      ,
+      "imageURLs": [
+         "https://i.etsystatic.com/18139571/r/il/7e3bed/1802048014/il_1588xN.1802048014_lxk1.jpg",
+         "https://i.etsystatic.com/18139571/r/il/bdbdff/1849516241/il_794xN.1849516241_2pi1.jpg",
+         "https://i.etsystatic.com/18139571/r/il/d34b14/1802047884/il_794xN.1802047884_drnb.jpg",
+         "https://i.etsystatic.com/18139571/r/il/5a9658/1802047920/il_794xN.1802047920_bdfr.jpg"
+      ],
+      "vendorId": "user_two",
+      "sku": "calathea-ornata",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "lowlight",
+         "pet-friendly",
+         "indoor-houseplants",
+         "beginner",
+         "intermediate",
+         "advanced"
+      ],
+      "storeId": "veras-store-three"
+   },
+   {
+      "_id": "product_seven",
+      "title": "Organic Lavender English Seeds",
+      "description": "Lavender-seeds",
+      "handle": "lavender-seeds",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "intermediate",
+      "colors": [
+         "green",
+         "purple",
+         "dark-green",
+         "light-purple"
+      ],
+      "lightLevel": "bright-light",
+      "benefit": [
+         "medicinal"
+      ],
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": true,
+      "isArtificial": false,
+      "price": 
+         {
+            "value": 200,
+            "currency": "USD"
+         },
+      "imageURLs": [
+         "https://i.etsystatic.com/9319994/r/il/58b91d/2334439194/il_1588xN.2334439194_55va.jpg",
+         "https://i.etsystatic.com/9319994/r/il/d7ee04/2382032027/il_794xN.2382032027_6n6l.jpg"
+      ],
+      "vendorId": "user_four",
+      "sku": "lavender-seeds",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "beginner",
+         "seeds",
+         "herb-seeds",
+         "herbs",
+         "flowers",
+         "flowering-plants"
+      ],
+      "storeId": "veras-store-four"
+   },
+   {
+      "_id": "product_eight",
+      "title": "Burning Bush Shrub Seeds",
+      "description": "burning-bush-shrub-seeds",
+      "handle": "burning-bush-shrub-seeds",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "beginner",
+      "colors": [
+         "green",
+         "red",
+         "dark-green",
+         "organge"
+      ],
+      "lightLevel": "bright-light",
+      "benefit": [],
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": true,
+      "isArtificial": false,
+      "price": {
+         "value": 300,
+         "currency": "USD"
+      },
+      "imageURLs": [
+         "https://i.etsystatic.com/9319994/r/il/716f17/2364664108/il_1588xN.2364664108_f10f.jpg",
+         "https://i.etsystatic.com/9319994/r/il/d7ba1d/2364664068/il_794xN.2364664068_pohy.jpg"
+      ],
+      "vendorId": "user_five",
+      "sku": "burning-bush-shrub-seeds",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "beginner",
+         "seeds",
+         "lowlight",
+         "cannabis",
+         "beginner"
+      ],
+      "storeId": "veras-store-four"
+   },
+   {
+      "_id": "product_nine_garden_shovel",
+      "title": "Garden Shovel",
+      "description": "Know someone with a green thumb? Gift them this functional garden trowel to use all season long.",
+      "handle": "personalized-garden-shovel",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "intermediate",
+      "colors": [
+         "green",
+         "red",
+         "dark-green",
+         "orange",
+         "yellow",
+         "purple"
+      ],
+      "lightLevel": "bright-light",
+      "benefit": [],
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": true,
+      "isArtificial": false,
+      "price": {
+         "value": 399,
+         "currency": "USD"
+      },
+      "imageURLs": [
+         "https://i.etsystatic.com/9319994/r/il/ade59a/2253817850/il_1588xN.2253817850_sy5y.jpg",
+         "https://i.etsystatic.com/9319994/r/il/bd061a/2382749180/il_794xN.2382749180_nqr0.jpg"
+      ],
+      "vendorId": "user_four",
+      "sku": "petunia-seeds",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "garden_tools",
+         "accessories"
+      ],
+      "storeId": "veras-store-four"
+   },
+   {
+      "_id": "product_nine",
+      "title": "Petunia Seeds",
+      "description": "petunia-seeds",
+      "handle": "petunia-seeds",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "intermediate",
+      "colors": [
+         "green",
+         "red",
+         "dark-green",
+         "orange",
+         "yellow",
+         "purple"
+      ],
+      "lightLevel": "bright-light",
+      "benefit": [],
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": true,
+      "isArtificial": false,
+      "price": {
+         "value": 399,
+         "currency": "USD"
+      },
+      "imageURLs": [
+         "https://i.etsystatic.com/9319994/r/il/ade59a/2253817850/il_1588xN.2253817850_sy5y.jpg",
+         "https://i.etsystatic.com/9319994/r/il/bd061a/2382749180/il_794xN.2382749180_nqr0.jpg"
+      ],
+      "vendorId": "user_four",
+      "sku": "petunia-seeds",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "beginner",
+         "seeds",
+         "flowering-plants",
+         "flower-seeds",
+         "flowers",
+         "annuals"
+      ],
+      "storeId": "veras-store-four"
+   },
+   {
+      "_id": "product_ten",
+      "title": "Rainbow Carrot Seeds",
+      "description": "rainbow-carrot-seeds",
+      "handle": "rainbow-carrot-seeds",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "intermediate",
+      "colors": [
+         "green",
+         "orange",
+         "yellow",
+         "purple",
+         "white"
+      ],
+      "lightLevel": "bright-light",
+      "benefit": [
+         "edible"
+      ],
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": {
+         "value": 299,
+         "currency": "USD"
+      },
+      "imageURLs": [
+         "https://i.etsystatic.com/9319994/r/il/35cc9d/2301394683/il_1588xN.2301394683_qy9f.jpg"
+      ],
+      "vendorId": "user_three",
+      "sku": "rainbow-carrot-seeds",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "beginner",
+         "seeds",
+         "vegetable-seeds",
+         "vegetable-plants",
+         "vegetables",
+         "lowlight",
+         "pet-safe"
+      ],
+      "storeId": "veras-store-four"
+   },
+   {
+      "_id": "product_eleven",
+      "title": "Strawberry Mint Seeds",
+      "description": "strawberry-mint-seeds",
+      "handle": "strawberry-mint-seeds",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "beginner",
+      "colors": [
+         "dark-green",
+         "green"
+      ],
+      "lightLevel": "bright-light",
+      "benefit": [
+         "edible",
+         "medicinal"
+      ],
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": {
+         "value": 299,
+         "currency": "USD"
+      },
+      "imageURLs": [
+         "https://i.etsystatic.com/11226248/r/il/066260/889097407/il_1588xN.889097407_8gjk.jpg",
+         "https://i.etsystatic.com/11226248/r/il/c0ae21/889335292/il_794xN.889335292_lari.jpg",
+         "https://i.etsystatic.com/11226248/r/il/99e992/889097431/il_794xN.889097431_qlco.jpg",
+         "https://i.etsystatic.com/11226248/r/il/c3527b/889335324/il_794xN.889335324_ipg0.jpg"
+      ],
+      "vendorId": "user_five",
+      "sku": "strawberry-mint-seeds",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "beginner",
+         "seeds",
+         "lowlight",
+         "herb-seeds"
+      ],
+      "storeId": "veras-store-five"
+   },
+   {
+      "_id": "product_twelve",
+      "title": "Roma Tomato Seeds",
+      "description": "roma-tomato-seeds",
+      "handle": "roma-tomato-seeds",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "userLevel": "intermediate",
+      "colors": [
+         "dark-green",
+         "green",
+         "red"
+      ],
+      "lightLevel": "bright-light",
+      "benefit": [
+         "edible"
+      ],
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": {
+         "value": 199,
+         "currency": "USD"
+      },
+      "imageURLs": [
+         "https://i.etsystatic.com/9319994/r/il/5fa1c3/2362332425/il_1588xN.2362332425_k98a.jpg",
+         "https://i.etsystatic.com/9319994/r/il/b3b4cd/2247756118/il_794xN.2247756118_ksz9.jpg",
+         "https://i.etsystatic.com/9319994/r/il/f5030a/2295356505/il_794xN.2295356505_pgj2.jpg"
+      ],
+      "vendorId": "user_two",
+      "sku": "roma-tomato-seeds",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "beginner",
+         "seeds",
+         "bright-light",
+         "indoor-houseplants",
+         "vegetable-plants",
+         "vegetable-seeds",
+         "vegetables"
+      ],
+      "storeId": "veras-store-five"
+   },
+   {
+      "_id": "product_pot_fourteen",
+      "title": "12 Ceramic Pot - Black",
+      "handle": "12-inch-ceramic-pot-black",
+      "description": "GORGEOUS CERAMIC PLANTER - Enjoy the beauty of porcelain ceramic, finished with a stunning hand glaze. Don't settle for cheap plastic or fiberglass planters.\n",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "colors": [
+         "black",
+         "gold",
+         "orange"
+      ],
+      "lightLevel": "bright-light",
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": [
+         {
+            "value": 4095,
+            "currency": "USD"
+         },
+         "40.95"
+      ],
+      "imageURLs": [
+         "https://i.etsystatic.com/17196129/r/il/ecb225/2214102300/il_794xN.2214102300_gzvo.jpg",
+         "https://i.etsystatic.com/17196129/r/il/011b60/2214086502/il_794xN.2214086502_p6qk.jpg",
+         "https://i.etsystatic.com/17196129/r/il/e615a1/2261684449/il_794xN.2261684449_8346.jpg",
+         "https://i.etsystatic.com/17196129/r/il/5620f9/2261684911/il_794xN.2261684911_9l25.jpg"
+      ],
+      "vendorId": "user_one",
+      "sku": "12-inch-ceramic-pot-black",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "plants_and_stands",
+         "indoor_planters_pots",
+         "medium_planters",
+         "large_planters"
+      ],
+      "storeId": ""
+   },
+   {
+      "_id": "product_thirteen",
+      "title": "BioChar Organic Soil Amendment",
+      "description": "biochar-organic-soil",
+      "handle": "biochar-organic-soil",
+      "inventoryAvailableToSell": 20,
+      "inventoryInStock": 20,
+      "isVisible": true,
+      "colors": [
+         "black",
+         "brown",
+         "white"
+      ],
+      "lightLevel": "bright-light",
+      "style": [
+         "hot",
+         "trending"
+      ],
+      "isOrganic": false,
+      "isArtificial": false,
+      "price": {
+         "value": 1495,
+         "currency": "USD"
+      },
+      "imageURLs": [
+         "https://i.etsystatic.com/22912879/r/il/9cded5/2314151691/il_1588xN.2314151691_actx.jpg",
+         "https://i.etsystatic.com/22912879/r/il/5e0df0/2334589062/il_794xN.2334589062_csxr.jpg",
+         "https://i.etsystatic.com/22912879/r/il/849016/2353356874/il_794xN.2353356874_juoh.jpg"
+      ],
+      "vendorId": "user_one",
+      "sku": "biochar-soil-amendment",
+      "width": 10,
+      "height": 10,
+      "weight": 10,
+      "tagIds": [
+         "soil",
+         "indoor-houseplants",
+         "plant_care",
+         "plant_food_fertilizer",
+         "garden_soil",
+         "potting_soil"
+      ],
+      "storeId": "veras-store-three"
+   }
+]

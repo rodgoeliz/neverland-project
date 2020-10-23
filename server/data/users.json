@@ -1,0 +1,77 @@
+[
+   {
+      "id": "user_one",
+      "email": "vera.kutsenko+california-tropicals@gmail.com",
+      "name": "California Tropical",
+      "avatarURL": "https://i.etsystatic.com/isla/189e2a/42062987/isla_500x500.42062987_2af9tjre.jpg?version=0",
+      "zipCode": "94117",
+      "phoneNumber": "66506461003",
+      "storeId": "vera-store-one",
+      "isSeller": true,
+      "sellerProfile": {
+         "stripeUID": "acct_1HccB9BnxIDKWX6p",
+         "userId": "user_one",
+         "storeId": "vera-store-one"
+      }
+   },
+   {
+      "id": "user_two",
+      "email": "vera+sellerexpressaccount1@gmail.com",
+      "name": "Elle's Plant Shop",
+      "avatarURL": "https://i.etsystatic.com/isla/411d48/37233176/isla_500x500.37233176_fg3cdb99.jpg?version=0",
+      "zipCode": "94117",
+      "phoneNumber": "66506461003",
+      "storeId": "vera-store-two",
+      "isSeller": true,
+      "sellerProfile": {
+         "stripeUID": "acct_1HcbmtGnhnsEUOo0",
+         "userId": "user_two",
+         "storeId": "vera-store-two"
+      }
+   },
+   {
+      "id": "user_three",
+      "email": "vera.kutsenko+fern-plant@gmail.com",
+      "name": "Fern Plant Shop",
+      "avatarURL": "https://i.etsystatic.com/isla/30afa6/41752207/isla_500x500.41752207_ihhfmqxq.jpg?version=0",
+      "zipCode": "94117",
+      "phoneNumber": "66506461003",
+      "storeId": "vera-store-three",
+      "isSeller": true,
+      "sellerProfile": {
+         "stripeUID": "acct_1HccB9BnxIDKWX6p",
+         "userId": "user_three",
+         "storeId": "vera-store-three"
+      }
+   },
+   {
+      "id": "user_four",
+      "email": "vera.kutsenko+rootedingreen@gmail.com",
+      "name": "RootedInGreen",
+      "avatarURL": "https://i.etsystatic.com/isla/30afa6/41752207/isla_500x500.41752207_ihhfmqxq.jpg?version=0",
+      "zipCode": "94117",
+      "phoneNumber": "66506461003",
+      "storeId": "vera-store-four",
+      "isSeller": true,
+      "sellerProfile": {
+         "stripeUID": "acct_1HcbmtGnhnsEUOo0",
+         "userId": "user_four",
+         "storeId": "vera-store-four"
+      }
+   },
+   {
+      "id": "user_five",
+      "email": "vera.kutsenko+jacquelinehomegarden@gmail.com",
+      "name": "Jacqueline Home Garden",
+      "avatarURL": "https://i.etsystatic.com/isla/9be7eb/31590571/isla_500x500.31590571_bld0humq.jpg?version=0",
+      "zipCode": "94117",
+      "phoneNumber": "66506461003",
+      "storeId": "vera-store-five",
+      "isSeller": true,
+      "sellerProfile": {
+         "stripeUID": "acct_1HccB9BnxIDKWX6p",
+         "userId": "user_five",
+         "storeId": "vera-store-five"
+      }
+   }
+]

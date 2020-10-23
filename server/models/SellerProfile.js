@@ -12,6 +12,7 @@ const sellerProfileSchema = new mongoose.Schema({
 	stripeUID: String,
 	productCategoriesSold: [String],
 	storesSellerSellsAt: [String],
+  buyerSurchage: Number,
 	productSource: String,
 	packingDetails: String,
 	personalAddress: {

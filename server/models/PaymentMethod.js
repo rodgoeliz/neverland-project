@@ -5,6 +5,8 @@ const paymentMethodSchema = new mongoose.Schema({
 	createdAt: Date,
 	updatedAt: Date,
 	type: String,
+  stripeToken: Object,
+  stripePaymentMethodId: String,
 	address: {
 		type: Schema.Types.ObjectId,
 		ref: 'Address'
@@ -23,6 +25,7 @@ const paymentMethodSchema = new mongoose.Schema({
 	},
 	paymentMethodId: String,		
 	paymentMethodEmail: String,
+	stripeId: String,
 	isActive: Boolean,
 	isDefault: Boolean
 });

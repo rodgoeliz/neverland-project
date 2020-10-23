@@ -20,9 +20,9 @@ const productSchema = new mongoose.Schema({
 	pinterestShareMsg: String,
 	twitterMsg: String,
 	style: Array,
-	light: String,
-	color: Array,
-	level: String,
+	lightLevel: String,
+	colors: Array,
+	userLevel: String,
 	benefit: Array,
 	imageURLs: Array,
 	vendorId: {
@@ -30,13 +30,21 @@ const productSchema = new mongoose.Schema({
 		ref: 'User'
 	},
 	sku: String,
-	weight: Number,
-	height: Number,
-	width: Number,
-	light: String,	
+	originZipCode: String,
+	handlingFee: String,
+	offerFreeShipping: Boolean,
+	weightLb: Number,
+	weightOz: Number,
+	heightIn: Number,
+	widthIn: Number,
+	lengthIn: Number,
 	size: String,
-	color: String,	
-	style: String,
+	isOrganic: Boolean,
+	isArtificial: Boolean,
+	variationIds: [{
+		type: Schema.Types.ObjectId,
+		ref: 'ProductVariation'	
+	}],
 	price: {
 		value: Number,
 		currency: String
@@ -50,6 +58,10 @@ const productSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Store'
 	}
+});
+
+productSchema.pre('remove', function (next) {
+  this.model('RecentlyViewedProduct').remove({productId: this._id}, next);
 });
 
 const Product = mongoose.model('Product', productSchema);

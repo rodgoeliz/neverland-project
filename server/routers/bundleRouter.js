@@ -3,6 +3,21 @@ require('dotenv').config();
 var router = express.Router();
 const mongoose = require('mongoose');
 var Bundle = require('../models/Bundle');
+
+router.get('/get/all', async function(req, res, next) {
+	let userId = req.query.userId;
+	if (!userId) {
+		res.json({success: false, error: "Not logged in. Please authenticate."})
+	}
+
+	let bundles = await Bundle.find({userId});
+	if (bundles) {
+		res.json({
+			success: true,
+			payload: bundles
+		});
+	}
+});
 /*
   Creates a new bundle or adds to an existing bundle.
   Returns a populated bundle w/ store and user
@@ -17,7 +32,7 @@ router.post('/add', async function(req, res, next) {
 	if (bundle) {
 		let alreadyExistsProduct = false;
 		for (var i in bundle.productIds) {
-			let existingProductId = productIds[i];
+			let existingProductId = bundle.productIds[i];
 			if (existingProductId == productId) {
 				alreadyExistsProduct = true;
 			}
@@ -37,14 +52,18 @@ router.post('/add', async function(req, res, next) {
 
 	await bundle.save()
 		.then((bundle) => {
-			bundle.populate('storeId').populate('userId')
+			Bundle.populate(bundle, {path: 'storeId'})
 				.then((bundle) => {
-					res.json({
-						success: true,
-						payload: bundle
-					});
+					Bundle.populate(bundle, {path: 'userId'}).then((bundle) => {
+						res.json({
+							success: true,
+							payload: bundle
+						});
+
+					})
 				});
 		}).catch((error) => {
+			console.log(error)
 			res.json({
 				success: false,
 				error: "Failed to create bundle."

@@ -3,6 +3,9 @@ require('dotenv').config();
 var router = express.Router();
 var WaitlistUser = require('../models/waitlistUser');
 var Product = require('../models/Product');
+var ProductVariation = require('../models/ProductVariation');
+var ProductVariationOption = require('../models/ProductVariationOption');
+var RecentlyViewedProduct = require('../models/RecentlyViewedProducts');
 var Store = require('../models/Store');
 var ProductTag = require('../models/ProductTag');
 const {sendEmail} = require("../email/emailClient");
@@ -18,6 +21,40 @@ const s3 = new AWS.S3({
 	accessKeyId: 'AKIAICO4I2GPW7SSMN6A',
 	secretAccessKey: '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'
 });
+
+router.post('/recentlyviewed/create', async function(req, res, next) {
+	let userId = req.body.userId;
+	let productId = req.body.productId;
+	let now = new Date();
+  let existingRVP = await RecentlyViewedProduct.findOne({productId, userId});
+  if (existingRVP) {
+    res.json({
+      success: true,
+      payload: existingRVP
+    });
+    return;
+  }
+	let recentlyViewedProductSchema = new RecentlyViewedProduct({
+		createdAt:	now,
+		updatedAt: now,
+		userId: userId,
+		productId: productId
+	});
+	recentlyViewedProductSchema.save()
+		.then((result) => {
+			res.json({
+				success: true,
+				payload: result
+			})		
+		})
+		.catch((error) => {
+			res.json({
+				success: false,
+				error: `Failed to create product: ${error}`
+			})
+		});
+});
+
 
 router.post('/tags/create', function(req, res, next) {
 	let tags = req.body.tags;
@@ -44,15 +81,11 @@ router.post('/tags/create', function(req, res, next) {
 });
 
 router.post('/upload/file', async function(req, res, next) {
-	console.log("/import CSV FILE")
-	console.log("type: ")
-	console.log(req.body)
 	let files= Object.values(req.files);
 	let type = req.body.fileType;
 	if (files.length > 0) {
 		files = files[0]
 	}
-	console.log(files)
 	parseFileAndSave = async (file, type) => {
 		createProduct = async ( productJson) => {
 
@@ -66,10 +99,7 @@ router.post('/upload/file', async function(req, res, next) {
 				})
 			};
 			let storeHandle = productJson.storeId;
-			console.log("STORE HANDLE: " + storeHandle)
 			let store = await Store.findOne({handle: storeHandle});
-			console.log(store)
-			console.log(productJson)
 			let newProduct = new Product({
 				title: productJson.title,
 				description: productJson.description,
@@ -129,7 +159,6 @@ router.post('/upload/file', async function(req, res, next) {
 		allFilePromises.push(parseFileAndSave(files[i], type));
 	}
 	Promise.allSettled(allFilePromises).then(function(date, err) {
-		console.log("Finished processing files;")
 	});
 });
 
@@ -203,6 +232,381 @@ router.post('/update', async function(req, res, next) {
 	}
 });
 
+
+/**
+
+	formData: {
+		processingTime
+		originZipCode
+		handlingFee
+		offerFreeShipping
+		itemWeightLb
+		itemWeightOz
+		itemHeightIn
+		itemWidthIn
+		itemLengthIn
+		primaryColor
+		secondaryColor
+		quantity
+		price
+		sku
+		categorySelectedItems
+		tagSelectedItems
+		isArtifical
+		isOrganic
+		productPhotos
+		title
+		description
+	}
+**/
+router.post('/seller/create', async function(req, res, next) {
+	const files= Object.values(req.files)
+	let formData = req.body;
+	let quantity = formData.quantity;
+	let price = formData.price;
+	let sku = formData.sku;
+	let categorySelectedItems = formData.categorySelectedItems;
+	let tagSelectedItems = formData.tagSelectedItems;
+	let productPhotos = formData.productPhotos;
+	let description = formData.description;
+	let lightLevel = formData.lightLevel;
+	let benefit = formData.benefit;
+	let userLevel = formData.userLevel;
+	let style = formData.style;
+	let variations = JSON.parse(formData.variations);
+	let now = new Date();
+
+	let processingTime = formData.processingTime;
+	let colors = formData.colors;
+	let offerFreeShipping = formData.offerFreeShipping;
+	let title = formData.title;
+	let originZipCode = formData.originZipCode;
+	let handlingFee = formData.handlingFee;
+	let storeId = formData.storeId;
+	let vendorId = formData.userId;
+	let isArtifical = formData.isArtifical;
+	let isOrganic = formData.isOrganic;
+	let itemWeightLb = formData.itemWeightLb;
+	let itemWeightOz = formData.itemWeightOz;
+	let itemHeightIn = formData.itemHeightIn;
+	let itemWidthIn = formData.itemWidthIn;
+	let itemLengthIn = formData.itemLengthIn;
+	let newProductId = mongoose.Types.ObjectId();
+
+	const genHandle = (title) => {
+		return title.toLowerCase();
+	}
+
+	// upload image photos here...
+	// extract category tags, extract tag tags
+	const uploadFileToS3 = (file, storeId, productId) => {
+		const fileContent = fs.readFileSync(file.path);
+		const params = {
+			Bucket: "enter-neverland",
+			Key: "product/"+storeId+"/"+productId+"/"+file.originalFilename,
+			ContentType: file.mimetype,
+			Body: fileContent
+		};
+		return s3.upload(params).promise();
+	}
+	let variationPromises = [];
+	let variationIds = []
+	for (var idx in variations) {
+		let variation = variations[idx];
+		let optionIds = [];
+		for (var idx in variation.options) {
+			let option = variation.options[idx];
+			var optionId = mongoose.Types.ObjectId();
+			optionIds.push(optionId);
+			let newVariationOptionSchema = new ProductVariationOption({
+				_id: optionId,
+				title: option.title,
+				handle: option.handle,
+				sku: option.sku,
+				price: {
+					value: option.price,
+					currency: 'USD'
+				},
+				quantity: option.quantity
+			});
+			variationPromises.push(newVariationOptionSchema.save());
+		}
+		let variationId = mongoose.Types.ObjectId();
+		variationIds.push(variationId);
+		let newVariationSchema = new ProductVariation({
+			_id: variationId,
+			createdAt: now,
+			udatedAt: now,
+			title: variation.title,
+			handle: variation.handle,
+			isPriceVaried: variation.isPriceVaried,
+			isSKUVaried: variation.isSKUVaried,
+			isQuantityVaried: variation.isQuantityVaried,
+			isVisible: variation.isVisible,
+			optionIds: optionIds
+		});
+		variationPromises.push(newVariationSchema.save());
+	}
+	var fileUploadPromises = [];
+	if (files.length > 0) {
+		files[0].map((file) => {
+			fileUploadPromises.push(uploadFileToS3(file, storeId, newProductId));
+		});
+	}
+	Promise.allSettled(fileUploadPromises).then(async function(data) {
+		let imageURLs = [];
+		for (let i = 0; i < data.length; i++) {
+			imageURLs.push(data[i].value.Location);
+		}
+		Promise.allSettled(variationPromises).then(async (results) => {
+			let newProductSchema = new Product({
+				createdAt: now,
+				updatedAt: now,
+				title: title,
+				variationIds: variationIds,
+				description: description,
+				originZipCode: originZipCode,
+				offerFreeShipping: offerFreeShipping,
+				handlingFee: handlingFee,
+				handle: genHandle(title),
+				inventoryInStock: quantity,
+				inventoryAvailableToSell: quantity,
+				isVisible: false,
+				imageURLs: imageURLs,
+				colors: colors,
+				benefit: benefit,
+				price: {
+					value: price,
+					currency: 'USD'
+				},
+				style: style,
+				userLevel: userLevel,
+				lightLevel: lightLevel,
+				weightLb: parseInt(itemWeightLb),
+				weightOz: parseInt(itemWeightOz),
+				heightIn: parseInt(itemHeightIn),
+				widthIn: parseInt(itemWidthIn),
+				lengthIn: parseInt(itemLengthIn),
+				isOrganic: isOrganic,
+				isArtifical: isArtifical,
+				storeId: storeId,
+				vendorId: vendorId
+			});
+
+			let newProduct = await newProductSchema.save();
+			res.json({
+				success: true,
+				payload: newProduct
+			});
+		});
+	});
+
+});
+
+router.post('/toggleVisibility', async function(req, res, next) {
+	let productId = req.body.productId;
+	let product = await Product.findById(productId);
+	product.isVisible = !product.isVisible;
+	product.save().then((product) => {
+		res.json({
+			success: true,
+			payload: product
+		})
+	}).catch((error) => {
+		res.json({
+			success: false,
+			error: error
+		});
+	})
+});
+
+/**
+
+	formData: {
+		processingTime
+		originZipCode
+		handlingFee
+		offerFreeShipping
+		itemWeightLb
+		itemWeightOz
+		itemHeightIn
+		itemWidthIn
+		itemLengthIn
+		primaryColor
+		secondaryColor
+		quantity
+		price
+		sku
+		categorySelectedItems
+		tagSelectedItems
+		isArtifical
+		isOrganic
+		productPhotos
+		title
+		description
+	}
+**//**
+router.post('/seller/update', async function(req, res, next) {
+	const files= Object.values(req.files)
+	console.log(files)
+	console.log("Request Body")
+	console.log(req.body)	
+	let formData = req.body;
+	let quantity = formData.quantity;
+	let price = formData.price;
+	let sku = formData.sku;
+	let categorySelectedItems = formData.categorySelectedItems;
+	let tagSelectedItems = formData.tagSelectedItems;
+	let productPhotos = formData.productPhotos;
+	let description = formData.description;
+	let lightLevel = formData.lightLevel;
+	let benefit = formData.benefit;
+	let userLevel = formData.userLevel;
+	let style = formData.style;
+	let variations = JSON.parse(formData.variations);
+	let now = new Date();
+
+	let processingTime = formData.processingTime;
+	let colors = formData.colors;
+	let offerFreeShipping = formData.offerFreeShipping;
+	let title = formData.title;
+	let originZipCode = formData.originZipCode;
+	let handlingFee = formData.handlingFee;
+	let storeId = formData.storeId;
+	let vendorId = formData.userId;
+	let isArtifical = formData.isArtifical;
+	let isOrganic = formData.isOrganic;
+	let itemWeightLb = formData.itemWeightLb;
+	let itemWeightOz = formData.itemWeightOz;
+	let itemHeightIn = formData.itemHeightIn;
+	let itemWidthIn = formData.itemWidthIn;
+	let itemLengthIn = formData.itemLengthIn;
+	let newProductId = mongoose.Types.ObjectId();
+
+	const genHandle = (title) => {
+		return title.toLowerCase();
+	}
+
+	// upload image photos here...
+	// extract category tags, extract tag tags
+	const uploadFileToS3 = (file, storeId, productId) => {
+		const fileContent = fs.readFileSync(file.path);
+		const params = {
+			Bucket: "enter-neverland",
+			Key: "product/"+storeId+"/"+productId+"/"+file.originalFilename,
+			ContentType: file.mimetype,
+			Body: fileContent
+		};
+		return s3.upload(params).promise();
+	}
+	console.log("Creating variations....")
+	let variationPromises = [];
+	let variationIds = []
+	for (var idx in variations) {
+		let variation = variations[idx];
+		let optionIds = [];
+		for (var idx in variation.options) {
+			let option = variation.options[idx];
+			var optionId = mongoose.Types.ObjectId();
+			optionIds.push(optionId);
+			let newVariationOptionSchema = new ProductVariationOption({
+				_id: optionId,
+				title: option.title,
+				handle: option.handle,
+				sku: option.sku,
+				price: {
+					value: option.price,
+					currency: 'USD'
+				},
+				quantity: option.quantity
+			});
+			variationPromises.push(newVariationOptionSchema.save());
+	console.log("OPTION IDS")
+	console.log(optionIds)
+		}
+		let variationId = mongoose.Types.ObjectId();
+		variationIds.push(variationId);
+		let newVariationSchema = new ProductVariation({
+			_id: variationId,
+			createdAt: now,
+			udatedAt: now,
+			title: variation.title,
+			handle: variation.handle,
+			isPriceVaried: variation.isPriceVaried,
+			isSKUVaried: variation.isSKUVaried,
+			isQuantityVaried: variation.isQuantityVaried,
+			isVisible: variation.isVisible,
+			optionIds: optionIds
+		});
+		variationPromises.push(newVariationSchema.save());
+	}
+	console.log("VARIATION IDS")
+	console.log(variationIds)
+	var fileUploadPromises = [];
+	if (files.length > 0) {
+		files[0].map((file) => {
+			fileUploadPromises.push(uploadFileToS3(file, storeId, newProductId));
+		});
+	}
+	console.log("calling file uplaod")
+	Promise.allSettled(fileUploadPromises).then(async function(data) {
+		console.log("Finished file upload promises")
+		let imageURLs = [];
+		for (let i = 0; i < data.length; i++) {
+			imageURLs.push(data[i].value.Location);
+		}
+		console.log("Generated imageURLS")
+		console.log(imageURLs)
+		Promise.allSettled(variationPromises).then(async (results) => {
+			console.log("Variation promise results...")
+			console.log(results)
+			console.log("Saved variations and options")
+			console.log("variationIds")
+			console.log(variationIds)
+			let newProductSchema = new Product({
+				createdAt: now,
+				updatedAt: now,
+				title: title,
+				variationIds: variationIds,
+				description: description,
+				originZipCode: originZipCode,
+				offerFreeShipping: offerFreeShipping,
+				handlingFee: handlingFee,
+				handle: genHandle(title),
+				inventoryInStock: quantity,
+				inventoryAvailableToSell: quantity,
+				isVisible: false,
+				imageURLs: imageURLs,
+				colors: colors,
+				benefit: benefit,
+				price: {
+					value: price,
+					currency: 'USD'
+				},
+				style: style,
+				userLevel: userLevel,
+				lightLevel: lightLevel,
+				weightLb: parseInt(itemWeightLb),
+				weightOz: parseInt(itemWeightOz),
+				heightIn: parseInt(itemHeightIn),
+				widthIn: parseInt(itemWidthIn),
+				lengthIn: parseInt(itemLengthIn),
+				isOrganic: isOrganic,
+				isArtifical: isArtifical,
+				storeId: storeId,
+				vendorId: vendorId
+			});
+
+			let newProduct = await newProductSchema.save();
+			console.log("Created a new product")
+			console.log(newProduct)
+			res.json({
+				success: true,
+				payload: newProduct
+			});
+		});
+	});
+**/
 
 /**
   Creates a new product. Based on FormData only because of image upload.

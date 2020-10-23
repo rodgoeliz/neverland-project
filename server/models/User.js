@@ -9,11 +9,13 @@ const userSchema = new mongoose.Schema({
 	username: String,
 	email: String,
 	firebaseUID: String,
+	stripeCustomerID: String,
 	password: String,
 	facebookId: String,
-	avatarURL: String,
+  avatarURL: String,
 	defaultLogin: String,
 	name: String,
+	onboardingStepId: String,
 	zipCode: String,
 	phoneNumber: String,
 	locations: Array,
@@ -24,7 +26,7 @@ const userSchema = new mongoose.Schema({
 	isSeller: Boolean,
 	sellerProfile: {
 		type: Schema.Types.ObjectId,
-		ref: 'Seller'
+		ref: 'SellerProfile'
 	},
 	storeId: {
 		type: Schema.Types.ObjectId, 
@@ -62,9 +64,6 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 }
 
 userSchema.methods.compareAuthTokens = function(candidateToken, cb) {
-	console.log("CANDIDATE TOKEN: " + candidateToken)
-	console.log("THIS AUTH TOKEN: " + this.authToken)
-	console.log(this.authToken == candidateToken);
 	return this.authToken == candidateToken;
 }
 

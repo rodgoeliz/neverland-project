@@ -10,15 +10,13 @@ const cardSchema = new mongoose.Schema({
 	},
 	type: String,
 	name: String,
-	cvc: String,
 	zipCode: String,
 	expMonth: Number,
 	expYear: Number,
 	country: String,
 	funding: String,
 	last4: String,
-	type: String, // creditcard, venmo, paypal, apple pay	
-	stripeId: String
+	type: String // creditcard, venmo, paypal, apple pay	
 });
 
 const Card = mongoose.model('Card', cardSchema);

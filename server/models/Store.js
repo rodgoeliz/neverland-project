@@ -13,6 +13,10 @@ const storeSchema = new mongoose.Schema({
 	instagram: String,
 	facebook: String,
 	description: String,
+	businessAddress: {
+		type: Schema.Types.ObjectId,
+		ref: 'Address'
+	},
 	categoryTagIds: [{
 		type: Schema.Types.ObjectId,
 		ref: 'ProductTag'

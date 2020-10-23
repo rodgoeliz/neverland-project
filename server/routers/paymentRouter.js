@@ -5,9 +5,88 @@ var WaitlistUser = require('../models/waitlistUser');
 var Product = require('../models/Product');
 var Address = require('../models/Address');
 var Card = require('../models/Card');
+var OrderIntent = require('../models/OrderIntent');
+var User = require('../models/User');
 var PaymentMethod = require('../models/PaymentMethod');
 var ProductTag = require('../models/ProductTag');
+const { createStripeAccountForUser, getStripeAccountForUser } = require("../utils/paymentProcessor");
+
 const mongoose = require('mongoose');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST_KEY);
+
+router.post('/stripe/confirm-payment-method-and-payment', async function(req, res, next) {
+  let paymentMethodId = req.body.paymentMethodId;
+  let paymentIntentId = req.body.paymentIntentId;
+  try {
+    const paymentIntentConfirmation = await stripe.paymentIntents.confirm(paymentIntentId, {payment_method: paymentMethodId});
+    res.json({
+      success: true,
+      payload: paymentIntentConfirmation
+    });
+  } catch (error) {
+    console.log("error in paymentintentconfirmation")
+    console.log(error)
+    res.json({
+      success: false, 
+      payload: error
+    });
+  }
+
+});
+
+router.post('/stripe/create-payment-intent', async function(req, res, next) {
+  let orderIntentId = req.body.orderIntentId;
+  let userId = req.body.userId;
+  // get charge amount
+  
+  let user = await User.findOne({_id: userId});
+  let orderIntent = await OrderIntent.findOne({_id: orderIntentId}).populate({path: 'vendorId', populate: {path: 'sellerProfile'}});
+  let orderTotal = Math.round(orderIntent.total * 100);
+  // get vendor for product
+  // get their stripe account connected id
+  let sellerStripeAccountId = orderIntent.vendorId.sellerProfile.stripeUID;
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: orderTotal,
+      currency: 'usd',
+      application_fee_amount: orderIntent.buyerSurcharge,
+      transfer_data: {
+        destination: sellerStripeAccountId
+      },
+      customer: user.stripeCustomerID,
+      payment_method_types: ['card'],
+    });
+    res.json({
+      success: true,
+      payload: paymentIntent
+    });
+  } catch(error) {
+    res.json({
+      success: false,
+      error: error
+    });
+  }
+
+});
+
+router.post('/stripe/create-setup-intent', async function(req, res, next) {
+  let userId = req.body.userId;
+  let user = await User.findOne({_id: userId});
+  try {
+    const intent = await stripe.setupIntents.create({
+      customer: user.stripeCustomerID
+    });
+    res.json({
+      success: true,
+      payload: intent
+    });
+  } catch(error) {
+    res.json({
+      success: false,
+      error: error
+    });
+  }
+});
 
 router.get('/get/default', async function(req, res, next) {
 	let userId = req.query.userId;
@@ -23,30 +102,6 @@ router.get('/get/default', async function(req, res, next) {
 			error: {}
 		});
 	}
-});
-
-router.post('/method/delete', async function(req, res, next) {
-	let paymentMethodId = req.body.paymentMethodId;
-	let paymentMethod = await PaymentMethod.findOne({_id: paymentMethodId})
-		.then(async (paymentMethod) => {
-			let cardId = paymentMethod.card;
-			let billingAddressId = paymentMethod.billingAddress;
-			let allDeletePromises = [];
-			allDeletePromises.push(await PaymentMethod.deleteOne({_id: paymentMethodId}));
-			allDeletePromises.push(await Card.deleteOne({_id: cardId}));
-			allDeletePromises.push(await Address.deleteOne({_id: billingAddressId}));
-			Promise.all(allDeeltePromises).then((results) => {
-				res.json({
-					success: true,
-					payload: {}	
-				});
-			});
-		}).catch((error) => {
-			res.json({
-				success: false,
-				error: "Failed to deep delete payment method."
-			})
-		});
 });
 
 router.post('/method/update', async function(req, res, next) {
@@ -78,6 +133,18 @@ router.post('/method/update', async function(req, res, next) {
 
 });
 
+const createStripeCard = async (paymentMethod) => {
+	var paymentMethod = await stripe.paymentMethods.create({
+	  type: 'card',
+	  card: {
+	    number: '',
+	    exp_month: 10,
+	    exp_year: 2021,
+	    cvc: '314',
+	  },
+	});
+}
+
 /**
   Creates a payment method (ie a credit card, etc) for a user
   **/
@@ -86,22 +153,25 @@ router.post('/method/create', async function(req, res, next) {
 	let userId = req.body.userId;
 	let type = req.body.type;
 	let isSameAsShipping = req.body.isSameAsShipping;
+  let stripePaymentMethodId = req.body.stripePaymentMethodId;
 	let shippingAddressId = req.body.shippingAddressId;
 	let method = req.body.paymentMethod;
+  let stripeToken = req.body.stripeToken;
 	let isDefaultMethod = req.body.isDefaultMethod;
 	let billingAddress = req.body.billingAddressInfo;
+	let cardNumber = req.body.cardNumber;
 	let now = new Date();
 	let existingAddress = null;
-	console.log("payment method input")
-	console.log(method)
-	console.log("isdefaultmethod: " + isDefaultMethod)
+	let user = await User.findOne({_id: userId});
 	if (isSameAsShipping) {
-		console.log("SAME AS SHIPPING ADDRESS")
 		existingAddress = await Address.findOne({_id: shippingAddressId}).lean();
-		console.log("SHIPPING ADDRESS")
-		console.log(existingAddress)
 		delete existingAddress._id;
 	}
+
+  const paymentMethod = await stripe.paymentMethods.attach(
+    stripePaymentMethodId,
+    {customer: user.stripeCustomerID}
+  );
 
 	if (existingAddress == null) {
 		existingAddress = new Address({
@@ -115,7 +185,6 @@ router.post('/method/create', async function(req, res, next) {
 			addressLine1: billingAddress.addressLine1,
 			addressLine2: billingAddress.addressLine2,
 			addressZip: billingAddress.addressZip,
-			userId: userId
 		});
 
 	}
@@ -125,9 +194,22 @@ router.post('/method/create', async function(req, res, next) {
 	// find matching address, if exists, do not create
 	newBillingAddress.isBillingAddress = true;
 	newBillingAddress.isShippingAddress = false;
+
+
+
+	 let billingAddressStripeInput = {
+	 	address: {
+	  	 city: "San Francisco TEST",
+	  	 country: "US"	,
+	  	 line1: newBillingAddress.addressLine1,
+	  	 line2: newBillingAddress.addressLine2,
+	  	 postal_code: newBillingAddress.addressZip,
+	  	 state: newBillingAddress.addressState
+	 	}
+	 }
+
 	await newBillingAddress.save()
 		.then((address) => {
-			console.log("cREATE NEW CARD")
 			//TODO create a new stripeid for this card
 			let card = new Card({
 				createdAt: now,
@@ -141,23 +223,22 @@ router.post('/method/create', async function(req, res, next) {
 				last4: method.last4,
 				address: address
 			});
-			console.log(card)
 			card.save()
 				.then((card) => {
-					console.log("Create new payment method...")
 					let paymentMethod = new PaymentMethod({
 						userId: userId,
+            stripeToken: stripeToken,
 						type: "card",
 						billingAddress: address,
 						card: card,
+            stripePaymentMethodId: stripePaymentMethodId,
 						isActive: true,
 						isDefault: isDefaultMethod
 					});
-					console.log(paymentMethod);
 					paymentMethod.save()
 						.then((paymentMethod) => {
-							console.log(paymentMethod)
-							paymentMethod.populate('card').then((method)=> {
+							PaymentMethod.populate(paymentMethod, {path: 'card'}).then((method)=> {
+								// create a stripe method
 								res.json({
 									success: true,
 									payload:method 
@@ -165,6 +246,7 @@ router.post('/method/create', async function(req, res, next) {
 							})
 						})
 						.catch((error) => {
+							console.log(error)
 							res.json({
 								success: false,
 								error: "Failed to create payment method."

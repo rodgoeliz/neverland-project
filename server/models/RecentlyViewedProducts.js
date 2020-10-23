@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema; 
 
 const recentlyViewedProduct = new mongoose.Schema({
 	createdAt: Date,
