@@ -12,6 +12,7 @@ import Layout from './components/layouts/Layout';
 import AdminPage from "./components/layouts/AdminPage";
 import AdminProductEdit from "./components/layouts/AdminProductEdit";
 import SellerOnboardingReAuth from "./components/layouts/SellerOnboardingReAuth";
+import SellerOnboardingRouting from "./components/layouts/SellerOnboardingRouting";
 import {ParallaxProvider} from "react-scroll-parallax";
 import AOS from 'aos';
 
@@ -19,7 +20,7 @@ class App extends Component {
   render() {
     AOS.init();
     return (
-      <ParallaxProvider>
+    <ParallaxProvider>
         <Provider store={store}>
           <BrowserRouter>
             <Layout className="App">

@@ -31,4 +31,4 @@ const mapStateToProps = state => {
 	}
 }
 
-export default connect(mapStateToProps, {launchAppReAuth})(SellerOnboardingReAuth);
+export default connect(mapStateToProps, {})(SellerOnboardingRouting);
