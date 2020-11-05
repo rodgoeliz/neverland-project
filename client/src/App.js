@@ -13,6 +13,7 @@ import AdminPage from "./components/layouts/AdminPage";
 import AdminProductEdit from "./components/layouts/AdminProductEdit";
 import SellerOnboardingReAuth from "./components/layouts/SellerOnboardingReAuth";
 import SellerOnboardingRouting from "./components/layouts/SellerOnboardingRouting";
+import DownloadNeverland from "./download/downloadNeverland";
 import {ParallaxProvider} from "react-scroll-parallax";
 import AOS from 'aos';
 
@@ -29,6 +30,7 @@ class App extends Component {
                 <Route exact path="/admin" component={AdminPage} />
                 <Route exact path="/adminTwo" component={NeverlandOurStory} />
                 <Route exact path="/story" component={NeverlandOurStory} />
+                <Route exact path="/download/neverland" component={DownloadNeverland} />
                 <Route exact path="/waitlist/user" component={NeverlandWaitlist} />
                 <Route exact path="/faq" component={NeverlandFAQ} />
                 <Route exact path="/seller-onboarding/reauth/:accountId" component={SellerOnboardingReAuth} />

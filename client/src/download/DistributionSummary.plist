@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NeverlandMain.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>76E8EADEEAE07E13406B375FF8692131A053389A</string>
+				<key>dateExpires</key>
+				<string>11/5/21</string>
+				<key>type</key>
+				<string>Apple Distribution</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>4PJCC3B6J6.com.Neverland.Marketplace</string>
+				<key>aps-environment</key>
+				<string>production</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>4PJCC3B6J6</string>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>NeverlandMain.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>b9496e2a-9f97-44da-82a6-edbce36159a5</string>
+				<key>name</key>
+				<string>iOS Team Ad Hoc Provisioning Profile: com.Neverland.Marketplace</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>4PJCC3B6J6</string>
+				<key>name</key>
+				<string>Mango Labs, Inc (CA)</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
