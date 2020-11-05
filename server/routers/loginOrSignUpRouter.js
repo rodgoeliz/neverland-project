@@ -58,7 +58,7 @@ router.post('/update', async function(req, res, next){
 
 router.post('/authorize-firebase', async function(req, res, next) {
 	let firebaseUID = req.body.firebaseUID;
-	let existingUser = await User.findOne({firebaseUID: firebaseUID});
+	let existingUser = await User.findOne({firebaseUID: firebaseUID}).populate('storeId');
 	if (existingUser) {
 		res.json({
 			success: true,
@@ -151,10 +151,12 @@ router.post('/login', async function(req, res, next) {
 });
 
 router.post('/signup', async function(req, res, next) {
+	console.log("REQUEST: ", req.body)
 	let email = req.body.email;
 	let password = req.body.password;
 	let firebaseUID = req.body.firebaseUID;
-
+	let isSeller = req.body.isSeller ? req.body.isSeller : false;
+	console.log("Is seller signing up: ", isSeller)
 	let facebookId = req.body.facebookId ? req.body.facebookId : "";
 	let name = req.body.name ? req.body.name : "";
 	let avatarURL = req.body.avatarURL ? req.body.avatarURL : "";
@@ -168,7 +170,9 @@ router.post('/signup', async function(req, res, next) {
 
 		authExpirationDate.setDate(authExpirationDate.getDate() + 7);
 		let stripeCustomerId = await createStripeAccountForUser(email);
+		var id = mongoose.Types.ObjectId();		
 		let userSchema = {
+			_id: id,
 			email: email,
 			isProfileComplete: false,
 			onboardingStepId: "signup_start",
@@ -178,6 +182,7 @@ router.post('/signup', async function(req, res, next) {
 			name: name,
 			avatarURL: avatarURL,
 			defaultLogin,
+			isSeller,
 			authToken: authToken,
 			tokenType: "local",
 			createdAt: Date.now(),
@@ -187,20 +192,31 @@ router.post('/signup', async function(req, res, next) {
 		if (password) {
 			userSchema.password = password
 		}
+
+		console.log("Before creating a new user..", userSchema);
 		var newUser = new User(userSchema);
-		newUser.save(function(err, result) {
-			if (err) {
+		console.log("after creating a new year")
+		try {
+			newUser.save(function(err, result) {
+				console.log(err)
+				console.log(result)
+				if (err) {
+					res.json({
+						success: false,
+						error: "There was a problem creating your account. Try again."
+					});
+					return; 
+				}
+				console.log("NEw user")
+				console.log(newUser)
 				res.json({
-					success: false,
-					error: "There was a problem creating your account. Try again."
+					success: true,
+					data: newUser	
 				});
-				return; 
-			}
-			res.json({
-				success: true,
-				data: newUser	
 			});
-		});
+		} catch (error){
+			console.log("ERROR SAVING USER", error)
+		}
 	} else {
 		if (existingUser.defaultLogin == defaultLogin) {
 			res.json({

@@ -12,6 +12,7 @@ const addressSchema = new mongoose.Schema({
 	addressCity: String,
 	addressState: String,
 	addressCountry: String,
+	addressCounty: String,
 	addressLine1: String,
 	addressLine2: String,
 	addressZip: String,

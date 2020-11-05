@@ -17,7 +17,11 @@ const userSchema = new mongoose.Schema({
 	name: String,
 	onboardingStepId: String,
 	zipCode: String,
-	phoneNumber: String,
+	phoneNumber: {
+		number: String,
+		countryCode: String
+	},
+	phoneNumberDetailed: Object,
 	locations: Array,
 	plantInterests: Array,
 	level: String,

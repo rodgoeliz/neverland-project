@@ -7,8 +7,9 @@ const productVariationOptionSchema = new mongoose.Schema({
 	title: String,
 	handle: String,
 	sku: String,
+  isVisible: Boolean,
 	price: {
-		value: String,
+		value: Number,
 		currency: String
 	},
 	quantity: String

@@ -29,7 +29,7 @@ const formData = require('express-form-data');
 const dotenv = require('dotenv');
 dotenv.config();
 //app.use(cors());
-mongoose.connect(process.env.REACT_APP_MONGODB_URI, {useNewUrlParser: true});
+mongoose.connect(process.env.REACT_APP_MONGODB_URI, {useFindAndModify: false, useNewUrlParser: true});
 mongoose.connection.on('error', (err) => {
 	process.exit();
 });

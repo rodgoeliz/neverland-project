@@ -18,7 +18,15 @@ const CONTEXTUAL_SECTION_PRODUCT_LIMIT = 15;
 router.get('/feed/home', async function(req, res, next) {
 	let userId = req.query.userId;
 	// if no userId, then go to login
-	let user = await User.findOne({_id: userId});
+	console.log("Get home feed", userId)
+	console.log(req.query)
+	console.log("-----")
+	let user = null;
+	try {
+		user = await User.findOne({_id: userId});
+	} catch (error)	 {
+		console.log("get user error", error)
+	}
 	if (!user) {
 		return;
 	}

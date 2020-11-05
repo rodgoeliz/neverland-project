@@ -38,9 +38,11 @@ const productSchema = new mongoose.Schema({
 	heightIn: Number,
 	widthIn: Number,
 	lengthIn: Number,
+  sku: String,
 	size: String,
 	isOrganic: Boolean,
 	isArtificial: Boolean,
+  processingTime: String,
 	variationIds: [{
 		type: Schema.Types.ObjectId,
 		ref: 'ProductVariation'	
@@ -50,6 +52,10 @@ const productSchema = new mongoose.Schema({
 		currency: String
 	},
 	publishedAt: Date,
+  categoryIds: [{
+    type: Schema.Types.ObjectId,
+    ref: 'NavigationItem'
+  }],
 	tagIds: [{
 		type: Schema.Types.ObjectId,
 		ref: 'ProductTag'
@@ -58,6 +64,13 @@ const productSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Store'
 	}
+});
+
+productSchema.post('find', function(next) {
+  console.log('find hook')
+  this.populate({path: 'variationIds', populate: {path: 'optionIds'}});
+  this.populate('tagIds');
+  this.populate('storeId');
 });
 
 productSchema.pre('remove', function (next) {

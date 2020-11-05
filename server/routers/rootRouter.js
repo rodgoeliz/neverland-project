@@ -283,7 +283,8 @@ router.get('/init', async function(req, res, next) {
 				allPaymentMethods: allPaymentMethods,
 				allOrders: allOrders,
 				isProfileComplete: user.isProfileComplete,
-				stepId: user.onboardingStepId
+				stepId: user.onboardingStepId,
+        isSeller: user.isSeller
 			}
 		})
 	});

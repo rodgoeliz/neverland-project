@@ -7,8 +7,13 @@ var Address = require('../models/Address');
 var Store = require('../models/Store');
 var Product = require('../models/Product');
 var ProductTag = require('../models/ProductTag');
+var NavigationItem = require('../models/NavigationItem');
 var SellerProfile = require('../models/SellerProfile');
 
+const SELLER_SIGNUP_BASICS_STEP_ID = 'seller_signup_basics';
+const SELLER_SIGNUP_SHOP_BASICS = 'seller_signup_shop_basics';
+const SELLER_SIGNUP_PAYMENT = 'seller_signup_basics';
+const SELLER_SIGNUP_ADD_PRODUCTS = 'seller_signup_add_products';
 const BASICS_STEP_ID = 'seller-onboarding-basics-step';
 const SHOP_STEP_ID = "seller-onboarding-shop-basics-step"
 
@@ -28,7 +33,18 @@ router.get(`/product/categories/get`, async function(req, res, next) {
   // if no id specified, we get all categories
   let categoryId = req.query.id;
   let query = {};
-
+  try {
+  	let categories = await NavigationItem.find(query);
+  	res.json({
+  		success: true,
+  		payload: categories 
+  	});
+  } catch (error) {
+  	res.json({
+  		success: false,
+  		payload: error.message
+  	});
+  }
 });
 
 router.get(`/product/tags/get`, async function(req, res, next) {
@@ -86,6 +102,31 @@ router.get(`/onboarding/getPaymentStatus`, async function(req, res, next) {
 		sellerPacking
 	}
 }**/
+router.get(`/account-links/get`, async function(req, res, next) {
+  let sellerId = req.query.sellerId;
+  let user = await User.findOne({_id: sellerId}).populate('sellerProfile');
+  if (!user || !user.sellerProfile) {
+    res.json({
+      success: false,
+      error: "Couldn't find this seller."
+    });
+    return;
+  }
+  console.log(user)
+  let stripeUID = user.sellerProfile.stripeUID;
+  console.log(stripeUID)
+  const accountLinks = await stripe.accountLinks.create({
+      account: stripeUID,
+      refresh_url: 'http://www.enterneverland.com/seller-onboarding/reauth/' + stripeUID,
+      return_url: 'http://www.enterneverland.com/seller-onboarding/return/' + stripeUID,
+      type: 'account_onboarding',
+  });
+  console.log("account links created", accountLinks)
+  res.json({
+    success: true,
+    payload: accountLinks
+  });
+});
 
 router.get(`/onboarding/getStripeSetupLink`, async function(req, res, next) {
 	let userId = req.query.userId;
@@ -126,13 +167,25 @@ router.get(`/products/getAll`, async function(req, res, next) {
 router.post('/onboarding/submit', async function(req, res, next) {
 	let stepId = req.body.stepId;
 	let formData = req.body.formData;
+	let userId = req.body.userId;
 	let now = new Date();
 	let sellerUser = null;
+	console.log("Submitting step", stepId)
+	console.log("user id: ", userId)
+	console.log("form data", formData)
 	//create a stripe express account
-	if (stepId == BASICS_STEP_ID) {
+	if (stepId == SELLER_SIGNUP_BASICS_STEP_ID) {
 		let email = formData.email;
 		let firebaseUser = formData.firebaseUser;
-		let user = await User.findOne({email: email}).populate("seller");
+		let user = await User.findOne({_id: userId}).populate('sellerProfile');
+		if (!user) {
+			console.log("couldn't find a registered user -- how did this happen?")
+			res.json({
+				success: false,
+				error: "User couldn't be found for this e-mail."
+			});
+		}
+		let firebaseUID = user.firebaseUID;
 		let newSellerAddress = new Address({
 			createdAt: now,
 			updatedAt: now,
@@ -140,6 +193,7 @@ router.post('/onboarding/submit', async function(req, res, next) {
 			isShippingAddress: true,
 			addressCity: formData.addressInput.city,
 			addressState: formData.addressInput.state,
+			addressCounty: formData.addressInput.county,
 			addressCountry: "USA",
 			addressLine1: formData.addressInput.street,
 			addressLine2: formData.addressInput.street_two,
@@ -148,10 +202,12 @@ router.post('/onboarding/submit', async function(req, res, next) {
 		});
 		let address = await newSellerAddress.save();
 
+		console.log("Saved seller address...", address);
+
 		// create a stripe account
 		const account = await stripe.accounts.create({
 		  type: 'express',
-		  email: email,
+		  email: user.email,
 		});
 		// create a stripe account link
 		const accountLinks = await stripe.accountLinks.create({
@@ -166,7 +222,19 @@ router.post('/onboarding/submit', async function(req, res, next) {
 				error: "Stripe account creation failed."
 			});
 		}
-
+		console.log("Created a stripe accounts link...")
+		console.log("accountLinks", accountLinks);
+		const transformData = function(key, data, isSingle) {
+			let transformedData = [];
+			for (var idx in data) {
+				let item = data[idx];
+				transformedData.push(item[key]);
+			}
+			if (isSingle && transformedData.length == 1) {
+				return transformedData[0]
+			}
+			return transformedData;
+		}
 		let sellerProfile = new SellerProfile({
 			createdAt: now,
 			updatedAt: now,
@@ -174,41 +242,38 @@ router.post('/onboarding/submit', async function(req, res, next) {
 			phoneNumber: formData.phoneNumber,
 			stripeUID: account.id,
 			userId: user,
-			sellerInterestReason: formData.sellerInterestReason,
-			sellerReferralSource: formData.sellerReferralSource,
+			sellerInterestReason: transformData("id", formData.sellerInterestReason, true),
+			sellerReferralSource: transformData("id", formData.sellerReferralSource, true),
 			sellerChallenge: formData.sellerChallenge,
-			statesCanNotShipTo: formData.stateSelectedItems,
-			productCategoriesSold: formData.productSelectedItems,
-			storesSellerSellsAt: formData.sellerStoreSelectedItems,
+			statesCanNotShipTo: transformData("abbreviation", formData.stateSelectedItems, false),
+			productCategoriesSold: transformData("id", formData.productSelectedItems, false),
+			storesSellerSellsAt: transformData("id", formData.sellerStoreSelectedItems, false),
 			fullName: formData.fullName,
 			birthday: formData.birthday,
-			productSource: formData.selelrProductSource,
+			productSource: formData.sellerProductSource,
 			packingDetails: formData.sellerPacking,
 		});
 		let newSellerProfile = await sellerProfile.save();	
-		if (user) {
-			user.isSeller = true;
-			user.firebaseUID = firebaseUser.uid;
-			user.isProfileComplete = false;
-			user.sellerProfile = newSellerProfile;
-			user.password = formData.password;
-			user.name = formData.fullName
-			sellerUser = await user.save();
-		} else {
-			let newUser = new User({
-				name: formData.fullName,
-				firebaseUID: firebaseUser.uid,
-				email: email,
-				password: formData.password,
+		console.log("Saved seller profile")
+		console.log(newSellerProfile)
+
+		console.log("updating user with new seller profile info...")	
+		let result = await User.findOneAndUpdate({_id: userId}, {
+			$set: {
+				isSeller: true,
+				firebaseUID: firebaseUID,
+				isProfileComplete: false,
+				phoneNumber: formData.phoneNumber,
 				sellerProfile: newSellerProfile,
-				isProfileComplete: false
-			});
-			sellerUser = await newUser.save();
-		}
+				name: formData.fullName,
+				onboardingStepId: stepId,
+			}
+		}, {new: true}).populate({path: 'sellerProfile', populate: {path: 'personalAddress'}});
+		console.log(result)
 		res.json({
 			success: true,
 			payload: {
-				sellerUser,
+				sellerUser: result,
 				accountLinks
 		}});
 	}
@@ -222,10 +287,10 @@ router.post('/onboarding/submit', async function(req, res, next) {
 	isShopOwner
 	shopOwners
 	}**/
-	if (stepId == SHOP_STEP_ID) {
+	if (stepId == SELLER_SIGNUP_SHOP_BASICS) {
 		let userId = req.body.userId;
 		// pull user id and see if store exists
-		let user = await User.findOne({_id: userId}).populate('storeId');
+		let user = await User.findOne({_id: userId}).populate('storeId').populate({path: 'sellerProfile', populate: {path: 'personalAddress'}});
 		if (!user.storeId) {
 			let newSellerBusinessAddress = new Address({
 				createdAt: now,
@@ -234,6 +299,7 @@ router.post('/onboarding/submit', async function(req, res, next) {
 				isShippingAddress: true,
 				addressCity: formData.shopAddressInput.city,
 				addressState: formData.shopAddressInput.state,
+				addressCounty: formData.shopAddressInput.county,
 				addressCountry: "USA",
 				addressLine1: formData.shopAddressInput.street,
 				addressLine2: formData.shopAddressInput.street_two,
@@ -249,13 +315,17 @@ router.post('/onboarding/submit', async function(req, res, next) {
 				businessAddress: newAddress,
 				description: formData.shopDescription,
 				title: formData.shopTitle,
-				website: formData.shopWebsite,
+				website: formData.website,
 				userId: userId
 			});
 			newStore = await newStore.save();	
-			user.storeId = newStore;
-			let updatedUser = await user.save();
-			updatedUser = await User.populate(updatedUser, 'storeId');
+			console.log("saving user with new stepId and storeId", stepId)
+			console.log(newStore)
+			let updatedUser = await User.findOneAndUpdate({_id: userId}, {$set: {
+				storeId: newStore,
+				onboardingStepId: stepId
+			}}, {new: true}).populate('storeId').populate({path: 'sellerProfile', populate: {path: 'personalAddress'}});
+			console.log("sending back updated user", updatedUser)
 			res.json({
 				success: true,
 				payload: updatedUser	
@@ -269,8 +339,8 @@ router.post('/onboarding/submit', async function(req, res, next) {
 				isShippingAddress: true,
 				description: formData.shopDescription,
 				title: formData.shopTitle,
-				website: formData.shopWebsite
-			}});
+				website: formData.website
+			}}, {new: true});
 			// update Address
 			let businessAddressId = updatedStore.businessAddress;
 			let updatedBusinessAddress = await Address.findOneAndUpdate({_id: businessAddressId}, {
@@ -281,12 +351,17 @@ router.post('/onboarding/submit', async function(req, res, next) {
 					addressCity: formData.shopAddressInput.city,
 					addressState: formData.shopAddressInput.state,
 					addressCountry: "USA",
+					addressCounty: formData.shopAddressInput.county,
 					addressLine1: formData.shopAddressInput.street,
 					addressLine2: formData.shopAddressInput.street_two,
 					addressZip: formData.shopAddressInput.zip_code,
 				}
 			});
-			let updatedUser = await User.populate(user, 'storeId')
+			let updatedUser = await User.findOneAndUpdate({_id: userId}, {$set: {
+				onboardingStepId: formData.stepId
+			}}, {new: true}).populate('storeId').populate({path: 'sellerProfile', populate: {path: 'personalAddress'}});
+			console.log("STORE EXISTS")
+			console.log("updatedUser", updatedUser)
 			res.json({
 				success: true,
 				payload: updatedUser

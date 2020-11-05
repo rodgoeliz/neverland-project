@@ -3,6 +3,8 @@ require('dotenv').config();
 var router = express.Router();
 var WaitlistUser = require('../models/waitlistUser');
 var Product = require('../models/Product');
+var ProductTag = require('../models/ProductTag');
+var NavigationItem = require('../models/NavigationItem');
 var ProductVariation = require('../models/ProductVariation');
 var ProductVariationOption = require('../models/ProductVariationOption');
 var RecentlyViewedProduct = require('../models/RecentlyViewedProducts');
@@ -262,11 +264,12 @@ router.post('/update', async function(req, res, next) {
 router.post('/seller/create', async function(req, res, next) {
 	const files= Object.values(req.files)
 	let formData = req.body;
-	let quantity = formData.quantity;
-	let price = formData.price;
+	console.log("seller create endpoint...", formData)
+	let quantity = formData.productQuantity;
+	let price = formData.productPrice;
 	let sku = formData.sku;
-	let categorySelectedItems = formData.categorySelectedItems;
-	let tagSelectedItems = formData.tagSelectedItems;
+	let categorySelectedItems = formData.categories ? JSON.parse(formData.categories) : [];
+	let tagSelectedItems = JSON.parse(formData.productTags);
 	let productPhotos = formData.productPhotos;
 	let description = formData.description;
 	let lightLevel = formData.lightLevel;
@@ -278,20 +281,22 @@ router.post('/seller/create', async function(req, res, next) {
 
 	let processingTime = formData.processingTime;
 	let colors = formData.colors;
-	let offerFreeShipping = formData.offerFreeShipping;
+	let offerFreeShipping = formData.offerFreeShipping ? formData.offerFreeShipping: false;
 	let title = formData.title;
 	let originZipCode = formData.originZipCode;
 	let handlingFee = formData.handlingFee;
 	let storeId = formData.storeId;
 	let vendorId = formData.userId;
-	let isArtifical = formData.isArtifical;
-	let isOrganic = formData.isOrganic;
+	let isArtificial = formData.isArtificial? formData.isArtificial:false;
+	let isOrganic = formData.isOrganic ? formData.isOrganic: false;
 	let itemWeightLb = formData.itemWeightLb;
 	let itemWeightOz = formData.itemWeightOz;
 	let itemHeightIn = formData.itemHeightIn;
 	let itemWidthIn = formData.itemWidthIn;
 	let itemLengthIn = formData.itemLengthIn;
+  let productSKU = formData.productSKU;
 	let newProductId = mongoose.Types.ObjectId();
+  let isVisible = formData.isVisible ? formData.isVisible : false;
 
 	const genHandle = (title) => {
 		return title.toLowerCase();
@@ -323,8 +328,9 @@ router.post('/seller/create', async function(req, res, next) {
 				title: option.title,
 				handle: option.handle,
 				sku: option.sku,
+				isVisible: option.isVisible,
 				price: {
-					value: option.price,
+					value: option.price * 100,
 					currency: 'USD'
 				},
 				quantity: option.quantity
@@ -354,53 +360,300 @@ router.post('/seller/create', async function(req, res, next) {
 		});
 	}
 	Promise.allSettled(fileUploadPromises).then(async function(data) {
+		console.log("Uploaded image files for product...")
 		let imageURLs = [];
 		for (let i = 0; i < data.length; i++) {
 			imageURLs.push(data[i].value.Location);
 		}
 		Promise.allSettled(variationPromises).then(async (results) => {
-			let newProductSchema = new Product({
-				createdAt: now,
-				updatedAt: now,
-				title: title,
-				variationIds: variationIds,
-				description: description,
-				originZipCode: originZipCode,
-				offerFreeShipping: offerFreeShipping,
-				handlingFee: handlingFee,
-				handle: genHandle(title),
-				inventoryInStock: quantity,
-				inventoryAvailableToSell: quantity,
-				isVisible: false,
-				imageURLs: imageURLs,
-				colors: colors,
-				benefit: benefit,
-				price: {
-					value: price,
-					currency: 'USD'
-				},
-				style: style,
-				userLevel: userLevel,
-				lightLevel: lightLevel,
-				weightLb: parseInt(itemWeightLb),
-				weightOz: parseInt(itemWeightOz),
-				heightIn: parseInt(itemHeightIn),
-				widthIn: parseInt(itemWidthIn),
-				lengthIn: parseInt(itemLengthIn),
-				isOrganic: isOrganic,
-				isArtifical: isArtifical,
-				storeId: storeId,
-				vendorId: vendorId
-			});
+			console.log("Uploaded image files for product...")
+			// find product tags
+			// find categories
+			tagSelectedItems = tagSelectedItems.map((item) => {return item._id});
+			categorySelectedItems = categorySelectedItems.map((item) => {return item._id});
+			let tagIds = await ProductTag.find({_id: {$in: tagSelectedItems}});
+			let categories = await NavigationItem.find({_id: {$in: categorySelectedItems}});
+			Promise.allSettled([tagIds, categories]).then( async (results) => {
+				let tags = results[0].value;
+				let categories = results[1].value;
+				console.log("DID WE FIND TAGS??", tagSelectedItems, categorySelectedItems);
+				console.log(tags)	
+				console.log(categories)
+        let newProductMap = {
+          createdAt: now,
+          updatedAt: now,
+          title: title,
+          variationIds: variationIds,
+          tagIds: tags,
+          categoryIds: categories,
+          description: description,
+          originZipCode: originZipCode,
+          offerFreeShipping: offerFreeShipping,
+          handlingFee: handlingFee,
+          handle: genHandle(title),
+          inventoryInStock: quantity,
+          inventoryAvailableToSell: quantity,
+          isVisible: isVisible,
+          imageURLs: imageURLs,
+          processingTime: processingTime,
+          colors: colors,
+          benefit: benefit,
+          style: style,
+          userLevel: userLevel,
+          lightLevel: lightLevel,
+          weightLb: parseInt(itemWeightLb),
+          weightOz: parseInt(itemWeightOz),
+          heightIn: parseInt(itemHeightIn),
+          widthIn: parseInt(itemWidthIn),
+          lengthIn: parseInt(itemLengthIn),
+          isOrganic: isOrganic,
+          isArtificial: isArtificial,
+          storeId: storeId,
+          vendorId: vendorId
+        }
+        console.log("IS PRICE DEFINED", price)
+        if (price) {
+          newProductMap.price = {
+            value: parseFloat(price) * 100,
+            currency: 'USD'
+          } 
+        }
+				let newProductSchema = new Product(newProductMap);
 
-			let newProduct = await newProductSchema.save();
-			res.json({
-				success: true,
-				payload: newProduct
-			});
+				let newProduct = await newProductSchema
+          .save()
+          .then(async (product) => {
+            await product.populate({path: 'variationIds', populate: {path: 'optionIds'}}).execPopulate();
+            console.log("Created new product")
+            console.log(product)
+            res.json({
+              success: true,
+              payload: product
+            })
+          });
+        /*Product.populate(newProduct, {path: 'variationIds'}
+				console.log("Created a new product", newProduct);
+				res.json({
+					success: true,
+					payload: newProduct
+				});*/
+			})
 		});
 	});
 
+});
+
+router.post('/seller/update', async function(req, res, next) {
+  const files= Object.values(req.files)
+  let formData = req.body;
+  console.log("seller update product endpoint...", formData)
+  let quantity = formData.productQuantity;
+  let price = parseFloat(formData.productPrice);
+  let sku = formData.sku;
+  let categorySelectedItems = formData.categories ? JSON.parse(formData.categories) : [];
+  let tagSelectedItems = JSON.parse(formData.productTags);
+  let productPhotos = formData.productPhotos;
+  let description = formData.description;
+  let lightLevel = formData.lightLevel;
+  let benefit = formData.benefit;
+  let userLevel = formData.userLevel;
+  let style = formData.style;
+  let variations = JSON.parse(formData.variations);
+  let now = new Date();
+
+  let processingTime = formData.processingTime;
+  let colors = formData.colors;
+  let offerFreeShipping = formData.offerFreeShipping ? formData.offerFreeShipping : false;
+  let title = formData.title;
+  let originZipCode = formData.originZipCode;
+  let handlingFee = formData.handlingFee;
+  let storeId = formData.storeId;
+  let vendorId = formData.userId;
+  let isArtificial = formData.isArtificial ? formData.isArtificial : false;
+  let isOrganic = formData.isOrganic ? formData.isOrganic : false;
+  let isVisible = formData.isVisible ? formData.isVisible: false;
+  let itemWeightLb = formData.itemWeightLb;
+  let itemWeightOz = formData.itemWeightOz;
+  let itemHeightIn = formData.itemHeightIn;
+  let itemWidthIn = formData.itemWidthIn;
+  let itemLengthIn = formData.itemLengthIn;
+  let productSKU = formData.productSKU;
+  let productId = formData.productId;
+
+  let existingProduct = await Product.find({_id: productId});
+  if (!existingProduct) {
+    res.json({
+      success: false,
+      error: "Failed to find this product in our database."
+    });
+    return;
+  }
+
+  const genHandle = (title) => {
+    return title.toLowerCase();
+  }
+
+  // upload image photos here...
+  // extract category tags, extract tag tags
+  const uploadFileToS3 = (file, storeId, productId) => {
+    const fileContent = fs.readFileSync(file.path);
+    const params = {
+      Bucket: "enter-neverland",
+      Key: "product/"+storeId+"/"+productId+"/"+file.originalFilename,
+      ContentType: file.mimetype,
+      Body: fileContent
+    };
+    return s3.upload(params).promise();
+  }
+  let variationPromises = [];
+  let variationIds = []
+  // if _id exists, then it's an existing variation - update it
+  // if new id, then add a new variation and new options
+  for (var idx in variations) {
+    let variation = variations[idx];
+    // existing variation
+    let optionIds = [];
+    let optionId = mongoose.Types.ObjectId();
+    for (var idx in variation.options) {
+      let option = variation.options[idx];
+        let optionSchema={
+          title: option.title,
+          handle: option.handle,
+          sku: option.sku,
+          isVisible: option.isVisible,
+          price: {
+            value: option.price * 100,
+            currency: 'USD'
+          },
+          quantity: option.quantity
+        }
+      if (option._id) {
+        optionId = option._id
+        await ProductVariationOption.findOneAndUpdate({_id: option._id}, {
+          $set: optionSchema
+        }, {new: true});
+      } else {
+        optionSchema._id = optionId;
+        optionSchema.createdAt = new Date();
+        let newVariationOptionSchema = new ProductVariationOption(optionSchema);
+        variationPromises.push(newVariationOptionSchema.save());
+      }
+      optionIds.push(optionId);
+    }
+    let variationSchema = {
+      udatedAt: now,
+      title: variation.title,
+      handle: variation.handle,
+      isPriceVaried: variation.isPriceVaried,
+      isSKUVaried: variation.isSKUVaried,
+      isQuantityVaried: variation.isQuantityVaried,
+      isVisible: variation.isVisible,
+      optionIds: optionIds
+    }
+    let variationId = mongoose.Types.ObjectId();
+    if (variation._id) {
+        variationId = variation._id;
+        await ProductVariation.findOneAndUpdate({_id: variation._id}, {
+          $set: variationSchema 
+        }, {new: true});
+    } else {
+      let newVariationSchema = new ProductVariation({
+        _id: variationId,
+        createdAt: now,
+        udatedAt: now,
+        title: variation.title,
+        handle: variation.handle,
+        isPriceVaried: variation.isPriceVaried,
+        isSKUVaried: variation.isSKUVaried,
+        isQuantityVaried: variation.isQuantityVaried,
+        isVisible: variation.isVisible,
+        optionIds: optionIds
+      });
+      variationPromises.push(newVariationSchema.save());
+    }
+    variationIds.push(variationId);
+  }
+  // check to see if new imges or old
+  var fileUploadPromises = [];
+  let productPhotoUrls = [];
+  if (files.length > 0) {
+    files[0].map((file) => {
+      if (file.uri && file.uri.includes('http:/')) {
+        productPhotoUrls.push(file.uri);
+      } else {
+        fileUploadPromises.push(uploadFileToS3(file, storeId, productId));
+      }
+    });
+  }
+  Promise.allSettled(fileUploadPromises).then(async function(data) {
+    console.log("Uploaded image files for product...")
+    for (let i = 0; i < data.length; i++) {
+      productPhotoUrls.push(data[i].value.Location);
+    }
+    Promise.allSettled(variationPromises).then(async (results) => {
+      console.log("Uploaded image files for product...")
+      // find product tags
+      // find categories
+      tagSelectedItems = tagSelectedItems.map((item) => {return item._id});
+      categorySelectedItems = categorySelectedItems.map((item) => {return item._id});
+      let tagIds = await ProductTag.find({_id: {$in: tagSelectedItems}});
+      let categories = await NavigationItem.find({_id: {$in: categorySelectedItems}});
+      Promise.allSettled([tagIds, categories]).then( async (results) => {
+        let tags = results[0].value;
+        let categories = results[1].value;
+        let newProductSchema = {
+          updatedAt: now,
+          title: title,
+          variationIds: variationIds,
+          tagIds: tags,
+          categoryIds: categories,
+          description: description,
+          originZipCode: originZipCode,
+          offerFreeShipping: offerFreeShipping,
+          handlingFee: handlingFee,
+          handle: genHandle(title),
+          inventoryInStock: quantity,
+          inventoryAvailableToSell: quantity,
+          isVisible: isVisible,
+          imageURLs: productPhotoUrls,
+          processingTime: processingTime,
+          colors: colors,
+          benefit: benefit,
+          style: style,
+          userLevel: userLevel,
+          lightLevel: lightLevel,
+          weightLb: parseInt(itemWeightLb),
+          weightOz: parseInt(itemWeightOz),
+          heightIn: parseInt(itemHeightIn),
+          widthIn: parseInt(itemWidthIn),
+          lengthIn: parseInt(itemLengthIn),
+          isOrganic: isOrganic,
+          isArtificial: isArtificial,
+          storeId: storeId,
+          vendorId: vendorId
+        };
+        console.log("IS PRICE DEFINED", price)
+        if (price) {
+          newProductSchema.price = {
+            value: price * 100,
+            currency: 'USD'
+          } 
+        }
+        console.log("updating product with", productId, newProductSchema)
+        let newProduct = await Product
+          .findOneAndUpdate({_id: productId}, {$set: newProductSchema}, { new: true})
+          .populate({path: 'variationIds', populate: {'path': 'optionIds'}})
+          .populate('tagIds')
+          .populate('categoryIds')
+          .exec();
+        console.log("SENDING BACK NEW PRODUCT", newProduct)
+        res.json({
+          success: true,
+          payload: newProduct 
+        });
+      })
+    });
+  });
 });
 
 router.post('/toggleVisibility', async function(req, res, next) {
@@ -420,32 +673,8 @@ router.post('/toggleVisibility', async function(req, res, next) {
 	})
 });
 
-/**
 
-	formData: {
-		processingTime
-		originZipCode
-		handlingFee
-		offerFreeShipping
-		itemWeightLb
-		itemWeightOz
-		itemHeightIn
-		itemWidthIn
-		itemLengthIn
-		primaryColor
-		secondaryColor
-		quantity
-		price
-		sku
-		categorySelectedItems
-		tagSelectedItems
-		isArtifical
-		isOrganic
-		productPhotos
-		title
-		description
-	}
-**//**
+/**
 router.post('/seller/update', async function(req, res, next) {
 	const files= Object.values(req.files)
 	console.log(files)

@@ -31,7 +31,7 @@ class App extends Component {
                 <Route exact path="/waitlist/user" component={NeverlandWaitlist} />
                 <Route exact path="/faq" component={NeverlandFAQ} />
                 <Route exact path="/seller-onboarding/reauth/:accountId" component={SellerOnboardingReAuth} />
-                <Route exact path="/seller-onboarding/return/:accountId" component={SellerOnboardingReAuth} />
+                <Route exact path="/seller-onboarding/return/:accountId" component={SellerOnboardingRouting} />
                 <Route path="/edit/product/:productId" component={AdminProductEdit} />
               </div>
             </Layout>

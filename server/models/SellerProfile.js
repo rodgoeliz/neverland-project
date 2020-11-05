@@ -25,7 +25,10 @@ const sellerProfileSchema = new mongoose.Schema({
 	},
 	statesCanNotShipTo: [String],
 	birthday: Date,
-	phoneNumber: String,
+	phoneNumber: {
+		number: String,
+		countryCode: String
+	},
 	userId: {
 		type: Schema.Types.ObjectId,
 		ref: 'User'
