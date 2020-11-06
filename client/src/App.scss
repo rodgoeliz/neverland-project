@@ -23,7 +23,7 @@ body {
 
 h1 {
   font-family: 'Cognace';
-  font-size: 4.5rem !important;
+  font-size: 3.5rem !important;
   line-height: 1.0 !important;
 }
 
@@ -56,11 +56,14 @@ a:focus {
     margin-top: -16px;
     z-index: -100;
 }
+.h2-cognace-blue,
 .h2-cognace {
   font-family: 'Cognace';
   font-size: calc(2.75rem + (4 * (100vw - 360px)) / 407) !important;
 }
-
+.h2-cognace-blue {
+  color: #1E1DCD
+}
 .h3-cognace {
   font-family: 'Cognace';
   font-size: calc(2.25rem + (4 * (100vw - 360px)) / 407) !important;
@@ -79,6 +82,36 @@ a:focus {
 
 h2 {
   font-size: 2.5rem !important;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+.carousel-item-content-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  min-height: 70vh;
+  align-items: center;
+}
+
+.carousel-item-text-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.carousel-item-text-label {
+  text-align: center;
+  font-weight: bold;
+}
+
+.carousel-item-text-header {
+  text-align: center  
+}
+
+.carousel-item-image {
+  width: 80%
 }
 
 .join-waitlist-loading {

@@ -323,6 +323,7 @@ router.post('/seller/create', async function(req, res, next) {
 			let option = variation.options[idx];
 			var optionId = mongoose.Types.ObjectId();
 			optionIds.push(optionId);
+      let priceValue = option.price ? option.price * 100 : 0;
 			let newVariationOptionSchema = new ProductVariationOption({
 				_id: optionId,
 				title: option.title,
@@ -330,7 +331,7 @@ router.post('/seller/create', async function(req, res, next) {
 				sku: option.sku,
 				isVisible: option.isVisible,
 				price: {
-					value: option.price * 100,
+					value: priceValue,
 					currency: 'USD'
 				},
 				quantity: option.quantity
