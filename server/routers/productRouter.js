@@ -452,8 +452,8 @@ router.post('/seller/update', async function(req, res, next) {
   let price = parseFloat(formData.productPrice);
   let sku = formData.sku;
   let categorySelectedItems = formData.categories ? JSON.parse(formData.categories) : [];
-  let tagSelectedItems = JSON.parse(formData.productTags);
-  let productPhotos = formData.productPhotos;
+  let tagSelectedItems = formData.productTags ? JSON.parse(formData.productTags) : [];
+  let productPhotos = (formData.productPhotos || formData.productPhotos != '') ? formData.productPhotos : [];
   let description = formData.description;
   let lightLevel = formData.lightLevel;
   let benefit = formData.benefit;
