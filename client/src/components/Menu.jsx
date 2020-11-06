@@ -8,13 +8,10 @@ const Menu = ({open}) => {
       <div className="mobile-menu-logo-container">
         <img className="mobile-menu-logo" src="/images/neverland_monologo_black.png" />
       </div>
-      {/*<a href="/story">
-        Our Story 
+      <a href="/faq">FAQ<span class="sr-only">(current)</span></a>
+      <a href="/contactus">
+        Contact Us
       </a>
-      <a href="#plants">
-        Plants
-        </a>
-      <a href="/faq">FAQ<span class="sr-only">(current)</span></a>*/}
     </StyledMenu>
   )
 }

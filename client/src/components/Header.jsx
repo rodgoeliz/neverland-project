@@ -30,14 +30,12 @@ class Header extends Component {
 							</div>
 							<div className="display-mobile">
 								<a href="/"><img className="mobile-nav-logo" src="/images/neverland_monologo_black.png" /></a>
-                      <a class="nav-link" href="/faq">FAQ<span class="sr-only">(current)</span></a>
 							</div>
 						</div>
 						<div className="row-nm">
 								<div className="desktop-menu row-nm" style={{margin: 'auto'}}>
-                      <a class="nav-link" href="/faq">FAQ<span class="sr-only">(current)</span></a>
-							        {/*<a class="nav-link" href="/story">Our Story<span class="sr-only">(current)</span></a>
-							        <a class="nav-link" href="/#plants">Plants</a>*/}
+                    <a class="nav-link" href="/faq">FAQ<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/contactus">Contact Us<span class="sr-only">(current)</span></a>
 						        </div>
 						        <div className="mobile-menu">
 									<Burger open={this.state.open} setOpen={this.setOpen.bind(this)}/>

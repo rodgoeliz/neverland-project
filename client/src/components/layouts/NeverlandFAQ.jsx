@@ -40,12 +40,12 @@ class NeverlandFAQ extends Component {
 							</AccordionCard>
 							<AccordionCard eventKey="2" title="How can I apply to be a seller?">
                 <p>
-                  Thanks for your interest in joining our seller community! Please apply here and a member of our team will be in touch with you within 24 hours.
+                  Thanks for your interest in joining our seller community! Please <a href="https://enterneverland.typeform.com/to/bVKM8aYR">apply here</a> and a member of our team will be in touch with you within 24 hours.
                 </p>
 							</AccordionCard>
 							<AccordionCard eventKey="3" title="Who can I contact about press opportunities?">
                 <p>
-                  Please contact press@enterneverland.com
+                  Please contact <a href="mailto:press@enterneverland.com">press@enterneverland.com.</a>
                 </p>
 							</AccordionCard>
               <AccordionCard eventKey="4" title="Where does Neverland ship?">
@@ -65,7 +65,7 @@ class NeverlandFAQ extends Component {
               </AccordionCard>
               <AccordionCard eventKey="8" title="Can we work together for an upcoming event/activation/cool thing I'm planning?">
                 <p>
-                We’d love to hear from you. Please email hello@enterneverland.com. 
+                We’d love to hear from you. Please email <a href="mailto:hello@enterneverland.com">hello@enterneverland.com</a>. 
                 </p>
               </AccordionCard>
 						</Accordion>
@@ -77,7 +77,7 @@ class NeverlandFAQ extends Component {
 						<div></div>
 						<div>
 							Email us! <br/>
-							<b>hello@enterneverland.com</b><br/><br />
+							<b><a href="mailto:hello@enterneverland.com">hello@enterneverland.com</a></b><br/><br />
 
 							We're online 9am-6pm PST, Monday through Friday.
 						</div>

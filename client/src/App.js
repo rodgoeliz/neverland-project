@@ -8,6 +8,7 @@ import NeverlandHome from './components/layouts/NeverlandHome';
 import NeverlandOurStory from './components/layouts/NeverlandOurStory';
 import NeverlandWaitlist from "./components/layouts/NeverlandWaitlist";
 import NeverlandFAQ from "./components/layouts/NeverlandFAQ";
+import NeverlandContactUs from "./components/layouts/NeverlandContactUs";
 import Layout from './components/layouts/Layout';
 import AdminPage from "./components/layouts/AdminPage";
 import AdminProductEdit from "./components/layouts/AdminProductEdit";
@@ -33,6 +34,7 @@ class App extends Component {
                 <Route exact path="/download/neverland" component={DownloadNeverland} />
                 <Route exact path="/waitlist/user" component={NeverlandWaitlist} />
                 <Route exact path="/faq" component={NeverlandFAQ} />
+                <Route exact path="/contactus" component={NeverlandContactUs} />
                 <Route exact path="/seller-onboarding/reauth/:accountId" component={SellerOnboardingReAuth} />
                 <Route exact path="/seller-onboarding/return/:accountId" component={SellerOnboardingRouting} />
                 <Route path="/edit/product/:productId" component={AdminProductEdit} />
