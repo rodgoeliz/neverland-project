@@ -111,6 +111,7 @@ class NeverlandHome extends Component {
 				</div>
         <br />
         <br />
+          <div><h2 className='h2-cognace' style={{'text-align': 'center'}}>How it works</h2></div>
           <Carousel activeIndex={this.state.carouselIndex} onSelect={this.handleOnSelectNext.bind(this)}>
             <Carousel.Item>
               <div className="row-nm carousel-item-content-container">
@@ -174,6 +175,9 @@ class NeverlandHome extends Component {
                 <p>           
               Neverland is the online destination for plants and gardening. Buyers can discover new plants and gardening products, book gardening services online, and get inspired. Plant and gardening professionals can sell their products, connect with new buyers, and build their business.  
                 </p>
+            </div>  
+          <div className="col-md-6 display-mobile" style={{margin: 'auto', 'text-align': 'center', 'align-items': 'center', 'justify-content': 'center'}}>
+             <img className="app-img" src="/images/about-neverland.png"/>
             </div>  
 				  </div>
 				<br/>
