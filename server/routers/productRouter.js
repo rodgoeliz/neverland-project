@@ -267,9 +267,9 @@ router.post('/seller/create', async function(req, res, next) {
 	console.log("seller create endpoint...", formData)
 	let quantity = formData.productQuantity;
 	let price = formData.productPrice;
-	let sku = formData.sku;
+	let sku = formData.productSKU;
 	let categorySelectedItems = formData.categories ? JSON.parse(formData.categories) : [];
-	let tagSelectedItems = JSON.parse(formData.productTags);
+	let tagSelectedItems = formData.productTags ? JSON.parse(formData.productTags) : [];
 	let productPhotos = formData.productPhotos;
 	let description = formData.description;
 	let lightLevel = formData.lightLevel;
@@ -405,6 +405,7 @@ router.post('/seller/create', async function(req, res, next) {
           weightLb: parseInt(itemWeightLb),
           weightOz: parseInt(itemWeightOz),
           heightIn: parseInt(itemHeightIn),
+          sku: productSKU,
           widthIn: parseInt(itemWidthIn),
           lengthIn: parseInt(itemLengthIn),
           isOrganic: isOrganic,
@@ -450,7 +451,7 @@ router.post('/seller/update', async function(req, res, next) {
   console.log("seller update product endpoint...", formData)
   let quantity = formData.productQuantity;
   let price = parseFloat(formData.productPrice);
-  let sku = formData.sku;
+  let sku = formData.productSKU;
   let categorySelectedItems = formData.categories ? JSON.parse(formData.categories) : [];
   let tagSelectedItems = formData.productTags ? JSON.parse(formData.productTags) : [];
   let productPhotos = (formData.productPhotos || formData.productPhotos != '') ? formData.productPhotos : [];
@@ -621,6 +622,7 @@ router.post('/seller/update', async function(req, res, next) {
           colors: colors,
           benefit: benefit,
           style: style,
+          sku: productSKU,
           userLevel: userLevel,
           lightLevel: lightLevel,
           weightLb: parseInt(itemWeightLb),
