@@ -9,6 +9,7 @@ var NavigationMenu = require('../models/NavigationMenu');
 var NavigationItem = require('../models/NavigationItem');
 var ProductTag = require('../models/ProductTag');
 var Product = require('../models/Product');
+var Store = require('../models/Store');
 var ProductCollection = require('../models/ProductCollection');
 const {sendEmail} = require("../email/emailClient");
 var Mailchimp = require('mailchimp-api-v3')
@@ -125,7 +126,15 @@ router.get('/feed/home', async function(req, res, next) {
 		}
 	}
 
-
+  // find all the user shops
+  const stores = await Store.find({productIds: {$exists: true, $ne: []}}).populate('productIds').limit(10);
+  sections.push({
+    type: 'shopCollectionSection',
+    items: stores,
+    title: 'Popular Stores',
+    typeId: 'popular-stores'
+  });
+  console.log("Stores section", stores)
 /*
 	let level = user.level;
 	let levelTag = await ProductTag.find({shortLinks: {$in: level}});

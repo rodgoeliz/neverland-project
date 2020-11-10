@@ -426,13 +426,21 @@ router.post('/seller/create', async function(req, res, next) {
           .save()
           .then(async (product) => {
             await product.populate({path: 'variationIds', populate: {path: 'optionIds'}}).execPopulate();
-            console.log("Created new product")
-            console.log(product)
-            res.json({
-              success: true,
-              payload: product
-            })
-          });
+            // update store
+            const store = await Store.findOne({_id: storeId});
+            let productIds = store.productIds;
+            if (!productIds) {
+              productIds = [product._id]
+            } else {
+              productIds.push(product._id)
+            }
+            await Store 
+              .findOneAndUpdate({_id: storeId}, {$set: {productIds}});
+              res.json({
+                success: true,
+                payload: product
+              })
+            });
         /*Product.populate(newProduct, {path: 'variationIds'}
 				console.log("Created a new product", newProduct);
 				res.json({
