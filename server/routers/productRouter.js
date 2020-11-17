@@ -953,7 +953,14 @@ router.get('/get', async function(req, res, next) {
 			populate: {
 				path: 'userId', 
 				model: 'User'
-		}}).populate('userId').populate('tagIds');
+		}})
+    .populate('userId')
+    .populate({
+      path: 'variationIds',
+      populate: {
+        path: 'optionIds'
+    })
+    .populate('tagIds');
 	res.json({
 		success: true,
 		payload: product});
