@@ -959,7 +959,7 @@ router.get('/get', async function(req, res, next) {
       path: 'variationIds',
       populate: {
         path: 'optionIds'
-    })
+    }})
     .populate('tagIds');
 	res.json({
 		success: true,

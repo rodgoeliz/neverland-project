@@ -10,6 +10,30 @@ var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
 const mongoose = require('mongoose');
 const fs = require('fs');
 
+router.get('/products/get', async function(req, res, next) {
+  let storeId = req.query.storeId;
+  if (!storeId) {
+    res.json({
+      success: false,
+      error: "Store wasn't provided."
+    });
+  }
+  const store = await Store.find({_id: storeId}).populate('productIds');
+  if (!store) {
+    res.json({
+      success: false,
+      error: 'Store or products could not be found.'
+    });
+  }
+  res.json({
+    success: true,
+    payload: {
+      storeId: store._id,
+      products: store.productIds
+    }
+  });
+});
+
 router.post('/tags/create/many', function(req, res, next) {
 	let tags = req.body.tags;
 	tags.map((tag) => {
