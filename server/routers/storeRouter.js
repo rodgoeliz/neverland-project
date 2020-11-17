@@ -18,7 +18,8 @@ router.get('/products/get', async function(req, res, next) {
       error: "Store wasn't provided."
     });
   }
-  const store = await Store.find({_id: storeId}).populate('productIds');
+  const store = await Store.findOne({_id: storeId})
+    .populate({path: 'productIds', populate: {path: 'variationIds', populate: 'optionIds'}});
   if (!store) {
     res.json({
       success: false,
