@@ -10,6 +10,30 @@ const mongoose = require('mongoose');
 var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
 const { createStripeAccountForUser } = require("../utils/paymentProcessor");
 
+router.get('/reset-password', async function(req, res, next) {
+  let email = req.query.email;
+  console.log("Reset password endpoint", email)
+  if (!email) {
+    res.json({
+      success: false,
+      error: "Please provide an email."
+    });
+    return;
+  }
+
+  let user = await User.findOne({email: email});
+  if (!user) {
+    res.json({
+      success: false,
+      error: "Please enter a valid email."
+    });
+    return;
+  }
+  res.json({
+    success: true
+  });
+});
+
 router.get('/all', async function(req, res, next) {
 	let allUsers = await User.find({});
 	res.json(allUsers)
