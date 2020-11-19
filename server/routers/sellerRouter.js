@@ -17,7 +17,7 @@ const SELLER_SIGNUP_ADD_PRODUCTS = 'seller_signup_add_products';
 const BASICS_STEP_ID = 'seller-onboarding-basics-step';
 const SHOP_STEP_ID = "seller-onboarding-shop-basics-step"
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_LIVE_KEY);
 
 router.get(`/onboarding/stripe/reauth`, async function(req, res, next) {
 	let stripeId = req.query.stripeId;

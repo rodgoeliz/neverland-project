@@ -16,7 +16,9 @@ router.get('/reset-password', async function(req, res, next) {
   if (!email) {
     res.json({
       success: false,
-      error: "Please provide an email."
+      error: {
+        message: "Please provide an email."
+      }
     });
     return;
   }
@@ -25,7 +27,9 @@ router.get('/reset-password', async function(req, res, next) {
   if (!user) {
     res.json({
       success: false,
-      error: "Please enter a valid email."
+      error: {
+        message: "We can't find an account with this email."
+      }
     });
     return;
   }
