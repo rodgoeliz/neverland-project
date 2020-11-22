@@ -135,6 +135,7 @@ router.post('/test-data/init', async function(req, res, next) {
     product.vendorId = vendor._id;
     product._id = newId;
     let newProduct = await newProductSchema.save();
+    product.objectID = newId;
     toAlgoliaImport.push(product);
     productHandleToIdMap[product.handle] = newProduct;
   }

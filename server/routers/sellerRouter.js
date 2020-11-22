@@ -17,11 +17,11 @@ const SELLER_SIGNUP_ADD_PRODUCTS = 'seller_signup_add_products';
 const BASICS_STEP_ID = 'seller-onboarding-basics-step';
 const SHOP_STEP_ID = "seller-onboarding-shop-basics-step"
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_LIVE_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 router.get(`/onboarding/stripe/reauth`, async function(req, res, next) {
 	let stripeId = req.query.stripeId;
-});
+});``
 
 router.get(`/onboarding/stripe/continue`, async function(req, res, next) {
 	let stripeId = req.query.stripeId;
@@ -290,6 +290,7 @@ router.post('/onboarding/submit', async function(req, res, next) {
 	}**/
 	if (stepId == SELLER_SIGNUP_SHOP_BASICS) {
 		let userId = req.body.userId;
+    console.log("SELLER SIGNUP SHOP BASICS", formData)
 		// pull user id and see if store exists
 		let user = await User.findOne({_id: userId}).populate('storeId').populate({path: 'sellerProfile', populate: {path: 'personalAddress'}});
 		if (!user.storeId) {
