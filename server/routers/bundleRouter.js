@@ -4,19 +4,68 @@ var router = express.Router();
 const mongoose = require('mongoose');
 var Bundle = require('../models/Bundle');
 
-router.get('/get/all', async function(req, res, next) {
+router.get('/get', async function(req, res, next) {
+  let bundleId = req.query.id;
+  let lite = req.query.lite;
+  if (!bundleId) {
+    res.json({success: false, error: "Please include bundle id."});
+  }
+  try {
+    const bundle = await Bundle.findOne({_id: bundleId}).populate('storeId').populate('productIds');
+    let transformedBundle = bundle;
+    if (lite) {
+      transformedBundle = {
+        _id: bundle._id,
+        storeId: {
+          title: bundle.storeId.title
+        },
+        productIds: bundle.productIds
+      }
+    }
+    res.json({
+      success: true,
+      payload: bundle
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error
+    });
+  }
+});
+
+router.get('/get/list', async function(req, res, next) {
 	let userId = req.query.userId;
+  let lite = req.query.lite;
 	if (!userId) {
 		res.json({success: false, error: "Not logged in. Please authenticate."})
 	}
 
-	let bundles = await Bundle.find({userId});
-	if (bundles) {
+	const bundles = await Bundle.find({userId}).populate('storeId').populate('productIds');
+  let transformedBundles = bundles;
+  if (lite) {
+    for (var i = 0; i < bundles.length; i++) {
+      let bundle = bundles[i];
+      transformedBundles.push({
+        _id: bundle._id,
+        storeId: {
+          title: bundle.storeId.title
+        },
+        productIds: bundle.productIds
+      });
+    }
+  }
+	if (transformedBundles) {
 		res.json({
 			success: true,
-			payload: bundles
+			payload: transformedBundles
 		});
-	}
+	} else {
+    res.json({
+      success: false,
+      error: "Failed to load bundles."
+    });
+  }
 });
 /*
   Creates a new bundle or adds to an existing bundle.
