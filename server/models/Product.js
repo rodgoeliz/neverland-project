@@ -66,22 +66,19 @@ const productSchema = new mongoose.Schema({
 	}
 });
 
-productSchema.pre('updateOne', function(next) {
+productSchema.pre('updateOne', function() {
   //sync up with algolia
   const algoliasearch = require("algoliasearch");
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
   const index = client.initIndex("dev_neverland_products");
-  console.log("SAVING OBJECT ID: ", this._id)
-  console.log(this)
   this.objectID = this._id;
   index.saveObjects([this], {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
-      next();
     }).catch(err => {
     });
 });
 
-productSchema.pre('findOneAndUpdate', function(next) {
+productSchema.pre('findOneAndUpdate', function() {
   //sync up with algolia
   const algoliasearch = require("algoliasearch");
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
@@ -89,7 +86,6 @@ productSchema.pre('findOneAndUpdate', function(next) {
   this.objectID = this._id;
   index.saveObjects([this], {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
-      next();
     }).catch(err => {
       // log error
     });
@@ -100,13 +96,9 @@ productSchema.pre('save', function(next) {
   const algoliasearch = require("algoliasearch");
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
   const index = client.initIndex("dev_neverland_products");
-  console.log("SAVING OBJECT ID: ", this._id)
-  console.log(this)
   this.objectID = this._id;
-  console.log(this.objectID)
   index.saveObjects([this], {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
-      console.log("Saved objects")
       //res.json({success: true});
       next();
     }).catch(err => {
@@ -115,17 +107,15 @@ productSchema.pre('save', function(next) {
     });
 });
 
-productSchema.post('find', function(next) {
+productSchema.post('find', function(result) {
   this.populate({path: 'variationIds', populate: {path: 'optionIds'}});
   this.populate('tagIds');
   this.populate('storeId');
-  next();
 });
 
 productSchema.pre('remove', function (next) {
   this.model('RecentlyViewedProduct').remove({productId: this._id}, next);
   // TODO: remove product variation and variation options
-  next();
 });
 
 const Product = mongoose.model('Product', productSchema);
