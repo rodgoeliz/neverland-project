@@ -44,13 +44,14 @@ router.get('/get', async function(req, res, next) {
 });
 
 router.get('/get/list', async function(req, res, next) {
+
 	let userId = req.query.userId;
   let lite = req.query.lite;
 	if (!userId) {
 		res.json({success: false, error: "Not logged in. Please authenticate."})
 	}
-
-	const bundles = await Bundle.find({userId})
+	const bundles = await Bundle
+      .find({userId})
       .populate('storeId')
       .populate({
         path: 'productIds',
@@ -60,25 +61,28 @@ router.get('/get/list', async function(req, res, next) {
             path: 'optionIds'
           }
         }});
-
   let transformedBundles = bundles;
   if (lite) {
-    for (var i = 0; i < bundles.length; i++) {
+    for (var i in bundles) {
+      //console.log("Bundles iterate")
       let bundle = bundles[i];
+      let storeTitle = bundle.storeId ? bundle.storeId.title : null;
       transformedBundles.push({
         _id: bundle._id,
         storeId: {
-          title: bundle.storeId.title
+          title: storeTitle
         },
         productIds: bundle.productIds
       });
     }
   }
+
 	if (transformedBundles) {
 		res.json({
 			success: true,
 			payload: transformedBundles
 		});
+    return;
 	} else {
     res.json({
       success: false,

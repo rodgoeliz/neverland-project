@@ -33,7 +33,7 @@ class App extends Component {
                 <Route exact path="/admin" component={AdminPage} />
                 <Route exact path="/adminTwo" component={NeverlandOurStory} />
                 <Route exact path="/story" component={NeverlandOurStory} />
-                <Route exact path="/seller/onboarding" component={SellerOnboardingBasicsPage} />
+                <Route exact path="/seller/onboarding/basics" component={SellerOnboardingBasicsPage} />
                 <Route exact path="/privacy" component={PrivacyPolicy} />
                 <Route exact path="/download/neverland" component={DownloadNeverland} />
                 <Route exact path="/waitlist/user" component={NeverlandWaitlist} />

@@ -4,12 +4,21 @@ import Footer from '../Footer.jsx';
 
 class Layout extends Component {
 	render() {
-		return (
-			<div>
-				<Header />
-				<div> {this.props.children} </div>
-				<Footer />
-			</div>);
+    let pathName = window.location.pathname;
+    if (pathName.includes('seller/onboarding')) {
+      return (
+      <div>
+        {this.props.children }
+      </div>
+      ) 
+    } else {
+      return (
+        <div>
+          <Header />
+          <div> {this.props.children} </div>
+          <Footer />
+        </div>);
+      }
 	}
 }
 
