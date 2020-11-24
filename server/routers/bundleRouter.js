@@ -11,7 +11,16 @@ router.get('/get', async function(req, res, next) {
     res.json({success: false, error: "Please include bundle id."});
   }
   try {
-    const bundle = await Bundle.findOne({_id: bundleId}).populate('storeId').populate('productIds');
+    const bundle = await Bundle.findOne({_id: bundleId})
+      .populate('storeId')
+      .populate({
+        path: 'productIds',
+        populate: {
+          path: 'variationIds',
+          populate: {
+            path: 'optionIds'
+          }
+        }});
     let transformedBundle = bundle;
     if (lite) {
       transformedBundle = {
