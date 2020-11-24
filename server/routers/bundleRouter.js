@@ -75,6 +75,8 @@ router.post('/add', async function(req, res, next) {
 	let userId = req.body.userId;
 	let storeId = req.body.storeId;
 	let productId = req.body.productId;
+  let variationOptionIds = req.body.optionIds;
+
 	let now = new Date();
 	// see if there's existing bundle
 	let bundle = await Bundle.findOne({userId, storeId});
@@ -93,6 +95,7 @@ router.post('/add', async function(req, res, next) {
 		bundle = new Bundle({
 			createdAt: now,
 			updatedAt: now,
+      variationOptionIds,
 			userId,
 			storeId,
 			productId	

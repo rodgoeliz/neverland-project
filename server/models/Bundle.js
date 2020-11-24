@@ -5,6 +5,10 @@ const bundleSchema = new mongoose.Schema({
 	createdAt: Date,
 	updatedAt: Date,
 	isInternal: Boolean,
+  variationOptionIds: [{
+    type: Schema.Types.ObjectId,
+    ref: 'ProductVariationOption'
+  }],
 	userId: {
 		type: Schema.Types.ObjectId,
 		ref: 'User'
