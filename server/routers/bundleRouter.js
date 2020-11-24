@@ -50,7 +50,17 @@ router.get('/get/list', async function(req, res, next) {
 		res.json({success: false, error: "Not logged in. Please authenticate."})
 	}
 
-	const bundles = await Bundle.find({userId}).populate('storeId').populate('productIds');
+	const bundles = await Bundle.find({userId})
+      .populate('storeId')
+      .populate({
+        path: 'productIds',
+        populate: {
+          path: 'variationIds',
+          populate: {
+            path: 'optionIds'
+          }
+        }});
+
   let transformedBundles = bundles;
   if (lite) {
     for (var i = 0; i < bundles.length; i++) {
