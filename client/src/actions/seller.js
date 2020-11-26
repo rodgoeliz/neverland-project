@@ -5,7 +5,7 @@ import { setUser } from './auth';
 import Api from '../lib/api';
 
 export const onSubmitStep = ({ stepId, formData, userId }) => async (dispatch) => {
-    const response = await Api.post(`api/seller/onboarding/submit`, {
+    const response = await Api.post(`/api/seller/onboarding/submit`, {
       stepId,
       formData,
       userId,
