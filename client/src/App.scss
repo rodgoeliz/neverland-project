@@ -7,6 +7,10 @@ $theme-black: #312A2D;
 $theme-beige: #EFE6D8;
 $theme-dark-blue: #11109c;
 $theme-dark-yellow: #a98d2e;
+$theme-light-beige:#FAF6F0;
+$theme-xlight-beige: #FFFDFB;
+$theme-warm-light-beige: #F6F0E6;
+
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
 @font-face {
@@ -19,6 +23,31 @@ body {
   font-size: 24px ;
   background-color: $theme-beige !important;
 }
+
+.onboarding {
+  &__textInput {
+    font-size: 18px;
+    flex: 1;
+    padding-left: 4px;
+    background-color: 'transparent' !important;
+    &:focus {
+      outline: 'none' !important;  
+    }
+  }
+}
+
+.PhoneInputInput {
+  background-color: $theme-warm-light-beige!important;
+  border: 0px;
+  border-top-right-radius: 16px;
+  border-top-left-radius: 16px;
+  width: 100%;
+}
+
+.PhoneInputInput:focus {
+  outline: none;
+}
+
 .carousel-control-next-icon {
     width: 32px !important;
     height: 32px !important;

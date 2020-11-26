@@ -61,7 +61,7 @@ router.get('/get/list', async function(req, res, next) {
             path: 'optionIds'
           }
         }});
-  let transformedBundles = bundles;
+  let transformedBundles = Array.from(bundles);
   if (lite) {
     transformedBundles = [];
     for (var i in bundles) {
@@ -78,7 +78,6 @@ router.get('/get/list', async function(req, res, next) {
       });
     }
   }
-
 	if (transformedBundles) {
 		res.json({
 			success: true,

@@ -361,7 +361,7 @@ router.post('/seller/create', async function(req, res, next) {
 		});
 	}
 	Promise.allSettled(fileUploadPromises).then(async function(data) {
-		console.log("Uploaded image files for product...")
+		console.log("Uploaded image files for product...", data)
 		let imageURLs = [];
 		for (let i = 0; i < data.length; i++) {
 			imageURLs.push(data[i].value.Location);

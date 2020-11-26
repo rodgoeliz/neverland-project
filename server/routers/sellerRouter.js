@@ -104,7 +104,9 @@ router.get(`/onboarding/getPaymentStatus`, async function(req, res, next) {
 }**/
 router.get(`/account-links/get`, async function(req, res, next) {
   console.log("account links get....")
+  console.log(process.env)
   let sellerId = req.query.sellerId;
+  let source = req.query.source;
   let user = await User.findOne({_id: sellerId}).populate('sellerProfile');
   if (!user || !user.sellerProfile) {
     res.json({
@@ -116,12 +118,26 @@ router.get(`/account-links/get`, async function(req, res, next) {
   console.log(user)
   let stripeUID = user.sellerProfile.stripeUID;
   console.log(stripeUID)
-  const accountLinks = await stripe.accountLinks.create({
+  let env = process.env.NODE_ENV || 'development';
+  let baseURL = "https://www.enterneverland.com";
+  if (env == 'development') {
+    baseURL = "http://localhost:3000"
+  }
+  let accountLinks = await stripe.accountLinks.create({
       account: stripeUID,
-      refresh_url: 'https://www.enterneverland.com/seller-onboarding/reauth/' + stripeUID,
-      return_url: 'https://www.enterneverland.com/seller-onboarding/return/' + stripeUID,
+      refresh_url: `${baseURL}/seller-onboarding/reauth/${stripeUID}`,
+      return_url: `${baseURL}/seller-onboarding/return/${stripeUID}`,
       type: 'account_onboarding',
   });
+  if (source == 'web') {
+    console.log("creating a web link...")
+    accountLinks = await stripe.accountLinks.create({
+      account: stripeUID,
+      refresh_url: `${baseURL}/seller/onboarding/reauth/web/${stripeUID}`,
+      return_url: `${baseURL}/seller/onboarding/return/web/${stripeUID}`,
+      type: 'account_onboarding',
+    });
+  }
   console.log("account links created", accountLinks)
   res.json({
     success: true,
@@ -169,6 +185,7 @@ router.post('/onboarding/submit', async function(req, res, next) {
 	let stepId = req.body.stepId;
 	let formData = req.body.formData;
 	let userId = req.body.userId;
+  let source = req.body.source;
 	let now = new Date();
 	let sellerUser = null;
 	console.log("Submitting step", stepId)
@@ -211,12 +228,21 @@ router.post('/onboarding/submit', async function(req, res, next) {
 		  email: user.email,
 		});
 		// create a stripe account link
-		const accountLinks = await stripe.accountLinks.create({
+		let accountLinks = await stripe.accountLinks.create({
 		  account: account.id,
 		  refresh_url: 'https://www.enterneverland.com/seller-onboarding/reauth/' + account.id,
 		  return_url: 'https://www.enterneverland.com/seller-onboarding/return/' + account.id,
 		  type: 'account_onboarding',
 		});
+    if (source == 'web') {
+      accountLinks = await stripe.accountLinks.create({
+        account: account.id,
+        refresh_url: 'https://www.enterneverland.com/seller-onboarding/reauth/web' + account.id,
+        return_url: 'https://www.enterneverland.com/seller-onboarding/return/web' + account.id,
+        type: 'account_onboarding',
+      });
+    }
+
 		if (!account) {
 			res.json({
 				success: false,

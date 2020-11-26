@@ -17,7 +17,30 @@
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
       <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
 
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyCkDwb0OKQ0TCYGAA2Iw05hatyw_N7YRO0",
+    authDomain: "neverland-282203.firebaseapp.com",
+    databaseURL: "https://neverland-282203.firebaseio.com",
+    projectId: "neverland-282203",
+    storageBucket: "neverland-282203.appspot.com",
+    messagingSenderId: "597472506635",
+    appId: "1:597472506635:web:518f234a9b6ed965d3280e",
+    measurementId: "G-TC0THWHS04"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -51,7 +74,13 @@ window['_fs_namespace'] = 'FS';
     g._v="1.2.0";
 })(window,document,window['_fs_namespace'],'script','user');
 </script>
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkDwb0OKQ0TCYGAA2Iw05hatyw_N7YRO0&libraries=places"></script>
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+  integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+  crossorigin="anonymous"
+/>
     <title>Neverland</title>
   </head>
   <body>
