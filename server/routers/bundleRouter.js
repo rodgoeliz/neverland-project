@@ -63,8 +63,10 @@ router.get('/get/list', async function(req, res, next) {
         }});
   let transformedBundles = bundles;
   if (lite) {
+    transformedBundles = [];
     for (var i in bundles) {
       //console.log("Bundles iterate")
+
       let bundle = bundles[i];
       let storeTitle = bundle.storeId ? bundle.storeId.title : null;
       transformedBundles.push({
