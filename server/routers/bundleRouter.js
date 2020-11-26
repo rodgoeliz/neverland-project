@@ -104,18 +104,16 @@ router.post('/add', async function(req, res, next) {
 
 	let now = new Date();
 	// see if there's existing bundle
-	let bundle = await Bundle.findOne({userId, storeId});
+  let bundle = await Bundle.findOne({userId, storeId});
+  let productIds = bundle.productIds;
 	if (bundle) {
-		let alreadyExistsProduct = false;
-		for (var i in bundle.productIds) {
-			let existingProductId = bundle.productIds[i];
-			if (existingProductId == productId) {
-				alreadyExistsProduct = true;
-			}
-		}
-		if (!alreadyExistsProduct) {
-			bundle.productIds.push(productId);
-		}
+		productIds.push(productId);
+    const updatedBundle = await Bundle.findOneAndUpdate({userId, storeId}, {$set: {productIds}}, {new: true})
+      .populate('productIds').populate('variationOptionIds').populate('storeId');
+    res.json({
+      success: true,
+      payload: updatedBundle
+    });
 	} else {
 		bundle = new Bundle({
 			createdAt: now,
@@ -123,29 +121,28 @@ router.post('/add', async function(req, res, next) {
       variationOptionIds,
 			userId,
 			storeId,
-			productId	
+			productIds: [productId]
 		});
+    await bundle.save()
+      .then((bundle) => {
+        Bundle.populate(bundle, {path: 'storeId'})
+          .then((bundle) => {
+            Bundle.populate(bundle, {path: 'userId'}).then((bundle) => {
+              res.json({
+                success: true,
+                payload: bundle
+              });
+
+            })
+          });
+      }).catch((error) => {
+        console.log(error)
+        res.json({
+          success: false,
+          error: "Failed to create bundle."
+        });
+      })
 	}
-
-	await bundle.save()
-		.then((bundle) => {
-			Bundle.populate(bundle, {path: 'storeId'})
-				.then((bundle) => {
-					Bundle.populate(bundle, {path: 'userId'}).then((bundle) => {
-						res.json({
-							success: true,
-							payload: bundle
-						});
-
-					})
-				});
-		}).catch((error) => {
-			console.log(error)
-			res.json({
-				success: false,
-				error: "Failed to create bundle."
-			});
-		})
 });
 
 /**
