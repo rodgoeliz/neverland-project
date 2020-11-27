@@ -139,10 +139,10 @@ class SellerOnboardingAddProductsPage extends Component {
     }
     let nextButton = null;
     // if greater than 3 products, allow to move on
-    //if (sellerProducts && sellerProducts.length > 2) {
+    if (sellerProducts && sellerProducts.length > 2) {
 
       nextButton = <NButton title={'Next Step'} onClick={this.onPressNext} />;
-   // }
+    }
     let containerStyle = {...BrandStyles.components.onboarding.container, justifyContent: 'center', paddingTop: 42};
     return (
       <OnboardingImageWrapper>
