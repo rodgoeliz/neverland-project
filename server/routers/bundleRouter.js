@@ -104,8 +104,10 @@ router.post('/add', async function(req, res, next) {
 	let now = new Date();
 	// see if there's existing bundle
   let bundle = await Bundle.findOne({userId, storeId});
-  let productIds = bundle.productIds;
+
 	if (bundle) {
+    let productIds = bundle.productIds;
+
 		productIds.push(productId);
     const updatedBundle = await Bundle.findOneAndUpdate({userId, storeId}, {$set: {productIds}}, {new: true})
       .populate('productIds').populate('variationOptionIds').populate('storeId');
