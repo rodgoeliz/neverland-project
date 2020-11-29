@@ -21,7 +21,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 router.get(`/onboarding/stripe/reauth`, async function(req, res, next) {
 	let stripeId = req.query.stripeId;
-});``
+});
 
 router.get(`/onboarding/stripe/continue`, async function(req, res, next) {
 	let stripeId = req.query.stripeId;
@@ -37,7 +37,7 @@ router.get(`/product/categories/get`, async function(req, res, next) {
   	let categories = await NavigationItem.find(query);
   	res.json({
   		success: true,
-  		payload: categories 
+  		payload: categories
   	});
   } catch (error) {
   	res.json({
@@ -280,11 +280,11 @@ router.post('/onboarding/submit', async function(req, res, next) {
 			productSource: formData.sellerProductSource,
 			packingDetails: formData.sellerPacking,
 		});
-		let newSellerProfile = await sellerProfile.save();	
+		let newSellerProfile = await sellerProfile.save();
 		console.log("Saved seller profile")
 		console.log(newSellerProfile)
 
-		console.log("updating user with new seller profile info...")	
+		console.log("updating user with new seller profile info...")
 		let result = await User.findOneAndUpdate({_id: userId}, {
 			$set: {
 				isSeller: true,
@@ -346,7 +346,7 @@ router.post('/onboarding/submit', async function(req, res, next) {
 				website: formData.website,
 				userId: userId
 			});
-			newStore = await newStore.save();	
+			newStore = await newStore.save();
 			console.log("saving user with new stepId and storeId", stepId)
 			console.log(newStore)
 			let updatedUser = await User.findOneAndUpdate({_id: userId}, {$set: {
@@ -356,7 +356,7 @@ router.post('/onboarding/submit', async function(req, res, next) {
 			console.log("sending back updated user", updatedUser)
 			res.json({
 				success: true,
-				payload: updatedUser	
+				payload: updatedUser
 			});
 		} else {
 			let store = user.storeId;
