@@ -1,5 +1,6 @@
 var rootConfig = require('../data/rootConfig');
 const Taxjar = require('taxjar');
+var OrderProductItem = require('../models/OrderProductItem');
 const taxjarClient = new Taxjar({
 	apiKey: process.env.TAXJAR_API_TOKEN
 });
@@ -26,13 +27,32 @@ module.exports.getFulfillmentMethod = async (carrier, type) => {
 
 module.exports.calculateBundleSubTotal = async (bundle) => {
 	let subtotal = 0;
-	bundle.productIds.map((product) => {
-    console.log("PRICE FOR : " + product._id)
-    console.log(product.price)
-		let value = parseFloat(product.price.value)
-		subtotal += value;
-	});
-	return subtotal;
+  console.log("calculateBundleSubTotal", bundle.productOrderItemIds);
+  let productOrderItems = await OrderProductItem.find({_id: {$in: bundle.productOrderItemIds}})
+    .populate('selectedOptionIds').populate('productId');
+  let totalPrice = 0;
+  console.log("calculate productorderitem", productOrderItems) ;
+  // go through product order items
+  productOrderItems.map((productOrderItem) => {
+    console.log(productOrderItem.productId)
+    let price = productOrderItem.productId.price.value;
+    let basePrice = 0;
+    if (price && !isNaN(price)) {
+      basePrice += parseFloat(price);
+    }
+
+    // go through options and add the additional pricing
+    for (var i in productOrderItem.selectedOptionIds) {
+      let option = productOrderItem.selectedOptionIds[i] ;
+      basePrice += parseFloat(option.price.value);
+    }
+
+    // multiply by the quantity needed
+    basePrice = basePrice * productOrderItem.quantity;
+    totalPrice += basePrice;
+  });
+  console.log("Total Price: ", totalPrice);
+	return totalPrice;
 }
 
 module.exports.calculateTaxSurcharge = async (bundleSubtotal, shippingAddress, shippingCharge) => {

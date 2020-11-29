@@ -1,4 +1,4 @@
-export default const firebaseConfig = {
+module.exports.firebaseConfig = {
     apiKey: "AIzaSyCkDwb0OKQ0TCYGAA2Iw05hatyw_N7YRO0",
     authDomain: "neverland-282203.firebaseapp.com",
     databaseURL: "https://neverland-282203.firebaseio.com",

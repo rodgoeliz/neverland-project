@@ -134,7 +134,7 @@ router.get('/feed/home', async function(req, res, next) {
     title: 'Popular Stores',
     typeId: 'popular-stores'
   });
-  console.log("Stores section", stores)
+  //console.log("Stores section", stores)
 /*
 	let level = user.level;
 	let levelTag = await ProductTag.find({shortLinks: {$in: level}});

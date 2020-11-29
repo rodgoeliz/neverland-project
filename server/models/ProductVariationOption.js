@@ -12,6 +12,10 @@ const productVariationOptionSchema = new mongoose.Schema({
 		value: Number,
 		currency: String
 	},
+  variationId: {
+    type: Schema.Types.ObjectId,
+    ref: 'ProductVariation'
+  },
 	quantity: String
 });
 

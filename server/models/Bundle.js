@@ -17,6 +17,10 @@ const bundleSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Store'
 	},
+  productOrderItemIds: [{
+    type: Schema.Types.ObjectId,
+    ref: 'OrderProductItem'
+  }],
 	productIds: [
 		{
 			type: Schema.Types.ObjectId,

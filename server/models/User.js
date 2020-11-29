@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
 		number: String,
 		countryCode: String
 	},
+  userInterestTags: [{
+    type: Schema.Types.ObjectId,
+    ref: 'ProductTag'
+  }],
 	phoneNumberDetailed: Object,
 	locations: Array,
 	plantInterests: Array,

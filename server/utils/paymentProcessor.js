@@ -1,6 +1,6 @@
 var rootConfig = require('../data/rootConfig');
 require('dotenv').config();
-const stripe = require('stripe')(process.env.STRIPE_SECRET_LIVE_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 module.exports.createSellerStripeAccount = async () => {
 	const account = await stripe.accounts.create({

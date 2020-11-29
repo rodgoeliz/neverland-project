@@ -11,6 +11,8 @@ var Store = require('../models/Store');
 var OrderInvoice = require('../models/OrderInvoice');
 var OrderIntent = require('../models/OrderIntent');
 var Order = require('../models/Order');
+var OrderProductItem = require('../models/OrderProductItem');
+
 const { getBuyerProtectionSurcharge, calculateBundleSubTotal, getFulfillmentMethod, calculateTaxSurcharge } = require("../utils/orderProcessor");
 
 router.get('/get', async function(req, res) {
@@ -18,26 +20,41 @@ router.get('/get', async function(req, res) {
 });
 
 router.post('/intent/create', async function(req, res) {
+  console.log("create Intent", req.body)
   let productId = req.body.productId;
   let bundleId = req.body.bundleId;
   let userId = req.body.userId;
   let storeId = req.body.storeId;
   let shippingAddressId = req.body.shippingAddressId;
   let paymentMethodId = req.body.paymentMethodId;
+  let quantity = req.body.quantity;
+  let variationOptionIds = req.body.selectedOptions;
   let now = new Date();
+
   if (productId && !bundleId)  {
+    console.log("create new bundle and order product item")
+    // create new order produt item
+    let newOrderProductItem = new OrderProductItem({
+      userId: userId,
+      storeId: storeId,
+      productId: productId,
+      quantity: quantity,
+      selectedOptionIds: variationOptionIds 
+    });
+    console.log(quantity)
+    console.log(variationOptionIds)
+    let nOPI = await newOrderProductItem.save();
     newBundle = new Bundle({
       isInternal: true,
       createdAt: now,
       updatedAt: now,
       userId: userId,
       storeId: storeId,
-      productIds: [productId]
+      productOrderItemIds: [nOPI._id]
     });
     bundle = await newBundle.save();
     bundleId = bundle._id;
   }
-
 
   let loadAllPromises = [];
   let shippingAddress = await Address.findOne({_id: shippingAddressId});
@@ -50,13 +67,14 @@ router.post('/intent/create', async function(req, res) {
   loadAllPromises.push(store);
   // if bundle is null, meaning we didn't load bundleId and we didn't have to create a bundle to 
   // wrap around product
-  loadAllPromises.push(await Bundle.findOne({_id: bundleId}).populate('productIds'))
+  loadAllPromises.push(await Bundle.findOne({_id: bundleId}).populate('productIds'));
   Promise.all(loadAllPromises).then(async (results) => {
     let shippingAddress = results[0];
     let paymentMethod = results[1];
     let user = results[2];
     let store = results[3];
     let bundle = results[4];
+    console.log("BUNDLE", bundle)
     let subtotal = await calculateBundleSubTotal(bundle);
     subtotal = subtotal/100;
     let buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
@@ -70,7 +88,7 @@ router.post('/intent/create', async function(req, res) {
       createdAt: now,
       updatedAt: now,
       userId: userId,
-      billingAddress: paymentMethod.billingAddress._id,
+      billingAddress: paymentMethod? paymentMethod.billingAddress._id: "",
       storeId: storeId,
       price: {
         value: subtotal,
@@ -103,6 +121,8 @@ router.post('/create', async function(req, res) {
 	let storeId = req.body.storeId;
 	let shippingAddressId = req.body.shippingAddressId;
 	let paymentMethodId = req.body.paymentMethodId;
+  let quantity = req.body.quantity;
+  let variationOptionIds = req.body.variationOptionIds;
 	let now = new Date();
 	let bundle = null;
 	//if productId only and not a bundle, create a bundle wrapping that product.

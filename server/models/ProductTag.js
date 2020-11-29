@@ -6,7 +6,8 @@ const productTagsSchema = new mongoose.Schema({
 	title: String,
 	description: String,
 	handle: String,
-	type: String
+	type: String,
+  imageURL: String
 });
 
 const ProductTags = mongoose.model('ProductTag', productTagsSchema);

@@ -5,10 +5,26 @@ var router = express.Router();
 var WaitlistUser = require('../models/waitlistUser');
 var User = require('../models/User');
 const {sendEmail} = require("../email/emailClient");
+const firebaseConfig = require('../utils/firebaseConfig');
 var Mailchimp = require('mailchimp-api-v3')
 const mongoose = require('mongoose');
 var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
+const firebase = require('firebase');
 const { createStripeAccountForUser } = require("../utils/paymentProcessor");
+firebase.initializeApp(firebaseConfig);
+
+router.post('/firebase/login', async function(req, res, next) {
+  const email = req.body.email;
+  const pass = req.body.password;
+  const isSellerOnboarding = req.body.isSellerOnboarding;
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, pass)
+    .then((data) => {
+
+    })
+    .t
+});
 
 router.get('/reset-password', async function(req, res, next) {
   let email = req.query.email;
@@ -72,6 +88,7 @@ router.post('/update', async function(req, res, next){
 		res.json({success: false, error: "Failed to find user"})	
 		return;
 	}
+  console.log("UPDATE USER: ", req.body.data)
 	for (var key in req.body.data) {
 		user[key] = req.body.data[key];
 	};
