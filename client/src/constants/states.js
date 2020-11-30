@@ -1,5 +1,9 @@
 export default [
   {
+    name: 'None/Not Available' ,
+    abbreviation: 'none-not-available'
+  },
+  {
     name: 'Alabama',
     abbreviation: 'AL',
   },

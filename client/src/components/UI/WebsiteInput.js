@@ -103,7 +103,7 @@ export default class WebsiteInput extends React.Component {
           <span style={labelStyle}>Website</span>
           <div style={BrandStyles.components.inputBase.contentWrapper}>
             <StyledInput
-              placeholder="Website (https)"
+              placeholder="Website or Store Link (FB, Etsy, etc) (https)"
               autoCapitalize="none"
               style={BrandStyles.components.inputBase.textInput}
               value={this.state.name}
