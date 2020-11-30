@@ -117,6 +117,7 @@ router.post('/intent/create', async function(req, res) {
 router.post('/create', async function(req, res) {
 	let productId = req.body.productId;
 	let bundleId = req.body.bundleId;
+  let productOrderItemId = req.body.productOrderItemId;
 	let userId = req.body.userId;
 	let storeId = req.body.storeId;
 	let shippingAddressId = req.body.shippingAddressId;
@@ -125,15 +126,16 @@ router.post('/create', async function(req, res) {
   let variationOptionIds = req.body.variationOptionIds;
 	let now = new Date();
 	let bundle = null;
-	//if productId only and not a bundle, create a bundle wrapping that product.
-	if (productId && !bundleId)	 {
+	//if productId only and not a bundle, create a bundle wrappi png that product.
+	if (productId && !bundleId && productOrderItemId)	 {
 		newBundle = new Bundle({
 			isInternal: true,
 			createdAt: now,
 			updatedAt: now,
 			userId: userId,
 			storeId: storeId,
-			productIds: [productId]
+			productIds: [productId],
+      productOrderItemIds: [productOrderItemId]
 		});
 		bundle = await newBundle.save();
 		bundleId = bundle._id;

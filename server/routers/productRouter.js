@@ -651,12 +651,16 @@ router.post('/seller/update', async function(req, res, next) {
           } 
         }
         console.log("updating product with", productId, newProductSchema)
+        let test = await Product.findOne({_id: productId});
+        console.log("TEST", productId, test)
+        console.log("TEST222")
         let newProduct = await Product
           .findOneAndUpdate({_id: productId}, {$set: newProductSchema}, { new: true})
           .populate({path: 'variationIds', populate: {'path': 'optionIds'}})
           .populate('tagIds')
           .populate('categoryIds')
           .exec();
+        console.log("CONVERT")
         console.log("SENDING BACK NEW PRODUCT", newProduct)
         res.json({
           success: true,

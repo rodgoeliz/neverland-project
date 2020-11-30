@@ -513,17 +513,13 @@ class AddProductView extends Component {
     formData.append('userId', this.props.user._id);
     formData.append('storeId', this.props.user.storeId._id);
     let existingProduct = null; 
-    if (this.props.route) {
-      const existingProduct =
-        this.props.product ?? this.props.currentSellerProduct ?? this.props.route.params
-          ? this.props.route.params.product
-          : null;
+    if (this.props) {
+      existingProduct = this.props.product ? this.props.product : this.props.currentSellerProduct;
     }
-
     if (existingProduct) {
       formData.append('productId', existingProduct._id);
       await this.props.updateProduct({ formData });
-      this.props.navigation.goBack();
+      this.onCloseView();
       return;
     }
 

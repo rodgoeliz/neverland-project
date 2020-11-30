@@ -19,6 +19,7 @@ const navigationItemSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'NavigationItem'
 	}],
+  imageURL: String,
 	mainTagHandle:String,
 	mainTagId: Schema.Types.ObjectId,
 	tagHandles:[String],

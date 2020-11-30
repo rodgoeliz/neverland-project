@@ -173,6 +173,7 @@ router.post('/method/create', async function(req, res, next) {
     {customer: user.stripeCustomerID}
   );
 
+  console.log("Create payment method", paymentMethod, process.env.STRIPE_SECRET_KEY)
 	if (existingAddress == null) {
 		existingAddress = new Address({
 			createdAt: now,

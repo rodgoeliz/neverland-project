@@ -41,6 +41,8 @@ const styles = {
   },
   textContentContainer: {
     paddingLeft: 8,
+    display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
   },
   titleText: {
