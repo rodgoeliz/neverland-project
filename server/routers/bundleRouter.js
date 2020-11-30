@@ -136,7 +136,7 @@ router.post('/add', async function(req, res, next) {
 	let now = new Date();
 	// see if there's existing bundle
   let bundle = await Bundle.findOne({userId, storeId});
-  console.log("found a bundle with this arrangement", bundle)
+  console.log("found a bundle with this arrangement", bundle ? bundle._id:"no bundle")
   let productOrderItem = null;
   let optionQuery = [];
   console.log(variationOptionIds)
@@ -152,7 +152,7 @@ router.post('/add', async function(req, res, next) {
 
   console.log("QUERY", JSON.stringify({productId: productId, userId, storeId:storeId._id, selectedOptionIds: {$all: variationOptionIds}}));
   productOrderItem = await OrderProductItem.findOne({$and: [{productId}, {userId}, {storeId}, {selectedOptionIds: {$all: variationOptionIds}}]});
-  console.log("FOUND POITEM??", productOrderItem)
+  console.log("FOUND POITEM??", productOrderItem ? productOrderItem._id: "No product item found")
   let updateQuery = {};
   if (!productOrderItem) {
       console.log("wuantity", quantity)
@@ -197,7 +197,7 @@ router.post('/add', async function(req, res, next) {
 	if (bundle) {
     // check to see if the product already is in the bundle and if it is, increase the quantity of the productorderitem
     // check if selected options in there
-    console.log("productOrderItem", productOrderItem)
+    console.log("BUNDLE EXISTS..")
     let productIds = bundle.productOrderItemIds;
     let alreadyExists = false;
     for (var i in productIds) {
@@ -209,6 +209,7 @@ router.post('/add', async function(req, res, next) {
     if (!alreadyExists) {
       productIds.push(productOrderItem._id);
     }
+    console.log("UPDATING BUNDLE WITH ..", productIds)
     const updatedBundle = await Bundle.findOneAndUpdate(
       {userId, storeId}, 
       {$set: {productOrderItemIds: productIds}}, 

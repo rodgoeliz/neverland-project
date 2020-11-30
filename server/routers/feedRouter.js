@@ -53,7 +53,7 @@ router.get('/feed/home', async function(req, res, next) {
     });
   }
   let navigationMenu = await NavigationMenu.findOne({handle: 'main_menu'}).populate({path: 'navigationItemsTopLevel', populate: { path: 'children'}});
-  console.log("navigation menu", navigationMenu)
+  //console.log("navigation menu", navigationMenu)
   let navigationSections = [];
   // navigation sections with children is an array of arrays
   let navigationSectionsWithChildren = {};
