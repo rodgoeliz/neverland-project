@@ -27,6 +27,7 @@ module.exports.getFulfillmentMethod = async (carrier, type) => {
 
 module.exports.calculateBundleSubTotal = async (bundle) => {
 	let subtotal = 0;
+  console.log(bundle)
   console.log("calculateBundleSubTotal", bundle.productOrderItemIds);
   let productOrderItems = await OrderProductItem.find({_id: {$in: bundle.productOrderItemIds}})
     .populate('selectedOptionIds').populate('productId');
@@ -37,16 +38,18 @@ module.exports.calculateBundleSubTotal = async (bundle) => {
     console.log(productOrderItem.productId)
     let price = productOrderItem.productId.price.value;
     let basePrice = 0;
+    console.log("BASE PRICE", price)
     if (price && !isNaN(price)) {
       basePrice += parseFloat(price);
     }
-
+    console.log("after converting", basePrice)
+    console.log(productOrderItem.selectedOptionIds)
     // go through options and add the additional pricing
     for (var i in productOrderItem.selectedOptionIds) {
       let option = productOrderItem.selectedOptionIds[i] ;
       basePrice += parseFloat(option.price.value);
     }
-
+    
     // multiply by the quantity needed
     basePrice = basePrice * productOrderItem.quantity;
     totalPrice += basePrice;

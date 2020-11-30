@@ -123,10 +123,24 @@ router.post('/create', async function(req, res) {
 	let shippingAddressId = req.body.shippingAddressId;
 	let paymentMethodId = req.body.paymentMethodId;
   let quantity = req.body.quantity;
+  console.log("quantity", quantity)
   let variationOptionIds = req.body.variationOptionIds;
 	let now = new Date();
 	let bundle = null;
+  if (!productOrderItemId && productId){
+    let newProductOrderItemId = new OrderProductItem({
+      createdAt: now,
+      userId: userId,
+      storeId: storeId,
+      productId: productId,
+      quantity: quantity,
+      selectedOptionIds: req.body.variationOptionIds
+    });
+    productOrderItemId = await newProductOrderItemId.save();
+    productOrderItemId = productOrderItemId._id;
+  }
 	//if productId only and not a bundle, create a bundle wrappi png that product.
+  console.log("orderRouter PRODUCTID, BUNDLEID, POID", productId, bundleId, productOrderItemId)
 	if (productId && !bundleId && productOrderItemId)	 {
 		newBundle = new Bundle({
 			isInternal: true,
@@ -164,8 +178,14 @@ router.post('/create', async function(req, res) {
 		let shippingMethod = await getFulfillmentMethod("usps", "priority");
 		let shippingCharge = shippingMethod.price;
 		let taxSurcharge = await calculateTaxSurcharge(subtotal, shippingAddress, shippingCharge, store.address);
-		let total = subtotal + buyerSurcharge + taxSurcharge.taxAmount + shippingCharge;
-		let surcharge = buyerSurcharge + taxSurcharge.taxAmount + shippingCharge;
+		let total = subtotal + buyerSurcharge + shippingCharge;
+
+		let surcharge = buyerSurcharge + shippingCharge;
+
+    if (taxSurcharge) {
+      surcharge += taxSurcharge.taxAmount;
+      total += taxSurcharge.taxAmount;
+    }
 		// create payment
 		let newOrderInvoice = new OrderInvoice({
 			createdAt: now,

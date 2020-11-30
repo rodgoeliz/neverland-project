@@ -71,14 +71,14 @@ export const logoutFirebase = () => async (dispatch) => {
 
 export const loginFirebase = (data) => async (dispatch) => {
   const { email, password } = data;
-
+  console.log("loginFirebase")
   try {
     const result = await auth().signInWithEmailAndPassword(email, password);
 
     if (result && result.user) {
       try {
         const response = await Api.get(`/api/user/get?email=${email}`);
-
+        console.log("loginFirebase", response)
         if (response.data.success) {
           dispatch(setUser(response.data.payload));
           dispatch(setIsAuthorized(true));

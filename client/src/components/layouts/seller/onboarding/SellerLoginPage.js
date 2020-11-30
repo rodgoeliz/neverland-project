@@ -97,7 +97,7 @@ class SellerLoginPage extends React.Component {
       this.setState({ isSubmitting: true });
 
       console.log('onFormSubmit in HomeMainSignupContainer');
-      const { onSignUpFirebase } = this.props;
+      const { loginFirebase } = this.props;
       this.setState({ success: null, error: null, loading: true });
       let data = this.state;
       try {
@@ -109,7 +109,9 @@ class SellerLoginPage extends React.Component {
         };
         console.log("sign up with: ", transformedData)
         console.log(this.props.history)
+        console.log("loginFirebase", loginFirebase)
         const success = await loginFirebase(transformedData, 'default');
+        console.log(success);
         this.setState({ nextPath: '/seller/onboarding/main', success, error: null, isLoadingSubmitSignup: false });
         this.redirectToNextStep();
       } catch (error) {

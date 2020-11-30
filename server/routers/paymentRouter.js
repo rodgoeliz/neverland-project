@@ -12,7 +12,7 @@ var ProductTag = require('../models/ProductTag');
 const { createStripeAccountForUser, getStripeAccountForUser } = require("../utils/paymentProcessor");
 
 const mongoose = require('mongoose');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_LIVE_KEY);
 
 router.post('/stripe/confirm-payment-method-and-payment', async function(req, res, next) {
   let paymentMethodId = req.body.paymentMethodId;
