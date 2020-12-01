@@ -29,6 +29,10 @@ const paymentMethodSchema = new mongoose.Schema({
 	isActive: Boolean,
 	isDefault: Boolean
 });
+paymentMethodSchema.pre('remove', function(next) {
+  let cardId = this.card;
+  this.model('Card').remove({_id: cardId}, next);
+});
 
 const PaymentMethod = mongoose.model('PaymentMethod', paymentMethodSchema);
 module.exports = PaymentMethod;

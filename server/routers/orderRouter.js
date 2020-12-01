@@ -15,8 +15,75 @@ var OrderProductItem = require('../models/OrderProductItem');
 
 const { getBuyerProtectionSurcharge, calculateBundleSubTotal, getFulfillmentMethod, calculateTaxSurcharge } = require("../utils/orderProcessor");
 
-router.get('/get', async function(req, res) {
+router.get('/get/list', async function(req, res) {
+  let userId = req.query.userId;
+  console.log('userId', userId)
+  try {
 
+  let orders = await Order.find({userId: userId})
+    .populate('paymentMethod')
+    .populate('storeId')
+    .populate({
+      path: 'bundleId',
+      populate: {
+        path: 'productOrderItemIds',
+        populate: [{
+          path: 'productId',
+          populate: {
+            path: 'variationIds',
+            populate: {
+              path: 'optionIds'
+            }
+          }
+        }, {
+          path: 'selectedOptionIds'
+        }]}})
+    .populate('orderInvoiceId');
+    console.log(orders)
+    res.json({
+      success: true,
+      payload: orders
+    });
+  } catch(error) {
+    res.json({
+      success: false,
+      error: error
+    });
+  }
+});
+
+router.get('/get', async function(req, res) {
+  let orderId = req.query.id;
+  try {
+  let order = await Order.findOne({_id: orderId})
+    .populate('paymentMethod')
+    .populate('storeId')
+    .populate({
+      path: 'bundleId',
+      populate: {
+        path: 'productOrderItemIds',
+        populate: [{
+          path: 'productId',
+          populate: {
+            path: 'variationIds',
+            populate: {
+              path: 'optionIds'
+            }
+          }
+         }, {
+          path: 'selectedOptionIds'
+        }]}})
+    .populate('orderInvoiceId');
+    res.json({
+      success: true,
+      payload: order
+    });
+  } catch(error){
+    res.json({
+      success: false,
+      error: `Failed to fetch order ${orderId}`
+    })
+  }
 });
 
 router.post('/intent/create', async function(req, res) {

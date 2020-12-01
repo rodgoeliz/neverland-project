@@ -105,6 +105,7 @@ router.get('/get/default', async function(req, res, next) {
 });
 
 router.post('/method/update', async function(req, res, next) {
+  console.log(req.body)
 	let paymentMethodId = req.body.paymentMethodId;
 	let updates = req.body.cardUpdates;
 	let billingAddressUpdates = req.body.billingAddressUpdates;
@@ -121,6 +122,7 @@ router.post('/method/update', async function(req, res, next) {
 		Promise.all(updatePromises).then(async (results) => {
 			await PaymentMethod.findOne({_id: paymentMethodId}).populate('card').populate('billingAddress')
 			.then((paymentMethod) => {
+        console.log("UPDATED PAYMENT METHOD", paymentMethod)
 				res.json({
 					success: true,
 					payload: paymentMethod
@@ -144,6 +146,24 @@ const createStripeCard = async (paymentMethod) => {
 	  },
 	});
 }
+
+router.post('/method/delete', async function(req, res, next) {
+  let paymentMethodId = req.body.paymentMethodId;
+  try {
+    await PaymentMethod.remove({_id: paymentMethodId});
+    console.log(paymentMethodId)
+    res.json({
+      success: true,
+      payload: paymentMethodId
+    })
+  } catch (error) {
+    console.log(error)
+    res.json({
+      success: false,
+      error: "Failed to delete payment method."
+    });
+  }
+});
 
 /**
   Creates a payment method (ie a credit card, etc) for a user
