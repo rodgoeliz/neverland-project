@@ -41,7 +41,7 @@ router.get('/test/updateAlgolia', async function(req, res, next) {
       height: 20,
       weight: 10,
       price: '10.99',
-      tagIds: [] 
+      tagIds: ['5f890d6c801d1c0a3a071fd3','5f890d6c801d1c0a3a071fd0' ] 
   });
   let newProd = await newProduct.save();
   if (action == 'create') {
@@ -56,7 +56,8 @@ router.get('/test/updateAlgolia', async function(req, res, next) {
 
     let updates = {
       $set: {
-        title: 'Updated Test Product'
+        title: 'Updated Test Product',
+        tagIds: ['5f890ce8a9eace09fe5b7b59']
       }
     };
     let product = await Product.findOneAndUpdate({_id: id}, updates, {new: true});
