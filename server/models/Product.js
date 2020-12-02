@@ -68,42 +68,47 @@ const productSchema = new mongoose.Schema({
 
 productSchema.post('updateOne', function() {
   //sync up with algolia
-  /*const algoliasearch = require("algoliasearch");
+  console.log("Trying to do this...")
+  const algoliasearch = require("algoliasearch");
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
   const index = client.initIndex("dev_neverland_products");
-  this.objectID = this._id;
-  index.saveObjects([this], {'autoGenerateObjectIDIfNotExist': true})
+  const docToUpdate = await this.model.findOne(this.getQuery());
+  docToUpdate.populate('storeId');
+  docToUpdate.objectID = docToUpdate._id;
+  console.log("tryuing to convert to string..")
+  console.log(this)
+  index.saveObjects([docToUpdate], {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
     }).catch(err => {
-    });*/
+      // log error
+    });
 });
 
 productSchema.post('findOneAndUpdate', function() {
   //sync up with algolia
-  /*console.log("Trying to do this...")
+  console.log("Trying to do this...")
   const algoliasearch = require("algoliasearch");
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
   const index = client.initIndex("dev_neverland_products");
-  this.objectID = this._id;
+  const docToUpdate = await this.model.findOne(this.getQuery());
+  docToUpdate.populate('storeId');
+  docToUpdate.objectID = docToUpdate._id;
   console.log("tryuing to convert to string..")
   console.log(this)
-  console.log(this.toJSON())
-  index.saveObjects([this.toJSON()], {'autoGenerateObjectIDIfNotExist': true})
+  index.saveObjects([docToUpdate], {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
     }).catch(err => {
       // log error
-    });*/
+    });
 });
 
 productSchema.post('save', function(next) {
   //sync up with algolia
-  /*const algoliasearch = require("algoliasearch");
+  const algoliasearch = require("algoliasearch");
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
   const index = client.initIndex("dev_neverland_products");
   this.objectID = this._id;
   this.populate('storeId');
-  console.log("tryuing to convert to string..")
-  console.log(this)
   index.saveObjects([this], {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
       //res.json({success: true});
@@ -111,7 +116,7 @@ productSchema.post('save', function(next) {
     }).catch(err => {
       console.log(err)
       //res.json({success: false});
-    });*/
+    });
 });
 
 productSchema.post('find', function(result) {
