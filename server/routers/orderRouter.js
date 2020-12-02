@@ -275,9 +275,12 @@ router.post('/create', async function(req, res) {
 			createdAt: now,
 			updatedAt: now,
 			userId: userId,
+      bundleId: bundleId,
+      paymentMethod: paymentMethod,
 			billingAddress: paymentMethod.billingAddress._id,
 			storeId: storeId,
-			orderInvoiceId: orderInvoice
+			orderInvoiceId: orderInvoice,
+      status: "Need to Fulfill"
 		});
 		let newOrder = await newOrderObject.save();
 		// stripe create a new  connect payment

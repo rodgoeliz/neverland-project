@@ -105,6 +105,7 @@ router.get('/feed/home', async function(req, res, next) {
 				type: 'userInterestSection',
 				items: tagPlantInterestProducts,
 				title: tag.title,
+        handle: tag.handle,
 				typeId: tag._id
 			});
 		}
