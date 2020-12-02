@@ -25,6 +25,7 @@ const productSchema = new mongoose.Schema({
 	userLevel: String,
 	benefit: Array,
 	imageURLs: Array,
+  objectID: String,
 	vendorId: {
 		type: Schema.Types.ObjectId,
 		ref: 'User'
@@ -66,17 +67,14 @@ const productSchema = new mongoose.Schema({
 	}
 });
 
-productSchema.post('updateOne', function() {
+productSchema.post('updateOne', async function() {
   //sync up with algolia
-  console.log("Trying to do this...")
   const algoliasearch = require("algoliasearch");
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
   const index = client.initIndex("dev_neverland_products");
   const docToUpdate = await this.model.findOne(this.getQuery());
   docToUpdate.populate('storeId');
   docToUpdate.objectID = docToUpdate._id;
-  console.log("tryuing to convert to string..")
-  console.log(this)
   index.saveObjects([docToUpdate], {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
     }).catch(err => {
@@ -84,48 +82,46 @@ productSchema.post('updateOne', function() {
     });
 });
 
-productSchema.post('findOneAndUpdate', function() {
+productSchema.post('findOneAndUpdate', async function() {
   //sync up with algolia
-  console.log("Trying to do this...")
   const algoliasearch = require("algoliasearch");
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
   const index = client.initIndex("dev_neverland_products");
   const docToUpdate = await this.model.findOne(this.getQuery());
   docToUpdate.populate('storeId');
   docToUpdate.objectID = docToUpdate._id;
-  console.log("tryuing to convert to string..")
-  console.log(this)
   index.saveObjects([docToUpdate], {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
+      console.log("OBJECTIDS", objectIDs)
     }).catch(err => {
       // log error
     });
 });
 
-productSchema.post('save', function(next) {
+productSchema.post('save', async function(next) {
   //sync up with algolia
   const algoliasearch = require("algoliasearch");
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
   const index = client.initIndex("dev_neverland_products");
-  this.objectID = this._id;
-  this.populate('storeId');
+  let object = this;
+  object.set('objectID', this._id)
   index.saveObjects([this], {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
       //res.json({success: true});
-      next();
+      console.log(objectIDs)
     }).catch(err => {
       console.log(err)
       //res.json({success: false});
     });
 });
 
-productSchema.post('find', function(result) {
+productSchema.post('find', async function(result) {
   this.populate({path: 'variationIds', populate: {path: 'optionIds'}});
   this.populate('tagIds');
   this.populate('storeId');
 });
 
-productSchema.pre('remove', function (next) {
+productSchema.pre('remove', async function (next) {
   this.model('RecentlyViewedProduct').remove({productId: this._id}, next);
   // TODO: remove product variation and variation options
 });

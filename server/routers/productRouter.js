@@ -24,6 +24,46 @@ const s3 = new AWS.S3({
 	secretAccessKey: 'HCf4LX2aihuWLESvcRvospHdElKtKMLhj1jme6Tl'
 });
 
+router.get('/test/updateAlgolia', async function(req, res, next) {
+  let action = req.query.action;
+  let id = req.query.id;
+  // creating a new object
+  let newProduct = new Product({
+      title: "Test Product",
+      description: "Test description for test product - algolia.",
+      handle: "test-product-alg",
+      inventoryAvailableToSell: 20,
+      inventoryInStock: 20,
+      imageURLs: [],
+      isVisible: true,
+      sku: 'sku',
+      width: 20,
+      height: 20,
+      weight: 10,
+      price: '10.99',
+      tagIds: [] 
+  });
+  let newProd = await newProduct.save();
+  if (action == 'create') {
+    console.log("Testing sync to create a new product", newProd._id)
+    res.json({
+      success: true
+    });
+  }
+
+  if (action == 'update') {
+  console.log("Testing updating product...", id);
+
+    let updates = {
+      $set: {
+        title: 'Updated Test Product'
+      }
+    };
+    let product = await Product.findOneAndUpdate({_id: id}, updates, {new: true});
+  console.log("updated product....", product._id) 
+  }
+});
+
 router.post('/recentlyviewed/create', async function(req, res, next) {
 	let userId = req.body.userId;
 	let productId = req.body.productId;
