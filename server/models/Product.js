@@ -103,6 +103,7 @@ productSchema.post('save', async function(next) {
   const algoliasearch = require("algoliasearch");
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
   const index = client.initIndex("dev_neverland_products");
+  this.populate('storeId');
   let object = this;
   object.set('objectID', this._id)
   index.saveObjects([this], {'autoGenerateObjectIDIfNotExist': true})
