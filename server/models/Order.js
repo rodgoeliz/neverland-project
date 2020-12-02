@@ -5,7 +5,14 @@ const orderSchema = new mongoose.Schema({
 	createdAt: Date,
 	updatedAt: Date,
 	anonymousAccessToken: String,
-	billingAddress: String,
+	billingAddress: {
+    type: Schema.Types.ObjectId,
+    ref: 'Address'
+  },
+  shippingAddressId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Address'
+  },
 	userId: {
 		type: Schema.Types.ObjectId,
 		ref: 'User'

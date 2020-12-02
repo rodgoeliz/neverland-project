@@ -21,7 +21,13 @@ router.get('/get/list', async function(req, res) {
   try {
 
   let orders = await Order.find({userId: userId})
-    .populate('paymentMethod')
+    .populate({
+      path: 'paymentMethod', 
+      populate: {
+        path: 'billingAddress'
+    })
+    .populate('shippingAddressId')
+    .populate('billingAddress')
     .populate('storeId')
     .populate({
       path: 'bundleId',
@@ -156,6 +162,7 @@ router.post('/intent/create', async function(req, res) {
       updatedAt: now,
       userId: userId,
       billingAddress: paymentMethod? paymentMethod.billingAddress._id: "",
+      shippingAddressId: shippingAddress,
       storeId: storeId,
       price: {
         value: subtotal,
