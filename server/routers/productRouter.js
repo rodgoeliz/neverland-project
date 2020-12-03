@@ -8,6 +8,7 @@ var NavigationItem = require('../models/NavigationItem');
 var ProductVariation = require('../models/ProductVariation');
 var ProductVariationOption = require('../models/ProductVariationOption');
 var RecentlyViewedProduct = require('../models/RecentlyViewedProducts');
+var FavoriteProduct = require('../models/FavoriteProduct');
 var Store = require('../models/Store');
 var ProductTag = require('../models/ProductTag');
 const {sendEmail} = require("../email/emailClient");
@@ -22,6 +23,52 @@ const csv = require('csvtojson');
 const s3 = new AWS.S3({
 	accessKeyId: 'AKIAICO4I2GPW7SSMN6A',
 	secretAccessKey: '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'
+});
+
+router.get('/favorite/get/list', async function(req, res) {
+  let userId = req.query.userId;
+  try {
+    let products = await FavoriteProduct.find({userId});
+    res.json({
+      success: true,
+      payload: products
+    });
+  } catch(error) {
+    res.json({
+      success: false,
+      error: error
+    });
+  }
+});
+
+router.post('/favorite/create', async function (req, res, next) {
+  let productId = req.body.productId;
+  let userId = req.body.userId;
+  try {
+    let existingProduct = await FavoriteProduct.findOne({userId, productId});
+    if (existingProduct) {
+      res.json({
+        success: true,
+        payload: existingProduct
+      });
+      return;
+    }
+    const newFavProd = await new FavoriteProduct({
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      productId,
+      userId
+    }).save();
+    res.json({
+      success: true,
+      payload: newFavProd
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error
+    });
+  }
 });
 
 router.get('/test/updateAlgolia', async function(req, res, next) {

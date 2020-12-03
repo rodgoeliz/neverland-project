@@ -25,7 +25,7 @@ router.get('/get/list', async function(req, res) {
       path: 'paymentMethod', 
       populate: {
         path: 'billingAddress'
-    })
+    }})
     .populate('shippingAddressId')
     .populate('billingAddress')
     .populate('storeId')
