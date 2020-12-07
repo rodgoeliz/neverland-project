@@ -99,11 +99,12 @@ router.get('/get/list', async function(req, res, next) {
 
       let bundle = bundles[i];
       let storeTitle = bundle.storeId ? bundle.storeId.title : null;
+      let storeId = bundle.storeId ? bundle.storeId._id : null;
       transformedBundles.push({
         _id: bundle._id,
         storeId: {
           title: storeTitle,
-          _id: bundle.storeId._id
+          _id: storeId 
         },
         productOrderItemIds: bundle.productOrderItemIds
       });
