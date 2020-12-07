@@ -16,8 +16,8 @@ const SELLER_SIGNUP_PAYMENT = 'seller_signup_basics';
 const SELLER_SIGNUP_ADD_PRODUCTS = 'seller_signup_add_products';
 const BASICS_STEP_ID = 'seller-onboarding-basics-step';
 const SHOP_STEP_ID = "seller-onboarding-shop-basics-step"
-const { getEnvVariable } = require("../utils/orderProcessor");
-const stripe = require('stripe')(getEnvVariable('STRIPE_SECRET_KEY');
+const { getEnvVariable } = require("../utils/envWrapper");
+const stripe = require('stripe')(getEnvVariable('STRIPE_SECRET_KEY'));
 
 router.get(`/onboarding/stripe/reauth`, async function(req, res, next) {
 	let stripeId = req.query.stripeId;
