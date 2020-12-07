@@ -32,6 +32,7 @@ class SellerLoginPage extends React.Component {
       isSellerOnboarding: true,
       toNextStep: false
     };
+    console.log("LOGIN PROPS", props)
   }
 
 
@@ -112,7 +113,11 @@ class SellerLoginPage extends React.Component {
         console.log("loginFirebase", loginFirebase)
         const success = await loginFirebase(transformedData, 'default');
         console.log(success);
-        this.setState({ nextPath: '/seller/onboarding/main', success, error: null, isLoadingSubmitSignup: false });
+        let nextPath = '/seller/onboarding/main';
+        if (this.props && this.props.location && this.props.location.state) {
+          nextPath = this.props.location.state.from;
+        }
+        this.setState({ nextPath: nextPath, success, error: null, isLoadingSubmitSignup: false });
         this.redirectToNextStep();
       } catch (error) {
         this.setState({

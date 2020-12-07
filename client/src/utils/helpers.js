@@ -6,7 +6,6 @@ export const getNextOnBoardingStepId = (lastCompletedStepId, isSeller = false) =
   if (isSeller) {
     switch (lastCompletedStepId) {
       case sellerOnBoardingSteps.SIGNUP_START:
-        console.log('SIGNUP_START');
         return sellerOnBoardingSteps.SIGNUP_BASICS;
       case sellerOnBoardingSteps.SIGNUP_BASICS:
         return sellerOnBoardingSteps.SIGNUP_SHOP_BASICS;

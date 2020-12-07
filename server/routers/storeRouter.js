@@ -10,6 +10,23 @@ var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
 const mongoose = require('mongoose');
 const fs = require('fs');
 
+router.get(`/get/list`, async function(req, res, next) {
+  console.log("STORES....")
+  try {
+    let stores = await Store.find({});
+    res.json({
+      success: true,
+      payload: stores
+    });
+  } catch(error) {
+    res.json({
+      success: false,
+      error: error
+    });
+  }
+});
+
+
 router.get('/products/get', async function(req, res, next) {
   let storeId = req.query.storeId;
   if (!storeId) {

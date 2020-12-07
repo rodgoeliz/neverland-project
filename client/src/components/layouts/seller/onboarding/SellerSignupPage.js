@@ -33,6 +33,7 @@ class SellerSignupPage extends React.Component {
       toNextStep: false
     };
     this.onClickBackButton = this.onClickBackButton.bind(this);
+    console.log("PROPSP:", props)
   }
 
   onChangeInput(key, value) {
@@ -150,7 +151,15 @@ class SellerSignupPage extends React.Component {
 
   render() {
     if (this.state.toNextStep) {
-      return (<Redirect to="/seller/onboarding/basics" />);
+      let fromPath = "";
+      if (this.props && this.props.location && this.props.location.state) {
+        fromPath = this.props.location.state.from;
+      }
+       
+      return (<Redirect to={{
+        pathname: "/seller/onboarding/basics",
+        state: {from: fromPath}
+        }} />);
     }
     let spinner = null;
     if (this.state.isSubmitting) {

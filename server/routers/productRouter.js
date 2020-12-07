@@ -6,6 +6,7 @@ var Product = require('../models/Product');
 var ProductTag = require('../models/ProductTag');
 var NavigationItem = require('../models/NavigationItem');
 var ProductVariation = require('../models/ProductVariation');
+var ProductSearchMetaData = require('../models/ProductSearchMetaData');
 var ProductVariationOption = require('../models/ProductVariationOption');
 var RecentlyViewedProduct = require('../models/RecentlyViewedProducts');
 var FavoriteProduct = require('../models/FavoriteProduct');
@@ -23,6 +24,38 @@ const csv = require('csvtojson');
 const s3 = new AWS.S3({
 	accessKeyId: 'AKIAICO4I2GPW7SSMN6A',
 	secretAccessKey: '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'
+});
+
+router.get('/meta-data/get/list', async function(req, res) {
+  const type = req.query.type;
+  let query = {};
+  if (type) {
+    query = {type};
+  }
+  let prodMetaData = await ProductSearchMetaData.find(query);//.toArray();
+  if (!type) {
+    let byTypeMap = {};
+    for (var i in prodMetaData) {
+      let metaData = prodMetaData[i];
+      let type = metaData.type;
+      if (byTypeMap[type]) {
+        let exArr = byTypeMap[type];
+        exArr.push(metaData);
+        byTypeMap[type] = exArr;
+      } else {
+        byTypeMap[type] = [metaData];
+      }
+    }
+    res.json({
+      success: true,
+      payload: byTypeMap 
+    });
+  } else {
+    res.json({
+      success: true,
+      payload: prodMetaData
+    });
+  }
 });
 
 router.get('/favorite/get/list', async function(req, res) {
@@ -373,7 +406,6 @@ router.post('/seller/create', async function(req, res, next) {
 	let title = formData.title;
 	let originZipCode = formData.originZipCode;
 	let handlingFee = formData.handlingFee;
-	let storeId = formData.storeId;
 	let vendorId = formData.userId;
 	let isArtificial = formData.isArtificial? formData.isArtificial:false;
 	let isOrganic = formData.isOrganic ? formData.isOrganic: false;
@@ -384,7 +416,18 @@ router.post('/seller/create', async function(req, res, next) {
 	let itemLengthIn = formData.itemLengthIn;
   let productSKU = formData.productSKU;
 	let newProductId = mongoose.Types.ObjectId();
+  let storeId = formData.storeId ? formData.storeId : formData.store;
   let isVisible = formData.isVisible ? formData.isVisible : false;
+  console.log("Formdata.storeId, ", formData.storeId);
+  console.log('')
+  console.log("storeId: ", storeId)
+  // search metadata, metaData.style..
+  let searchMetaData = null;
+  if (formData.metaData) {
+    searchMetaData = JSON.parse(formData.metaData);
+  }
+  console.log("Metadata from request: ", formData.metaData)
+  console.log("Search Meta Data: ", searchMetaData);
 
 	const genHandle = (title) => {
 		return title.toLowerCase();
@@ -499,7 +542,10 @@ router.post('/seller/create', async function(req, res, next) {
           isOrganic: isOrganic,
           isArtificial: isArtificial,
           storeId: storeId,
-          vendorId: vendorId
+          vendorId: vendorId,
+        }
+        if (searchMetaData) {
+          newProductMap.searchMetaData = searchMetaData;
         }
         console.log("IS PRICE DEFINED", price)
         if (price) {
@@ -545,12 +591,17 @@ router.post('/seller/update', async function(req, res, next) {
   const files= Object.values(req.files)
   let formData = req.body;
   console.log("seller update product endpoint...", formData)
+  console.log("SELLER FILES: ", files)
   let quantity = formData.productQuantity;
   let price = parseFloat(formData.productPrice);
   let sku = formData.productSKU;
   let categorySelectedItems = formData.categories ? JSON.parse(formData.categories) : [];
   let tagSelectedItems = formData.productTags ? JSON.parse(formData.productTags) : [];
   let productPhotos = (formData.productPhotos || formData.productPhotos != '') ? formData.productPhotos : [];
+  console.log("PRODUCT PHOTOS", productPhotos)
+  if (typeof productPhotos == 'string') {
+    productPhotos = JSON.parse(productPhotos);
+  }
   let description = formData.description;
   let lightLevel = formData.lightLevel;
   let benefit = formData.benefit;
@@ -577,7 +628,14 @@ router.post('/seller/update', async function(req, res, next) {
   let itemLengthIn = formData.itemLengthIn;
   let productSKU = formData.productSKU;
   let productId = formData.productId;
-
+  console.log("STORE ID: ", storeId);
+  let searchMetaData = null;
+  if (formData.metaData) {
+    searchMetaData = JSON.parse(formData.metaData);
+  }
+  console.log("FormData from request: ", formData)
+  console.log("Metadata from request: ", formData.metaData)
+  console.log("Search Meta Data: ", searchMetaData);
   let existingProduct = await Product.find({_id: productId});
   if (!existingProduct) {
     res.json({
@@ -676,6 +734,7 @@ router.post('/seller/update', async function(req, res, next) {
   let productPhotoUrls = [];
   if (files.length > 0) {
     files[0].map((file) => {
+      console.log("CHECKING PHOTO FILES: ", file);
       if (file.uri && file.uri.includes('http:/')) {
         productPhotoUrls.push(file.uri);
       } else {
@@ -683,11 +742,19 @@ router.post('/seller/update', async function(req, res, next) {
       }
     });
   }
+  if (productPhotos)  {
+    for (var i in productPhotos) {
+      if (productPhotos[i].sourceURL) {
+        productPhotoUrls.push(productPhotos[i].sourceURL);
+      }
+    }
+  }
   Promise.allSettled(fileUploadPromises).then(async function(data) {
     console.log("Uploaded image files for product...")
     for (let i = 0; i < data.length; i++) {
       productPhotoUrls.push(data[i].value.Location);
     }
+    console.log("PRODUCT PHOTO URLS:", productPhotoUrls);
     Promise.allSettled(variationPromises).then(async (results) => {
       console.log("Uploaded image files for product...")
       // find product tags
@@ -729,8 +796,12 @@ router.post('/seller/update', async function(req, res, next) {
           isOrganic: isOrganic,
           isArtificial: isArtificial,
           storeId: storeId,
-          vendorId: vendorId
+          vendorId: vendorId,
+          searchMetaData
         };
+        if (searchMetaData) {
+          newProductSchema.searchMetaData = searchMetaData;
+        }
         console.log("IS PRICE DEFINED", price)
         if (price) {
           newProductSchema.price = {
@@ -1068,9 +1139,42 @@ router.get('/tags/all', async function(req, res, next) {
 	res.json(allProductTags);
 });
 
-router.get('/all', async function(req, res, next) {
-	let allProducts = await Product.find({});
-	res.json(allProducts);
+router.get('/get/list', async function(req, res, next) {
+  try {
+  	let allProducts = await Product.find({})
+      .populate({
+        path: 'storeId', 
+        populate: {
+          path: 'userId', 
+          model: 'User'
+      }})
+      .populate('userId')
+      .populate({
+        path: 'variationIds',
+        populate: {
+          path: 'optionIds'
+      }})
+      .populate('tagIds')
+      .populate({
+        path: 'vendorId',
+        populate: [{
+          path: 'userId',
+          model: 'User'
+        }, {
+          path: 'storeId',
+          model: 'Store'
+        }]
+      })
+    	res.json({
+        success: true,
+        payload: allProducts
+      });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error
+    });
+  }
 })
 
 module.exports = router;

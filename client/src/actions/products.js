@@ -13,6 +13,22 @@ export const createTestProduct = () => async (dispatch) => {
   });
 };
 
+export const getProductSearchMetaData = () => async (dispatch) =>  {
+  try {
+    const response = await Api.get(`/api/product/meta-data/get/list`);
+    if (response.data.success) {
+      dispatch({
+        type: actionTypes.products.GET_PRODUCTS_SEARCH_META_DATA_LIST,
+        payload: response.data.payload
+      });
+    } else {
+      console.log("Error retrieving product search meta data: ", response.data.error)
+    }
+  } catch (error) {
+      console.log(error);
+  }
+}
+
 export const createProduct = ({ formData }) => async (dispatch) => {
   try {
     const response = await Api.post(`/api/product/seller/create`, formData, {
@@ -135,3 +151,19 @@ export const getProductById = (id) => async (dispatch) => {
     //throw HandleErrorMessage(error);
   }
 };
+
+export const getProductList = () => async (dispatch) => {
+  try  {
+    const response = await Api.get(`api/product/get/list`);
+    if (response.data.success) {
+      dispatch({
+        type: actionTypes.products.GET_PRODUCT_LIST,
+        payload: response.data.payload
+      })
+    } else {
+      throw new Error({ message: 'getProductList failed' });
+    }
+  } catch (error) {
+    console.log("error getting product list: ", error);
+  }
+}

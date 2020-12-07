@@ -2,7 +2,7 @@ import actionTypes from '../constants/newActionTypes';
 import Api from '../lib/api';
 import {auth} from '../services/firebase';
 import firebase from 'firebase';
-
+import store from '../store/store';
 /**
  * Transform the endpoint data structure into our redux store format
  * @param {obj} data
@@ -58,7 +58,7 @@ export const setOnBoardingStepId = (payload) => ({
 export const logoutFirebase = () => async (dispatch) => {
   try {
     await auth().signOut();
-
+    await store.persistor.purge();
     // don't forget to reset mixpanel user
     //await Mixpanel.reset();
   } catch (error) {

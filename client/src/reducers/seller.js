@@ -1,4 +1,6 @@
 import actionTypes from '../constants/newActionTypes';
+import { PURGE } from "redux-persist";
+
 export const initialState = {
   accountLinks: {},
   currentProduct: {},
@@ -60,6 +62,8 @@ const sellerReducer = (state = initialState, action) => {
         ...state,
         allProductTags: action.payload,
       };
+    case PURGE:
+      return {...initialState};
     default:
       return state;
   }

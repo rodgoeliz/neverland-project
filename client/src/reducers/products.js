@@ -1,18 +1,29 @@
 import actionTypes from '../constants/newActionTypes';
+import { PURGE } from "redux-persist";
 
 export const initialState = {
   loadedProducts: [],
   productsCache: {},
+  productsCacheArr: [],
   sellerProductsCache: {},
   hasNext: true,
   offset: 0,
   limit: 5,
   recentlyViewedProductsCache: [],
   productTags: [],
+  productSearchMetaDataTags: {}
 };
 
 const productReducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.products.GET_PRODUCTS_SEARCH_META_DATA_LIST:
+      return {
+        ...state,
+        productSearchMetaDataTags: {
+          ...state.productSearchMetaDataTags,
+          ...action.payload
+        }
+      };
     case actionTypes.products.ADD_TEST_SELLER_PRODUCT:
       console.log('HERE');
       let newCache = {};
@@ -150,6 +161,22 @@ const productReducer = (state = initialState, action) => {
         ...state,
         productTags: action.payload,
       };
+    case actionTypes.products.GET_PRODUCT_LIST:
+      let transformedCache = [];
+      for (var i in action.payload) {
+        let prod = action.payload[i];
+        transformedCache[prod._id] = prod;
+      }
+      return {
+        ...state,
+        productsCache: {
+          ...state.productsCache,
+          ...transformedCache
+        },
+        productsCacheArr: action.payload
+      }
+    case PURGE:
+      return {...initialState};
     default:
       return state;
   }

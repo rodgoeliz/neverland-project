@@ -476,7 +476,7 @@ class AddProductVariationView extends Component {
     let { variations, isSavingProduct } = this.props;
     let existingVariationViews = null;
     console.log('Render variations view', variations);
-    if (variations.length > 0) {
+    if (variations && variations.length > 0) {
       existingVariationViews = (
         <div style={{ paddingTop: 16 }}>
           <span style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}>
@@ -505,12 +505,8 @@ class AddProductVariationView extends Component {
                 minHeight: 48,
               }}
             >
-              <div onClick={this.props.onCloseModal}>
-                <span>Close</span>
-              </div>
-              <div onClick={this.props.onCloseModal}>
-                <span>Save</span>
-              </div>
+              <NButton title="Close" theme="secondary" onClick={this.props.onCloseModal} />
+              <NButton title="Save" onClick={this.props.onCloseModal} />
             </div>
             <div
               enableResetScrollToCoords={false}
@@ -520,20 +516,20 @@ class AddProductVariationView extends Component {
                 maxHeight: '100vh - 128px', 
               }}
             >
+            <div style={{display: 'flex', flexDirection: 'column'}}>
               <span
                 style={{
                   fontSize: 20,
                   fontWeight: 'bold',
-                  textAlign: 'center',
-                  marginBottom: 16,
+                  marginBottom: 6,
                 }}
               >
                 Product Variations
               </span>
               <span style={{ marginLeft: 12, marginBottom: 8 }}>
-                {' '}
                 You can have maximum 2 variations{' '}
               </span>
+            </div>
               {this.renderCreateNewProductVariationPicker()}
               {existingVariationViews}
             </div>

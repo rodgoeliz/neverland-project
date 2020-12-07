@@ -39,7 +39,6 @@ class SellerOnboardingAddProductsPage extends Component {
     this._closeModal = this._closeModal.bind(this);
   }
 
-
   async onSubmitProduct() {
     this.setState({ isSavingProduct: true });
     this.saveProduct();
@@ -166,12 +165,18 @@ class SellerOnboardingAddProductsPage extends Component {
               <span>Please add at least 3 products to your store.</span>
             </div>
             <div style={{ height: 16 }} />
-            <Modal
-             style={{content: {borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige}}}
-              isOpen={this.state.isAddProductModalVisible}
-              >
-              <AddProductView onChange={this.onChange} onClose={this._closeModal} product={this.state.product}/>
-            </Modal>
+            <div>
+              <Modal
+                style={{content: {borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige}}}
+                isOpen={this.state.isAddProductModalVisible}
+                animationType="slide"
+                shouldCloseOnOverlayClick={true}
+                transparent={false}
+                onRequestClose={this._closeModal}
+                >
+                <AddProductView onChange={this.onChange} onClose={this._closeModal} product={this.state.product}/>
+              </Modal>
+            </div>
             <NButton onClick={this.onPressAddProduct} title="Add product" />
             {nextButton}
             <FlatList

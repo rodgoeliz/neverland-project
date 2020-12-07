@@ -114,7 +114,8 @@ export const loadAllProductCategories = (input) => async (dispatch) => {
       console.log('loadAllProductCategories error', response);
     }
   } catch (error) {
-    throw HandleErrorMessage(error);
+    console.log('loadAllProductCategories', error)
+    //throw HandleErrorMessage(error);
   }
 };
 
@@ -143,21 +144,22 @@ export const loadSellerProduct = ({ productId }) => async (dispatch, getState) =
       state.productsCache &&
       state.productsCache.includes((product) => product.productId === productId)
     ) {
-      console.log('product is in cache');
-      dispatch(
-        setCurrentProduct(state.productsCache.find((product) => product.productId === productId)),
-      );
+      let product = state.productsCache.find((product) => product.productId === productId);
+      console.log('product is in cache', product);
+      dispatch(setCurrentProduct(product));
 
-      return;
+      return product;
     }
 
     const response = await Api.get(`/api/seller/products/get?productId=${productId}`);
-
+    console.log("GET RESPONSE FOR PRODUCT: ", response)
     if (response.data.success) {
       dispatch(setCurrentProduct(response.data.payload));
+      return response.data.payload;
     }
   } catch (error) {
-    throw HandleErrorMessage(error);
+    console.log('//error getting productid', error)
+    //throw HandleErrorMessage(error);
   }
 };
 
@@ -167,7 +169,7 @@ export const checkSellerPaymentOnBoardingStatus = ({ stripeId }) => async (dispa
 
     console.log('checkSellerPaymentOnBoardingStatus does nothing but RESULT', response);
   } catch (error) {
-    throw HandleErrorMessage(error);
+    //throw HandleErrorMessage(error);
   }
 };
 
@@ -181,7 +183,7 @@ export const getProductsForSeller = ({ sellerId }) => async (dispatch) => {
       console.log('getProductsForSeller ERROR', response);
     }
   } catch (error) {
-    throw HandleErrorMessage(error);
+    //throw HandleErrorMessage(error);
   }
 };
 
@@ -197,7 +199,7 @@ export const toggleVisibility = ({ productId }) => async (dispatch) => {
       //dispatch(createErrorAction(actionTypes.seller.TOGGLE_VISIBILITY, response.data.error));
     }
   } catch (error) {
-    throw HandleErrorMessage(error);
+    //throw HandleErrorMessage(error);
   }
 };
 

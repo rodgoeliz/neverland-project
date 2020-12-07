@@ -4,15 +4,16 @@ import Switch from 'react-switch';
 //import ImagePicker from 'react-native-image-crop-picker';
 import { connect } from 'react-redux';
 
-import BrandStyles from '../../../BrandStyles';
+import BrandStyles from '../../BrandStyles';
 import ClipLoader from "react-spinners/ClipLoader";
 
-import BaseInput from '../../../UI/BaseInput';
+import BaseInput from '../../UI/BaseInput';
 import Modal from 'react-modal';
-import CheckBoxInput from '../../../UI/CheckBoxInput';
-import NSelect from '../../../UI/NSelect';
+import CheckBoxInput from '../../UI/CheckBoxInput';
+import NSelect from '../../UI/NSelect';
 import {FaPhotoVideo, FaRegEdit} from 'react-icons/fa';
 import { GrFormClose } from 'react-icons/gr';
+import { transformProductToFormData } from '../../../utils/productHelpers';
 
 import {
   clearSellerCurrentProductCache,
@@ -20,16 +21,16 @@ import {
   loadAllProductTags,
   loadSellerProduct,
   clearTagsAndCategories
-} from '../../../../actions/seller';
-import { transformProductToFormData } from '../../../../utils/productHelpers';
-import { setOnBoardingStepId, logoutFirebase } from "../../../../actions/auth";
-import { createProduct, createTestProduct, updateProduct, getProductSearchMetaData } from '../../../../actions/products';
+} from '../../../actions/seller';
+import { setOnBoardingStepId, logoutFirebase } from "../../../actions/auth";
+import { getStores } from "../../../actions/store";
+import { createProduct, createTestProduct, updateProduct, getProductSearchMetaData } from '../../../actions/products';
 
-import AddProductVariationView from './AddProductVariationView';
-import NButton from '../../../UI/NButton';
+import AddProductVariationView from '../seller/onboarding/AddProductVariationView';
+import NButton from '../../UI/NButton';
 
-import isZipCodeValid from '../../../../utils/zipcodeValidator';
-import isNumberValid from '../../../../utils/numberValidator';
+import isZipCodeValid from '../../../utils/zipcodeValidator';
+import isNumberValid from '../../../utils/numberValidator';
 
 const PROCESSING_TIME_VALUES = [
   { id: 'twenty-four-hours', value: '24 Hrs' },
@@ -72,7 +73,7 @@ const IMAGE_PICKER_ACTION_SHEET = ['Select from gallery', 'Take a photo', 'Cance
 */
 }
 
-class AddProductView extends Component {
+class AddProductAdminView extends Component {
   constructor(props) {
     super(props);
     let { variations } = props;
@@ -136,6 +137,7 @@ class AddProductView extends Component {
 
   async initTags() {
     await this.props.loadAllTags();
+    await this.props.getStores();
     await this.props.loadAllCategories();
     await this.props.getProductSearchMetaData();
     this.setState({
@@ -163,8 +165,11 @@ class AddProductView extends Component {
 
     //console.log("creating test product", this.props.createTestProduct)
     // means we are editing a product, so we must pull it
-    let passedProductId = this.props.productId; // ? this.props.productId : params.productId;
-    console.log("AddProductAdminView componentDidMount productId: ", passedProductId);
+    let passedProductId = this.props.productId;
+    if (this.props && this.props.match) {
+      const { match: {params}} = this.props;
+      passedProductId = params.productId;
+    }
     if (passedProductId) {
       this.setState({
         isLoading: true
@@ -184,7 +189,6 @@ class AddProductView extends Component {
       this.props.clearSellerProductCache();
     }
   }
-
   transformToFormData(jsonObj, formData) {
     for (const key in jsonObj) {
       console.log("KEY: ", key)
@@ -499,28 +503,21 @@ class AddProductView extends Component {
     }*/
     let formData = new FormData();
     //formData.append('my_photos')
-    if (this.state.formData.productPhotos) {
-      for (let i = 0; i < this.state.formData.productPhotos.length; i++) {
-        let photo = this.state.formData.productPhotos[i];
-        formData.append(`productImageFile[${i}]`, photo);
-       /* {
-          uri: photo.sourceURL,
-          type: photo.mime,
-          name: this.state.formData.title + '-' + this.props.user._id + 'productImage' + i,
-        });*/
-      }
+    for (let i = 0; i < this.state.formData.productPhotos.length; i++) {
+      let photo = this.state.formData.productPhotos[i];
+      formData.append(`productImageFile[${i}]`, photo);
+     /* {
+        uri: photo.sourceURL,
+        type: photo.mime,
+        name: this.state.formData.title + '-' + this.props.user._id + 'productImage' + i,
+      });*/
     }
     formData = this.transformToFormData(this.state.formData, formData);
     // if we didn't assign a store, pull user store
     console.log("FORM DATA ( look at storeId ) ", this.state.formData)
-    console.log("THIS USER DEFINED? ", this.props.user)
     if (!this.state.formData.storeId) {
       formData.append('userId', this.props.user._id);
-      if (typeof this.props.user.storeId == "string") {
-        formData.append('storeId', this.props.user.storeId);
-      } else if (typeof this.props.user.storeId == "object") {
-        formData.append('storeId', this.props.user.storeId._id);
-      }
+      formData.append('storeId', this.props.user.storeId._id);
     } else {
       if (this.state.formData.storeId && this.state.formData.storeId.length == 1) {
         let store = this.state.formData.storeId[0];
@@ -540,13 +537,13 @@ class AddProductView extends Component {
     if (existingProduct) {
       formData.append('productId', existingProduct._id);
       await this.props.updateProduct({ formData });
-      //this.onCloseView();
+      this.onCloseView();
       return;
     }
 
     await this.props.createProduct({ formData });
     this.setState({ isSavingProduct: false });
-    //this.onCloseView();
+    this.onCloseView();
   }
 
   async onSubmitProduct() {
@@ -791,8 +788,6 @@ class AddProductView extends Component {
     return (
       <div>
         <Modal
-          style={{content: {borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige}}}
-          shouldCloseOnOverlayClick={true}
           animationType="slide"
           transparent={false}
           presentationStyle={'fullScreen'}
@@ -1450,8 +1445,30 @@ class AddProductView extends Component {
     );
   }
 
+  renderStoreData() {
+    return (
+      <div>
+        <NSelect
+          items={this.props.stores}
+          values={this.state.formData.storeId ? this.state.formData.storeId : ""}
+          itemIdKey="_id"
+          itemTitleKey="title"
+          title="Store"
+          placeholderText={'Select store...'}
+          searchEnabled={true}
+          error={this.state.errors['store']}
+          isSingleSelect={true}
+          renderItem={({item}) => {
+            return <span>{item.title} - {item._id}</span>
+          }}
+          onChangeItems={
+            this.onNSelectChangeNewItems.bind(this, 'storeId')
+          }/>
+      </div>
+    );
+  }
 
-  renderSearchMetaData() {
+  renderAdminSearchMetaData() {
     // add a new field
     let metaDataTags = this.props.productSearchMetaDataTags;
     console.log("META DATA TAGS...", metaDataTags)
@@ -1484,7 +1501,6 @@ class AddProductView extends Component {
     let newMetaField = (<div><NButton title="Add a new metafield" /></div>);
     return (
       <div>
-        <div> The more search meta data and tags you add, the more likely your product will appear to customers. These are all optional, but we recommend you fill out the ones relevant for the product for more business.</div>
        {metaNSelects} 
       </div>
     );
@@ -1616,8 +1632,6 @@ class AddProductView extends Component {
               value={this.state.formData.itemWidthIn ? this.state.formData.itemWidthIn : null}
               error={this.state.errors['itemWidthIn']}
             />
-          </div>
-          <div style={{display: 'flex', flexDirection: 'row'}}>
             <BaseInput
               onChange={this.onChangeInput}
               keyId="itemLengthIn"
@@ -1636,7 +1650,7 @@ class AddProductView extends Component {
 
   render() {
     console.log("AddProductAdminView", this.props)
-    if (this.state.isLoading || this.props.isLoadingSellerProduct) {
+    if (this.state.isLoading || this.props.isLoadingSellerProduct || !this.state.formData || Object.keys(this.state.formData).length == 0) {
       return (
         <div>
           <span>Loading product...</span>
@@ -1680,8 +1694,9 @@ class AddProductView extends Component {
             <span>{this.state.errors['root']}</span>
             {this.renderProductBasics()}
             <div style={{ height: 24 }} />
+            {this.renderStoreData()}
             <h3> Search Meta Data </h3>
-            {this.renderSearchMetaData()}
+            {this.renderAdminSearchMetaData()}
             <h3
               style={{
                 fontWeight: 'bold',
@@ -1752,6 +1767,7 @@ const mapStateToProps = (state) => ({
 const actions = {
   logOut: logoutFirebase,
   setOnBoardingStepId: setOnBoardingStepId,
+  getStores,
   createProduct,
   updateProduct,
   loadSellerProduct,
@@ -1764,4 +1780,4 @@ const actions = {
   // getSellerProducts: getSellerProducts
 };
 
-export default connect(mapStateToProps, actions) (AddProductView);
+export default connect(mapStateToProps, actions) (AddProductAdminView);

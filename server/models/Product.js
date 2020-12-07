@@ -65,7 +65,8 @@ const productSchema = new mongoose.Schema({
 	storeId: {
 		type: Schema.Types.ObjectId,
 		ref: 'Store'
-	}
+	},
+  searchMetaData: Object
 });
 
 productSchema.post('updateOne', async function() {

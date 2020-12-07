@@ -10,9 +10,9 @@ var User = require('../models/User');
 var PaymentMethod = require('../models/PaymentMethod');
 var ProductTag = require('../models/ProductTag');
 const { createStripeAccountForUser, getStripeAccountForUser } = require("../utils/paymentProcessor");
-
+const { getEnvVariable } = require("../utils/orderProcessor");
+const stripe = require('stripe')(getEnvVariable('STRIPE_SECRET_KEY');
 const mongoose = require('mongoose');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 router.post('/stripe/confirm-payment-method-and-payment', async function(req, res, next) {
   let paymentMethodId = req.body.paymentMethodId;

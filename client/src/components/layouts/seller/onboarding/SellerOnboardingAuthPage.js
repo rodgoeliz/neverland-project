@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { getSellerAccountLinks, clearAccountLinks } from '../../../../actions/seller';
 import { getNextOnBoardingStepId } from "../../../../utils/helpers";
+import { logoutFirebase } from '../../../../actions/auth'
 import { sellerOnBoardingStepsToPath, sellerOnBoardingSteps } from '../../../../constants/onBoardingSteps'
 import BrandStyles from '../../../BrandStyles';
 import NButton from "../../../UI/NButton";
+import NClickableText from "../../../UI/NClickableText";
 
 const styles = {
   logoContainer: {
@@ -30,9 +32,11 @@ class SellerOnboardingAuthPage extends Component {
   }
 
   async componentDidMount() {
+    console.log("auth page", this.props)
     // clear our entire state
     // get user onboardingStepID and reroute to the right step OR take them to  
     // sign up or login page
+  //  this.props.logoutFirebase();
   }
 
   onSubmitForm() {}
@@ -51,7 +55,15 @@ class SellerOnboardingAuthPage extends Component {
 
   render() {
     if (this.state.redirectTo) {
-      return <Redirect to={this.state.redirectTo} />;
+      let fromPath = "";
+      if (this.props && this.props.location && this.props.location.state) {
+        fromPath = this.props.location.state.from;
+      }
+       
+      return (<Redirect to={{
+        pathname: this.state.redirectTo,
+        state: {from: fromPath}
+        }} />);
     }
       return (
         <div style={{width: '100vw', height: '100vh', display: 'flex', alignItems: 'center'}}>
@@ -77,7 +89,7 @@ class SellerOnboardingAuthPage extends Component {
             <br/>
             <br/>
             <NButton onClick={this.onClickSignup} buttonStyle={{maxWidth: 400, margin: 'auto'}} title={'Signup'} />
-            <span onClick={this.onClickLogin}>Login</span>
+            <NClickableText title="Login" onClick={this.onClickLogin} />
           </div>
         </div>
       );
@@ -89,6 +101,7 @@ const mapStateToProps = (state) => ({
 });
 
 const actions = {
+  logoutFirebase
 };
 
 export default connect(mapStateToProps, actions)(SellerOnboardingAuthPage);

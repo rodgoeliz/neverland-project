@@ -16,8 +16,8 @@ const SELLER_SIGNUP_PAYMENT = 'seller_signup_basics';
 const SELLER_SIGNUP_ADD_PRODUCTS = 'seller_signup_add_products';
 const BASICS_STEP_ID = 'seller-onboarding-basics-step';
 const SHOP_STEP_ID = "seller-onboarding-shop-basics-step"
-
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { getEnvVariable } = require("../utils/orderProcessor");
+const stripe = require('stripe')(getEnvVariable('STRIPE_SECRET_KEY');
 
 router.get(`/onboarding/stripe/reauth`, async function(req, res, next) {
 	let stripeId = req.query.stripeId;
@@ -47,6 +47,29 @@ router.get(`/product/categories/get`, async function(req, res, next) {
   }
 });
 
+router.get('/products/get', async function(req, res, next) {
+  console.log("Get product")
+  console.log(req.query)
+  let productId = req.query.productId;
+  let product = await Product.findOne({_id: productId})
+    .populate({
+      path: 'storeId', 
+      populate: {
+        path: 'userId', 
+        model: 'User'
+    }})
+    .populate('userId')
+    .populate('categoryIds')
+    .populate({
+      path: 'variationIds',
+      populate: {
+        path: 'optionIds'
+    }})
+    .populate('tagIds');
+  res.json({
+    success: true,
+    payload: product});
+});
 router.get(`/product/tags/get`, async function(req, res, next) {
   console.log("get all product tags")
   // if no id specified, we get all tags

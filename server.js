@@ -24,6 +24,7 @@ var orderRouter = require('./server/routers/orderRouter');
 var sellerRouter = require('./server/routers/sellerRouter');
 var bundleRouter = require('./server/routers/bundleRouter');
 var marketplaceRouter = require('./server/routers/marketplaceRouter');
+var adminRouter = require('./server/routers/adminRouter');
 const formData = require('express-form-data');
 
 const dotenv = require('dotenv');
@@ -52,6 +53,9 @@ app.use("/api/order", orderRouter);
 app.use("/api/seller", sellerRouter);
 app.use("/api/bundle", bundleRouter);
 app.use("/api/marketplace", marketplaceRouter)
+app.use("/api/admin", adminRouter);
+
+
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname + '/client/build/index.html'));
 })

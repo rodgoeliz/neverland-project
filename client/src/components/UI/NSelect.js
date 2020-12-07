@@ -7,6 +7,13 @@ import NButton from './NButton';
 import FlatList from './FlatList';
 import styled from 'styled-components';
 
+const StyledTextButton = styled.div`
+  background-color: 'black',
+  &:hover: {
+    cursor: pointer;
+  }
+`
+
 const StyledInput = styled.div`
   height: 40px
   display: flex,
@@ -51,9 +58,11 @@ class NSelectItem extends React.PureComponent {
       >
         <div style={itemStyles.contentContainer}>
           {isActive}
-          <span style={textActiveStyle}>
-            {this.props.item[this.props.itemTitleKey]}
-          </span>
+          {this.props.renderItem ? this.props.renderItem({item: this.props.item}):
+            <span style={textActiveStyle}>
+              {this.props.item[this.props.itemTitleKey]}
+            </span>
+          }
         </div>
       </StyledNSelectItemWrapper>
     );
@@ -100,7 +109,6 @@ class NSelectedItem extends React.PureComponent {
 export default class NSelect extends Component {
   constructor(props) {
     super(props);
-    console.log("ITEMS IN NSELECT", props.items)
     let items = props.items ? props.items : [];
     let newItems = props.newItems ? props.newItems : [];
     let inputValues = [];
@@ -114,7 +122,6 @@ export default class NSelect extends Component {
       data: items.concat(newItems),
       newItems: newItems,
     };
-    console.log(this.state.data)
     this._renderItem = this._renderItem.bind(this);
     this._renderListHeader = this._renderListHeader.bind(this);
     this._showModal = this._showModal.bind(this);
@@ -207,6 +214,7 @@ export default class NSelect extends Component {
         isActive={isActive}
         canSelectMore={this.state.canSelectMore}
         item={item}
+        renderItem={this.props.renderItem}
         key={this.props.itemIdKey}
         title={this.props.itemTitleKey}
       />
@@ -245,24 +253,24 @@ export default class NSelect extends Component {
   _renderPlaceholderText() {
       let textStyle = BrandStyles.components.placeholderText;
       textStyle = {...textStyle, color: BrandStyles.color.black,  fontWeight: 'bold'};
-    if (this.state.selectedItems.length == 1 && this.props.hideSelectedTags) {
-      let item = this.state.selectedItems[0];
-      return (
-        <span style={textStyle}>
-          {item[this.props.itemTitleKey]}
-        </span>
-      );
-    } else if (this.state.selectedItems.length > 1) {
-      return (
-        <span style={textStyle}>
-          {this.props.placeholderText + `(${this.state.selectedItems.length} selected)`}
-        </span>
-      );
-    } else {
-      return (
-        <span style={BrandStyles.components.placeholderText}> {this.props.placeholderText} </span>
-      );
-    }
+      if (this.state.selectedItems.length == 1 && this.props.hideSelectedTags) {
+        let item = this.state.selectedItems[0];
+        return (
+          <span style={textStyle}>
+            {item[this.props.itemTitleKey]}
+          </span>
+        );
+      } else if (this.state.selectedItems.length > 1) {
+        return (
+          <span style={textStyle}>
+            {this.props.placeholderText + `(${this.state.selectedItems.length} selected)`}
+          </span>
+        );
+      } else {
+        return (
+          <span style={BrandStyles.components.placeholderText}> {this.props.placeholderText} </span>
+        );
+      }
   }
 
   _handleSearch(e) {
@@ -301,7 +309,6 @@ export default class NSelect extends Component {
   }
 
   render() {
-    console.log("Nselect", this.state.data)
     let extraHeaderStyle = {};
     let selectedItemsStyle = styles.selectedItemsContainer;
     let selectedTagsComp = null;
@@ -321,22 +328,26 @@ export default class NSelect extends Component {
     labelStyle = {...labelStyle, marginLeft: 16};
     let modalDiv = {...headerStyle, ...extraHeaderStyle, marginRight: 16, marginLeft: 16, flexDirection: 'column'};
     return (
-      <div>
+      <StyledTextButton>
         <div
           style={modalDiv}
           onClick={this._showModal}
         >
+          <StyledTextButton>
           <span style={labelStyle}> {this.props.title} </span>
           <div style={styles.headerContentContainer}>
             {this._renderPlaceholderText()}
             <FaChevronDown style={BrandStyles.components.iconPlaceholder}/>
           </div>
+          </StyledTextButton>
         </div>
         <span style={labelStyle}>{this.props.error}</span>
         <Modal
           style={{content: {borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige}}}
           animationType="slide"
+          shouldCloseOnOverlayClick={true}
           isOpen={this.state.isModalVisible}
+          onRequestClose={this._closeModal} 
           presentationStyle="fullScreen"
         >
           <div
@@ -346,9 +357,9 @@ export default class NSelect extends Component {
               overflow: 'scroll'
             }}
           >
-            <div onClick={this._closeModal}>
-              <GrFormClose style={{'width': 30}} />
-            </div>
+            <StyledTextButton onClick={this._closeModal}>
+              <GrFormClose style={{'width': 40, fontSize: 24}} />
+            </StyledTextButton>
             <span style={styles.headerTitle}>{this.props.placeholderText}</span>
             <FlatList
               style={styles.list}
@@ -363,7 +374,7 @@ export default class NSelect extends Component {
           </div>
         </Modal>
         {selectedTagsComp}
-      </div>
+      </StyledTextButton>
     );
   }
 }

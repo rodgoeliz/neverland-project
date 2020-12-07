@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import { Spinner } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import BrandStyles from '../BrandStyles';
+import styled from 'styled-components';
+
+const HoverCursorWrapper = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 const styles = {
   buttonSecondary: {
@@ -106,6 +113,7 @@ class NButton extends Component {
       buttonStyles = {...buttonStyles, ...styles.secondaryHorizontalPadding};
 
       return (
+        <HoverCursorWrapper>
         <div
           style={buttonStyles}
           {...this.props}
@@ -117,11 +125,12 @@ class NButton extends Component {
           {this.props.iconRight}
           {spinner}
         </div>
+        </HoverCursorWrapper>
       );
     }
     buttonStyles = {...buttonStyles, ...styles.shadowButton};
-    console.log(buttonStyles)
     return (
+      <HoverCursorWrapper>
       <div
         {...this.props}
         style={buttonStyles}
@@ -136,6 +145,7 @@ class NButton extends Component {
           {spinner}
         </div>
       </div>
+      </HoverCursorWrapper>
     );
   }
 }

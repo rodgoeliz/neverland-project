@@ -14,6 +14,8 @@ import NeverlandContactUs from "./components/layouts/NeverlandContactUs";
 import Layout from './components/layouts/Layout';
 import AdminPage from "./components/layouts/AdminPage";
 import AdminProductEdit from "./components/layouts/AdminProductEdit";
+import ProductAdminView from './components/layouts/admin/ProductAdminView';
+import AddProductAdminView from './components/layouts/admin/AddProductAdminView';
 import SellerOnboardingReAuth from "./components/layouts/SellerOnboardingReAuth";
 import SellerOnboardingRouting from "./components/layouts/SellerOnboardingRouting";
 import PrivacyPolicy from "./components/layouts/PrivacyPolicy";
@@ -33,7 +35,7 @@ import DownloadNeverland from "./download/downloadNeverland";
 import {ParallaxProvider} from "react-scroll-parallax";
 import AOS from 'aos';
 
-function PrivateRoute({ component: Component, authenticated, loading, ...rest }) {
+function AdminRoute({ component: Component, authenticated, isAdmin, loading, ...rest }) {
   if (loading) {
     return (<SellerLoadingPage />);
   }
@@ -41,10 +43,30 @@ function PrivateRoute({ component: Component, authenticated, loading, ...rest })
     <Route
       {...rest}
       render={(props) =>{ 
-        if (authenticated == true) {
+        if (authenticated == true && isAdmin == true) {
           return <Component {...props} />
         } else {
           return (<Redirect to={{ pathname: '/auth', state: { from: props.location } }} />)
+        }
+      }
+    }
+    />
+  )
+}
+
+function PrivateRoute({ component: Component, authenticated, loading, ...rest }) {
+  if (loading) {
+    return (<SellerLoadingPage />);
+  }
+  console.log("PRIVATE ROUTE: ", authenticated)
+  return (
+    <Route
+      {...rest}
+      render={(props) =>{ 
+        if (authenticated == true) {
+          return <Component {...props} />
+        } else {
+          return (<Redirect to={{ pathname: '/seller/onboarding/auth', state: { from: props.location } }} />)
         }
       }
     }
@@ -74,9 +96,9 @@ class App extends Component {
       loading: true
     };
   }
+
   componentDidMount() {
     auth().onAuthStateChanged((user) => {
-      console.log("onAuthStateChanged", user)
       if (user) {
         this.setState({
           authenticated: true,
@@ -102,6 +124,9 @@ class App extends Component {
                 <Route exact path="/" component={NeverlandHome} />
                 <Route exact path="/admin" component={AdminPage} />
                 <Route exact path="/adminTwo" component={NeverlandOurStory} />
+                <Route exact path ="/admin/product" component={ProductAdminView} />
+                <Route exact path ="/admin/product/:productId" component={AddProductAdminView} />
+                <Route exact path="/admin/product/new" component={AddProductAdminView} />
                 <Route exact path="/story" component={NeverlandOurStory} />
                 <PublicRoute exact path="/seller/onboarding/signup" authenticated={this.state.authenticated} component={SellerSignupPage} />
                 <PublicRoute exact path="/seller/onboarding/login" authenticated={this.state.authenticated} component={SellerLoginPage} />

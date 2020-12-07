@@ -7,6 +7,7 @@ import auth from "../reducers/auth";
 import seller from "../reducers/seller";
 import products from "../reducers/products";
 import storage from 'redux-persist/lib/storage';
+import stores from '../reducers/store';
 
 const persistConfig = {
   key: 'root',
@@ -18,7 +19,8 @@ const rootReducers =  combineReducers({
     admin,
     auth,
     seller,
-    products
+    products,
+    stores
   });
 const persistedReducer = persistReducer(persistConfig, rootReducers)
 const store = createStore(
