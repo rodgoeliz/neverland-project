@@ -86,6 +86,7 @@ const TextAreaInput = styled.textarea`
   padding-right: 16px;
   margin-left: 16px;
   margin-right: 16px;
+  font-size: 18px;
   width: 100%;
   padding: 16px;
   height: 100px;
@@ -362,7 +363,9 @@ class SellerOnboardingBasicsPage extends Component {
       <div style={{display: 'flex', flexDirection: 'column'}}>
         <NameInput onChange={this.onChangeInputFinal} error={this.state.nameError} />
         <PhoneNumberInput onChange={this.onChangeInputFinal} error={this.state.phoneNumberError} />
-        <NButton onClick={this.onNextSection} title={'Next'} />
+        <div>
+          <NButton onClick={this.onNextSection} title={'Next'} />
+        </div>
       </div>
     );
   }
@@ -388,7 +391,9 @@ class SellerOnboardingBasicsPage extends Component {
         </div>
         <p>{this.state.addressError}</p>
         <AddressInput onChange={this.onChangeAddressInput} theme={'light'} />
-        <NButton onClick={this.onNextSection} title="Next" />
+        <div style={{marginTop: 32}}>
+          <NButton style={{margin: 'auto'}} onClick={this.onNextSection} title="Next" />
+        </div>
       </div>
     );
   }
@@ -558,7 +563,9 @@ class SellerOnboardingBasicsPage extends Component {
           />
           <span>{this.state.sellerPackingError}</span>
         </form>
-        <NButton onClick={this.onSubmit} title="Submit" />
+        <div style={{marginTop: 32}}>
+          <NButton style={{margin: 'auto'}} onClick={this.onSubmit} title="Submit" />
+        </div>
         <div style={{ height: 84 }} />
       </div>
     );
@@ -581,7 +588,7 @@ class SellerOnboardingBasicsPage extends Component {
             >
               Basics
             </p>
-            <div style={{maxWidth: 800, alignSelf: 'center', justifyContent: 'center'}}>
+            <div style={{maxWidth: 800, justifyContent: 'center'}}>
               {this.renderBasicInfoSection()}
               {this.renderBasicAddressSection()}
               {this.renderAdditionalInfoSection()}

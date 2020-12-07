@@ -129,7 +129,7 @@ export default class BaseInput extends React.Component {
     if (this.props.autoCapitalize) {
       autoCap = this.props.autoCapitalize;
     }
-    let widthStyle = { width: `(100vw - 32) / ${widthFactor }`};
+    let widthStyle = { width: `(400 - 32) / ${widthFactor }`};
     if (this.props.full) {
       widthStyle = { flex: 1 };
     }

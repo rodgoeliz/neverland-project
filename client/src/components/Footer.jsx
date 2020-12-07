@@ -60,7 +60,6 @@ class Footer extends Component {
 		if (this.props.waitlist && this.props.waitlist.newsletterSubmitSuccess) {
 			successMessage = <span className="fas fa-check"> You're in!</span>;
 		}
-		console.log(this.props.waitlist)
 		return (
 			<div className="footer-container">
 			<div className="footer">

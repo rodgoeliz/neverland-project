@@ -32,12 +32,10 @@ class SellerLoginPage extends React.Component {
       isSellerOnboarding: true,
       toNextStep: false
     };
-    console.log("LOGIN PROPS", props)
   }
 
 
   onChangeInput(key, value) {
-    console.log("onChangeInput", key, value)
     this.setState({
       [key]: value,
     });
@@ -50,7 +48,6 @@ class SellerLoginPage extends React.Component {
 
   validateInput() {
     let isValid = true;
-    console.log('validateInput', this.state);
     if (this.state.email === '') {
       console.log('email is empty');
       this.setState({
@@ -80,7 +77,6 @@ class SellerLoginPage extends React.Component {
       }
     }
 
-    console.log('IS VALID', isValid);
     return isValid;
   }
 
@@ -93,11 +89,8 @@ class SellerLoginPage extends React.Component {
 
   async onSubmitForm() {
     if (this.validateInput()) {
-      console.log('ON SUBMIT FORM is it seller? ', this.state.isSellerOnboarding);
-      console.log(this.state);
       this.setState({ isSubmitting: true });
 
-      console.log('onFormSubmit in HomeMainSignupContainer');
       const { loginFirebase } = this.props;
       this.setState({ success: null, error: null, loading: true });
       let data = this.state;
@@ -108,11 +101,7 @@ class SellerLoginPage extends React.Component {
           password: data.password.password,
           isSellerOnboarding: this.state.isSellerOnboarding,
         };
-        console.log("sign up with: ", transformedData)
-        console.log(this.props.history)
-        console.log("loginFirebase", loginFirebase)
         const success = await loginFirebase(transformedData, 'default');
-        console.log(success);
         let nextPath = '/seller/onboarding/main';
         if (this.props && this.props.location && this.props.location.state) {
           nextPath = this.props.location.state.from;

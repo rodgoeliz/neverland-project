@@ -3,9 +3,7 @@ import Api from '../lib/api';
 
 export const getStores = () => async (dispatch) => {
   try {
-    console.log("getting stores...")
     const response = await Api.get(`/api/store/get/list`);
-    console.log(response)
     if (response.data.success) {
       dispatch({
         type: actionTypes.store.GET_STORES,

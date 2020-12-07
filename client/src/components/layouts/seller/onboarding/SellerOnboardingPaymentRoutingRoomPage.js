@@ -19,8 +19,6 @@ class SellerOnboardingPaymentRoutingRoomPage extends Component {
   }
 
   async componentDidMount() {
-    console.log("Seller onboarding routing room", this.props)
-
     const accountId = this.props.match.params.accountId;
     await this.props.getAccountInfo({ accountId });
     this.props.clearAccountLinks();

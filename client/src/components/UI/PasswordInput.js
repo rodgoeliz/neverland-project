@@ -39,7 +39,6 @@ export default class PasswordInput extends React.Component {
 
   validateInput() {
     let issues = isPasswordValid(this.state.password);
-    console.log(777, issues);
     let passwordErrorText = [];
     if (issues.length > 0) {
       for (const idx in issues) {

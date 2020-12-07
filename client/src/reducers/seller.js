@@ -17,7 +17,6 @@ const sellerReducer = (state = initialState, action) => {
         currentProduct: action.payload,
       };
     case actionTypes.seller.SET_ALL_PRODUCTS:
-    console.log("SET ALL PRODUCTS (SELLER REDUCER)")
       return {
         ...state,
         productsCache: action.payload,
@@ -51,13 +50,11 @@ const sellerReducer = (state = initialState, action) => {
         allProductTags: [],
       };
     case actionTypes.seller.SET_ALL_PRODUCT_CATEGORIES:
-    console.log("allProductCategories", action.payload)
       return {
         ...state,
         allProductCategories: action.payload,
       };
     case actionTypes.seller.SET_ALL_PRODUCT_TAGS:
-    console.log("allProductTags", action.payload)
       return {
         ...state,
         allProductTags: action.payload,

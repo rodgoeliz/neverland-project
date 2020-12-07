@@ -93,7 +93,6 @@ export default class NameInput extends React.Component {
     if (!this.state.hasError) {
       validationIcon = (<FaRegCheckCircle style={BrandStyles.components.inputBase.validationIcon} />);
     }
-    console.log(validationIcon)
     return (
       <div style={BrandStyles.components.inputBase.wrapper}>
         <div style={containerStyle}>

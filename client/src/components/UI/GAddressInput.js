@@ -44,16 +44,13 @@ export default class GAddressInput extends Component {
   }
 
   handleChange = address => {
-    console.log("address", address)
     this.setState({ address });
   };
    
   handleSelect = address => {
-    console.log("Address", address)
     this.setState({address})
     geocodeByAddress(address)
       .then(results => {
-        console.log("onAddressDetails", results)
         if (results.length > 0) {
           this.props.onAddressDetails(results[0]);
         } else {
@@ -168,32 +165,6 @@ export default class GAddressInput extends Component {
           </div>
         )}
       </PlacesAutocomplete>
-
-{/*}
-
-            <PlacesAutocomplete
-              placeholder="Search..."
-              //styles={{
-               // textInput: [
-                //  BrandStyles.components.inputBase.textInput,
-                 // { backgroundColor: BrandStyles.color.lightwarmBeige },
-               // ], //{backgroundColor: BrandStyles.color.beige, paddingRight: 16}
-             // }}
-              onSelect={(data, details = null) => {
-                // 'details' is provided when fetchDetails = true
-                console.log('GooglePlacesAutocomplete onPress');
-                console.log(data, details);
-                this.props.onAddressDetails(details);
-              }}
-              onFail={(error) => console.error(error)}
-              onNotFound={this.onNotFound}
-              fetchDetails={true}
-              query={{
-                key: GOOGLE_PLACES_API_KEY,
-                language: 'en',
-                fields: 'address_component,name,geometry,formatted_address',
-              }}
-            />*/}
           </div>
         </div>
       </div>

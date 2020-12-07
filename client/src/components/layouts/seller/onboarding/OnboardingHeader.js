@@ -33,13 +33,11 @@ class OnboardingHeader extends React.Component {
   }
 
   onPressBackButton() {
-    console.log("onpressback", this.props.history)
   }
 
   render() {
     const hideBackButton = this.props.hideBackButton;
     const onPressBack = this.props.onPressBack;  
-    console.log(this.props.onClickBackButton)
     return (
       <div style={styles.container}>
         <div style={styles.logoContainer}>

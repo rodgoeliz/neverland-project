@@ -90,7 +90,6 @@ class SellerOnboardingAddProductsPage extends Component {
 
   onPressItem = (itemId) => {
     const product = this.props.sellerProducts[itemId];
-    console.log("PRODUCT", product);
     this.setState({
       product,
       isAddProductModalVisible: true
@@ -98,7 +97,6 @@ class SellerOnboardingAddProductsPage extends Component {
   };
 
   _closeModal() {
-    console.log("clsoe modal")
     this.setState({
       isAddProductModalVisible: false,
     });
@@ -110,9 +108,6 @@ class SellerOnboardingAddProductsPage extends Component {
       toNextStep: true
     });
   };
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log('RECEIVING NEW PROPS???', nextProps);
-  }
 
   renderProductItem({ item }) {
     return <ProductListItem full product={item} onClickItem={this.onPressItem} />;
@@ -123,8 +118,6 @@ class SellerOnboardingAddProductsPage extends Component {
       return (<Redirect to="/seller/onboarding/payment" />);
     }
     const isLoading = this.state.isLoading;
-    console.log('ARE TAGS LOADING???', isLoading);
-    console.log("SellerOnboardingAddProductsPage render", this.props)
     /*const currentProduct =
       this.props.product ?? this.props.currentSellerProduct ?? this.props.route.params
         ? this.props.route.params.product

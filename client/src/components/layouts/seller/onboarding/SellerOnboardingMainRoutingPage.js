@@ -40,7 +40,6 @@ class SellerOnboardingMainRoutingPage extends Component {
       return (<Redirect to={this.state.nextPath} />);
     }
     if (this.state.isLoading) {
-      console.log("SELLER LOADING PAGE")
       return (<SellerLoadingPage />);
     }
   }

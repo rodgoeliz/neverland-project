@@ -32,7 +32,6 @@ class SellerOnboardingAuthPage extends Component {
   }
 
   async componentDidMount() {
-    console.log("auth page", this.props)
     // clear our entire state
     // get user onboardingStepID and reroute to the right step OR take them to  
     // sign up or login page
@@ -69,9 +68,9 @@ class SellerOnboardingAuthPage extends Component {
         <div style={{width: '100vw', height: '100vh', display: 'flex', alignItems: 'center'}}>
           <div
             style={{
-              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
               justifyContent: 'center',
-              alignItems: 'center',
               margin: 'auto',
               textAlign: 'center',
               backgroundColor: BrandStyles.color.beige,

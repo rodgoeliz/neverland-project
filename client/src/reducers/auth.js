@@ -29,12 +29,6 @@ const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.auth.SET_USER:
       let isSeller = action.payload.isSeller;
-      console.log('Action SET_USER', action.payload);
-      console.log('Action SET_USER onboardingStepId', action.payload.onboardingStepId);
-      console.log(
-        `Getting NEXT ONBOARING STEP for ${action.payload.onboardingStepId}`,
-        getNextOnBoardingStepId(action.payload.onboardingStepId, isSeller),
-      );
       return {
         ...state,
         ...action.payload,

@@ -14,7 +14,6 @@ class SellerOnboardingReAuthWebPage extends Component {
     // clear our entire state
     await this.props.clearAccountLinks();
     await this.props.getSellerAccountLinks({ sellerId: this.props.user._id });
-    console.log("Got new account links in reauth", this.props.accountLinks)
     if (this.props.accountLinks) {
       window.open(this.props.accountLinks.url);
     }

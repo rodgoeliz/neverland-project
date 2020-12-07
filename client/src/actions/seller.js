@@ -10,8 +10,6 @@ export const onSubmitStep = ({ stepId, formData, userId }) => async (dispatch) =
       formData,
       userId,
     });
-    console.log('Submit seller OnboardingStep', stepId, userId, formData);
-    console.log('SUBMITTED SELLER ONOARDING STEP: ', response);
     // set user info as well here
     if (!response.data.success) {
       //dispatch(
@@ -20,8 +18,6 @@ export const onSubmitStep = ({ stepId, formData, userId }) => async (dispatch) =
     } else {
       if (stepId === sellerOnBoardingSteps.SIGNUP_BASICS) {
         const { sellerUser, accountLinks } = response.data.payload;
-        console.log('SIGNUP BASICS..shoudl set user');
-        console.log(sellerUser, accountLinks);
         dispatch({
           type: actionTypes.seller.SET_ACCOUNT_LINKS,
           payload: accountLinks,
@@ -33,11 +29,6 @@ export const onSubmitStep = ({ stepId, formData, userId }) => async (dispatch) =
         stepId === sellerOnBoardingSteps.SIGNUP_SHOP_BASICS ||
         stepId === sellerOnBoardingSteps.SIGNUP_PAYMENT
       ) {
-        console.log(
-          'Setting user for seller onboarding shop basics step or payment',
-          stepId,
-          response.data.payload,
-        );
         dispatch(setUser(response.data.payload));
       }
     }
@@ -51,10 +42,8 @@ export const launchAppReAuth = (email, inviter) => {
 
 
 export const getSellerAccountLinks = ({ sellerId }, props) => async (dispatch) => {
-  console.log('GetSellerAccountLinks');
   try {
     const response = await Api.get(`/api/seller/account-links/get?sellerId=${sellerId}&source=web`);
-    console.log('response from account links', response);
     if (response.data.success) {
       dispatch({
         type: actionTypes.seller.SET_ACCOUNT_LINKS,
@@ -106,7 +95,6 @@ export const loadAllProductCategories = (input) => async (dispatch) => {
   try {
     const response = await Api.get(`/api/seller/product/categories/get`);
 
-    console.log('loadAllProductCategories', response);
     if (response.data.success) {
       dispatch(setAllProductCategories(response.data.payload));
     } else {
@@ -123,10 +111,8 @@ export const loadAllProductTags = (input) => async (dispatch) => {
   try {
     const response = await Api.get(`/api/seller/product/tags/get`);
 
-    console.log('loadAllProductTags', response);
 
     if (response.data.success) {
-      console.log("loadAllProductTags set it", response.data.payload)
       dispatch(setAllProductTags(response.data.payload));
     } else {
       //  handle error message
@@ -145,14 +131,12 @@ export const loadSellerProduct = ({ productId }) => async (dispatch, getState) =
       state.productsCache.includes((product) => product.productId === productId)
     ) {
       let product = state.productsCache.find((product) => product.productId === productId);
-      console.log('product is in cache', product);
       dispatch(setCurrentProduct(product));
 
       return product;
     }
 
     const response = await Api.get(`/api/seller/products/get?productId=${productId}`);
-    console.log("GET RESPONSE FOR PRODUCT: ", response)
     if (response.data.success) {
       dispatch(setCurrentProduct(response.data.payload));
       return response.data.payload;
@@ -167,7 +151,6 @@ export const checkSellerPaymentOnBoardingStatus = ({ stripeId }) => async (dispa
   try {
     const response = await Api.get(`/api/seller/onboarding/getPaymentStatus?stripeId=${stripeId}`);
 
-    console.log('checkSellerPaymentOnBoardingStatus does nothing but RESULT', response);
   } catch (error) {
     //throw HandleErrorMessage(error);
   }

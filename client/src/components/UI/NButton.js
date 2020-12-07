@@ -5,6 +5,8 @@ import BrandStyles from '../BrandStyles';
 import styled from 'styled-components';
 
 const HoverCursorWrapper = styled.div`
+  min-width: 300px;
+  margin: 0 auto;
   &:hover {
     cursor: pointer;
   }
@@ -78,6 +80,8 @@ const styles = {
     height: 16,
     width: 16,
     marginHorizontal: 8,
+    marginLeft: 16,
+    display: 'flex'
   },
 };
 
@@ -85,7 +89,7 @@ class NButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: props.isLoading ? props.isLoading : false,
     };
   }
 
@@ -98,12 +102,13 @@ class NButton extends Component {
   };
 
   render() {
+    console.log("isLoading", this.props.isLoading)
     let spinner = this.props.isLoading ? (
       <div style={styles.spinnerContainer}>
-        <Spinner variant="primary" size="sm" />
+        <Spinner animation="border" variant="light" size="sm"/>
       </div>
     ) : null;
-
+    console.log("SPINNER", spinner)
     const themeStyle = this.props.theme === 'secondary' ? styles.buttonSecondary : styles.button;
     let buttonStyles = themeStyle;
     if (this.props.buttonStyle) {

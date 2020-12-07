@@ -164,15 +164,12 @@ class AddProductView extends Component {
     //console.log("creating test product", this.props.createTestProduct)
     // means we are editing a product, so we must pull it
     let passedProductId = this.props.productId; // ? this.props.productId : params.productId;
-    console.log("AddProductAdminView componentDidMount productId: ", passedProductId);
     if (passedProductId) {
       this.setState({
         isLoading: true
       }, async () => {
         let sellerProduct = await this.props.loadSellerProduct({ productId: passedProductId});
-        console.log("Got the product: ", sellerProduct);
         let transformedProductFD = transformProductToFormData(sellerProduct);
-        console.log("Transformed form data for product: ", transformedProductFD);
         this.setState({
           formData: transformedProductFD,
           product: sellerProduct,
@@ -187,7 +184,6 @@ class AddProductView extends Component {
 
   transformToFormData(jsonObj, formData) {
     for (const key in jsonObj) {
-      console.log("KEY: ", key)
       switch (key) {
         case 'variations':
           formData.append(key, JSON.stringify(jsonObj[key]));
@@ -229,10 +225,8 @@ class AddProductView extends Component {
         case 'metaData.benefit':
         case 'metaData.size': 
         case 'metaData': 
-          console.log("KEYKEYKEY", key)
           if (key && jsonObj[key]) {
             formData.append(key, JSON.stringify(jsonObj[key]));
-            console.log("FORM DATA APPEND KEY: ", key, JSON.stringify(jsonObj[key]))
           }
           break;
         default:
@@ -268,7 +262,6 @@ class AddProductView extends Component {
   onPressAddPhoto() {}
 
   addPhotosToFormData(photosArr) {
-    console.log("ADD PHOTOS TO FORM DATA: ", photosArr, this.state.formData.productPhotos)
     let newFormData = { ...this.state.formData };
     let photos = newFormData.productPhotos;
     if (!photos) {
@@ -512,8 +505,6 @@ class AddProductView extends Component {
     }
     formData = this.transformToFormData(this.state.formData, formData);
     // if we didn't assign a store, pull user store
-    console.log("FORM DATA ( look at storeId ) ", this.state.formData)
-    console.log("THIS USER DEFINED? ", this.props.user)
     if (!this.state.formData.storeId) {
       formData.append('userId', this.props.user._id);
       if (typeof this.props.user.storeId == "string") {
@@ -524,8 +515,6 @@ class AddProductView extends Component {
     } else {
       if (this.state.formData.storeId && this.state.formData.storeId.length == 1) {
         let store = this.state.formData.storeId[0];
-        console.log("STOREID: ", store._id);
-        console.log("vendorId: ", store.userId);
         formData.append('storeId', store._id);
         if (typeof store.userId == "object") {
           formData.append('vendorId', store.userId._id);
@@ -625,7 +614,6 @@ class AddProductView extends Component {
             resolve(reader.result);
           };
           }catch(error) {
-            console.log("ERROR", error)
           }
         }
     });
@@ -1160,23 +1148,19 @@ class AddProductView extends Component {
 
   onNSelectChangeMetaDataItems(key, newValues) {
     let formData = this.state.formData;
-    console.log("FORM DATA ON META CHANGE: ", formData)
     formData.metaData[key] = newValues;
     this.setState({
       formData,
     }, () => {
-      console.log("CHANGED STATE: ", this.state.formData)
     });
   }
 
   onNSelectChangeNewItems(key, newValues) {
-    console.log("CHANGE NEW ITEMS KEY, new Values", key, newValues)
     let formData = this.state.formData;
     formData[key] = newValues;
     this.setState({
       formData,
     }, () => {
-      console.log("CHANGED STATE: ", this.state.formData)
     });
   }
 
@@ -1454,11 +1438,9 @@ class AddProductView extends Component {
   renderSearchMetaData() {
     // add a new field
     let metaDataTags = this.props.productSearchMetaDataTags;
-    console.log("META DATA TAGS...", metaDataTags)
     let metaNSelects = [];
     for (var key in metaDataTags) {
       let renderItem=({item}) => {
-        console.log("inrenderitem", item)
         let hex = item.metaData ? item.metaData.hex : '#fff'
             return (
               <div style={{display: 'flex', flexDirection: 'row'}}>
@@ -1521,7 +1503,6 @@ class AddProductView extends Component {
   }
 
   renderShippingAndFulfillment() {
-    console.log("renderShippingAndFulfillment", this.state.formData)
     return (
       <div>
         <form>
@@ -1635,7 +1616,6 @@ class AddProductView extends Component {
   }
 
   render() {
-    console.log("AddProductAdminView", this.props)
     if (this.state.isLoading || this.props.isLoadingSellerProduct) {
       return (
         <div>

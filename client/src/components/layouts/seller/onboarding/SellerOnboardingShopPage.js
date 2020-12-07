@@ -29,7 +29,6 @@ const TextAreaInput = styled.textarea`
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   margin-top: 4px;
-  margin-right: 16px;
   padding-right: 16px;
   margin-left: 16px;
   margin-right: 16px;
@@ -316,7 +315,7 @@ class SellerOnboardingShopPage extends Component {
                 itemIdKey="id"
                 itemTitleKey="value"
                 hideSelectedTags={true}
-                placeholderText={'Select products...'}
+                placeholderText={'Are you the shop owner...'}
                 onChangeItems={this.onChangeNSelectInput.bind(this, 'isShopOwner')}
               />
               {shopOwnersInput}

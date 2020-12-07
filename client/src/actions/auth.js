@@ -71,14 +71,12 @@ export const logoutFirebase = () => async (dispatch) => {
 
 export const loginFirebase = (data) => async (dispatch) => {
   const { email, password } = data;
-  console.log("loginFirebase")
   try {
     const result = await auth().signInWithEmailAndPassword(email, password);
-
+    await store.persistor.purge();
     if (result && result.user) {
       try {
         const response = await Api.get(`/api/user/get?email=${email}`);
-        console.log("loginFirebase", response)
         if (response.data.success) {
           dispatch(setUser(response.data.payload));
           dispatch(setIsAuthorized(true));
@@ -112,7 +110,6 @@ export const loginFirebase = (data) => async (dispatch) => {
 
 export const onSignUpFirebase = (data, type) => async (dispatch) => {
   const transformedData = transformData(data, type);
-  console.log("onSignUpFirebase action", transformedData)
   try {
     if (type === 'default') {
       const firebaseResponse = await auth().createUserWithEmailAndPassword(
@@ -120,7 +117,6 @@ export const onSignUpFirebase = (data, type) => async (dispatch) => {
         data.password,
       );
       const firebaseUID = firebaseResponse.user.uid;
-      console.log("firebaseUID", firebaseUID)
       if (!firebaseUID || firebaseUID === '') {
         throw new Error({ message: 'Failed to create a firebase user' });
       }
@@ -128,9 +124,7 @@ export const onSignUpFirebase = (data, type) => async (dispatch) => {
       transformedData.firebaseUID = firebaseUID;
       // create a user in our backend with firebase uid and input data.
       const response = await Api.post(`api/user/signup`, transformedData);
-      console.log("sign up in our backend", response)
       if (response.data.success) {
-        console.log(11111, firebaseUID, response.data.data);
         // identify Mixpanel
         {/*await Mixpanel.identify(`${firebaseUID}`);
 
@@ -138,7 +132,6 @@ export const onSignUpFirebase = (data, type) => async (dispatch) => {
           $email: data.email,
           // add more props here
         });*/}
-        console.log("SETTING USER", response.data.data)
         dispatch(setUser(response.data.data));
         dispatch(setIsAuthorized(true));
         return response.data.data;

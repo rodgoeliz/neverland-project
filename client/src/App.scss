@@ -24,6 +24,12 @@ body {
   background-color: $theme-beige !important;
 }
 
+input {
+  font-size: 18px;
+}
+textarea {
+  font-size: 18px;
+}
 .onboarding {
   &__textInput {
     font-size: 18px;
@@ -42,6 +48,7 @@ body {
   border-top-right-radius: 16px;
   border-top-left-radius: 16px;
   width: 100%;
+  font-size: 18px;
 }
 
 .PhoneInputInput:focus {
@@ -771,7 +778,7 @@ h4 {
     padding-right: 2em !important;
   }
   body {
-    font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407) !important;
+    font-size: calc(1.00rem + (4 * (100vw - 360px)) / 407) !important;
   }
   li {
     line-height: 1.15;

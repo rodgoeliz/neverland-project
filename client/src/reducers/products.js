@@ -25,12 +25,10 @@ const productReducer = (state = initialState, action) => {
         }
       };
     case actionTypes.products.ADD_TEST_SELLER_PRODUCT:
-      console.log('HERE');
       let newCache = {};
       for (var key in state.sellerProductsCache) {
         newCache[key] = state.sellerProductsCache[key];
       }
-      console.log('sellercache add test product', newCache);
       let product = {
         metafields: [],
         style: [],
@@ -92,20 +90,15 @@ const productReducer = (state = initialState, action) => {
         __v: 0,
       };
       newCache[product._id] = product;
-      console.log('newsellerproductcache', newCache);
       return {
         ...state,
         sellerProductsCache: newCache,
       };
     case actionTypes.products.ADD_OR_REPLACE_SELLER_PRODUCT:
-      console.log('adding or replacing seller product');
-      console.log(state);
       let sellerProducts = state.sellerProductsCache;
       if (sellerProducts === undefined) {
         sellerProducts = {};
       }
-      console.log(sellerProducts);
-      console.log(action.payload);
       sellerProducts[action.payload._id] = action.payload;
       let sellerProductscache = {
         ...state,
@@ -114,7 +107,6 @@ const productReducer = (state = initialState, action) => {
           [action.payload._id]: action.payload,
         },
       };
-      console.log('updated sellerProducts', sellerProductscache);
       return {
         ...state,
         sellerProductsCache: {

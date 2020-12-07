@@ -57,11 +57,11 @@ class SellerOnboardingPaymentPage extends Component {
           <h2 style={{ fontWeight: 'bold' }}>Get Paid</h2>
           <div style={{ height: 16 }} />
           <span>
-            We integrate with Stripe to manage your payouts. Please clik on the button below to set
+            We integrate with Stripe to manage your payouts. Please click on the button below to set
             up all of your information.
           </span>
           <div style={{ height: 16 }} />
-          <NButton onClick={this.onPressStripePaymentFlow} title="Fill out payment info" />
+          <NButton onClick={this.onPressStripePaymentFlow} buttonStyle={{minWidth: 400}} title="Fill out payment info" />
           {/*<Button onPress={this.props.logOut} title="logout"></Button>*/}
         </div>
       </OnboardingImageWrapper>

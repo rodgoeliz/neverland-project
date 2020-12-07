@@ -48,7 +48,6 @@ export const transformProductToFormData = (product) => {
         return { sourceURL: imageURL };
       });
       let processingTime = getProcessingTime(product.processingTime);
-      console.log("PRoDUCT: ", product)
       formData = {
         title: product.title,
         description: product.description,
@@ -79,7 +78,6 @@ export const transformProductToFormData = (product) => {
         metaData: product.searchMetaData ? product.searchMetaData : {}
       };
 
-      console.log("LOADED IN FORM DATA: ", formData)
       if (product.price && product.price.value) {
         const transformedValue = product.price.value / 100;
         formData.productPrice = transformedValue.toString();

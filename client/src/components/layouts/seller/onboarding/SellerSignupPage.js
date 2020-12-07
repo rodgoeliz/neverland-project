@@ -33,11 +33,9 @@ class SellerSignupPage extends React.Component {
       toNextStep: false
     };
     this.onClickBackButton = this.onClickBackButton.bind(this);
-    console.log("PROPSP:", props)
   }
 
   onChangeInput(key, value) {
-    console.log("onChangeInput", key, value)
     this.setState({
       [key]: value,
     });
@@ -50,9 +48,7 @@ class SellerSignupPage extends React.Component {
 
   validateInput() {
     let isValid = true;
-    console.log('validateInput', this.state);
     if (this.state.email === '') {
-      console.log('email is empty');
       this.setState({
         emailError: 'Please enter a valid e-mail.',
       });
@@ -80,7 +76,6 @@ class SellerSignupPage extends React.Component {
       }
     }
 
-    console.log('IS VALID', isValid);
     return isValid;
   }
 
@@ -90,11 +85,8 @@ class SellerSignupPage extends React.Component {
 
   async onSubmitForm() {
     if (this.validateInput()) {
-      console.log('ON SUBMIT FORM is it seller? ', this.state.isSellerOnboarding);
-      console.log(this.state);
-      this.setState({ isSubmitting: true });
+      this.setState({ isLoadingSubmitSignup: true });
 
-      console.log('onFormSubmit in HomeMainSignupContainer');
       const { onSignUpFirebase } = this.props;
       this.setState({ success: null, error: null, loading: true });
       let data = this.state;
@@ -105,8 +97,6 @@ class SellerSignupPage extends React.Component {
           password: data.password.password,
           isSellerOnboarding: this.state.isSellerOnboarding,
         };
-        console.log("sign up with: ", transformedData)
-        console.log(this.props.history)
         const success = await onSignUpFirebase(transformedData, 'default');
         this.setState({ toNextStep: true, success, error: null, isLoadingSubmitSignup: false });
         this.redirectToNextStep();
@@ -178,7 +168,7 @@ class SellerSignupPage extends React.Component {
       <OnboardingImageWrapper>
         <OnboardingHeader onClickBackButton={this.onClickBackButton} />
         <div>
-          <div style={containerStyle}>
+          <div style={{...containerStyle, alignItems: 'center'}}>
             <div style={{ height: 64 }} />
             <span
               style={{
@@ -201,7 +191,7 @@ class SellerSignupPage extends React.Component {
               SIGN UP
             </span>
             <div style={{ height: 32 }} />
-            <form style={{ justifyContent: 'center' }}>
+            <div style={{ display: 'flex', flexDirection:'column', justifyContent: 'center' }}>
               <EmailInput onChange={this.onChangeInput.bind(this)} error={this.state.emailError} />
               <div style={{height: 8}} />
               <PasswordInput
@@ -214,7 +204,7 @@ class SellerSignupPage extends React.Component {
                   buttonStyle={{
                     justifyContent: 'center',
                   }}
-                  isLoading={this.props.isLoadingSubmitSignup}
+                  isLoading={this.state.isLoadingSubmitSignup}
                   title="Sign Up"
                   onClick={() => {
                     this.onSubmitForm();
@@ -232,7 +222,7 @@ class SellerSignupPage extends React.Component {
                   {spinner}
                 </NButton>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </OnboardingImageWrapper>

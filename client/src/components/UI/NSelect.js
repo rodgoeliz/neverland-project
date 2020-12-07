@@ -327,6 +327,7 @@ export default class NSelect extends Component {
       : BrandStyles.components.inputBase.label;
     labelStyle = {...labelStyle, marginLeft: 16};
     let modalDiv = {...headerStyle, ...extraHeaderStyle, marginRight: 16, marginLeft: 16, flexDirection: 'column'};
+    let title = this.props.title ? <span style={labelStyle}> {this.props.title} </span>: null;
     return (
       <StyledTextButton>
         <div
@@ -334,7 +335,7 @@ export default class NSelect extends Component {
           onClick={this._showModal}
         >
           <StyledTextButton>
-          <span style={labelStyle}> {this.props.title} </span>
+          {title}
           <div style={styles.headerContentContainer}>
             {this._renderPlaceholderText()}
             <FaChevronDown style={BrandStyles.components.iconPlaceholder}/>

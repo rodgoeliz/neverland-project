@@ -29,7 +29,6 @@ axios.interceptors.request.use(
     if (token) {
       config.headers.common.Authorization = `Bearer ${token}`;
     }*/}
-    console.log("MIDDLEWEAR CONFIG", config)
     return config;
   },
   (error) => {

@@ -10,7 +10,8 @@ import {parsePhoneNumber} from 'react-phone-number-input';
 const styles = {
   inputClass: {
     borderRadius: 0,
-    backgroundColor: 'black'
+    backgroundColor: 'black',
+    fontSize: 18
   },
   container: {
     'background-color': BrandStyles.color.xlightBeige,
@@ -57,14 +58,12 @@ export default class PhoneNumberInput extends React.Component {
       },
       () => {
         this.props.onChange('phoneNumber', this.state);
-        console.log('Set error in validate input');
       },
     );
   }
 
   onChangeInput(key, value) {
     let typingTimeout = this.state.typingTimeout;
-    console.log("onChangePhoneInput", value);
     if (!value) {
       return
     }
@@ -86,7 +85,6 @@ export default class PhoneNumberInput extends React.Component {
           }, 400),
         },
         () => {
-          console.log(this.state)
           this.props.onChange(key, this.state);
         },
       );
@@ -110,7 +108,6 @@ export default class PhoneNumberInput extends React.Component {
   }
 
   onPressConfirm() {
-    console.log('On press confirm');
   }
 
   render() {
@@ -135,12 +132,12 @@ export default class PhoneNumberInput extends React.Component {
               defaultCountry="US"
               inputClass={styles.inputClass}
               containerClass={styles.inputClass}
-              onChange={(value) => {console.log(value); this.onChangeInput('phoneNumber', value);}}/>
+              onChange={(value) => {this.onChangeInput('phoneNumber', value);}}/>
               </div>
             {validationIcon}
           </div>
         </div>
-        <p style={BrandStyles.components.inputBase.errorMessage}>{this.state.error}</p>
+        <span style={BrandStyles.components.inputBase.errorMessage}>{this.state.error}</span>
       </div>
     );
   }
