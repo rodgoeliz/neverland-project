@@ -572,7 +572,7 @@ class SellerOnboardingBasicsPage extends Component {
   };
 
   render() {
-    let containerStyle = {...BrandStyles.components.onboarding.container, flexDirection: 'column'};
+    let containerStyle = {...BrandStyles.components.onboarding.container, alignItems: 'center', flexDirection: 'column'};
     return (
       <OnboardingImageWrapper>
         <OnboardingHeader onPressBack={this.props.onPressBack} />
