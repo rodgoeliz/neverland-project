@@ -8,6 +8,7 @@ var Store = require('../models/Store');
 var Product = require('../models/Product');
 var ProductTag = require('../models/ProductTag');
 var NavigationItem = require('../models/NavigationItem');
+const {sendEmail} = require("../email/emailClient");
 var SellerProfile = require('../models/SellerProfile');
 
 const SELLER_SIGNUP_BASICS_STEP_ID = 'seller_signup_basics';
@@ -214,9 +215,13 @@ router.post('/onboarding/submit', async function(req, res, next) {
 	console.log("Submitting step", stepId)
 	console.log("user id: ", userId)
 	console.log("form data", formData)
+  let env = process.env.NODE_ENV || 'development';
 	//create a stripe express account
 	if (stepId == SELLER_SIGNUP_BASICS_STEP_ID) {
 		let email = formData.email;
+    if (email && env != 'development') {
+      sendEmail('vera@enterneverland.com', email, `${email} signed up as a seller in production to Neverland!`, "templates/sellerSignUp.hbs", {email: email})
+    }
 		let firebaseUser = formData.firebaseUser;
 		let user = await User.findOne({_id: userId}).populate('sellerProfile');
 		if (!user) {
