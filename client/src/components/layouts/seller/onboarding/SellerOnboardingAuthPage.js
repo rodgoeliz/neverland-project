@@ -35,7 +35,7 @@ class SellerOnboardingAuthPage extends Component {
     // clear our entire state
     // get user onboardingStepID and reroute to the right step OR take them to  
     // sign up or login page
-  //  this.props.logoutFirebase();
+
   }
 
   onSubmitForm() {}
