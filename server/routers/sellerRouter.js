@@ -221,7 +221,7 @@ router.post('/onboarding/submit', async function(req, res, next) {
 		let email = formData.email;
 		let firebaseUser = formData.firebaseUser;
 		let user = await User.findOne({_id: userId}).populate('sellerProfile');
-    if (email && env != 'development') {
+    if (user.email && env != 'development') {
       sendEmail('vera@enterneverland.com', `[Neverland Auto Notif] ${user.email} completed seller onboarding basics step!`, "templates/sellerSignUp.hbs", {email: user.email});
       sendEmail('hayley@enterneverland.com', `[Neverland Auto Notif] ${user.email} completed seller onboarding basics step!`, "templates/sellerSignUp.hbs", {email: user.email});
     }
