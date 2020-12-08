@@ -36,7 +36,7 @@ export const createProduct = ({ formData }) => async (dispatch) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-
+    console.log("product create response...");
     if (response.data.success) {
       dispatch({
         type: actionTypes.products.ADD_PRODUCT,

@@ -322,10 +322,12 @@ class AddProductView extends Component {
 
   validateInput() {
     let errors = this.state.errors;
+    console.log(this.state.formData)
+    let isValid = true;
     if (!this.state.formData) {
       errors['root'] = 'Please complete the form.';
       this.setState({ errors });
-      return;
+      return false;
     } else {
       errors['root'] = '';
     }
@@ -334,6 +336,7 @@ class AddProductView extends Component {
       let variations = this.state.formData.variations;
       if (variations && variations.length === 0) {
         errors['variations'] = 'Please add variations or toggle off.';
+        isValid = false;
       } else {
         errors['variations'] = '';
       }
@@ -341,39 +344,44 @@ class AddProductView extends Component {
 
     if (!this.state.formData.isProductVariationsVisible) {
       let productPrice = this.state.formData.productPrice;
-      if (!productPrice || !productPrice.productPrice || productPrice.productPrice.length < 1) {
+      if (!productPrice || productPrice.length < 1) {
         errors['productPrice'] = 'Enter a valid price.';
+        isValid = false;
       } else {
         errors['productPrice'] = '';
       }
       let productQuantity = this.state.formData.productQuantity;
       if (
         !productQuantity ||
-        !productQuantity.productQuantity ||
-        productQuantity.productQuantity.length < 1
+        productQuantity.length < 1
       ) {
         errors['productQuantity'] = 'Enter a valid quantity.';
+        isValid = false;
       } else {
         errors['productQuantity'] = '';
       }
       let productSKU = this.state.formData.productSKU;
-      if (!productSKU || !productSKU.productSKU || productSKU.productSKU.length < 3) {
+      if (!productSKU || productSKU.length < 3) {
         errors['productSKU'] = 'Enter a valid SKU.';
+        isValid = false;
       } else {
         errors['productSKU'] = '';
       }
     }
 
     let title = this.state.formData.title;
-    if (!title || !title.title || title.title.length < 3) {
+    console.log("TITLE")
+    if (!title || title.length < 3) {
       errors['title'] = 'Please enter a title.';
+        isValid = false;
     } else {
       errors['title'] = '';
     }
 
     let description = this.state.formData.description;
-    if (!description || !description.description || description.description.length === 0) {
+    if (!description || description.length === 0) {
       errors['description'] = 'Please enter a description.';
+        isValid = false;
     } else {
       errors['description'] = '';
     }
@@ -382,12 +390,14 @@ class AddProductView extends Component {
     let productTags = this.state.formData.productTags;
     if (!productTags || productTags.length === 0) {
       errors['productTags'] = 'Please select at least one product tag.';
+        isValid = false;
     } else {
       errors['productTags'] = '';
     }
     let categories = this.state.formData.categories;
     if (!categories || categories.length === 0) {
       errors['categories'] = 'Please select at least one category.';
+        isValid = false;
     } else {
       errors['categories'] = '';
     }
@@ -395,6 +405,7 @@ class AddProductView extends Component {
     let processingTime = this.state.formData.processingTime;
     if (!processingTime || processingTime.length === 0) {
       errors['processingTime'] = 'Please select a processing time.';
+        isValid = false;
     } else {
       errors['processingTime'] = '';
     }
@@ -402,54 +413,49 @@ class AddProductView extends Component {
     let itemHeightIn = this.state.formData.itemHeightIn;
     if (
       !itemHeightIn ||
-      !itemHeightIn.itemHeightIn ||
-      itemHeightIn.hasError ||
-      itemHeightIn.itemHeightIn.length === 0
+      itemHeightIn.length === 0
     ) {
       errors['itemHeightIn'] = 'Please enter item height.';
+        isValid = false;
     } else {
       errors['itemHeightIn'] = '';
     }
     let itemLengthIn = this.state.formData.itemLengthIn;
     if (
       !itemLengthIn ||
-      !itemLengthIn.itemLengthIn ||
-      itemLengthIn.hasError ||
-      itemLengthIn.itemLengthIn.length === 0
+      itemLengthIn.length === 0
     ) {
       errors['itemLengthIn'] = 'Please enter item length.';
+        isValid = false;
     } else {
       errors['itemLengthIn'] = '';
     }
     let itemWeightLb = this.state.formData.itemWeightLb;
     if (
       !itemWeightLb ||
-      !itemWeightLb.itemWeightLb ||
-      itemWeightLb.hasError ||
-      itemWeightLb.itemWeightLb.length === 0
+      itemWeightLb.length === 0
     ) {
       errors['itemWeightLb'] = 'Please enter item weight.';
+        isValid = false;
     } else {
       errors['itemWeightLb'] = '';
     }
     let itemWeightOz = this.state.formData.itemWeightOz;
     if (
       !itemWeightOz ||
-      !itemWeightOz.itemWeightOz ||
-      itemWeightOz.hasError ||
-      itemWeightOz.itemWeightOz.length === 0
+      itemWeightOz.length === 0
     ) {
       errors['itemWeightOz'] = 'Please enter item weight (oz).';
+        isValid = false;
     } else {
       errors['itemWeightOz'] = '';
     }
     let itemWidthIn = this.state.formData.itemWidthIn;
     if (
       !itemWidthIn ||
-      !itemWidthIn.itemWidthIn ||
-      itemWidthIn.hasError ||
-      itemWidthIn.itemWidthIn.length === 0
+      itemWidthIn.length === 0
     ) {
+        isValid = false;
       errors['itemWidthIn'] = 'Please enter item width (in).';
     } else {
       errors['itemWidthIn'] = '';
@@ -458,6 +464,7 @@ class AddProductView extends Component {
     let productPhotos = this.state.formData.productPhotos;
     if (!productPhotos || productPhotos.length === 0) {
       errors['productPhotos'] = 'Please select product photos.';
+        isValid = false;
     } else {
       errors['productPhotos'] = '';
     }
@@ -465,10 +472,9 @@ class AddProductView extends Component {
     let originZipCode = this.state.formData.originZipCode;
     if (
       !originZipCode ||
-      !originZipCode.originZipCode ||
-      originZipCode.hasError ||
-      originZipCode.originZipCode.length === 0
+      originZipCode.length === 0
     ) {
+        isValid = false;
       errors['originZipCode'] = 'Please enter zip code.';
     } else {
       errors['originZipCode'] = '';
@@ -478,18 +484,24 @@ class AddProductView extends Component {
 
     this.setState({
       errors,
+    }, () => {
+      console.log("ERRORS IN FORM: ", this.state)
     });
+    return isValid;
   }
 
   async saveProduct() {
+    let valid = this.validateInput();
+    if (!valid) {
+      return;
+    }
+    console.log("HELLO....")
+    this.setState({ isSavingProduct: true });
+
     let currentProduct = this.props.product ? this.props.product : this.props.currentSellerProduct;
     if (!currentProduct && this.state.product) {
       currentProduct = this.state.product;
     }
-    /*let valid = this.validateInput();
-    if (!valid) {
-      return;
-    }*/
     let formData = new FormData();
     //formData.append('my_photos')
     if (this.state.formData.productPhotos) {
@@ -529,17 +541,16 @@ class AddProductView extends Component {
     if (existingProduct) {
       formData.append('productId', existingProduct._id);
       await this.props.updateProduct({ formData });
-      //this.onCloseView();
+      this.onCloseView();
       return;
     }
 
     await this.props.createProduct({ formData });
     this.setState({ isSavingProduct: false });
-    //this.onCloseView();
+    this.onCloseView();
   }
 
   async onSubmitProduct() {
-    this.setState({ isSavingProduct: true });
     this.saveProduct();
   }
 
@@ -1623,16 +1634,19 @@ class AddProductView extends Component {
         </div>
       );
     }
-    let loader = this.state.isSavingProduct ? (
-      <div style={{position: 'absolute', display: 'flex', height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}}>
-        <div style={{padding: 8, backgroundColor: 'white', borderRadius: 16}}>
-          <ClipLoader
-            size={45}
-            color={'blue'}
-            loading={this.state.isSavingProduct}/>
-        </div>
-      </div>
-    ) : null;
+    if (this.state.isSavingProduct) {
+      return (
+        <div>
+          <div style={{position: 'absolute', display: 'flex', height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}}>
+            <div style={{padding: 8, backgroundColor: 'white', borderRadius: 16}}>
+              <ClipLoader
+                size={45}
+                color={'blue'}
+                loading={this.state.isSavingProduct}/>
+            </div>
+          </div>
+        </div>);
+    }
 
     let containerStyle = {...BrandStyles.components.onboarding.container, flexDirection: 'column'};
     return (
@@ -1655,7 +1669,6 @@ class AddProductView extends Component {
           keyboardShouldPersistTaps="handled"
           keyboardVerticalOffset={30}
         >
-          {loader}
           <div>
             <span>{this.state.errors['root']}</span>
             {this.renderProductBasics()}

@@ -383,9 +383,10 @@ router.post('/update', async function(req, res, next) {
 	}
 **/
 router.post('/seller/create', async function(req, res, next) {
+  try {
+
 	const files= Object.values(req.files)
 	let formData = req.body;
-	console.log("seller create endpoint...", formData)
 	let quantity = formData.productQuantity;
 	let price = formData.productPrice;
 	let sku = formData.productSKU;
@@ -397,7 +398,7 @@ router.post('/seller/create', async function(req, res, next) {
 	let benefit = formData.benefit;
 	let userLevel = formData.userLevel;
 	let style = formData.style;
-	let variations = JSON.parse(formData.variations);
+	let variations = formData.variations ? JSON.parse(formData.variations) : [];
 	let now = new Date();
 
 	let processingTime = formData.processingTime;
@@ -418,16 +419,11 @@ router.post('/seller/create', async function(req, res, next) {
 	let newProductId = mongoose.Types.ObjectId();
   let storeId = formData.storeId ? formData.storeId : formData.store;
   let isVisible = formData.isVisible ? formData.isVisible : false;
-  console.log("Formdata.storeId, ", formData.storeId);
-  console.log('')
-  console.log("storeId: ", storeId)
   // search metadata, metaData.style..
   let searchMetaData = null;
   if (formData.metaData) {
     searchMetaData = JSON.parse(formData.metaData);
   }
-  console.log("Metadata from request: ", formData.metaData)
-  console.log("Search Meta Data: ", searchMetaData);
 
 	const genHandle = (title) => {
 		return title.toLowerCase();
@@ -508,9 +504,6 @@ router.post('/seller/create', async function(req, res, next) {
 			Promise.allSettled([tagIds, categories]).then( async (results) => {
 				let tags = results[0].value;
 				let categories = results[1].value;
-				console.log("DID WE FIND TAGS??", tagSelectedItems, categorySelectedItems);
-				console.log(tags)	
-				console.log(categories)
         let newProductMap = {
           createdAt: now,
           updatedAt: now,
@@ -547,7 +540,6 @@ router.post('/seller/create', async function(req, res, next) {
         if (searchMetaData) {
           newProductMap.searchMetaData = searchMetaData;
         }
-        console.log("IS PRICE DEFINED", price)
         if (price) {
           newProductMap.price = {
             value: parseFloat(price) * 100,
@@ -584,7 +576,14 @@ router.post('/seller/create', async function(req, res, next) {
 			})
 		});
 	});
-
+  } catch (error) {
+    console.log(error);
+    console.log(error.message)
+    res.json({
+      success: false,
+      error: error.message
+    });
+  }
 });
 
 router.post('/seller/update', async function(req, res, next) {

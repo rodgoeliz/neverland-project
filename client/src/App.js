@@ -58,7 +58,6 @@ function PrivateRoute({ component: Component, authenticated, loading, ...rest })
   if (loading) {
     return (<SellerLoadingPage />);
   }
-  console.log("PRIVATE ROUTE: ", authenticated)
   return (
     <Route
       {...rest}
