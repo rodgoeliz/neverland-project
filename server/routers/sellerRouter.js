@@ -219,11 +219,12 @@ router.post('/onboarding/submit', async function(req, res, next) {
 	//create a stripe express account
 	if (stepId == SELLER_SIGNUP_BASICS_STEP_ID) {
 		let email = formData.email;
-    if (email && env != 'development') {
-      sendEmail('vera@enterneverland.com', email, `${email} signed up as a seller in production to Neverland!`, "templates/sellerSignUp.hbs", {email: email})
-    }
 		let firebaseUser = formData.firebaseUser;
 		let user = await User.findOne({_id: userId}).populate('sellerProfile');
+    if (email && env != 'development') {
+      sendEmail('vera@enterneverland.com', `[Neverland Auto Notif] ${user.email} completed seller onboarding basics step!`, "templates/sellerSignUp.hbs", {email: user.email});
+      sendEmail('hayley@enterneverland.com', `[Neverland Auto Notif] ${user.email} completed seller onboarding basics step!`, "templates/sellerSignUp.hbs", {email: user.email});
+    }
 		if (!user) {
 			console.log("couldn't find a registered user -- how did this happen?")
 			res.json({
@@ -375,13 +376,14 @@ router.post('/onboarding/submit', async function(req, res, next) {
 				userId: userId
 			});
 			newStore = await newStore.save();
-			console.log("saving user with new stepId and storeId", stepId)
-			console.log(newStore)
 			let updatedUser = await User.findOneAndUpdate({_id: userId}, {$set: {
 				storeId: newStore,
 				onboardingStepId: stepId
 			}}, {new: true}).populate('storeId').populate({path: 'sellerProfile', populate: {path: 'personalAddress'}});
-			console.log("sending back updated user", updatedUser)
+      if (updatedUser && env != 'development') {
+        sendEmail('vera@enterneverland.com', `[Neverland Auto Notif]${updatedUser.email} completed seller onboarding shop step!`, "templates/sellerSignUp.hbs", {email: updatedUser.email});
+        sendEmail('hayley@enterneverland.com', `[Neverland Auto Notif]${updatedUser.email} completed seller onboarding shop step!`, "templates/sellerSignUp.hbs", {email: updatedUser.email});
+      }
 			res.json({
 				success: true,
 				payload: updatedUser
