@@ -27,7 +27,7 @@ import { createProduct, createTestProduct, updateProduct, getProductSearchMetaDa
 
 import AddProductVariationView from './AddProductVariationView';
 import NButton from '../../../UI/NButton';
-
+import searchMetaDataTags from '../../../../constants/searchMetaDataTags.js';
 import isZipCodeValid from '../../../../utils/zipcodeValidator';
 import isNumberValid from '../../../../utils/numberValidator';
 
@@ -495,7 +495,6 @@ class AddProductView extends Component {
     if (!valid) {
       return;
     }
-    console.log("HELLO....")
     this.setState({ isSavingProduct: true });
 
     let currentProduct = this.props.product ? this.props.product : this.props.currentSellerProduct;
@@ -1460,24 +1459,31 @@ class AddProductView extends Component {
               </div>);
       }
       metaNSelects.push(
-        <NSelect 
-          items={metaDataTags[key]}
-          values={this.state.formData.metaData? this.state.formData.metaData[key]: []}
-          itemIdKey="_id"
-          itemTitleKey="title"
-          title={key}
-          renderItem={key == 'color' ? renderItem : null}
-          placeholderText={`Select ${key}...`}
-          searchEnabled={true}
-          error={this.state.errors[`metaData$${key}`]}
-          onChangeItems={this.onNSelectChangeMetaDataItems.bind(this, `${key}`)}
-          />
+        <div>
+          <div style={{marginLeft: 16, marginTop: 16}}>
+            <span style={{fontWeight: 'bold'}}>{key}</span><br/>
+            <span style={{fontSize: 12}}>{searchMetaDataTags[key]}</span>
+          </div>
+          <NSelect 
+            items={metaDataTags[key]}
+            values={this.state.formData.metaData? this.state.formData.metaData[key]: []}
+            itemIdKey="_id"
+            itemTitleKey="title"
+            title={key}
+            renderItem={key == 'color' ? renderItem : null}
+            placeholderText={`Select ${key}...`}
+            searchEnabled={true}
+            error={this.state.errors[`metaData$${key}`]}
+            onChangeItems={this.onNSelectChangeMetaDataItems.bind(this, `${key}`)}
+            />
+        </div>
+
       );
     }
     let newMetaField = (<div><NButton title="Add a new metafield" /></div>);
     return (
       <div>
-        <div> The more search meta data and tags you add, the more likely your product will appear to customers. These are all optional, but we recommend you fill out the ones relevant for the product for more business.</div>
+        <div> Please add only the relevant tags for your product as they will go through review by our seller success team. The more search meta data and tags you add, the more likely your product will appear to customers. These are all optional, but we recommend you fill out the ones relevant for the product for more business.</div>
        {metaNSelects} 
       </div>
     );

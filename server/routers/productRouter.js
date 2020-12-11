@@ -410,11 +410,11 @@ router.post('/seller/create', async function(req, res, next) {
 	let vendorId = formData.userId;
 	let isArtificial = formData.isArtificial? formData.isArtificial:false;
 	let isOrganic = formData.isOrganic ? formData.isOrganic: false;
-	let itemWeightLb = formData.itemWeightLb;
-	let itemWeightOz = formData.itemWeightOz;
-	let itemHeightIn = formData.itemHeightIn;
-	let itemWidthIn = formData.itemWidthIn;
-	let itemLengthIn = formData.itemLengthIn;
+	let itemWeightLb = formData.itemWeightLb ? parseFloat(formData.itemWeightLb) : 0;
+	let itemWeightOz = formData.itemWeightOz ? parseFloat(formData.itemWeightOz) : 0;
+	let itemHeightIn = formData.itemHeightIn ? parseFloat(formData.itemHeightIn) : 0;
+	let itemWidthIn = formData.itemWidthIn ? parseFloat(formData.itemWidthIn): 0;
+	let itemLengthIn = formData.itemLengthIn ? parseFloat(formData.itemLengthIn): 0;
   let productSKU = formData.productSKU;
 	let newProductId = mongoose.Types.ObjectId();
   let storeId = formData.storeId ? formData.storeId : formData.store;
@@ -526,12 +526,12 @@ router.post('/seller/create', async function(req, res, next) {
           style: style,
           userLevel: userLevel,
           lightLevel: lightLevel,
-          weightLb: parseInt(itemWeightLb),
-          weightOz: parseInt(itemWeightOz),
-          heightIn: parseInt(itemHeightIn),
+          weightLb: itemWeightLb,
+          weightOz: itemWeightOz,
+          heightIn: itemHeightIn,
           sku: productSKU,
-          widthIn: parseInt(itemWidthIn),
-          lengthIn: parseInt(itemLengthIn),
+          widthIn: itemWidthIn,
+          lengthIn: itemLengthIn,
           isOrganic: isOrganic,
           isArtificial: isArtificial,
           storeId: storeId,
@@ -620,11 +620,11 @@ router.post('/seller/update', async function(req, res, next) {
   let isArtificial = formData.isArtificial ? formData.isArtificial : false;
   let isOrganic = formData.isOrganic ? formData.isOrganic : false;
   let isVisible = formData.isVisible ? formData.isVisible: false;
-  let itemWeightLb = formData.itemWeightLb;
-  let itemWeightOz = formData.itemWeightOz;
-  let itemHeightIn = formData.itemHeightIn;
-  let itemWidthIn = formData.itemWidthIn;
-  let itemLengthIn = formData.itemLengthIn;
+  let itemWeightLb = formData.itemWeightLb ? parseFloat(formData.itemWeightLb) : 0;
+  let itemWeightOz = formData.itemWeightOz ? parseFloat(formData.itemWeightOz) : 0;
+  let itemHeightIn = formData.itemHeightIn ? parseFloat(formData.itemHeightIn) : 0;
+  let itemWidthIn = formData.itemWidthIn ? parseFloat(formData.itemWidthIn): 0;
+  let itemLengthIn = formData.itemLengthIn ? parseFloat(formData.itemLengthIn): 0;
   let productSKU = formData.productSKU;
   let productId = formData.productId;
   console.log("STORE ID: ", storeId);
@@ -787,11 +787,11 @@ router.post('/seller/update', async function(req, res, next) {
           sku: productSKU,
           userLevel: userLevel,
           lightLevel: lightLevel,
-          weightLb: parseInt(itemWeightLb),
-          weightOz: parseInt(itemWeightOz),
-          heightIn: parseInt(itemHeightIn),
-          widthIn: parseInt(itemWidthIn),
-          lengthIn: parseInt(itemLengthIn),
+          weightLb: itemWeightLb,
+          weightOz: itemWeightOz,
+          heightIn: itemHeightIn,
+          widthIn: itemWidthIn,
+          lengthIn: itemLengthIn,
           isOrganic: isOrganic,
           isArtificial: isArtificial,
           storeId: storeId,

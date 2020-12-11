@@ -6,6 +6,7 @@ const productSearchMetaData = new mongoose.Schema({
   updatedAt: Date,
   type: String,
   title: String,
+  description: String,
   handle: String,
   metaData: Object
 });
