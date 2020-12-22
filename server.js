@@ -8,6 +8,7 @@ var cookieParser = require("cookie-parser");
 var path = require("path");
 const session = require('express-session');
 var mongoose = require('mongoose');
+const { getEnvVariable } = require("./server/utils/envWrapper");
 const MongoStore = require('connect-mongo')(session);
 var waitlistRouter = require('./server/routers/waitlistRouter');
 var userRouter = require('./server/routers/loginOrSignUpRouter');
@@ -30,7 +31,8 @@ const formData = require('express-form-data');
 const dotenv = require('dotenv');
 dotenv.config();
 app.use(cors());
-mongoose.connect(process.env.REACT_APP_MONGODB_URI, {useFindAndModify: false, useNewUrlParser: true});
+console.log("Connecting to db: ", getEnvVariable('MONGODB_URI'));
+mongoose.connect(getEnvVariable('MONGODB_URI'), {useFindAndModify: false, useNewUrlParser: true});
 mongoose.connection.on('error', (err) => {
 	process.exit();
 });

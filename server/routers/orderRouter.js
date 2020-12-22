@@ -15,6 +15,82 @@ var OrderProductItem = require('../models/OrderProductItem');
 
 const { getBuyerProtectionSurcharge, calculateBundleSubTotal, getFulfillmentMethod, calculateTaxSurcharge } = require("../utils/orderProcessor");
 
+router.post('/product/remove', async function(req, res) {
+  let productOrderItemId = req.body.productOrderItemId;
+  let orderIntentId = req.body.orderIntentId;
+  // find order Intent and remove the associated index with productOrderItemId
+  // delete productOrderItemId 
+  // return updated orderIntentId
+});
+
+router.post('/quantity/update', async function(req, res) {
+  let productOrderItemId = req.body.productOrderItemId;
+  let orderIntentId = req.body.orderIntentId;
+  let amount = req.body.amount;
+  let item = await OrderProductItem.findOne({_id: productOrderItemId});
+  let orderIntent = await OrderIntent.findOne({_id: orderIntentId})
+    .populate('bundleId')
+    .populate({
+      path: 'storeId',
+      populate: {
+        path: 'address'
+      }})
+    .populate('shippingAddressId')
+  if (!item) {
+    res.json({
+      success: false,
+      error: 'Failed to find the product.'
+    });
+  }
+  if (!orderIntent) {
+    res.json({
+      success: false,
+      error: "Could not find the order associated with this product and user."
+    });
+  }
+
+  const oldQ = item.quantity;
+  const newAmount = Math.max(oldQ - amount, 0);
+  let updateQuery = {
+    $set: {
+      quantity: newAmount
+    }
+  };
+  let product = await OrderProductItem.findOneAndUpdate(
+  { _id: productOrderItemId }, 
+  updates, 
+  { new: true });
+
+  const subtotal = await calculateBundleSubTotal(orderIntent.bundleId);
+  subtotal = subtotal/100;
+  const buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
+  const shippingMethod = await getFulfillmentMethod("usps", "priority");
+  const shippingCharge = shippingMethod.price;
+  const taxSurcharge = await calculateTaxSurcharge(subtotal, orderIntent.shippingAddressId, shippingCharge, orderIntent.storeId.address);
+  const total = subtotal + buyerSurcharge + shippingCharge;
+  const surcharge = buyerSurcharge + shippingCharge;
+  // if orderproductitem part of an order intent, we need to update the order intent with the new value and price
+  /*let newOrderIntent = await OrderIntent.findOneAndUpdate(
+    {_id: orderIntentId},
+    {
+      $set: {
+        subtotal,
+        buyerSurcharge,
+        shipping: shippingCharge,
+        taxes: taxSurcharge.taxAmount,
+        taxableAmount: taxSurcharge.taxableAmount,
+        total
+      }
+    }
+  });
+  res.json({
+    success: true,
+    payload: {
+      product: product,
+      orderIntent: newOrderIntent
+  });*/
+})
+
 router.get('/get/list', async function(req, res) {
   let userId = req.query.userId;
   console.log('userId', userId)
@@ -175,7 +251,7 @@ router.post('/intent/create', async function(req, res) {
       buyerSurcharge: Math.round(buyerSurcharge * 100),
       subtotal: subtotal,
       shipping: shippingCharge,
-      taxes: taxSurcharge.taxAmoun,
+      taxes: taxSurcharge.taxAmount,
       taxableAmount: taxSurcharge.taxableAmount,
       total: total
     });

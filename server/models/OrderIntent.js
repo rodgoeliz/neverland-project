@@ -5,6 +5,10 @@ const orderIntentSchema = new mongoose.Schema({
   createdAt: Date,
   updatedAt: Date,
   billingAddress: String,
+  shippingAddressId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Address'
+  },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User'
