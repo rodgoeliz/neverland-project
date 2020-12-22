@@ -5,6 +5,8 @@ const waitlistUserSchema = new mongoose.Schema({
 	referralCode: String,
 	position: Number,
 	inviter: String
+}, {
+  timestamps: true
 });
 waitlistUserSchema.pre('create', function(next) {
 	this.referralCode = "" + Math.rand(10,10000);

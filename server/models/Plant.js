@@ -5,106 +5,33 @@ const plantSchema = new mongoose.Schema({
 	createdAt: Date,
 	title: String,
 	hardinessZone: {
-		min: String,
-		max: String
+		min: Number,
+		max: Number 
 	},
+  indoorGrowTemp: {
+    min: {
+      value: Number,
+      type: String
+    },
+    max: {
+      value: Number,
+      type: String
+    }
+  },
 	description: String,
-	scientificName: String,
-	temperature: {
-		min: {
-			type: String,
-			value: Number
-		},
-		max: {
-			type: String,
-			value: Number
-		}
-	},
-	light: String,
-	growCycle: {
-		min: {
-			type: String,
-			value: Number
-		},
-		max: {
-			type: String,
-			value: Number
-		}
-	},
-	wateringCycle: {
-		min: {
-			type: String,
-			value: Number
-		},
-		max: {
-			type: String,
-			value: Number
-		}
-	},
-	fertilizingCycle: {
-		min: {
-			type: String,
-			value: Number
-		},
-		max: {
-			type: String,
-			value: Number
-		}
-	},
-	plantDates: {
-		germination: {
-			min: {
-				type: String,
-				value: Number
-			},
-			max: {
-				type: String,
-				value: Number
-			}
-		},
-		seedling: {
-			min: {
-				type: String,
-				value: Number
-			},
-			max: {
-				type: String,
-				value: Number
-			}
-		},
-		growing: {
-			min: {
-				type: String,
-				value: Number
-			},
-			max: {
-				type: String,
-				value: Number
-			}
-		},
-		harvesting: {
-			min: {
-				type: String,
-				value: Number
-			},
-			max: {
-				type: String,
-				value: Number
-			}
-		}
-	},
-	pests: [{
-		type: Schema.Types.ObjectId, 
-		ref: "Pest"
-	}],
-	diseases: [{
-		type: Schema.Types.ObjectId, 
-		ref: "Disease"
-	}],
-	faqs: [{
-		type: Schema.Types.ObjectId, 
-		ref: "FAQ"
-	}]
+	otherNames: [String],
+  light: [String],
+  water: String,
+  difficulty: [String],
+  petToxicity: String,
+  waterTask: {
+    type: Schema.Types.ObjectId,
+    ref: 'PlantTaskSchema'
+  },
+  foodTask: {
+    type: Schema.Types.ObjectId,
+    ref: 'PlantTaskSchema'
+  }
 });
 
 const Plant = mongoose.model('Plant', plantSchema);
