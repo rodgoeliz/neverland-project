@@ -13,6 +13,7 @@ const bundleSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'User'
 	},
+  showInMyBundles: Boolean,
 	storeId: {
 		type: Schema.Types.ObjectId,
 		ref: 'Store'

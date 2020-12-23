@@ -17,7 +17,63 @@ const { getBuyerProtectionSurcharge, calculateBundleSubTotal, getFulfillmentMeth
 
 router.post('/product/remove', async function(req, res) {
   let productOrderItemId = req.body.productOrderItemId;
+  let bundleId = req.body.bundleId;
   let orderIntentId = req.body.orderIntentId;
+  // look up bundleId and remove the productOrderItem
+  let orderIntent = await OrderIntent.findOne({_id: orderIntentId})
+    .populate('bundleId')
+    .populate({
+      path: 'storeId',
+      populate: {
+        path: 'address'
+      }})
+    .populate('shippingAddressId')
+  let bundle = await Bundle.findOne({_id: bundleId});
+  let productOrderItems = bundle.productOrderItemIds.filter((product) => {
+    return product._id != productOrderItemId;
+  });
+  const newBundle = await Bundle.findOneAndUpdate({_id: bundleId}, {
+    $set: {
+      productOrderItemIds: productOrderItems
+    }
+  }, {new: true});
+
+  await OrderProductItem.findOneAndDelete({_id: productOrderItemId});
+
+  const subtotal = await calculateBundleSubTotal(newBundle);
+  console.log("NEW SUBTOTAL AFTER REMOAL: ", subtotal)
+  const buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
+  const shippingMethod = await getFulfillmentMethod("usps", "priority");
+  const shippingCharge = shippingMethod.price;
+  const taxSurcharge = await calculateTaxSurcharge(subtotal, orderIntent.shippingAddressId, shippingCharge, orderIntent.storeId.address);
+  const total = subtotal + buyerSurcharge + shippingCharge;
+  const surcharge = buyerSurcharge + shippingCharge;
+  // if orderproductitem part of an order intent, we need to update the order intent with the new value and price
+  let newOrderIntent = await OrderIntent.findOneAndUpdate(
+    {_id: orderIntentId},
+    {
+      $set: {
+        subtotal,
+        buyerSurcharge,
+        price: {
+          value: subtotal,
+          currency: 'USD'
+        },
+        shipping: shippingCharge,
+        taxes: taxSurcharge.taxAmount,
+        taxableAmount: taxSurcharge.taxableAmount,
+        total
+      }
+    },
+   {new: true});
+  console.log("NEW ORDER INTENT: ", newOrderIntent)
+  res.json({
+    success: true,
+    payload: {
+      bundle,
+      orderIntent: newOrderIntent 
+    }
+  });
   // find order Intent and remove the associated index with productOrderItemId
   // delete productOrderItemId 
   // return updated orderIntentId
@@ -49,20 +105,18 @@ router.post('/quantity/update', async function(req, res) {
     });
   }
 
-  const oldQ = item.quantity;
-  const newAmount = Math.max(oldQ - amount, 0);
+  //const oldQ = item.quantity;
+  //const newAmount = Math.max(oldQ - amount, 0);
   let updateQuery = {
     $set: {
-      quantity: newAmount
+      quantity: amount 
     }
   };
   let product = await OrderProductItem.findOneAndUpdate(
   { _id: productOrderItemId }, 
-  updates, 
+  updateQuery, 
   { new: true });
-
   const subtotal = await calculateBundleSubTotal(orderIntent.bundleId);
-  subtotal = subtotal/100;
   const buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
   const shippingMethod = await getFulfillmentMethod("usps", "priority");
   const shippingCharge = shippingMethod.price;
@@ -70,30 +124,34 @@ router.post('/quantity/update', async function(req, res) {
   const total = subtotal + buyerSurcharge + shippingCharge;
   const surcharge = buyerSurcharge + shippingCharge;
   // if orderproductitem part of an order intent, we need to update the order intent with the new value and price
-  /*let newOrderIntent = await OrderIntent.findOneAndUpdate(
+  let newOrderIntent = await OrderIntent.findOneAndUpdate(
     {_id: orderIntentId},
     {
       $set: {
         subtotal,
         buyerSurcharge,
+        price: {
+          value: subtotal,
+          currency: 'USD'
+        },
         shipping: shippingCharge,
         taxes: taxSurcharge.taxAmount,
         taxableAmount: taxSurcharge.taxableAmount,
         total
       }
-    }
-  });
+    },
+   {new: true});
+  let updatedBundle = await Bundle.findOne({_id: orderIntent.bundleId}).populate('productOrderItemIds')
   res.json({
     success: true,
     payload: {
       product: product,
       orderIntent: newOrderIntent
-  });*/
-})
+  }});
+});
 
 router.get('/get/list', async function(req, res) {
   let userId = req.query.userId;
-  console.log('userId', userId)
   try {
 
   let orders = await Order.find({userId: userId})
@@ -121,7 +179,6 @@ router.get('/get/list', async function(req, res) {
           path: 'selectedOptionIds'
         }]}})
     .populate('orderInvoiceId');
-    console.log(orders)
     res.json({
       success: true,
       payload: orders
@@ -169,7 +226,6 @@ router.get('/get', async function(req, res) {
 });
 
 router.post('/intent/create', async function(req, res) {
-  console.log("create Intent", req.body)
   let productId = req.body.productId;
   let bundleId = req.body.bundleId;
   let userId = req.body.userId;
@@ -202,9 +258,11 @@ router.post('/intent/create', async function(req, res) {
       productOrderItemIds: [nOPI._id]
     });
     bundle = await newBundle.save();
-    bundleId = bundle._id;
-  }
 
+    bundleId = bundle._id;
+  } 
+  
+  console.log("BUNDLE ID FOR ORDER INTENT: ", bundleId)
   let loadAllPromises = [];
   let shippingAddress = await Address.findOne({_id: shippingAddressId});
   let paymentMethod = await PaymentMethod.findOne({_id: paymentMethodId}).populate('card').populate('billingAddress');
@@ -216,7 +274,8 @@ router.post('/intent/create', async function(req, res) {
   loadAllPromises.push(store);
   // if bundle is null, meaning we didn't load bundleId and we didn't have to create a bundle to 
   // wrap around product
-  loadAllPromises.push(await Bundle.findOne({_id: bundleId}).populate('productIds'));
+  loadAllPromises.push(await Bundle.findOne({_id: bundleId}).populate('productIds')
+    .populate({path: 'productOrderItemIds', populate: 'productId'}));
   Promise.all(loadAllPromises).then(async (results) => {
     let shippingAddress = results[0];
     let paymentMethod = results[1];
@@ -245,6 +304,7 @@ router.post('/intent/create', async function(req, res) {
         currency: 'USD' 
       },
       storeId: storeId,
+      bundleId: bundleId,
       vendorId: store.userId,
       effectiveTaxRate: taxSurcharge.rate,
       surcharges: surcharge,
@@ -258,7 +318,10 @@ router.post('/intent/create', async function(req, res) {
     let newOrder = await newOrderObject.save();
     res.json({
       success: true,
-      payload: newOrder
+      payload: {
+        orderIntent: newOrder,
+        newBundle: bundle 
+      }
     })
 
   });

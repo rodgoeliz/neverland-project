@@ -5,6 +5,52 @@ const mongoose = require('mongoose');
 var Bundle = require('../models/Bundle');
 var OrderProductItem = require('../models/OrderProductItem');
 
+router.post('/product/remove', async function(req, res) {
+  let productOrderItemId = req.body.productOrderItemId;
+  let bundleId = req.body.bundleId;
+  let bundle = await Bundle.findOne({_id: bundleId});
+  let productOrderItems = bundle.productOrderItemIds.filter((product) => {
+    return product._id != productOrderItemId;
+  });
+  const newBundle = await Bundle.findOneAndUpdate({_id: bundleId}, {
+    $set: {
+      productOrderItemIds: productOrderItems
+    }
+  }, {new: true});
+
+  await OrderProductItem.findOneAndDelete({_id: productOrderItemId});
+
+  res.json({
+    success: true,
+    payload: bundle
+  });
+});
+
+router.post('/quantity/update', async function(req, res) {
+  let productOrderItemId = req.body.productOrderItemId;
+  let bundleId = req.body.bundleId;
+  let amount = req.body.amount;
+  let item = await OrderProductItem.findOne({_id: productOrderItemId});
+  //const oldQ = item.quantity;
+  //const newAmount = Math.max(oldQ - amount, 0);
+  let updateQuery = {
+    $set: {
+      quantity: amount 
+    }
+  };
+  let product = await OrderProductItem.findOneAndUpdate(
+  { _id: productOrderItemId }, 
+  updateQuery, 
+  { new: true });
+  let updatedBundle = await Bundle.findOne({_id: bundleId}).populate('productOrderItemIds')
+  res.json({
+    success: true,
+    payload: {
+      product: product,
+      bundle: updatedBundle 
+  }});
+});
+
 router.get('/get', async function(req, res, next) {
   let bundleId = req.query.id;
   let lite = req.query.lite;
@@ -67,7 +113,7 @@ router.get('/get/list', async function(req, res, next) {
 		res.json({success: false, error: "Not logged in. Please authenticate."})
 	}
 	const bundles = await Bundle
-      .find({userId})
+      .find({userId, showInMyBundles: true})
       .populate('storeId')
       .populate({
         path: 'productOrderItemIds',
@@ -126,6 +172,7 @@ router.get('/get/list', async function(req, res, next) {
 /*
   Creates a new bundle or adds to an existing bundle.
   Returns a populated bundle w/ store and user
+  this is ONLY FOR USER GENERATED BUNDLES, not CHECKOUT GENERATED BUNDLES
   */
 router.post('/add', async function(req, res, next) {
 	let userId = req.body.userId;
@@ -133,30 +180,23 @@ router.post('/add', async function(req, res, next) {
 	let productId = req.body.productId;
   let variationOptionIds = req.body.optionIds;
   let quantity = req.body.quantity;
-  console.log("add to bundle", quantity)
 	let now = new Date();
 	// see if there's existing bundle
-  let bundle = await Bundle.findOne({userId, storeId});
-  console.log("found a bundle with this arrangement", bundle ? bundle._id:"no bundle")
+  let bundle = await Bundle.findOne({userId, storeId, showInMyBundles: true});
   let productOrderItem = null;
   let optionQuery = [];
-  console.log(variationOptionIds)
-  for (var i in variationOptionIds) {
-      let option = variationOptionIds[i] ;
-      let subQuery = {
-        selectedOptionIds: option
-      }
-      optionQuery.push(subQuery);
-  }
-  let query = {$and: optionQuery}
-  console.log("QUERY", query)
 
-  console.log("QUERY", JSON.stringify({productId: productId, userId, storeId:storeId._id, selectedOptionIds: {$all: variationOptionIds}}));
-  productOrderItem = await OrderProductItem.findOne({$and: [{productId}, {userId}, {storeId}, {selectedOptionIds: {$all: variationOptionIds}}]});
-  console.log("FOUND POITEM??", productOrderItem ? productOrderItem._id: "No product item found")
+  let orderItemQuery = [{productId}, {userId}, {storeId: storeId._id}];
+  let oQuery = [];
+  for (var i in variationOptionIds) {
+    oQuery.push(variationOptionIds[i]);
+  }
+  if (oQuery.length > 0) {
+    orderItemQuery.push({selectedOptionIds: {$all: oQuery}});
+  }
+  productOrderItem = await OrderProductItem.findOne({$and: orderItemQuery});
   let updateQuery = {};
   if (!productOrderItem) {
-      console.log("wuantity", quantity)
       updateQuery = {
         userId,
         productId,
@@ -174,16 +214,9 @@ router.post('/add', async function(req, res, next) {
       quantity: newQuantity
     }
   }
-  console.log("UPDATE QUERY", updateQuery)
-  let oQuery = [];
-  for (var i in variationOptionIds) {
-    oQuery.push({
-      $elemMatch: {$eq: variationOptionIds[i]}
-    });
-  }
     productOrderItem = await OrderProductItem
       .findOneAndUpdate(
-        {$and: [{productId}, {userId}, {storeId}, {selectedOptionIds: {$all: oQuery}}]}
+        {$and: orderItemQuery}
         , {$set: updateQuery}, {new: true, upsert: true})
       .populate({
         path: 'productId', 
@@ -195,25 +228,24 @@ router.post('/add', async function(req, res, next) {
         }
       })
       .populate('selectedOptionIds');
+  
 	if (bundle) {
     // check to see if the product already is in the bundle and if it is, increase the quantity of the productorderitem
     // check if selected options in there
-    console.log("BUNDLE EXISTS..")
     let productIds = bundle.productOrderItemIds;
     let alreadyExists = false;
     for (var i in productIds) {
       let productItemId = productIds[i];
-      if (productItemId == productOrderItem._id) {
+      if (productItemId == productOrderItem._id.toString()) {
         alreadyExists = true;
       }
     }
     if (!alreadyExists) {
       productIds.push(productOrderItem._id);
     }
-    console.log("UPDATING BUNDLE WITH ..", productIds)
     const updatedBundle = await Bundle.findOneAndUpdate(
       {userId, storeId}, 
-      {$set: {productOrderItemIds: productIds}}, 
+      {$set: {productOrderItemIds: productIds, showInMyBundles: true}}, 
       {new: true})
       .populate({
           path: 'productOrderItemIds', 
@@ -225,7 +257,6 @@ router.post('/add', async function(req, res, next) {
       })
       .populate('variationOptionIds')
       .populate('storeId');
-    console.log("updated bundle", updatedBundle)
     res.json({
       success: true,
       payload: updatedBundle
@@ -237,13 +268,13 @@ router.post('/add', async function(req, res, next) {
 			createdAt: now,
 			updatedAt: now,
       variationOptionIds,
+      showInMyBundles: true,
 			userId,
 			storeId,
       productOrderItemIds: [productOrderItem],
 			productIds: [productId]
 		};
     try {
-      console.log("NEW BUNDLE", newBundleUpdate)
     const updatedBundle = await Bundle.findOneAndUpdate(
         {userId, storeId}, 
         {$set: newBundleUpdate}, 
@@ -258,7 +289,6 @@ router.post('/add', async function(req, res, next) {
       })
       .populate('variationOptionIds')
       .populate('storeId');
-      console.log(updatedBundle)
         res.json({
           success: true,
           payload: updatedBundle 
