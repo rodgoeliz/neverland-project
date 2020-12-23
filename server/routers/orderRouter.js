@@ -275,7 +275,7 @@ router.post('/intent/create', async function(req, res) {
   // if bundle is null, meaning we didn't load bundleId and we didn't have to create a bundle to 
   // wrap around product
   loadAllPromises.push(await Bundle.findOne({_id: bundleId}).populate('productIds')
-    .populate({path: 'productOrderItemIds', populate: 'productId'}));
+    .populate({path: 'productOrderItemIds', populate: [{path:'productId'}, {path: 'selectedOptionIds'}]}));
   Promise.all(loadAllPromises).then(async (results) => {
     let shippingAddress = results[0];
     let paymentMethod = results[1];
@@ -283,6 +283,7 @@ router.post('/intent/create', async function(req, res) {
     let store = results[3];
     let bundle = results[4];
     console.log("BUNDLE", bundle)
+    console.log("SELECED OPTION IDS: ", bundle.productOrderItemIds[0].selectedOptionIds)
     let subtotal = await calculateBundleSubTotal(bundle);
     subtotal = subtotal/100;
     let buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
