@@ -27,6 +27,7 @@ export default class AddressInput extends React.Component {
     if (address) {
       this.setState({
         full_name: address.fullName,
+        name: address.fullName,
         street: address.addressLine1,
         street_two: address.addressLine2,
         city: address.addressCity,
@@ -43,7 +44,6 @@ export default class AddressInput extends React.Component {
     // Full Name
     let fullName = this.state['name'];
     let validFullName = /^([\w]{2,})+\s+([\w\s]{2,})+$/.test(fullName);
-    console.log('fullname key', key);
     if (!validFullName && this.props.showName && (key === 'name' || key === undefined)) {
       hasError = true;
       this.setState({
@@ -60,7 +60,6 @@ export default class AddressInput extends React.Component {
 
     // state
     let state = this.state['state'];
-    console.log('validateInput state:', state);
 
     if ((!state || state.length !== 2) && (key === 'state' || key === undefined)) {
       this.setState({
@@ -79,7 +78,6 @@ export default class AddressInput extends React.Component {
 
     // zip code
     let zipCode = this.state['zip_code'];
-    console.log('zipCode', zipCode);
     if ((!zipCode || zipCode.length !== 5) && (key === 'zip_code' || key === undefined)) {
       this.setState({
         zipCodeError: 'Must be a valid zipcode.',
@@ -157,7 +155,6 @@ export default class AddressInput extends React.Component {
       zip_code: zipCode,
       state: state,
     };
-    console.log("Updating address", newState)
     this.setState(newState, () => {
       let hasError = this.validateInput();
       this.setState(
@@ -179,7 +176,7 @@ export default class AddressInput extends React.Component {
     return (
       <div style={backgroundContainerStyle}>
         <form>
-          <NameInput onChange={this.onChangeAddressInput} error={this.state.nameError} />
+          <NameInput onChange={this.onChangeAddressInput} value={this.state.name} error={this.state.nameError} />
           <GAddressInput onAddressDetails={this.onChangeAddressDetails} />
           <BaseInput
             onChange={this.onChangeAddressInput}

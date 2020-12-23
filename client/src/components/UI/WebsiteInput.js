@@ -37,6 +37,12 @@ export default class WebsiteInput extends React.Component {
 
   componentDidMount() {
     let error = this.props.error;
+    let website = this.props.value;
+    if (website) {
+      this.setState({
+        website
+      })
+    }
     if (error) {
       this.setState({
         error,
@@ -106,7 +112,7 @@ export default class WebsiteInput extends React.Component {
               placeholder="Website or Store Link (FB, Etsy, etc) (https)"
               autoCapitalize="none"
               style={BrandStyles.components.inputBase.textInput}
-              value={this.state.name}
+              value={this.state.website}
               onSubmitEditing={() => {
                 this.validateInput();
               }}

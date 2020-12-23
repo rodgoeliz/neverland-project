@@ -25,6 +25,13 @@ class SellerOnboardingMainRoutingPage extends Component {
       return;
     }
 
+    if (this.props.user.isActivated && this.props.user.isSeller) {
+      this.sestState({
+        nextPath: '/seller/dashboard/orders'
+      });
+      return;
+    }
+
     // else take user to their onboarding step if profile isn't activated
     let stepId = this.props.user.onboardingStepId;
     let nextPath = sellerOnBoardingStepsToPath[stepId];

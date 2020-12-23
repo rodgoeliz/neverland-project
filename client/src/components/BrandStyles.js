@@ -26,6 +26,7 @@ const BrandStyles = {
     warmlightBeige: '#F6F0E6',
     beige: '#efe6d8',
     mediumBeige: '#F2EDE5',
+    highContrastDarkBeige: '#EFE6D8',
     darkBeige: '#D8D2C9',
     xdarkBeige: '#B9B3A9',
     orange: '#d47b14',

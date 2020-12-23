@@ -17,6 +17,10 @@ class Header extends Component {
 	}
 
 	render() {
+    if (window && window.location && window.location.pathname && (window.location.pathname.includes('seller/dashboard'))) {
+
+      return (<div></div>);
+    } 
 		let backgroundClass = "header-bg-yellow";
 		if (window && window.location && window.location.pathname && (window.location.pathname.includes('story') || window.location.pathname.includes('waitlist'))){
 			backgroundClass = "header-bg-beige";

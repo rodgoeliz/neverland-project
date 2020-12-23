@@ -3,6 +3,7 @@ require('dotenv').config();
 var router = express.Router();
 var WaitlistUser = require('../models/waitlistUser');
 var Store = require('../models/Store');
+var Address = require('../models/Address');
 var User = require('../models/User');
 const {sendEmail} = require("../email/emailClient");
 var Mailchimp = require('mailchimp-api-v3')
@@ -10,6 +11,79 @@ var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
 const mongoose = require('mongoose');
 const fs = require('fs');
 
+router.post(`/update`, async function(req, res, next) {
+  let storeId = req.body.storeId;
+  let formData = req.body.formData;
+  let updates = {
+      description: formData.description,
+      website: formData.website,
+      title: formData.title
+    };
+
+  if (formData.isActive) {
+    updates[isActive] = formData.isActive
+  }
+  try {
+    const store = await Store.findOne({_id: storeId});
+
+    const storeAddress = await Address.findOneAndUpdate({
+      _id: store.businessAddress
+    }, {
+      $set: {
+        addressLine1: formData.address.addressLine1,
+        addressLine2: formData.address.addressLine2,
+        addressCity: formData.address.addressCity,
+        addressCountry: formData.address.addressCountry,
+        addressZip: formData.address.addressZip,
+        fullName: formData.address.fullName,
+        addressCounty: formData.address.addressCounty
+      }
+    }, {new: true});
+    console.log("UPDATED ADDRESS: ", storeAddress)
+    const updatedStore = await Store.findOneAndUpdate(
+      {
+        _id: storeId
+      }, 
+      {
+        $set: 
+        {
+          description: formData.description,
+          website: formData.website,
+          title: formData.title
+        }
+      }, {new: true});
+    console.log("UPDATED STORE: ", updatedStore)
+    res.json({
+      success: true,
+      payload: updatedStore
+    });
+  } catch (error) {
+    console.log(error)
+  }
+});
+
+router.get(`/get`, async function(req, res, next) {
+  let userId = req.query.userId;
+  if (!userId) {
+    res.json({
+      success: false,
+      error: "Must specify user."
+    });
+  }
+  try {
+    let store = await Store.findOne({userId}).populate('businessAddress');
+    res.json({
+      success: true,
+      payload: store
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error
+    });
+  }
+
+})
 router.get(`/get/list`, async function(req, res, next) {
   console.log("STORES....")
   try {

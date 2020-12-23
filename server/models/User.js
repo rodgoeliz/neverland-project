@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema({
 	plantRequirements: Array,
 	isProfileComplete: Boolean,
 	isSeller: Boolean,
+  isAdmin: Boolean,
 	sellerProfile: {
 		type: Schema.Types.ObjectId,
 		ref: 'SellerProfile'
