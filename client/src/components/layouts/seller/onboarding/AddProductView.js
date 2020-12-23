@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import BrandStyles from '../../../BrandStyles';
 import ClipLoader from "react-spinners/ClipLoader";
-
+import ImageUploader from 'react-images-upload';
 import BaseInput from '../../../UI/BaseInput';
 import Modal from 'react-modal';
 import CheckBoxInput from '../../../UI/CheckBoxInput';
@@ -118,7 +118,6 @@ class AddProductView extends Component {
       errors: {}
     };
     //props.onChange(this.state);
-    this.onPressChoosePhoto = this.onPressChoosePhoto.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
     this.addPhotosToState = this.addPhotosToState.bind(this);
     this.toggleSelection = this.toggleSelection.bind(this);
@@ -130,7 +129,6 @@ class AddProductView extends Component {
     this.onChangeEditOptionText = this.onChangeEditOptionText.bind(this);
     this.setEditingState = this.setEditingState.bind(this);
     this.getEditingState = this.getEditingState.bind(this);
-    this.onPressAddPhotoSheetOption = this.onPressAddPhotoSheetOption.bind(this);
     this.onImageFileChange = this.onImageFileChange.bind(this);
   }
 
@@ -283,41 +281,6 @@ class AddProductView extends Component {
     }
     newFormData.productPhotosData = photos;
     this.updateFormData(newFormData);
-  }
-
-  onPressAddPhotoSheetOption(buttonIndex) {
-    if (buttonIndex === 0) {
-      {/*ImagePicker.openPicker({
-        multiple: true,
-      }).then((images) => {
-        this.addPhotosToState(images);
-      });*/}
-    } else if (buttonIndex === 1) {
-      /*ImagePicker.openCamera({}).then((image) => {
-        const transformedImage = {
-          sourceURL: image.path,
-          mime: image.mime,
-          width: image.width,
-          height: image.height,
-          size: image.size,
-        };
-        this.addPhotosToState([transformedImage]);
-      });*/
-    }
-    //this.setState({ actionSheetIdx: buttonIndex });
-  }
-
-  onPressChoosePhoto() {
-
-    //open action sheet
-    /*ActionSheet.show(
-      {
-        options: IMAGE_PICKER_ACTION_SHEET,
-        cancelButtonIndex: IMAGE_PICKER_ACTION_SHEET.length - 1,
-        title: 'Add product photo',
-      },
-      this.onPressAddPhotoSheetOption,
-    );*/
   }
 
   validateInput() {
@@ -636,6 +599,27 @@ class AddProductView extends Component {
     });
   }
 
+  renderImageUploadInput() {
+    return (
+      <div>
+        <label for="file-upload" 
+          style={{
+              border: `2px solid ${BrandStyles.color.blue}`,
+              borderRadius: 16,
+              display: 'inline-block',
+              padding: '8px 18px',
+              cursor: 'pointer',
+              color: BrandStyles.color.blue,
+              fontWeight: 'bold'
+            }}
+          class="custom-file-upload">
+          <i class="fa fa-cloud-upload"></i> UPLOAD IMAGES 
+        </label>
+        <input style={{display: 'none'}} id="file-upload" type="file" onChange={this.onImageFileChange} multiple />
+      </div>
+    ) 
+  }
+
   renderChosenPhotos() {
     let photos = this.state.formData.productPhotosData;
     let spanStyle = {...BrandStyles.components.iconPlaceholder, marginBottom: 16, paddingTop: 16};
@@ -662,12 +646,12 @@ class AddProductView extends Component {
             {' '}
             Add photos to get started{' '}
           </span>
-          <input type="file" onChange={this.onImageFileChange} multiple />
+          {this.renderImageUploadInput()}
         </div>
       );
     }
     let productPhotoViews = [];
-    let iconStyle = {...BrandStyles.components.iconPlaceholder, color: BrandStyles.color.xdarkBeige};
+    let iconStyle = {...BrandStyles.components.iconPlaceholder, color: BrandStyles.color.xdarkBeige, fontSize: 24, marginTop: -8};
     photos.map((product) => {
       productPhotoViews.push(
         <div style={{position: 'relative'}}>
@@ -679,8 +663,11 @@ class AddProductView extends Component {
               right: 16,
               zIndex: 100,
               padding: 2,
+              width: 28,
+              height: 28,
               borderRadius: 100,
               backgroundColor: BrandStyles.color.beige,
+              cursor: 'pointer'
             }}
           >
             <GrFormClose style={iconStyle} />
@@ -688,8 +675,8 @@ class AddProductView extends Component {
           <img
             src={product.sourceURL ? product.sourceURL : product}
             style={{
-              width: 100,
-              height: 100,
+              width: 200,
+              height: 200,
               borderRadius: 16,
               marginTop: 8,
               marginRight: 8,
@@ -725,8 +712,8 @@ class AddProductView extends Component {
         >
           {productPhotoViews}
         </div>
-        <span> Add Photos </span>
-          <input type="file" onChange={this.onImageFileChange} multiple />
+        <span style={{fontWeight: 'bold', marginTop: 16}}> Add more images </span>
+          {this.renderImageUploadInput()}
       </div>
     );
   }

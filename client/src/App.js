@@ -18,6 +18,7 @@ import ProductAdminView from './components/layouts/admin/ProductAdminView';
 import AddProductAdminView from './components/layouts/admin/AddProductAdminView';
 import SellerOnboardingReAuth from "./components/layouts/SellerOnboardingReAuth";
 import SellerOnboardingRouting from "./components/layouts/SellerOnboardingRouting";
+import AddProductView from './components/layouts/seller/onboarding/AddProductView';
 import PrivacyPolicy from "./components/layouts/PrivacyPolicy";
 import SellerOnboardingBasicsPage from "./components/layouts/seller/onboarding/SellerOnboardingBasicsPage";
 import SellerSignupPage from "./components/layouts/seller/onboarding/SellerSignupPage";
@@ -168,6 +169,7 @@ class App extends Component {
                 <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/activation-pending" authenticated={this.state.authenticated} component={SellerOnboardingPendingActivationPage} />
                 <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/main" authenticated={this.state.authenticated} component={SellerDashboardMainPage} />
                 <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shop" authenticated={this.state.authenticated} component={SellerDashboardShopPage} />
+                <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/product/add" authenticated={this.state.authenticated} component={AddProductView} />
                 <Route exact path="/privacy" component={PrivacyPolicy} />
                 <Route exact path="/download/neverland" component={DownloadNeverland} />
                 <Route exact path="/waitlist/user" component={NeverlandWaitlist} />

@@ -31,7 +31,7 @@ const styles = {
     }
   },
   button: {
-    backgroundImage: `linear-gradient(to bottom right, ${BrandStyles.color.blue}, ${BrandStyles.color.xdarkBlue})`,
+    backgroundImage: `linear-gradient(to bottom right, ${BrandStyles.color.blue}, rgb(2 0 144))`,
     minHeight: 50,
     marginTop: 4,
     marginBottom: 4,

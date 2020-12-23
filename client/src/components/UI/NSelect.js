@@ -15,7 +15,7 @@ const StyledTextButton = styled.div`
 `
 
 const StyledInput = styled.div`
-  height: 40px
+  height: 60px
   display: flex,
   justify-content: center,
   padding-left: 4px,
@@ -25,7 +25,7 @@ const StyledInput = styled.div`
   } 
 `
 const StyledNSelectItemWrapper = styled.div`
-  height: 40px;
+  height: 60px;
   display: 'flex';
   justify-content: 'center';
   padding-left: 16;
@@ -326,10 +326,11 @@ export default class NSelect extends Component {
       ? BrandStyles.components.inputBase.errorLabel
       : BrandStyles.components.inputBase.label;
     labelStyle = {...labelStyle, marginLeft: 16};
-    let modalDiv = {...headerStyle, ...extraHeaderStyle, marginRight: 16, marginLeft: 16, flexDirection: 'column'};
+    let modalDiv = {...headerStyle, ...extraHeaderStyle, cursor: 'pointer',marginRight: 16, marginLeft: 16, flexDirection: 'column'};
     let title = this.props.title ? <span style={labelStyle}> {this.props.title} </span>: null;
     return (
       <StyledTextButton>
+        <span style={labelStyle}>{this.props.error}</span>
         <div
           style={modalDiv}
           onClick={this._showModal}
@@ -342,7 +343,6 @@ export default class NSelect extends Component {
           </div>
           </StyledTextButton>
         </div>
-        <span style={labelStyle}>{this.props.error}</span>
         <Modal
           style={{content: {borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige}}}
           animationType="slide"
@@ -358,10 +358,15 @@ export default class NSelect extends Component {
               overflow: 'scroll'
             }}
           >
-            <StyledTextButton onClick={this._closeModal}>
-              <GrFormClose style={{'width': 40, fontSize: 24}} />
-            </StyledTextButton>
+            <div onClick={this._closeModal} style={{display: 'flex', justifyContent: 'flex-end', cursor: 'pointer'}}>
+              <div style={{width: 140, border: `2px solid ${BrandStyles.color.blue}`, borderRadius: 16, color: BrandStyles.color.blue}}>
+                <GrFormClose style={{'width': 40, fontSize: 24, cursor: 'pointer', color: BrandStyles.color.blue}} /> <span style={{fontWeight: 'bold'}}>Close</span>
+              </div>
+            </div>
             <span style={styles.headerTitle}>{this.props.placeholderText}</span>
+            <br />
+            <br />
+            <br />
             <FlatList
               style={styles.list}
               ListHeaderComponent={searchEnabled ? this._renderListHeader : () => {return (<div />);}}
@@ -382,7 +387,7 @@ export default class NSelect extends Component {
 
 const itemStyles = {
   wrapperContainer: {
-    height: 40,
+    height: 60,
     display: 'flex',
     justifyContent: 'center',
     paddingLeft: 16,
@@ -391,7 +396,7 @@ const itemStyles = {
   contentContainer: {
     display: 'flex',
     flexDirection: 'row',
-    height: 40
+    height: 60
   },
   activeItemIcon: {
     width: 32,
@@ -464,7 +469,6 @@ const styles = {
     flexDirection: 'row',
     flexWrap: 'wrap',
     backgroundColor: BrandStyles.color.warmlightBeige,
-    marginTop: -24,
     marginBottom: 16,
     marginLeft: 16,
     marginRight: 16,

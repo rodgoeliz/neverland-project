@@ -37,6 +37,7 @@
     "react-bootstrap": "^1.0.0",
     "react-data-table-component": "^6.11.3",
     "react-dom": "^16.13.0",
+    "react-images-upload": "^1.2.8",
     "react-modal": "^3.12.1",
     "react-parallax": "^3.0.3",
     "react-parallax-component": "^1.0.6",
