@@ -1284,11 +1284,11 @@ class AddProductView extends Component {
             marginTop: 4,
             padding: 8,
             backgroundColor: BrandStyles.color.warmlightBeige,
+            borderRadius: 16
           }}
         >
           <span style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18 }}>
-            {' '}
-            Product Variations{' '}
+            Product Variations
           </span>
           <div style={{ marginTop: 16 }}>{this.renderProductVariationsTable()}</div>
           <div style={{ marginTop: 16 }}>
@@ -1307,15 +1307,14 @@ class AddProductView extends Component {
               marginTop: 4,
               padding: 32,
               backgroundColor: BrandStyles.color.warmlightBeige,
+              borderRadius: 16
             }}
           >
-            <div style={{ marginBottom: 16 }}>
+            <div style={{ marginBottom: 16, display: 'flex', flexDirection: 'column' }}>
               <span style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18 }}>
-                {' '}
-                Product Variations{' '}
+                Product Variations
               </span>
               <span style={{ textAlign: 'center' }}>
-                {' '}
                 Add new product variations (color, size, etc){' '}
               </span>
             </div>
@@ -1334,7 +1333,7 @@ class AddProductView extends Component {
     return (
       <form>
         <div>
-          <span style={{ fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}>
+          <span style={{ fontWeight: 'bold', fontSize: 20, textAlign: 'center', marginLeft: 16 }}>
             {' '}
             Product Photos{' '}
           </span>
@@ -1470,7 +1469,7 @@ class AddProductView extends Component {
     let newMetaField = (<div><NButton title="Add a new metafield" /></div>);
     return (
       <div>
-        <div> Please add only the relevant tags for your product as they will go through review by our seller success team. The more search meta data and tags you add, the more likely your product will appear to customers. These are all optional, but we recommend you fill out the ones relevant for the product for more business.</div>
+        <div style={{marginLeft: 16, marginRight: 16}}> Please add only the relevant tags for your product as they will go through review by our seller success team. The more search meta data and tags you add, the more likely your product will appear to customers. These are all optional, but we recommend you fill out the ones relevant for the product for more business.</div>
        {metaNSelects} 
       </div>
     );
@@ -1522,6 +1521,7 @@ class AddProductView extends Component {
             error={this.state.errors['processingTime']}
             onChangeItems={this.onChangeInput.bind(this, 'processingTime')}
           />
+          <br/>
           <BaseInput
             onChange={this.onChangeInput}
             keyId="originZipCode"
@@ -1544,11 +1544,12 @@ class AddProductView extends Component {
               textAlign: 'center',
               fontSize: 16,
               marginBottom: 16,
+              marginLeft: 16
             }}
           >
             Item Weight
           </span>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <div style={{ display: 'flex', flexDirection: 'row', marginTop: 16 }}>
             <BaseInput
               onChange={this.onChangeInput}
               keyId="itemWeightLb"
@@ -1576,11 +1577,12 @@ class AddProductView extends Component {
               textAlign: 'center',
               fontSize: 16,
               marginBottom: 16,
+              marginLeft: 16
             }}
           >
             Item Size (Packed)
           </span>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <div style={{ display: 'flex', flexDirection: 'row', marginTop: 16 }}>
             <BaseInput
               onChange={this.onChangeInput}
               keyId="itemHeightIn"
@@ -1664,10 +1666,28 @@ class AddProductView extends Component {
         >
           <div>
             <span>{this.state.errors['root']}</span>
+            <br />
+            <br />
+            <h3
+              style={{
+                fontWeight: 'bold',
+                textAlign: 'center',
+                marginBottom: 16,
+              }}
+            > Product Basics </h3>
+
             {this.renderProductBasics()}
-            <div style={{ height: 24 }} />
-            <h3> Search Meta Data </h3>
+            <br />
+            <br/>
+            <h3
+              style={{
+                fontWeight: 'bold',
+                textAlign: 'center',
+                marginBottom: 16,
+              }}> Search Meta Data </h3>
             {this.renderSearchMetaData()}
+            <br/>
+            <br/>
             <h3
               style={{
                 fontWeight: 'bold',
