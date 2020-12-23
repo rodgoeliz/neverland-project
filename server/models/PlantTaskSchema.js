@@ -3,10 +3,7 @@ const Schema = mongoose.Schema;
 
 const plantTaskSchema = new mongoose.Schema({
   type: String, // Water, Food, Repotting, etc
-  frequency: {
-    time: Number,
-    type: String // seconds, days, weeks
-  },
+  frequency: Object,
   plantId: {
     type: Schema.Types.ObjectId,
     ref: 'Plant'
@@ -15,5 +12,5 @@ const plantTaskSchema = new mongoose.Schema({
   timestamps: true
 });
 
-const PlantTask = mongoose.model('PlantTaskSchema', plantSchema);
+const PlantTask = mongoose.model('PlantTaskSchema', plantTaskSchema);
 module.exports = PlantTask;

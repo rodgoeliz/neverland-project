@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
 const plantUserAssocSchema = new mongoose.Schema({
 	plantId: {
 		type: Schema.Types.ObjectId, 

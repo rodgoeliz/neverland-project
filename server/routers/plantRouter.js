@@ -6,6 +6,7 @@ var WaitlistUser = require('../models/waitlistUser');
 var Plant = require('../models/Plant');
 var PlantUserAssoc = require('../models/PlantUserAssoc');
 var PlantUserTask = require('../models/PlantUserTask');
+var PlantTaskSchema = require('../models/PlantTaskSchema');
 const {sendEmail} = require("../email/emailClient");
 var Mailchimp = require('mailchimp-api-v3')
 var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
@@ -15,7 +16,7 @@ const { convertFrequencyToDate } = require("../utils/plantUtils");
 * Create a new assoc between a plant and a user and generate a
 * plant user task as well that'll get triggered
 **/
-router.post('/user/create', function(req, res, next) {
+router.post('/user/create', async function(req, res, next) {
   let userId = req.query.userId;
   let plantId = req.query.plantId;
   if (!userId || !plantId) {
@@ -46,12 +47,12 @@ router.post('/user/create', function(req, res, next) {
       isActive: true
     });
     const newPlant = await newPlantUserAssoc.save();
-    const newPlantUserTask = await newPlantUserTask.save();
+    const newPlantUserTaskObj = await newPlantUserTask.save();
     res.json({
       success: true,
       payload: {
-        plantUserAssoc: newPlantUserAssoc,
-        plantTask: newPlantUserTask
+        plantUserAssoc: newPlant,
+        plantTask: newPlantUserTaskObj
       }
     });
   } catch (error) {
@@ -65,7 +66,7 @@ router.post('/user/create', function(req, res, next) {
 // Called by a cron job, processes all plant user tasks to see if we
 // need to trigger any new notifications or messages to any of the users
 // about any of the plants
-router.post('/tasks/process', function(req, res, next) {
+router.post('/tasks/process', async function(req, res, next) {
   try {
     const tasks = await PlantUserTask.find({isActive: true}).populate('plantTaskId');
     let now = new Date();
@@ -76,8 +77,14 @@ router.post('/tasks/process', function(req, res, next) {
 
       if (dateToExecute <= now) {
         console.log("We should send notif for this task: ", task._id);
+        // update task isActive to false, create the next task
       }
       // if lastExecutedAt + Freq is greater than or equal to now
+    })
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error
     })
   }
 });
@@ -85,7 +92,7 @@ router.post('/tasks/process', function(req, res, next) {
 /**
   Get a plant.
 **/
-router.get('/get', function(req, res, next) {
+router.get('/get', async function(req, res, next) {
   let plantId = req.query.plantId;
   if (!plantId) {
     res.json({
@@ -107,9 +114,100 @@ router.get('/get', function(req, res, next) {
   }
 });
 
+router.get('/create/test', async function(req, res, next) {
+  let plants =[
+  {
+    title: 'Peace Lily',
+    imageURLS: ['', ''],
+    hardinessZone: {
+      min: 4,
+      max: 9
+    },
+    indoorGrowTemp: {
+      min: {
+        value: 50,
+        type: 'Fahrenheight'
+      },
+      max: {
+        value: 70,
+        type: 'Fahrenheight'
+      }
+    },
+    description: 'Peace lily is an awesome plant',
+    otherNames: ['Peace Sign Lily Other Name'],
+    light: ['low-light', 'bright-indirect-light'],
+    water: ['low'],
+    difficulty: ['beginner'],
+    petToxicity: 'toxic-cat',
+  },
+  {
+    title: 'Monstera Deliciosa',
+    imageURLS: ['', ''],
+    hardinessZone: {
+      min: 10,
+      max: 12
+    },
+    indoorGrowTemp: {
+      min: {
+        value: 70,
+        type: 'Fahrenheight'
+      },
+      max: {
+        value: 80,
+        type: 'Fahrenheight'
+      }
+    },
+    description: 'Monstera is an awesome plant',
+    otherNames: ['Monstera Other Name'],
+    light: ['low-light', 'bright-indirect-light'],
+    water: ['low'],
+    difficulty: ['beginner'],
+    petToxicity: 'toxic-dog',
+  }
+  ];
+
+  plants.map(async (plant) => {
+    const newPlantObjId = mongoose.Types.ObjectId();
+    const waterTaskSchema = {
+      type: 'water', 
+      frequency: {
+        time: 2,
+        type: 'days'
+      },
+      plantId: newPlantObjId
+    };
+    const foodTaskSchema = {
+      type: 'food',
+      frequency: {
+        time: 1, 
+        type: 'month'
+      },
+      plantId: newPlantObjId
+    }
+    let newPlantWaterSchema = new PlantTaskSchema(waterTaskSchema);
+    const newWaterTask = await newPlantWaterSchema.save();
+    let newPlantFoodSchema = new PlantTaskSchema(foodTaskSchema);
+    const newFoodTask = await newPlantFoodSchema.save();
+
+    var newPlant = new Plant({
+      title: plant.title,
+      description: plant.description,
+      hardinessZone:plant.hardinessZone,
+      light: plant.light,
+      water: plant.water,
+      petToxicity: plant.petToxicity,
+      difficulty: plant.difficulty,
+      waterTaskId: newWaterTask,
+      foodTaskId: newFoodTask
+    });
+    await newPlant.save();
+    console.log("SAVING NEW PLANT...")
+  })  ;
+});
+
 /** Get either a list of all plants or a list of plants for 
 a user **/
-router.get('/get/list', function(req, res, next) {
+router.get('/get/list', async function(req, res, next) {
   let userId = req.query.userId;
   let query = {};
   if (userId) {
@@ -131,7 +229,7 @@ router.get('/get/list', function(req, res, next) {
   }
 });
 
-router.post('/create', function(req, res, next) {
+router.post('/create', async function(req, res, next) {
 	const title = req.body.title;
 	const description = req.body.description;
 	const hardinessZoneMin = req.body.hardinessZoneMin;

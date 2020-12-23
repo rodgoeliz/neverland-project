@@ -4,6 +4,8 @@ const Schema = mongoose.Schema;
 const plantSchema = new mongoose.Schema({
 	createdAt: Date,
 	title: String,
+  imageURLs: [String],
+  handle: String,
 	hardinessZone: {
 		min: Number,
 		max: Number 
@@ -21,7 +23,7 @@ const plantSchema = new mongoose.Schema({
 	description: String,
 	otherNames: [String],
   light: [String],
-  water: String,
+  water: [String],
   difficulty: [String],
   petToxicity: String,
   waterTask: {
