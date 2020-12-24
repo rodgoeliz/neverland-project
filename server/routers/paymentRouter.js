@@ -41,7 +41,11 @@ router.post('/stripe/create-payment-intent', async function(req, res, next) {
   
   let user = await User.findOne({_id: userId});
   let orderIntent = await OrderIntent.findOne({_id: orderIntentId}).populate({path: 'vendorId', populate: {path: 'sellerProfile'}});
-  let orderTotal = Math.round(orderIntent.total * 100);
+  let orderTotal = Math.round(orderIntent.total);
+  let buyerSurcharge = Math.round(orderIntent.buyerSurcharge);
+  console.log(orderTotal)
+  console.log("ORDER INTENT TOTAL: ", orderTotal)
+  console.log("ORDER BUYER SURCHARGE: ", buyerSurcharge)
   // get vendor for product
   // get their stripe account connected id
   let sellerStripeAccountId = orderIntent.vendorId.sellerProfile.stripeUID;
@@ -49,7 +53,7 @@ router.post('/stripe/create-payment-intent', async function(req, res, next) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: orderTotal,
       currency: 'usd',
-      application_fee_amount: orderIntent.buyerSurcharge,
+      application_fee_amount: buyerSurcharge,
       transfer_data: {
         destination: sellerStripeAccountId
       },
