@@ -1,6 +1,10 @@
 
 
-module.exports.convertFrequencyToMS = (lastExecutedAt, freqTime, freqType) => {
+module.exports.convertFrequencyToDate = (lastExecutedAt, freqTime, freqType) => {
+  console.log("convertFrequencyToDate: ", lastExecutedAt, freqTime, freqType)
+  if (!lastExecutedAt) {
+    return new Date();
+  }
   switch (freqType) {
     case 'seconds':
       return new Date(lastExecutedAt.getTime() + freqTime * 1000);

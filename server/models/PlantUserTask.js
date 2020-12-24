@@ -14,8 +14,12 @@ const plantUserTaskSchema = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: 'PlantTaskSchema'
   },
+  sendBirdPlantUserId: String,
   lastExecutedTaskAt: Date,
-  isActive: Boolean
+  executeTaskAt: Date,
+  isActive: Boolean,
+  hasNotifiedUser: Boolean,
+  notifiedUserAt: Date,
 }, {
   timestamps: true
 });

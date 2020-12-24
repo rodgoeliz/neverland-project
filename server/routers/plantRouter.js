@@ -10,6 +10,7 @@ var PlantTaskSchema = require('../models/PlantTaskSchema');
 const {sendEmail} = require("../email/emailClient");
 var Mailchimp = require('mailchimp-api-v3')
 var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
+const {sendBird, genSendBirdUserID, sbConnect, sbCreateNotifMessage, sbGroupChannelGetChannel, sbGroupChannelSendUserMessage} = require('../services/sendbird');
 const { convertFrequencyToDate } = require("../utils/plantUtils");
 
 /**
@@ -63,25 +64,146 @@ router.post('/user/create', async function(req, res, next) {
   }
 });
 
+
+/**
+ * Endpoint to call to complete a specific task
+ **/
+router.post('/task/complete', async function(req, res, next) {
+
+});
+
+router.get('/tasks/test-tasks', async function(req, res, next) {
+  let newTask = new PlantUserTask({
+    userId: "5fe4fd8e7b448d146452f4d3",
+    plantId: "5fe28d105315422d862312d7",
+    plantTaskSchemaId: "5fe28d105315422d862312d4",
+    isActive: true,
+    executeTaskAt: new Date()
+  });
+  await newTask.save();
+});
+
 // Called by a cron job, processes all plant user tasks to see if we
 // need to trigger any new notifications or messages to any of the users
 // about any of the plants
-router.post('/tasks/process', async function(req, res, next) {
+router.get('/tasks/process', async function(req, res, next) {
   try {
-    const tasks = await PlantUserTask.find({isActive: true}).populate('plantTaskId');
-    let now = new Date();
+    // get tasks where executeTaskAt date is in the last 24 hour window - we run the job once daily
+    var now = new Date();
+    var twentyFourHoursAgo = new Date(now);
+    twentyFourHoursAgo.setTime(now.getTime() - 24 * 60 * 60 * 1000);
+    const tasks = await PlantUserTask.find({
+      $and: [
+        { isActive: true }, 
+        { $and: [
+          {
+            executeTaskAt: 
+              {
+                $lte: new Date()
+              }
+          }, {
+            executeTaskAt: {
+              $gte: twentyFourHoursAgo
+            }
+          }]
+        }
+      ]}).populate('plantTaskSchemaId').populate('plantId').populate('userId');
+    console.log("TASKS TO EXECUTE: ", tasks)
+    let sbUserToMessageParamsMap = {};
     tasks.map((task) => {
-      const lastExecutedAt = task.lastExecutedAt;
-      const frequency = task.plantTaskSchemaId.frequency;
-      const dateToExecute = convertFrequencyToDate(lastExecutedAt, frequency.time, frequency.type);
-
-      if (dateToExecute <= now) {
-        console.log("We should send notif for this task: ", task._id);
-        // update task isActive to false, create the next task
-      }
+      const sendBirdUserID = task.userId.sendBirdUserID;
+      const sendBirdChannelURL = task.userId.sendBirdChannelURL;
+      // create a map from sendBirdUserID to messages to send
+      const message = sbCreateNotifMessage(sendBirdUserID, 'Test notification for plant', task);
+      sbUserToMessageParamsMap[sendBirdChannelURL] = {
+          userId: sendBirdUserID,
+          message: message
+        };
       // if lastExecutedAt + Freq is greater than or equal to now
-    })
+    });
+
+    const updateOldAndNewTasks = async (oldTaskId) => {
+      return new Promise( async (resolve, reject) => {
+        console.log("UPDATE OLD TASK ID: ", oldTaskId)
+        try {
+         let oldTask = await PlantUserTask.findOneAndUpdate({_id: oldTaskId}, {
+          $set: {
+           isActive: false,
+           hasNotifiedUser: true,
+           notifiedUserAt: new Date()
+          }}, {new: true}).populate('plantTaskSchemaId');
+          const frequency = oldTask.plantTaskSchemaId.frequency;
+          const nextPlantTask = new PlantUserTask({
+            userId:oldTask.userId,
+            plantId: oldTask.plantId,
+            plantTaskSchemaId: oldTask.plantTaskSchemaId,
+            lastExecutedTaskAt: new Date(),
+            executeTaskAt: convertFrequencyToDate(new Date(), frequency.time, frequency.type),
+            isActive: true
+          });
+          const newPlant = await nextPlantTask.save();
+          resolve(newPlant)
+
+        } catch (error) {
+          reject(error);
+        }
+
+      })
+    }
+    let updateOldAndCreateNewPromises = [] ;
+    Object.keys(sbUserToMessageParamsMap).map((channelUrl) => {
+      const messageParams = sbUserToMessageParamsMap[channelUrl]['message'];
+      const userId = sbUserToMessageParamsMap[channelUrl]['userId'];
+        sbConnect(userId).then((user) => {
+          sbGroupChannelGetChannel(channelUrl)
+          .then((groupChannel) => {
+            sbGroupChannelSendUserMessage(groupChannel, messageParams)
+              .then(async (message) => {
+                const messMetaArray = message.metaArrays[0];
+                console.log("MESSAGE SENT: ", message.metaArrays)
+                console.log(updateOldAndCreateNewPromises)
+                console.log(updateOldAndNewTasks(messMetaArray['value']))
+                updateOldAndCreateNewPromises.push(updateOldAndNewTasks(messMetaArray['value']));
+                console.log("PUSHED")
+                /*let messMetaArray = message.metaArrays[0];
+                let oldTask = await PlantUserTask.findOneAndUpdate({_id: messMetaArray['value']}, {
+                  $set: {
+                    isActive: false,
+                    hasNotifiedUser: true,
+                    notifiedUserAt: new Date()
+                  }
+                }, {new: true}).populate('plantTaskSchemaId');
+                const frequency = oldTask.plantTaskSchemaId.frequency;
+                const nextPlantTask = new PlantUserTask({
+                  userId:oldTask.userId,
+                  plantId: oldTask.plantId,
+                  plantTaskSchemaId: oldTask.plantTaskSchemaId,
+                  lastExecutedTaskAt: new Date(),
+                  executeTaskAt: convertFrequencyToDate(new Date(), frequency.time, frequency.type),
+                  isActive: true
+                });
+                let plant = await nextPlantTask.save();*/
+              })
+              .catch((error) => {
+                console.log(error)
+                Logger.logError(error)
+              });
+          })
+          .catch((error) => {
+            console.log(error)
+            Logger.logError(error)
+          });
+        }).catch((error) => {
+
+        })
+    });
+    console.log("tasks", updateOldAndCreateNewPromises)
+    Promise.all(updateOldAndCreateNewPromises).then((err, results) => {
+      console.log("fulfilled promises", err, results)
+    });
+
   } catch (error) {
+    console.log(error)
     res.json({
       success: false,
       error: error

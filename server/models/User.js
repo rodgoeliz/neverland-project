@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema({
 	email: String,
 	firebaseUID: String,
 	stripeCustomerID: String,
+  sendBirdUserID: String,
+  sendBirdChannelURL: String,
 	password: String,
 	facebookId: String,
   avatarURL: String,

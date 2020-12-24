@@ -1,16 +1,19 @@
-var express = require("express");
-var crypto = require("crypto");
+const crypto = require("crypto");
 require('dotenv').config();
-var router = express.Router();
-var WaitlistUser = require('../models/waitlistUser');
-var User = require('../models/User');
-const {sendEmail} = require("../email/emailClient");
-const firebaseConfig = require('../utils/firebaseConfig');
-var Mailchimp = require('mailchimp-api-v3')
-const mongoose = require('mongoose');
-var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
+const express = require("express");
 const firebase = require('firebase');
+const firebaseConfig = require('../utils/firebaseConfig');
+const Mailchimp = require('mailchimp-api-v3')
+const mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
+const mongoose = require('mongoose');
+const User = require('../models/User');
+const WaitlistUser = require('../models/waitlistUser');
 const { createStripeAccountForUser } = require("../utils/paymentProcessor");
+const { sendEmail } = require("../email/emailClient");
+const router = express.Router();
+const Logger = require('../utils/errorLogger');
+const {sendBird, genSendBirdUserID, sbConnect, sbUpdateCurrentUserInfo, sbCreateChannelWithUserIds} = require('../services/sendbird');
+
 firebase.initializeApp(firebaseConfig);
 
 router.post('/firebase/login', async function(req, res, next) {
@@ -28,7 +31,6 @@ router.post('/firebase/login', async function(req, res, next) {
 
 router.get('/reset-password', async function(req, res, next) {
   let email = req.query.email;
-  console.log("Reset password endpoint", email)
   if (!email) {
     res.json({
       success: false,
@@ -88,7 +90,6 @@ router.post('/update', async function(req, res, next){
 		res.json({success: false, error: "Failed to find user"})	
 		return;
 	}
-  console.log("UPDATE USER: ", req.body.data)
 	for (var key in req.body.data) {
 		user[key] = req.body.data[key];
 	};
@@ -120,11 +121,6 @@ router.post('/authorize-firebase', async function(req, res, next) {
  * Path used for authorization (token) and login.
  */
 router.post('/authorize', async function(req, res, next) {
-	// get token & email
-	// find user via email
-	// check token and check expiration
-	// if expired, then return invalid
-	// if not expired, return the user w/ more info filled out
 	let email = req.body.email;
 	let token = req.body.authToken;
 	let tokenType = req.body.tokenType;
@@ -196,26 +192,27 @@ router.post('/login', async function(req, res, next) {
 });
 
 router.post('/signup', async function(req, res, next) {
-	console.log("REQUEST: ", req.body)
 	let email = req.body.email;
 	let password = req.body.password;
 	let firebaseUID = req.body.firebaseUID;
 	let isSeller = req.body.isSeller ? req.body.isSeller : false;
-	console.log("Is seller signing up: ", isSeller)
 	let facebookId = req.body.facebookId ? req.body.facebookId : "";
 	let name = req.body.name ? req.body.name : "";
 	let avatarURL = req.body.avatarURL ? req.body.avatarURL : "";
 	// add them to mailchimp	
 	let defaultLogin =  req.body.defaultLogin;
 	let existingUser = await User.findOne({email: email});
+
 	if (!existingUser) {
+
 		const authToken = crypto.randomBytes(64).toString('base64');
 		let now = Date.now();
 		let authExpirationDate = new Date();
 
 		authExpirationDate.setDate(authExpirationDate.getDate() + 7);
-		let stripeCustomerId = await createStripeAccountForUser(email);
+		const stripeCustomerId = await createStripeAccountForUser(email);
 		var id = mongoose.Types.ObjectId();		
+    const sendBirdUserId = genSendBirdUserID(email, id);
 		let userSchema = {
 			_id: id,
 			email: email,
@@ -224,6 +221,7 @@ router.post('/signup', async function(req, res, next) {
 			facebookId: facebookId,
 			firebaseUID: firebaseUID,
 			stripeCustomerID: stripeCustomerId.id,
+      sendBirdUserID: sendBirdUserId,
 			name: name,
 			avatarURL: avatarURL,
 			defaultLogin,
@@ -234,36 +232,52 @@ router.post('/signup', async function(req, res, next) {
 			updatedAt: Date.now(),
 			tokenExpiration: authExpirationDate
 		};
+
 		if (password) {
 			userSchema.password = password
 		}
-
-		console.log("Before creating a new user..", userSchema);
-		var newUser = new User(userSchema);
-		console.log("after creating a new year")
+		const newUser = new User(userSchema);
 		try {
 			newUser.save(function(err, result) {
-				console.log(err)
-				console.log(result)
 				if (err) {
+          Logger.logError(err);
 					res.json({
 						success: false,
 						error: "There was a problem creating your account. Try again."
 					});
 					return; 
 				}
-				console.log("NEw user")
-				console.log(newUser)
-				res.json({
-					success: true,
-					data: newUser	
-				});
-			});
+        // generate a new sendbird user
+        sbConnect(sendBirdUserId)
+          .then((user) => {
+            let superUserId = 'neverland-admin';
+            // create a channel
+            sbCreateChannelWithUserIds([sendBirdUserId, superUserId], true, 'Neverland Assistant', '', '')
+              .then(async (channel) => {
+                const updatedUser = await User.findOneAndUpdate({_id: result._id}, {$set: {sendBirdChannelURL: channel.url}}, {new: true});
+                // update user object w/ sendbird id
+                res.json({
+                  success: true,
+                  data:updatedUser 
+                });
+              })
+              .catch(error => {
+                console.log(error)
+                Logger.logError(error);
+              });
+          })
+          .catch((error) => {
+            Logger.logError(error);
+                console.log(error)
+          });
+  		 });
 		} catch (error){
+      Logger.logError(error);
 			console.log("ERROR SAVING USER", error)
 		}
 	} else {
 		if (existingUser.defaultLogin == defaultLogin) {
+      Logger.logError('[SIGNUP] Account already exists');
 			res.json({
 				success: false,
 				error: "This account already exists."
