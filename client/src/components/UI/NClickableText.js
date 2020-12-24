@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const HoverCursorWrapper = styled.div`
@@ -7,17 +7,8 @@ const HoverCursorWrapper = styled.div`
   }
 `;
 
-class NClickableText extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-
-        <HoverCursorWrapper onClick={this.props.onClick}>{this.props.title}</HoverCursorWrapper>
-      );
-  }
+function NClickableText({ onClick, title }) {
+  return <HoverCursorWrapper onClick={onClick}>{title}</HoverCursorWrapper>;
 }
 
 export default NClickableText;

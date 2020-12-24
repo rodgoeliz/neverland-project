@@ -151,7 +151,7 @@ const BrandStyles = {
       justifyContent: 'center',
     },
     listItemLiteContainer: {
-      backgroundColor: '#FFFDFB', //xlightBige
+      backgroundColor: '#FFFDFB', // xlightBige
       shadowColor: 'rgba(0,0,0, 0.1)',
       shadowOffset: { height: 4, width: 0 },
       shadowOpacity: 0.5,

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Spinner } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import BrandStyles from '../BrandStyles';
+
 import styled from 'styled-components';
+
+import BrandStyles from 'components/BrandStyles';
 
 const HoverCursorWrapper = styled.div`
   min-width: 300px;
@@ -27,8 +29,8 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     '&:hover': {
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   button: {
     backgroundImage: `linear-gradient(to bottom right, ${BrandStyles.color.blue}, rgb(2 0 144))`,
@@ -43,8 +45,8 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     '&:hover': {
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   linearGradient: {
     flex: 1,
@@ -57,21 +59,21 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     '&:hover': {
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   shadowButton: {
-    boxShadow: `0px 2px 4px ${BrandStyles.color.blue}`
+    boxShadow: `0px 2px 4px ${BrandStyles.color.blue}`,
   },
   buttonTitleTextPrimary: {
     color: BrandStyles.color.beige,
     fontWeight: 'bold',
-    textTransform: 'uppercase' 
+    textTransform: 'uppercase',
   },
   buttonTitleTextSecondary: {
     color: BrandStyles.color.blue,
     fontWeight: 'bold',
-    textTransform: 'uppercase' 
+    textTransform: 'uppercase',
   },
   secondaryHorizontalPadding: {
     paddingHorizontal: 32,
@@ -81,78 +83,65 @@ const styles = {
     width: 16,
     marginHorizontal: 8,
     marginLeft: 16,
-    display: 'flex'
+    display: 'flex',
   },
 };
 
 class NButton extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isLoading: props.isLoading ? props.isLoading : false,
-    };
+    this.state = {};
   }
 
   onClick = async () => {
-    console.log("onClick")
-    const { id, onClick } = this.props;
+    console.log('onClick');
+    const { onClick } = this.props;
     if (typeof onClick === 'function') {
       onClick();
     }
   };
 
   render() {
-    console.log("isLoading", this.props.isLoading)
-    let spinner = this.props.isLoading ? (
+    console.log('isLoading', this.props.isLoading);
+    const spinner = this.props.isLoading ? (
       <div style={styles.spinnerContainer}>
-        <Spinner animation="border" variant="light" size="sm"/>
+        <Spinner animation="border" variant="light" size="sm" />
       </div>
     ) : null;
-    console.log("SPINNER", spinner)
+    console.log('SPINNER', spinner);
     const themeStyle = this.props.theme === 'secondary' ? styles.buttonSecondary : styles.button;
     let buttonStyles = themeStyle;
     if (this.props.buttonStyle) {
-      buttonStyles = {...buttonStyles, ...this.props.buttonStyle};
+      buttonStyles = { ...buttonStyles, ...this.props.buttonStyle };
     }
     if (this.props.theme === 'secondary') {
-      buttonStyles = {...buttonStyles, ...styles.secondaryHorizontalPadding};
+      buttonStyles = { ...buttonStyles, ...styles.secondaryHorizontalPadding };
 
       return (
         <HoverCursorWrapper>
-        <div
-          style={buttonStyles}
-          {...this.props}
-          onClick={this.onClick}
-          disabled={this.props.disabled}
-        >
-          {this.props.iconLeft}
-          <p style={styles.buttonTitleTextSecondary}>{this.props.title}</p>
-          {this.props.iconRight}
-          {spinner}
-        </div>
+          <div style={buttonStyles} {...this.props} onClick={this.onClick} disabled={this.props.disabled}>
+            {this.props.iconLeft}
+            <p style={styles.buttonTitleTextSecondary}>{this.props.title}</p>
+            {this.props.iconRight}
+            {spinner}
+          </div>
         </HoverCursorWrapper>
       );
     }
-    buttonStyles = {...buttonStyles, ...styles.shadowButton};
+    buttonStyles = { ...buttonStyles, ...styles.shadowButton };
     return (
       <HoverCursorWrapper>
-      <div
-        {...this.props}
-        style={buttonStyles}
-        onClick={this.onClick}
-        disabled={this.props.disabled}
-      >
-        <div
-          style={styles.linearGradient}>
-          {this.props.iconLeft}
-          <span style={styles.buttonTitleTextPrimary}>{this.props.title}</span>
-          {this.props.iconRight}
-          {spinner}
+        <div {...this.props} style={buttonStyles} onClick={this.onClick} disabled={this.props.disabled}>
+          <div style={styles.linearGradient}>
+            {this.props.iconLeft}
+            <span style={styles.buttonTitleTextPrimary}>{this.props.title}</span>
+            {this.props.iconRight}
+            {spinner}
+          </div>
         </div>
-      </div>
       </HoverCursorWrapper>
     );
   }
 }
 
-export default connect(null, { })(NButton);
+export default connect(null, {})(NButton);

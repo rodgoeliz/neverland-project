@@ -1,15 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, forwardRef } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import Modal from 'react-modal';
-import DataTable from 'react-data-table-component';
 import MaterialTable from 'material-table';
-import AddProductAdminView from './AddProductAdminView';
-import NButton from "../../UI/NButton";
-import BrandStyles from '../../BrandStyles';
-import { getProductList } from '../../../actions/products';
-import { forwardRef } from 'react';
- 
+
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -25,33 +18,40 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
- 
+
+import BrandStyles from 'components/BrandStyles';
+
+import { getProductList } from 'actions/products';
+
+import NButton from "components/UI/NButton";
+
+import AddProductAdminView from './AddProductAdminView';
+
 const tableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-  };
+  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+};
 
 class ProductAdminView extends Component {
 
-  constructor(props)  {
+  constructor(props) {
     super(props);
     this.state = {
-      redirectTo: "",
       isAddProductModalVisible: false
     }
 
@@ -71,11 +71,11 @@ class ProductAdminView extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.productsCacheArr || !this.props.productsCache || Object.keys(this.props.productsCache) == 0 || Object.keys(this.props.productsCacheArr) == 0) {
+    if (!this.props.productsCacheArr || !this.props.productsCache || Object.keys(this.props.productsCache) === 0 || Object.keys(this.props.productsCacheArr) === 0) {
       this.setState({
         isLoading: true
       }, () => {
-        this._loadProducts();      
+        this._loadProducts();
       });
     }
   }
@@ -86,11 +86,7 @@ class ProductAdminView extends Component {
     });
   }
 
-  _closeCSVModal() {
-    this.setState({
-      isAddProductCSVModalVisible: false
-    });
-  }
+  _closeCSVModal() {}
 
   onChange(formData) {
     console.log("Product form data change", formData);
@@ -102,11 +98,7 @@ class ProductAdminView extends Component {
     });
   }
 
-  onPressAddProductCSV() {
-    this.setState({
-      isAddProductCSVModalVisible: true
-    });
-  }
+  onPressAddProductCSV() {}
 
   render() {
     if (this.state.isLoading) {
@@ -128,7 +120,7 @@ class ProductAdminView extends Component {
         render: rowData => {
           console.log('rowData', rowData)
           if (rowData.price && rowData.price.value) {
-            return (<div>${parseFloat(rowData.price.value)/100}</div>);
+            return (<div>${parseFloat(rowData.price.value) / 100}</div>);
           }
           return (<div>No Price Data Available</div>)
         }
@@ -138,12 +130,12 @@ class ProductAdminView extends Component {
         field: 'vendorId',
         render: rowData => {
           if (rowData.storeId) {
-            let storeTitle = rowData.storeId.title;
+            const storeTitle = rowData.storeId.title;
             let vendorName = "";
             if (rowData.vendorId && rowData.vendorId.email) {
-              vendorName=rowData.vendorId.email;
+              vendorName = rowData.vendorId.email;
             }
-            return (<div>{storeTitle} ({vendorName ? vendorName: 'No Owner'})</div>);
+            return (<div>{storeTitle} ({vendorName || 'No Owner'})</div>);
           }
           return "No Store";
         }
@@ -151,12 +143,12 @@ class ProductAdminView extends Component {
     ];
     console.log('this.props', this.props)
     if (this.state.openEditProductModalId) {
-      //return (<Redirect to={`/admin/product/${this.state.openEditProductModalId}`} />);
+      // return (<Redirect to={`/admin/product/${this.state.openEditProductModalId}`} />);
     }
     return (
       <div>
         <Modal
-          style={{content: {borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige}}}
+          style={{ content: { borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige } }}
           isOpen={this.state.isAddProductModalVisible}>
           <AddProductAdminView onChange={this.onChange} onClose={this._closeModal} />
         </Modal>
@@ -180,7 +172,7 @@ class ProductAdminView extends Component {
         </div>
       </div>
     )
-  } 
+  }
 }
 
 const mapStateToProps = (state) => ({
@@ -189,7 +181,7 @@ const mapStateToProps = (state) => ({
   currentProduct: state.seller.currentProduct
 });
 
-const actions = { 
+const actions = {
   getProductList
 };
-export default connect(mapStateToProps, actions) (ProductAdminView);
+export default connect(mapStateToProps, actions)(ProductAdminView);

@@ -1,13 +1,8 @@
 import React from 'react';
-import BrandStyles from '../BrandStyles';
-import {FaRegCheckCircle} from 'react-icons/fa';
+
 import styled from 'styled-components';
 
-const styles = {
-  container: {
-    'background-color': BrandStyles.color.xlightBeige,
-  },
-};
+import BrandStyles from 'components/BrandStyles';
 
 const StyledTextArea = styled.textarea`
   font-size: 18px;
@@ -16,9 +11,9 @@ const StyledTextArea = styled.textarea`
   background-color: transparent;
   border: 0;
   &:focus {
-    outline: none
-  } 
-`
+    outline: none;
+  }
+`;
 const StyledInput = styled.input`
   font-size: 18px;
   flex: 1;
@@ -26,9 +21,9 @@ const StyledInput = styled.input`
   background-color: transparent;
   border: 0;
   &:focus {
-    outline: none
-  } 
-`
+    outline: none;
+  }
+`;
 export default class BaseInput extends React.Component {
   constructor(props) {
     super(props);
@@ -48,7 +43,7 @@ export default class BaseInput extends React.Component {
   }
 
   componentDidMount() {
-    let error = this.props.error;
+    const { error } = this.props;
     if (error) {
       this.setState({
         error,
@@ -69,9 +64,9 @@ export default class BaseInput extends React.Component {
 
   validateInput() {
     if (this.props.validate) {
-      let hasError = !this.props.validate(this.state[this.props.keyId]);
+      const hasError = !this.props.validate(this.state[this.props.keyId]);
       let errorMessage = '';
-      let lowercaseLabel = this.props.label.toLowerCase();
+      const lowercaseLabel = this.props.label.toLowerCase();
       if (hasError) {
         errorMessage = `Please enter a valid ${lowercaseLabel}.`;
       } else {
@@ -86,7 +81,6 @@ export default class BaseInput extends React.Component {
           this.props.onChange(this.props.keyId, this.state[this.props.keyId]);
         },
       );
-      return;
     } else {
       // automatically valid if no valid function provided
       this.props.onChange(this.props.keyId, this.state[this.props.keyId]);
@@ -94,7 +88,7 @@ export default class BaseInput extends React.Component {
   }
 
   onChangeInput(key, value) {
-    let typingTimeout = this.state.typingTimeout;
+    const { typingTimeout } = this.state;
     if (typingTimeout) {
       clearTimeout(this.state.typingTimeout);
     }
@@ -108,75 +102,71 @@ export default class BaseInput extends React.Component {
   }
 
   render() {
-    let style = this.state.error ? BrandStyles.components.errorInput : BrandStyles.components.input;
     let widthFactor = 1; // full
 
     if (this.props.widthFactor) {
       widthFactor = this.props.widthFactor;
     }
 
-    let containerStyle = this.state.error
+    const containerStyle = this.state.error
       ? BrandStyles.components.inputBase.errorContainer
       : BrandStyles.components.inputBase.container;
-    let labelStyle = this.state.error
+    const labelStyle = this.state.error
       ? BrandStyles.components.inputBase.errorLabel
       : BrandStyles.components.inputBase.label;
-    let validationIcon = null;
-    if (!this.state.hasError) {
-      validationIcon = (<FaRegCheckCircle style={BrandStyles.components.inputBase.validationIcon} />);
-    }
+
     let autoCap = 'none';
     if (this.props.autoCapitalize) {
       autoCap = this.props.autoCapitalize;
     }
-    let widthStyle = { width: `(400 - 32) / ${widthFactor }`};
+    let widthStyle = { width: `(400 - 32) / ${widthFactor}` };
     if (this.props.full) {
       widthStyle = { flex: 1 };
     }
     let wrapperStyle = widthStyle;
     if (this.props.style) {
-      wrapperStyle = {...wrapperStyle, ...this.props.style};
+      wrapperStyle = { ...wrapperStyle, ...this.props.style };
     }
     let inputComponent = (
-          <StyledInput
-                keyboardType={this.props.keyboardType ? this.props.keyboardType : 'default'}
-                style={BrandStyles.components.inputBase.textInput}
-                placeholder={`Enter ${this.props.label.toLowerCase()}`}
-                multiline={this.props.multiline}
-                autoCapitalize={autoCap}
-                value={this.state[this.props.keyId]}
-                onSubmitEditing={() => {
-                  this.validateInput();
-                }}
-                onChange={(e) => {
-                  this.onChangeInput(this.props.keyId, e);
-                }}
-              />);
+      <StyledInput
+        keyboardType={this.props.keyboardType ? this.props.keyboardType : 'default'}
+        style={BrandStyles.components.inputBase.textInput}
+        placeholder={`Enter ${this.props.label.toLowerCase()}`}
+        multiline={this.props.multiline}
+        autoCapitalize={autoCap}
+        value={this.state[this.props.keyId]}
+        onSubmitEditing={() => {
+          this.validateInput();
+        }}
+        onChange={(e) => {
+          this.onChangeInput(this.props.keyId, e);
+        }}
+      />
+    );
     if (this.props.multiline) {
-        inputComponent =       
-              <StyledTextArea
-                keyboardType={this.props.keyboardType ? this.props.keyboardType : 'default'}
-                style={BrandStyles.components.inputBase.textInput}
-                placeholder={`Enter ${this.props.label.toLowerCase()}`}
-                multiline={this.props.multiline}
-                autoCapitalize={autoCap}
-                value={this.state[this.props.keyId]}
-                onSubmitEditing={() => {
-                  this.validateInput();
-                }}
-                onChange={(e) => {
-                  this.onChangeInput(this.props.keyId, e);
-                }}
-              />
+      inputComponent = (
+        <StyledTextArea
+          keyboardType={this.props.keyboardType ? this.props.keyboardType : 'default'}
+          style={BrandStyles.components.inputBase.textInput}
+          placeholder={`Enter ${this.props.label.toLowerCase()}`}
+          multiline={this.props.multiline}
+          autoCapitalize={autoCap}
+          value={this.state[this.props.keyId]}
+          onSubmitEditing={() => {
+            this.validateInput();
+          }}
+          onChange={(e) => {
+            this.onChangeInput(this.props.keyId, e);
+          }}
+        />
+      );
     }
     return (
       <div style={wrapperStyle}>
         <div style={BrandStyles.components.inputBase.wrapper}>
           <div style={containerStyle}>
             <span style={labelStyle}>{this.props.label}</span>
-            <div style={BrandStyles.components.inputBase.contentWrapper}>
-              {inputComponent}
-            </div>
+            <div style={BrandStyles.components.inputBase.contentWrapper}>{inputComponent}</div>
           </div>
           <span style={BrandStyles.components.inputBase.errorMessage}>{this.state.error}</span>
         </div>

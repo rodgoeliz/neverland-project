@@ -1,30 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Redirect} from 'react-router-dom';
-import { sellerOnBoardingSteps } from '../../../../constants/onBoardingSteps';
-import { checkSellerPaymentOnBoardingStatus, clearAccountLinks } from '../../../../actions/seller';
-import { setOnBoardingStepId } from '../../../../actions/auth';
-import { getNextOnBoardingStepId } from '../../../../utils/helpers';
-import screenNames from '../../../../constants/screenNames';
+import { Redirect } from 'react-router-dom';
+
+import { getNextOnBoardingStepId } from 'utils/helpers';
+
+import { setOnBoardingStepId } from 'actions/auth';
+import { checkSellerPaymentOnBoardingStatus, clearAccountLinks } from 'actions/seller';
+
 import SellerLoadingPage from './SellerLoadingPage';
-import BrandStyles from '../../../BrandStyles';
 
 class SellerOnboardingPaymentRoutingRoomPage extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      toActivationPendingPage: false
-    }
+      toActivationPendingPage: false,
+    };
   }
 
   async componentDidMount() {
-    const accountId = this.props.match.params.accountId;
+    const { accountId } = this.props.match.params;
     await this.props.getAccountInfo({ accountId });
     this.props.clearAccountLinks();
     this.props.setOnBoardingStepId(getNextOnBoardingStepId(this.props.onboardingStepId, true));
     this.setState({
-      toActivationPendingPage: true
+      toActivationPendingPage: true,
     });
   }
 
@@ -32,9 +31,9 @@ class SellerOnboardingPaymentRoutingRoomPage extends Component {
 
   render() {
     if (this.state.toActivationPendingPage) {
-      return (<Redirect to="/seller/onboarding/activation-pending" />);
+      return <Redirect to="/seller/onboarding/activation-pending" />;
     }
-    return (<SellerLoadingPage />);
+    return <SellerLoadingPage />;
   }
 }
 
@@ -44,8 +43,8 @@ const mapStateToProps = (state) => ({
 
 const actions = {
   getAccountInfo: checkSellerPaymentOnBoardingStatus,
-  setOnBoardingStepId: setOnBoardingStepId,
-  clearAccountLinks: clearAccountLinks,
+  setOnBoardingStepId,
+  clearAccountLinks,
 };
 
 export default connect(mapStateToProps, actions)(SellerOnboardingPaymentRoutingRoomPage);

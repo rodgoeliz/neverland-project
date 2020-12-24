@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import Config from './config';
 
 /**
@@ -19,21 +20,11 @@ axios.interceptors.request.use(
     const config = inputConfig;
     config.headers.common['Access-Control-Allow-Origin'] = "*";
     // Check for and add the stored Auth Token to the header request
-    {/*let token = '';
-    try {
-      token = await AsyncStorage.getItem('@Auth:token');
-    } catch (error) {
-      /* Nothing */
-    }
-    {/*
-    if (token) {
-      config.headers.common.Authorization = `Bearer ${token}`;
-    }*/}
     return config;
   },
   (error) => {
     throw error;
-},
+  },
 );
 
 /**

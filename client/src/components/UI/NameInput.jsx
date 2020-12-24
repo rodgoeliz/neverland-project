@@ -1,8 +1,11 @@
-import React, { useRef } from 'react';
-import isFullNameValid from '../../utils/fullNameValidator';
-import {FaRegCheckCircle} from 'react-icons/fa';
-import BrandStyles from '../BrandStyles';
+import React from 'react';
+
+import { FaRegCheckCircle } from 'react-icons/fa';
+
 import styled from 'styled-components';
+
+import isFullNameValid from 'utils/fullNameValidator';
+import BrandStyles from 'components/BrandStyles';
 
 const StyledInput = styled.input`
   font-size: 18px;
@@ -11,21 +14,15 @@ const StyledInput = styled.input`
   background-color: transparent;
   border: 0;
   &:focus {
-    outline: none
-  } 
-`
-
-const styles = {
-  container: {
-    backgroundColor: BrandStyles.color.xlightBeige,
-  },
-};
+    outline: none;
+  }
+`;
 
 export default class NameInput extends React.Component {
   constructor(props) {
     super(props);
-    let hasErrorState = true;
-    let errorState = '';
+    const hasErrorState = true;
+    const errorState = '';
     if (props.error) {
       this.state.hasError = true;
       this.state.error = props.error;
@@ -42,13 +39,13 @@ export default class NameInput extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.error != nextProps.error) {
+    if (this.props.error !== nextProps.error) {
       this.setState({ error: nextProps.error });
     }
   }
 
   validateInput() {
-    let hasError = !isFullNameValid(this.state.name);
+    const hasError = !isFullNameValid(this.state.name);
     let errorMessage = '';
     if (hasError) {
       errorMessage = 'Please enter a valid name.';
@@ -67,7 +64,7 @@ export default class NameInput extends React.Component {
   }
 
   onChangeInput(key, value) {
-    let typingTimeout = this.state.typingTimeout;
+    const { typingTimeout } = this.state;
     if (typingTimeout) {
       clearTimeout(this.state.typingTimeout);
     }
@@ -81,17 +78,15 @@ export default class NameInput extends React.Component {
   }
 
   render() {
-    let showName = this.props.showName;
-    let nameInput = null;
-    let containerStyle = this.state.error
+    const containerStyle = this.state.error
       ? BrandStyles.components.inputBase.errorContainer
       : BrandStyles.components.inputBase.container;
-    let labelStyle = this.state.error
+    const labelStyle = this.state.error
       ? BrandStyles.components.inputBase.errorLabel
       : BrandStyles.components.inputBase.label;
     let validationIcon = null;
     if (!this.state.hasError) {
-      validationIcon = (<FaRegCheckCircle style={BrandStyles.components.inputBase.validationIcon} />);
+      validationIcon = <FaRegCheckCircle style={BrandStyles.components.inputBase.validationIcon} />;
     }
     return (
       <div style={BrandStyles.components.inputBase.wrapper}>

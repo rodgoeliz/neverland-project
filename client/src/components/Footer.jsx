@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
-import {Navbar, NavDropdown, Form, Button, FormControl} from 'react-bootstrap';
-import { joinNewsletter } from "../actions/waitlist";
+
+import { joinNewsletter } from "actions/waitlist";
 
 class Footer extends Component {
 	constructor(props) {
@@ -10,7 +10,6 @@ class Footer extends Component {
 		this.state = {
 			emailInput: '',
 			emailError: "",
-			isSubmitting: false,
 			inviter: ""
 
 		}
@@ -27,27 +26,23 @@ class Footer extends Component {
 		}
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-	}
-
 
 	validateEmail(email) {
-    	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     	return re.test(String(email).toLowerCase());
 	}
 
 	onClickWaitlist() {
-		//validate email
+		// validate email
 		if (this.validateEmail(this.state.emailInput)) {
 			this.props.joinNewsletter(this.state.emailInput, this.state.inviter);
 			this.setState({
 				"emailError": "",
-				isSubmitting: true
 			});
 		} else {
 			this.setState({"emailError": "Please enter valid email"})
 		}
-		//window.location = "https://docs.google.com/forms/d/e/1FAIpQLSeZcRVCsn-_cOXdcMyjEfR7PQ9N536zi0NGdVZRbcfE4KUCpg/viewform"
+		// window.location = "https://docs.google.com/forms/d/e/1FAIpQLSeZcRVCsn-_cOXdcMyjEfR7PQ9N536zi0NGdVZRbcfE4KUCpg/viewform"
 	}
 
 	onChangeInput(event) {
@@ -55,6 +50,7 @@ class Footer extends Component {
 			emailInput: event.target.value 
 		});
 	}
+
 	render() {
 		let successMessage = "";
 		if (this.props.waitlist && this.props.waitlist.newsletterSubmitSuccess) {
@@ -100,10 +96,8 @@ class Footer extends Component {
 			);
 	}
 }
-const mapStateToProps = state => {
-	return {
+const mapStateToProps = state => ({
 		waitlist: state.waitlist
-	}
-}
+	})
 
 export default connect(mapStateToProps, {joinNewsletter})(Footer);

@@ -1,11 +1,7 @@
-import React, { Component } from 'react';
-import Header from '../Header.jsx';
-import Footer from '../Footer.jsx';
-import {Accordion, Card, Button} from 'react-bootstrap';
-import AccordionCard from '../AccordionCard';
+import React from 'react';
 
-class NeverlandContactUs extends Component {
-  render() {
+
+function NeverlandContactUs() {
     return (
       <div>
         <h1 style={{'text-align': 'center', marginTop: '2em', marginBottom: '1em'}}>Contact Us</h1>
@@ -37,7 +33,6 @@ class NeverlandContactUs extends Component {
         </div>
       </div>
       );
-  }
 }
 
 export default NeverlandContactUs;

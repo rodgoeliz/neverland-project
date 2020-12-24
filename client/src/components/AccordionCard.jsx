@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Accordion, Card, Button} from 'react-bootstrap';
+import {Accordion, Card} from 'react-bootstrap';
 
 class AccordionCard extends Component {
 
@@ -25,7 +25,7 @@ class AccordionCard extends Component {
 						<Accordion.Toggle as={Card.Header} onClick={this.onClick.bind(this)} style={{width: '100%', backgroundColor: 'transparent', border: 'none'}} variant="link" eventKey={this.props.eventKey}>
 							<div className="accordion-title-container">
 								<span className="question">{this.props.title}</span>
-								<span className={"fas " + iconClass}></span>
+								<span className={`fas ${  iconClass}`} />
 							</div>
 						</Accordion.Toggle>
 					</Card.Header>

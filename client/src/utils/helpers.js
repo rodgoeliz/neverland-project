@@ -1,5 +1,5 @@
-import { sellerOnBoardingSteps, userOnBoardingSteps } from '../constants/onBoardingSteps';
-import screenNames from '../constants/screenNames';
+import { sellerOnBoardingSteps, userOnBoardingSteps } from 'constants/onBoardingSteps';
+import screenNames from 'constants/screenNames';
 
 export const getNextOnBoardingStepId = (lastCompletedStepId, isSeller = false) => {
   console.log('getNextOnBoardingStepId lastCompletedStepId', lastCompletedStepId, isSeller);
@@ -62,5 +62,5 @@ export const getScreenName = (onBoardingStepId) => {
 export const formatPrice = (price, currency) =>
   (price / 100).toLocaleString('en-US', {
     style: 'currency',
-    currency: currency,
+    currency,
   });

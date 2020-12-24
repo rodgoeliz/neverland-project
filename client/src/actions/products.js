@@ -1,9 +1,7 @@
 
-import actionTypes from '../constants/newActionTypes';
-import Api from '../lib/api';
-//import HandleErrorMessage from '../lib/format-error-messages';
-//import { errorMessages } from '../constants/messages';
-//import { createErrorAction } from 'src/helpers';
+import actionTypes from 'constants/newActionTypes';
+
+import Api from 'lib/api';
 
 export const createTestProduct = () => async (dispatch) => {
   console.log('inaction');
@@ -13,7 +11,7 @@ export const createTestProduct = () => async (dispatch) => {
   });
 };
 
-export const getProductSearchMetaData = () => async (dispatch) =>  {
+export const getProductSearchMetaData = () => async (dispatch) => {
   try {
     const response = await Api.get(`/api/product/meta-data/get/list`);
     if (response.data.success) {
@@ -25,7 +23,7 @@ export const getProductSearchMetaData = () => async (dispatch) =>  {
       console.log("Error retrieving product search meta data: ", response.data.error)
     }
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
 }
 
@@ -50,29 +48,23 @@ export const createProduct = ({ formData }) => async (dispatch) => {
       console.log('Error creating product', response);
     }
   } catch (error) {
-    //throw HandleErrorMessage(error);
+    // throw HandleErrorMessage(error);
   }
 };
 
-export const loadProductsByTag = ({ limit, offset, tagId }) => async (dispatch) => {
+export const loadProductsByTag = ({ limit, offset, tagId }) => async () => {
   console.log('WARNING! loadProductsByTag does not trigger state change!');
   try {
-    const response = await Api.get(
+    await Api.get(
       `api/product/getMany?tagId=${tagId}&offset=${offset}&limit=${limit}`,
     );
 
-    if (!response.data.success) {
-      //dispatch(createErrorAction(actionTypes.products.LOAD_PRODUCTS_BY_TAG, response.data.error));
-      return;
-    }
-    const clearCache = offset === 0;
-    // dispatch.products.replace(response.data, clearCache);
   } catch (error) {
-    //throw HandleErrorMessage(error);
+console.log(error);
   }
 };
 
-export const updateProduct = ({ productId, formData }) => async (dispatch) => {
+export const updateProduct = ({ formData }) => async (dispatch) => {
   try {
     const response = await Api.post(`/api/product/seller/update`, formData, {
       headers: {
@@ -93,7 +85,7 @@ export const updateProduct = ({ productId, formData }) => async (dispatch) => {
       console.log('Error updating product', response);
     }
   } catch (error) {
-    //throw HandleErrorMessage(error);
+    // throw HandleErrorMessage(error);
   }
 };
 
@@ -113,7 +105,7 @@ export const logRecentlyViewedProduct = ({ productId, userId }) => async (dispat
       console.log('logRecentlyViewedProduct error', response);
     }
   } catch (error) {
-    //throw HandleErrorMessage(error);
+    // throw HandleErrorMessage(error);
   }
 };
 
@@ -130,7 +122,7 @@ export const getAllProductTags = () => async (dispatch) => {
       });
     }
   } catch (error) {
-    //throw HandleErrorMessage(error);
+    // throw HandleErrorMessage(error);
   }
 };
 
@@ -148,12 +140,12 @@ export const getProductById = (id) => async (dispatch) => {
       throw new Error({ message: 'getProductById failed' });
     }
   } catch (error) {
-    //throw HandleErrorMessage(error);
+    // throw HandleErrorMessage(error);
   }
 };
 
 export const getProductList = () => async (dispatch) => {
-  try  {
+  try {
     const response = await Api.get(`api/product/get/list`);
     if (response.data.success) {
       dispatch({

@@ -1,16 +1,17 @@
-import actionTypes from '../constants/newActionTypes';
 import { PURGE } from "redux-persist";
 
-var initialState = {
+import actionTypes from 'constants/newActionTypes';
+
+const initialState = {
   stores: [],
   userIdToStoreCache: {}
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.store.GET_STORE_FOR_USER: 
-      let store = action.payload;
-      let userId = store.userId;
+    case actionTypes.store.GET_STORE_FOR_USER:
+      const store = action.payload;
+      const { userId } = store;
       return {
         ...state,
         userIdToStoreCache: {
@@ -18,7 +19,7 @@ export default (state = initialState, action) => {
           [userId]: store
         }
       }
-    case  actionTypes.store.GET_STORES:
+    case actionTypes.store.GET_STORES:
       return {
         ...state,
         stores: action.payload
