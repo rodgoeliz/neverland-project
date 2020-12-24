@@ -24,21 +24,14 @@ const styles = {
     maxHeight: '10vh',
   },
 };
-class OnboardingHeader extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onPressBackButton = this.onPressBackButton.bind(this);
-  }
-
-  render() {
-    return (
-      <div style={styles.container}>
-        <div style={styles.logoContainer}>
-          <img src="../../../../images/neverland_logo.png" style={styles.logo} resizeMode="contain" />
-        </div>
+function OnboardingHeader() {
+  return (
+    <div style={styles.container}>
+      <div style={styles.logoContainer}>
+        <img src="../../../../images/neverland_logo.png" style={styles.logo} resizeMode="contain" />
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default OnboardingHeader;
