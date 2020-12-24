@@ -17,6 +17,7 @@ const orderInvoiceSchema = new mongoose.Schema({
 	shipping: Number,
 	subtotal: Number,
 	taxes: Number,
+  sellerPayout: Number,
 	taxableAmount: Number,
 	total: Number
 });

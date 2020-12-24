@@ -1,6 +1,21 @@
 const express = require('express');
 const createError = require('http-errors');
+const Sentry = require("@sentry/node");
+const Tracing = require("@sentry/tracing");
 const app = express();
+Sentry.init({
+  dsn: "https://a675cc5c922941cbbbc65a851c75252b@o478174.ingest.sentry.io/5569110",
+  /*integrations: [
+    // enable HTTP calls tracing
+    new Sentry.Integrations.Http({ tracing: true }),
+    // enable Express.js middleware tracing
+    new Tracing.Integrations.Express({ app }),
+  ],
+
+  // We recommend adjusting this value in production, or using tracesSampler
+  // for finer control
+  tracesSampleRate: 1.0,*/
+});
 const port = process.env.PORT || 5000;
 const bodyParser = require('body-parser');
 var cors = require('cors');
@@ -30,6 +45,25 @@ const formData = require('express-form-data');
 
 const dotenv = require('dotenv');
 dotenv.config();
+
+
+// RequestHandler creates a separate execution context using domains, so that every
+// transaction/span/breadcrumb is attached to its own Hub instance
+app.use(Sentry.Handlers.requestHandler());
+// TracingHandler creates a trace for every incoming request
+app.use(Sentry.Handlers.tracingHandler());
+
+app.use(
+  Sentry.Handlers.errorHandler({
+    shouldHandleError(error) {
+      // Capture all 404 and 500 errors
+      if (error.status === 404 || error.status === 500) {
+        return true;
+      }
+      return false;
+    },
+  })
+);
 app.use(cors());
 console.log("Connecting to db: ", getEnvVariable('MONGODB_URI'));
 mongoose.connect(getEnvVariable('MONGODB_URI'), {useFindAndModify: false, useNewUrlParser: true});
@@ -56,6 +90,7 @@ app.use("/api/seller", sellerRouter);
 app.use("/api/bundle", bundleRouter);
 app.use("/api/marketplace", marketplaceRouter)
 app.use("/api/admin", adminRouter);
+app.use(Sentry.Handlers.errorHandler());
 
 
 app.get('*', (req, res) => {

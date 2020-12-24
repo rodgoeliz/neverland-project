@@ -21,13 +21,14 @@ const index = client.initIndex("dev_neverland_products");
 
 
 router.post('/test-data/init/algolia', async function(req, res, next) {
-  index.saveObjects(products, {'autoGenerateObjectIDIfNotExist': true})
+  console.log("ROOT ROUTER TEST")
+  /*index.saveObjects(products, {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
       res.json({success: true})
     }).catch(err => {
       console.log(err)
       res.json({success: false})
-    });
+    });*/
 });
 
 router.post('/test-data/init', async function(req, res, next) {

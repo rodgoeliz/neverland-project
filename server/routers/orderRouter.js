@@ -12,8 +12,9 @@ var OrderInvoice = require('../models/OrderInvoice');
 var OrderIntent = require('../models/OrderIntent');
 var Order = require('../models/Order');
 var OrderProductItem = require('../models/OrderProductItem');
+const Logger = require('../utils/errorLogger');
 
-const { getBuyerProtectionSurcharge, calculateBundleSubTotal, getFulfillmentMethod, calculateTaxSurcharge } = require("../utils/orderProcessor");
+const { getBuyerProtectionSurcharge, getStripeFee, calculateBundleSubTotal, getFulfillmentMethod, calculateTaxSurcharge } = require("../utils/orderProcessor");
 
 router.post('/product/remove', async function(req, res) {
   let productOrderItemId = req.body.productOrderItemId;
@@ -237,7 +238,6 @@ router.post('/intent/create', async function(req, res) {
   let now = new Date();
 
   if (productId && !bundleId)  {
-    console.log("create new bundle and order product item")
     // create new order produt item
     let newOrderProductItem = new OrderProductItem({
       userId: userId,
@@ -246,8 +246,6 @@ router.post('/intent/create', async function(req, res) {
       quantity: quantity,
       selectedOptionIds: variationOptionIds 
     });
-    console.log(quantity)
-    console.log(variationOptionIds)
     let nOPI = await newOrderProductItem.save();
     newBundle = new Bundle({
       isInternal: true,
@@ -262,7 +260,6 @@ router.post('/intent/create', async function(req, res) {
     bundleId = bundle._id;
   } 
   
-  console.log("BUNDLE ID FOR ORDER INTENT: ", bundleId)
   let loadAllPromises = [];
   let shippingAddress = await Address.findOne({_id: shippingAddressId});
   let paymentMethod = await PaymentMethod.findOne({_id: paymentMethodId}).populate('card').populate('billingAddress');
@@ -282,8 +279,6 @@ router.post('/intent/create', async function(req, res) {
     let user = results[2];
     let store = results[3];
     let bundle = results[4];
-    console.log("BUNDLE", bundle)
-    console.log("SELECED OPTION IDS: ", bundle.productOrderItemIds[0].selectedOptionIds)
     let subtotal = await calculateBundleSubTotal(bundle);
     let buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
     let shippingMethod = await getFulfillmentMethod("usps", "priority");
@@ -291,7 +286,6 @@ router.post('/intent/create', async function(req, res) {
     let taxSurcharge = await calculateTaxSurcharge(subtotal, shippingAddress, shippingCharge, store.address);
     let total = subtotal + buyerSurcharge + shippingCharge;
     let surcharge = buyerSurcharge + shippingCharge;
-
     let newOrderObject = new OrderIntent({
       createdAt: now,
       updatedAt: now,
@@ -331,7 +325,6 @@ router.post('/intent/create', async function(req, res) {
 router.post('/create', async function(req, res) {
   // order intent
   let orderIntentId = req.body.orderIntentId;
-  console.log("ORDER INTENT ID: ", req.body)
   const orderIntent = await OrderIntent.findOne({_id: orderIntentId})
     .populate('shippingAddressId')
     .populate({path: 'bundleId', 
@@ -342,8 +335,6 @@ router.post('/create', async function(req, res) {
     .populate({path: 'paymentMethod', populate: 'billingAddress'})
     .populate('storeId')
     .populate('userId');
-    console.log("ORDER INTENT OBJ: ", orderIntent)
-    console.log("ORDER BUNDLE: ", orderIntent.bundleId);
 	let productId = req.body.productId;
 	let bundleId = req.body.bundleId;
   let productOrderItemId = req.body.productOrderItemId;
@@ -352,7 +343,6 @@ router.post('/create', async function(req, res) {
 	let shippingAddressId = req.body.shippingAddressId;
 	let paymentMethodId = req.body.paymentMethodId;
   let quantity = req.body.quantity;
-  console.log("quantity", quantity)
   let variationOptionIds = req.body.variationOptionIds;
 	let now = new Date();
 	// Load shipping address, payment method, user, paymentMethod
@@ -362,7 +352,6 @@ router.post('/create', async function(req, res) {
 	const user = orderIntent.userId;
 	const store = orderIntent.storeId;
   const bundle = orderIntent.bundleId;
-  console.log("BUNDLE", bundle)
 	// if bundle is null, meaning we didn't load bundleId and we didn't have to create a bundle to 
 	// wrap around product
 	const subtotal = await calculateBundleSubTotal(bundle);
@@ -371,15 +360,20 @@ router.post('/create', async function(req, res) {
 	const shippingCharge = shippingMethod.price;
 	const taxSurcharge = await calculateTaxSurcharge(subtotal, shippingAddress, shippingCharge, store.address);
 	const total = subtotal + buyerSurcharge + shippingCharge;
+  const stripeFee = await getStripeFee(total);
   let surcharge = shippingCharge + buyerSurcharge;
   if (taxSurcharge) {
     surcharge += taxSurcharge.taxAmount;
     total += taxSurcharge.taxAmount;
   }
+  const sellerPayout = total - buyerSurcharge - stripeFee;
+  console.log("SELLER PAYOUT: ", sellerPayout)
   if (total == orderIntent.total) {
+    try {
     let newOrderInvoice = new OrderInvoice({
       createdAt: now,
       updatedAt: now,
+      sellerPayout,
       bundleId: bundle._id,
       price: {
         value: subtotal,
@@ -398,6 +392,7 @@ router.post('/create', async function(req, res) {
       createdAt: now,
       updatedAt: now,
       userId: userId,
+      sellerPayout,
       bundleId: bundle._id,
       paymentMethod: paymentMethod,
       billingAddress: paymentMethod.billingAddress._id,
@@ -426,6 +421,10 @@ router.post('/create', async function(req, res) {
       success: true,
       payload: updatedOrder 
     }) 
+  }catch(error) {
+    console.log(error);
+    Logger.logError(error);
+  }
   } else {
     console.log("ORDER TOTAL DOESN't EQUAL INTENT ORDER TOTAL");
   }

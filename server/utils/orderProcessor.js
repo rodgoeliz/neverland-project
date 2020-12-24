@@ -5,6 +5,10 @@ const taxjarClient = new Taxjar({
 	apiKey: process.env.TAXJAR_API_TOKEN
 });
 
+module.exports.getStripeFee = async (total) => {
+  return Math.round(total * .029);
+}
+
 module.exports.getBuyerProtectionSurcharge = async (subtotal) => {
 	let buyerProtectionRules = rootConfig.surchargeRules.buyerProtection;
 	for (var i = 0; i < buyerProtectionRules.length; i++) {

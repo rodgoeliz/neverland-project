@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const orderSchema = new mongoose.Schema({
-	createdAt: Date,
-	updatedAt: Date,
 	anonymousAccessToken: String,
+  sellerPayout: Number,
 	billingAddress: {
     type: Schema.Types.ObjectId,
     ref: 'Address'
@@ -32,8 +31,10 @@ const orderSchema = new mongoose.Schema({
 	orderInvoiceId: {
 		type: Schema.Types.ObjectId,
 		ref: 'OrderInvoice'
-	}
-});
+	},
+  status: String, // need-to-fulfill, shipped, delivered, paid-out
+  deliveredAt: Date
+}, {timestamps: true});
 
 const Order = mongoose.model('Order', orderSchema);
 module.exports = Order;
