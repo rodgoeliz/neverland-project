@@ -1630,12 +1630,15 @@ class AddProductView extends Component {
     if (this.state.isSavingProduct) {
       return (
         <div>
-          <div style={{position: 'absolute', display: 'flex', height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}}>
+          <div style={{position: 'absolute', display: 'flex', height: '100%', width: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
             <div style={{padding: 8, backgroundColor: 'white', borderRadius: 16}}>
               <ClipLoader
                 size={45}
                 color={'blue'}
                 loading={this.state.isSavingProduct}/>
+            </div>
+            <div style={{padding: 8, backgroundColor: 'white', borderRadius: 16}}>
+              <b>DO NOT CLOSE this modal.</b> Please wait until we upload your entire product. May take a little longer than expected. 
             </div>
           </div>
         </div>);
