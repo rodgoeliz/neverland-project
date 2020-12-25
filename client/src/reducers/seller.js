@@ -16,6 +16,11 @@ const sellerReducer = (state = initialState, action) => {
         ...state,
         currentProduct: action.payload,
       };
+    case actionTypes.seller.GET_SELLER_PRODUCTS:
+      return {
+        ...state,
+        productsCache: action.payload
+      };
     case actionTypes.seller.SET_ALL_PRODUCTS:
       return {
         ...state,

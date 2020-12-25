@@ -116,11 +116,15 @@ const productReducer = (state = initialState, action) => {
       };
     case actionTypes.products.SET_SELLER_PRODUCTS:
       let spCache = state.sellerProductsCache;
+      let newSellerCache = {};
+      action.payload.map((item) => {
+        newSellerCache[item._id] = item;
+      })
       return {
         ...state,
-        sellerProductscache: {
+        sellerProductsCache: {
           ...state.sellerProductsCache,
-          ...action.payload,
+          ...newSellerCache
         },
       };
     case actionTypes.products.ADD_PRODUCT:

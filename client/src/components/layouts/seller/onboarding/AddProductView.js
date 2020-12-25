@@ -19,7 +19,8 @@ import {
   loadAllProductCategories,
   loadAllProductTags,
   loadSellerProduct,
-  clearTagsAndCategories
+  clearTagsAndCategories,
+  getSellerProducts
 } from '../../../../actions/seller';
 import { transformProductToFormData } from '../../../../utils/productHelpers';
 import { setOnBoardingStepId, logoutFirebase } from "../../../../actions/auth";
@@ -84,6 +85,7 @@ class AddProductView extends Component {
       productPhotosData: [],
       variations: variations,
       variationFormData: {},
+      product: props.product,
       isVisible: true,
       isProductVariationsVisible: false,
       errors:{}
@@ -103,6 +105,7 @@ class AddProductView extends Component {
 
     let formData = {};
     let loadedProduct = props.product;
+
     // means we are editing the product;
     let updatedFormData = {
       metaData: {}
@@ -159,6 +162,7 @@ class AddProductView extends Component {
       );
     }
 
+
     //console.log("creating test product", this.props.createTestProduct)
     // means we are editing a product, so we must pull it
     let passedProductId = this.props.productId; // ? this.props.productId : params.productId;
@@ -176,7 +180,7 @@ class AddProductView extends Component {
       });
 
     } else {
-      this.props.clearSellerProductCache();
+      //this.props.clearSellerProductCache();
     }
   }
 
@@ -1781,7 +1785,7 @@ const actions = {
   loadAllTags: loadAllProductTags,
   loadAllCategories: loadAllProductCategories,
   clearSellerProductCache: clearSellerCurrentProductCache,
-  // getSellerProducts: getSellerProducts
+   getSellerProducts: getSellerProducts
 };
 
 export default connect(mapStateToProps, actions) (AddProductView);

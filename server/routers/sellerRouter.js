@@ -188,7 +188,7 @@ router.get(`/onboarding/getStripeSetupLink`, async function(req, res, next) {
 	});
 });
 
-router.get(`/products/getAll`, async function(req, res, next) {
+router.get(`/products/get/list`, async function(req, res, next) {
 	let userId = req.query.userId;
 	let user = await User.findOne({_id: userId}).populate('storeId');
 	if (!user) {

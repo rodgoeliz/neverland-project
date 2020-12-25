@@ -15,6 +15,7 @@ import {
   loadAllProductTags,
   loadSellerProduct,
   clearTagsAndCategories,
+  getSellerProducts,
 } from '../../../../actions/seller';
 import { setOnBoardingStepId, logoutFirebase } from "../../../../actions/auth";
 import { createProduct, createTestProduct, updateProduct } from '../../../../actions/products';
@@ -25,12 +26,12 @@ class SellerOnboardingAddProductsPage extends Component {
   constructor(props) {
     super(props);
     let sellerProducts = [];
-    if (props.products) {
-      for (const key in props.products) {
-        sellerProducts.push(props.products[key]);
+    if (props.sellerProducts) {
+      for (const key in props.sellerProducts) {
+        sellerProducts.push(props.sellerProducts[key]);
       }
     }
-
+    console.log(sellerProducts)
     this.state = {
       products: sellerProducts,
     };
@@ -42,6 +43,18 @@ class SellerOnboardingAddProductsPage extends Component {
   async onSubmitProduct() {
     this.setState({ isSavingProduct: true });
     this.saveProduct();
+  }
+
+  async _loadSellerProducts() {
+    console.log("GETTING PRODUCTS: ", this.props.user._id)
+    await this.props.getSellerProducts(this.props.user._id);
+    this.setState({isLoading: false});
+  } 
+
+  async componentDidMount() {
+    this.setState({isLoading: true}, () => {
+      this._loadSellerProducts();
+    });
   }
 
   async saveProduct() {
@@ -124,9 +137,10 @@ class SellerOnboardingAddProductsPage extends Component {
         : null;*/
     //let currentProduct = this.props.product ? this.props.product : this.props.currentSellerProduct;
     let sellerProducts = [];
-    if (this.props.products) {
-      for (const key in this.props.products) {
-        sellerProducts.push(this.props.products[key]);
+    console.log("SELLER PRODUCTS", this.props.sellerProducts)
+    if (this.props.sellerProducts) {
+      for (const key in this.props.sellerProducts) {
+        sellerProducts.push(this.props.sellerProducts[key]);
       }
     }
     let nextButton = null;
@@ -136,6 +150,7 @@ class SellerOnboardingAddProductsPage extends Component {
         nextButton = <NButton title={'Next Step'} onClick={this.onPressNext} />;
       }
     let containerStyle = {...BrandStyles.components.onboarding.container, justifyContent: 'center', paddingTop: 42};
+    if (isLoading) return <div>isLoading..</div>;
     return (
       <OnboardingImageWrapper>
         <OnboardingHeader />
@@ -180,7 +195,7 @@ class SellerOnboardingAddProductsPage extends Component {
             />
             <div style={{ height: 64 }} />
           </div>
-          <div onClick={this.props.logOut}> <span>Logout</span> </div>
+          {/*<div onClick={this.props.logOut}> <span>Logout</span> </div>*/}
         </div>
       </OnboardingImageWrapper>
     );
@@ -206,7 +221,7 @@ const actions = {
   loadAllTags: loadAllProductTags,
   loadAllCategories: loadAllProductCategories,
   clearSellerProductCache: clearSellerCurrentProductCache,
-  // getSellerProducts: getSellerProducts
+  getSellerProducts: getSellerProducts
 };
 
 export default connect(mapStateToProps, actions)(SellerOnboardingAddProductsPage);

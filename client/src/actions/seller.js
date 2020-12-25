@@ -41,6 +41,25 @@ export const launchAppReAuth = (email, inviter) => {
 }
 
 
+export const getSellerProducts = (sellerId) => {
+  return async (dispatch) => {
+    try {
+      const response = await Api.get(`/api/seller/products/get/list?userId=${sellerId}`)
+      console.log("LOAD SELLER PRODUCTS: ", response)
+      dispatch({
+        type: actionTypes.products.SET_SELLER_PRODUCTS,
+        payload: response.data.payload
+      });
+      dispatch({
+        type: actionTypes.seller.GET_SELLER_PRODUCTS,
+        payload: response.data.payload
+      });
+    } catch(error) {
+
+    }
+  }
+}
+
 export const getSellerAccountLinks = ({ sellerId }, props) => async (dispatch) => {
   try {
     const response = await Api.get(`/api/seller/account-links/get?sellerId=${sellerId}&source=web`);
