@@ -3,7 +3,6 @@ const sb = new SendBird({appId: process.env.SENDBIRD_APP_ID});
 
 
 module.exports.sbCreateNotifMessage = (userId, message, task) => {
-  console.log("CREATE NOTIF MESSAGE: ", userId, message, task)
   const params = new sb.UserMessageParams();
   params.message = message;
   params.mentionType = 'users';                       // Either 'users' or 'channel'
