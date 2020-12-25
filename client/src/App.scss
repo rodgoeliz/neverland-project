@@ -778,27 +778,27 @@ h4 {
     padding-right: 2em !important;
   }
   body {
-    font-size: calc(1.00rem + (4 * (100vw - 360px)) / 407) !important;
+    font-size: calc(.80rem + (4 * (100vw - 360px)) / 407) !important;
   }
   li {
     line-height: 1.15;
-    font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407) !important;
+    font-size: calc(.80rem + (4 * (100vw - 360px)) / 407) !important;
   }
   p {
     line-height: 1.25;
-    font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407) !important;
+    font-size: calc(.80rem + (4 * (100vw - 360px)) / 407) !important;
   }
 
   h1 {
-    font-size: calc(3.25rem + (4 * (100vw - 360px)) / 407) !important;
-  }
-
-  h2 {
     font-size: calc(2.25rem + (4 * (100vw - 360px)) / 407) !important;
   }
 
-  h3 {
+  h2 {
     font-size: calc(1.75rem + (4 * (100vw - 360px)) / 407) !important;
+  }
+
+  h3 {
+    font-size: calc(1.25rem + (4 * (100vw - 360px)) / 407) !important;
   }
 
   .plant-pack-square-green,

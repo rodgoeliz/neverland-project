@@ -30,6 +30,22 @@ const styles = {
       cursor: 'pointer'
     }
   },
+  buttonDisabled: {
+    backgroundImage: `linear-gradient(to bottom right, rgb(196 192 183), rgb(168 159 140))`,
+    minHeight: 50,
+    marginTop: 4,
+    marginBottom: 4,
+    marginLeft: 16,
+    marginRight: 16,
+    borderRadius: 32,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '&:hover': {
+      cursor: 'pointer'
+    }
+  },
   button: {
     backgroundImage: `linear-gradient(to bottom right, ${BrandStyles.color.blue}, rgb(2 0 144))`,
     minHeight: 50,
@@ -63,6 +79,9 @@ const styles = {
   shadowButton: {
     boxShadow: `0px 2px 4px ${BrandStyles.color.blue}`
   },
+  shadowButtonDisabled: {
+    boxShadow: `0px 2px 4px rgb(168 159 140)`
+  },
   buttonTitleTextPrimary: {
     color: BrandStyles.color.beige,
     fontWeight: 'bold',
@@ -94,8 +113,10 @@ class NButton extends Component {
   }
 
   onClick = async () => {
-    console.log("onClick")
     const { id, onClick } = this.props;
+    if (this.props.disabled) {
+      return;
+    }
     if (typeof onClick === 'function') {
       onClick();
     }
@@ -108,8 +129,11 @@ class NButton extends Component {
         <Spinner animation="border" variant="light" size="sm"/>
       </div>
     ) : null;
-    console.log("SPINNER", spinner)
-    const themeStyle = this.props.theme === 'secondary' ? styles.buttonSecondary : styles.button;
+
+    let themeStyle = this.props.theme === 'secondary' ? styles.buttonSecondary : styles.button;
+    if (this.props.disabled) {
+      themeStyle = styles.buttonDisabled
+    }
     let buttonStyles = themeStyle;
     if (this.props.buttonStyle) {
       buttonStyles = {...buttonStyles, ...this.props.buttonStyle};
@@ -133,7 +157,11 @@ class NButton extends Component {
         </HoverCursorWrapper>
       );
     }
-    buttonStyles = {...buttonStyles, ...styles.shadowButton};
+    if (this.props.disabled) {
+      buttonStyles = {...buttonStyles, ...styles.shadowButtonDisabled}
+    } else {
+      buttonStyles = {...buttonStyles, ...styles.shadowButton};
+    }
     return (
       <HoverCursorWrapper>
       <div

@@ -440,6 +440,13 @@ class AddProductView extends Component {
     } else {
       errors['originZipCode'] = '';
     }
+    if (!isValid) {
+      errors['root'] = 'Please complete all required fields in the form.';
+      this.setState({ errors });
+      return false;
+    } else {
+      errors['root'] = '';
+    }
 
     let variations = this.state.formData.variations;
 
@@ -454,9 +461,12 @@ class AddProductView extends Component {
   async saveProduct() {
     let valid = this.validateInput();
     if (!valid) {
+      this.setState({
+        mainError: "Please complete all required fields before saving product."
+      });
       return;
     }
-    this.setState({ isSavingProduct: true });
+    this.setState({ isSavingProduct: true, mainError: "" });
 
     let currentProduct = this.props.product ? this.props.product : this.props.currentSellerProduct;
     if (!currentProduct && this.state.product) {
@@ -1645,6 +1655,9 @@ class AddProductView extends Component {
     }
 
     let containerStyle = {...BrandStyles.components.onboarding.container, flexDirection: 'column'};
+    let labelStyle = this.state.errors['root'] != ""
+      ? BrandStyles.components.inputBase.errorLabel
+      : BrandStyles.components.inputBase.label;
     return (
       <div style={{marginLeft: 32, marginRight: 32, maxWidth: 800, margin: 'auto'}}>
         <div style={{ height: 64 }} />
@@ -1666,7 +1679,7 @@ class AddProductView extends Component {
           keyboardVerticalOffset={30}
         >
           <div>
-            <span>{this.state.errors['root']}</span>
+            <span style={labelStyle}>{this.state.errors['root']}</span>
             <br />
             <br />
             <h3
