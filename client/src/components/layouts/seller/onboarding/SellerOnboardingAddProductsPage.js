@@ -8,6 +8,7 @@ import OnboardingHeader from "./OnboardingHeader";
 import AddProductView from "./AddProductView";
 import OnboardingImageWrapper from "./OnboardingImageWrapper";
 import BrandStyles from "../../../BrandStyles";
+import SellerLoadingPage from './SellerLoadingPage';
 import Modal from 'react-modal';
 import {
   clearSellerCurrentProductCache,
@@ -31,7 +32,6 @@ class SellerOnboardingAddProductsPage extends Component {
         sellerProducts.push(props.sellerProducts[key]);
       }
     }
-    console.log(sellerProducts)
     this.state = {
       products: sellerProducts,
     };
@@ -46,7 +46,6 @@ class SellerOnboardingAddProductsPage extends Component {
   }
 
   async _loadSellerProducts() {
-    console.log("GETTING PRODUCTS: ", this.props.user._id)
     await this.props.getSellerProducts(this.props.user._id);
     this.setState({isLoading: false});
   } 
@@ -137,7 +136,6 @@ class SellerOnboardingAddProductsPage extends Component {
         : null;*/
     //let currentProduct = this.props.product ? this.props.product : this.props.currentSellerProduct;
     let sellerProducts = [];
-    console.log("SELLER PRODUCTS", this.props.sellerProducts)
     if (this.props.sellerProducts) {
       for (const key in this.props.sellerProducts) {
         sellerProducts.push(this.props.sellerProducts[key]);
@@ -150,7 +148,7 @@ class SellerOnboardingAddProductsPage extends Component {
         nextButton = <NButton title={'Next Step'} onClick={this.onPressNext} />;
       }
     let containerStyle = {...BrandStyles.components.onboarding.container, justifyContent: 'center', paddingTop: 42};
-    if (isLoading) return <div>isLoading..</div>;
+    if (isLoading) return <SellerLoadingPage />; 
     return (
       <OnboardingImageWrapper>
         <OnboardingHeader />

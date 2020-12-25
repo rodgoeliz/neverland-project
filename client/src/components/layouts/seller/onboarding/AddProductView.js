@@ -85,7 +85,6 @@ class AddProductView extends Component {
       productPhotosData: [],
       variations: variations,
       variationFormData: {},
-      product: props.product,
       isVisible: true,
       isProductVariationsVisible: false,
       errors:{}
@@ -118,6 +117,7 @@ class AddProductView extends Component {
       isProductVariantModalVisible: false,
       allTags: props.allProductTags,
       formData: updatedFormData,
+      product: props.product,
       errors: {}
     };
     //props.onChange(this.state);
@@ -133,6 +133,7 @@ class AddProductView extends Component {
     this.setEditingState = this.setEditingState.bind(this);
     this.getEditingState = this.getEditingState.bind(this);
     this.onImageFileChange = this.onImageFileChange.bind(this);
+    this.saveProduct = this.saveProduct.bind(this);
   }
 
   async initTags() {
@@ -457,7 +458,6 @@ class AddProductView extends Component {
     this.setState({
       errors,
     }, () => {
-      console.log("ERRORS IN FORM: ", this.state)
     });
     return isValid;
   }
@@ -501,7 +501,11 @@ class AddProductView extends Component {
     } else {
       if (this.state.formData.storeId && this.state.formData.storeId.length == 1) {
         let store = this.state.formData.storeId[0];
-        formData.append('storeId', store._id);
+        if (typeof store == "object") {
+          formData.append('storeId', store._id);
+        } else if (typeof store.storeId == "string") {
+          formData.append('storeId', store)
+        }
         if (typeof store.userId == "object") {
           formData.append('vendorId', store.userId._id);
           formData.append('userId', store.userId._id);
@@ -541,7 +545,6 @@ class AddProductView extends Component {
         errors,
       },
       () => {
-        console.log('Updated onChange for FormData', this.state);
       },
     );
   }

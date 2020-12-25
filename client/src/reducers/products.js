@@ -99,6 +99,7 @@ const productReducer = (state = initialState, action) => {
       if (sellerProducts === undefined) {
         sellerProducts = {};
       }
+      console.log("REPLACING PRODUCT: ", action.payload._id, action.payload)
       sellerProducts[action.payload._id] = action.payload;
       let sellerProductscache = {
         ...state,
