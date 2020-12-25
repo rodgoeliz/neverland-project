@@ -285,7 +285,6 @@ class AddProductView extends Component {
 
   validateInput() {
     let errors = this.state.errors;
-    console.log(this.state.formData)
     let isValid = true;
     if (!this.state.formData) {
       errors['root'] = 'Please complete the form.';
@@ -333,7 +332,6 @@ class AddProductView extends Component {
     }
 
     let title = this.state.formData.title;
-    console.log("TITLE")
     if (!title || title.length < 3) {
       errors['title'] = 'Please enter a title.';
         isValid = false;
@@ -1439,8 +1437,8 @@ class AddProductView extends Component {
       let renderItem=({item}) => {
         let hex = item.metaData ? item.metaData.hex : '#fff'
             return (
-              <div style={{display: 'flex', flexDirection: 'row'}}>
-                <div style={{height: 20, width: 20, backgroundColor: hex}}></div>
+              <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                <div style={{height: 20, width: 20, alignItems: 'center', marginRight: 8, borderRadius: 16, backgroundColor: hex}}></div>
                 <span>{item.title}</span>
               </div>);
       }

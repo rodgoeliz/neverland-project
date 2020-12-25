@@ -44,10 +44,10 @@ class ProductVariantOptionTag extends React.PureComponent {
 }
 
 class AddProductVariationView extends Component {
+
   constructor(props) {
     super(props);
     const { variations } = props;
-    console.log('constructor', variations);
     this.state = {
       formData: {
         variations,
@@ -65,7 +65,6 @@ class AddProductVariationView extends Component {
 
   componentDidMount() {
     const { variations } = this.props;
-    console.log('componentDidMount', variations);
     this.setState({
       formData: {
         variations,
@@ -74,13 +73,11 @@ class AddProductVariationView extends Component {
   }
 
   updateFormData(formData) {
-    console.log('updateFormData', formData);
     this.setState(
       {
         formData,
       },
       () => {
-        console.log('updated form data', this.state.formData);
       },
     );
   }
@@ -205,13 +202,10 @@ class AddProductVariationView extends Component {
   }
 
   isChecked(key, variationSlug) {
-    console.log('AddProductVariationView - isChecked: ', key, variationSlug);
     const { variations } = this.state.formData;
     for (let i = 0; i < variations.length; i++) {
       const variation = variations[i];
-      console.log(variation);
       if (variation.handle == variationSlug) {
-        console.log(`${key}:`, variation[key]);
         return variation[key];
       }
     }
@@ -241,8 +235,6 @@ class AddProductVariationView extends Component {
     });
 
     newFormData.variations = updatedVariants;
-    console.log('new option data');
-    console.log(newFormData);
     this.updateFormData(newFormData);
   }
 
@@ -279,7 +271,6 @@ class AddProductVariationView extends Component {
       variationOptions.map((option) => {
         optionsViews.push(this.renderVariationOption(option, variation.handle));
       });
-      console.log('rendering variations views....');
       variationViews.push(
         <div key={variation.hdnle} style={styles.sectionContainer}>
           <div
@@ -380,7 +371,7 @@ class AddProductVariationView extends Component {
         formData: formDataCp,
       },
       () => {
-        this.props.onChangeVariations(this.state.formData.variations);
+        this.props.onChangeVariations(formDataCp.variations);
       },
     );
   }
@@ -397,9 +388,9 @@ class AddProductVariationView extends Component {
     newFormData[key] = value;
     let title = value.charAt(0).toUpperCase() + value.slice(1);
     if (value === 'size' || value === 'color') {
-      this.createNewVariation(title, value);
+      return this.createNewVariation(title, value);
     }
-    this.updateFormData(newFormData);
+    return this.updateFormData(newFormData);
   }
 
   renderCreateNewProductVariationPicker() {
@@ -475,7 +466,6 @@ class AddProductVariationView extends Component {
   render() {
     let { variations, isSavingProduct } = this.props;
     let existingVariationViews = null;
-    console.log('Render variations view', variations);
     if (variations && variations.length > 0) {
       existingVariationViews = (
         <div style={{ paddingTop: 16 }}>
