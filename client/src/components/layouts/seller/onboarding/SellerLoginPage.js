@@ -18,6 +18,12 @@ const styles = {
     justifyContent: 'center',
     padding: 16,
   },
+  errorMessage: {
+    color: BrandStyles.color.maroon,
+    fontSize: 12,
+    paddingLeft: 16,
+    paddingTop: 4,
+  },
 };
 
 class SellerLoginPage extends React.Component {
@@ -30,7 +36,8 @@ class SellerLoginPage extends React.Component {
       passwordError: '',
       isSubmitting: false,
       isSellerOnboarding: true,
-      toNextStep: false
+      toNextStep: false,
+      loginErrorCode: ""
     };
   }
 
@@ -101,13 +108,20 @@ class SellerLoginPage extends React.Component {
           password: data.password.password,
           isSellerOnboarding: this.state.isSellerOnboarding,
         };
-        const success = await loginFirebase(transformedData, 'default');
-        let nextPath = '/seller/onboarding/main';
-        if (this.props && this.props.location && this.props.location.state) {
-          nextPath = this.props.location.state.from;
+        const response = await loginFirebase(transformedData, 'default');
+        if (!response.success) {
+          this.setState({ loading: false, loginErrorCode: response.data }, () => {
+            console.log('Set loading to false');
+          });
+        } else {
+          console.log("login:", response)
+          let nextPath = '/seller/onboarding/main';
+          if (this.props && this.props.location && this.props.location.state) {
+            nextPath = this.props.location.state.from;
+          }
+          this.setState({ nextPath: nextPath, success: null, error: null, isLoadingSubmitSignup: false });
+          this.redirectToNextStep();
         }
-        this.setState({ nextPath: nextPath, success, error: null, isLoadingSubmitSignup: false });
-        this.redirectToNextStep();
       } catch (error) {
         this.setState({
           isLoadingSubmitSignup: false,
@@ -116,6 +130,47 @@ class SellerLoginPage extends React.Component {
         });
       }
     }
+  }
+  hasError(key) {
+    const errorCode = this.state.loginErrorCode;
+
+    if (key === 'email' && (errorCode === 'auth/invalid-email' || errorCode === 'auth/user-not-found')) {
+      return true;
+    }
+    if (key === 'password' && errorCode === 'auth/wrong-password') {
+      return true;
+    }
+
+    return (
+      key === 'other' &&
+      (errorCode === 'auth/user-not-found' || errorCode === 'auth/too-many-requests')
+    );
+  }
+
+  renderErrorCode() {
+    const errorCode = this.state.loginErrorCode;
+    let error = '';
+    switch (errorCode) {
+      case 'auth/invalid-email':
+        error = 'The provided email address is invalid.';
+        break;
+      case 'auth/wrong-password':
+        error = 'The password is incorrect';
+        break;
+      case 'auth/user-not-found':
+        error = 'This email does not exist.';
+        break;
+      case 'auth/too-many-requests':
+        error = 'Too many login attempts. Please try again in a few minutes.';
+        break;
+      default:
+        error = 'Something went wrong. Please check the data you entered and try again.';
+        break;
+    }
+    console.log("this state loginerrorcode:", this.state.loginErrorCode, error)
+    console.log(error)
+    return error;
+    return <span style={styles.errorMessage}>{error}</span>;
   }
 
   renderError(error) {
@@ -153,14 +208,26 @@ class SellerLoginPage extends React.Component {
       spinner = <Spinner />;
     }
     let emailInputStyle = BrandStyles.components.input;
+    let emailErrorMsg = this.state.emailError;
     if (this.state.emailError) {
       emailInputStyle = BrandStyles.components.errorInput;
     }
     let passInputStyle = BrandStyles.components.input;
+    let passErrorMsg = this.state.passwordError;
     if (this.state.passwordError && this.state.passwordError.length > 0) {
       passInputStyle = BrandStyles.components.errorInput;
     }
     let containerStyle = {...BrandStyles.components.onboarding.container, flexDirection: 'column'};
+    const emailError = this.hasError('email');
+    if (emailError) {
+      emailErrorMsg = this.renderErrorCode()
+    }
+    console.log("EMAIL ERRORMSG AFTER: ", emailErrorMsg)
+    const passError = this.hasError('password');
+    if (passError) {
+      passErrorMsg = this.renderErrorCode();
+    }
+    const userError = this.hasError('other');
     return (
       <OnboardingImageWrapper>
         <OnboardingHeader />
@@ -189,11 +256,11 @@ class SellerLoginPage extends React.Component {
             </span>
             <div style={{ height: 32 }} />
             <form style={{ justifyContent: 'center' }}>
-              <EmailInput onChange={this.onChangeInput.bind(this)} error={this.state.emailError} />
+              <EmailInput onChange={this.onChangeInput.bind(this)} error={emailErrorMsg} />
               <div style={{height: 8}} />
               <PasswordInput
                 onChange={this.onChangeInput.bind(this)}
-                error={this.state.passwordError}
+                error={passErrorMsg}
               />
               <div style={{height: 8}} />
               <div>
