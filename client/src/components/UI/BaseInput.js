@@ -141,7 +141,7 @@ export default class BaseInput extends React.Component {
           <StyledInput
                 keyboardType={this.props.keyboardType ? this.props.keyboardType : 'default'}
                 style={BrandStyles.components.inputBase.textInput}
-                placeholder={`Enter ${this.props.label.toLowerCase()}`}
+                placeholder={this.props.placeholder ? this.props.placeholder : `Enter ${this.props.label.toLowerCase()}`}
                 multiline={this.props.multiline}
                 autoCapitalize={autoCap}
                 value={this.state[this.props.keyId]}
@@ -157,7 +157,7 @@ export default class BaseInput extends React.Component {
               <StyledTextArea
                 keyboardType={this.props.keyboardType ? this.props.keyboardType : 'default'}
                 style={BrandStyles.components.inputBase.textInput}
-                placeholder={`Enter ${this.props.label.toLowerCase()}`}
+                placeholder={this.props.placeholder ? this.props.placeholder : `Enter ${this.props.label.toLowerCase()}`}
                 multiline={this.props.multiline}
                 autoCapitalize={autoCap}
                 value={this.state[this.props.keyId]}

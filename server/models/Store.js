@@ -17,6 +17,10 @@ const storeSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Address'
 	},
+  packageProfileIds: [{
+    type: Schema.Types.ObjectId,
+    ref: 'PackageProfile'
+  }],
 	categoryTagIds: [{
 		type: Schema.Types.ObjectId,
 		ref: 'ProductTag'

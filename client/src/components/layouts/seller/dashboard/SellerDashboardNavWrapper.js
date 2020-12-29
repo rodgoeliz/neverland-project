@@ -50,6 +50,7 @@ export default class SellerDashboardNavWrapper extends Component {
           <br />
           <Link style={styles.navItem} to="/seller/dashboard/orders"> My Orders </Link>
           <Link style={styles.navItem} to="/seller/dashboard/products"> My Products </Link>
+          <Link style={styles.navItem} to="/seller/dashboard/shipping"> Shipping & Packaging</Link>
           <Link style={styles.navItem} to="/seller/dashboard/shop"> My Shop </Link>
           <Link style={styles.navItem} to="/seller/dashboard/payments"> My Payments & Payouts </Link>
           <Link style={styles.navItem} to="/seller/dashboard/support"> Contact support </Link>

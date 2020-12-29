@@ -33,6 +33,7 @@ import SellerOnboardingPendingActivationPage from "./components/layouts/seller/o
 import SellerOnboardingMainRoutingPage from "./components/layouts/seller/onboarding/SellerOnboardingMainRoutingPage";
 import SellerDashboardMainPage from "./components/layouts/seller/dashboard/SellerDashboardMainPage";
 import SellerDashboardShopPage from "./components/layouts/seller/dashboard/SellerDashboardShopPage";
+import SellerDashboardShippingPage from "./components/layouts/seller/dashboard/SellerDashboardShippingPage";
 import SellerLoadingPage from "./components/layouts/seller/onboarding/SellerLoadingPage";
 import DownloadNeverland from "./download/downloadNeverland";
 import {ParallaxProvider} from "react-scroll-parallax";
@@ -170,6 +171,7 @@ class App extends Component {
                 <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/main" authenticated={this.state.authenticated} component={SellerDashboardMainPage} />
                 <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shop" authenticated={this.state.authenticated} component={SellerDashboardShopPage} />
                 <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/product/add" authenticated={this.state.authenticated} component={AddProductView} />
+                <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shipping" authenticated={this.state.authenticated} component={SellerDashboardShippingPage} />
                 <Route exact path="/privacy" component={PrivacyPolicy} />
                 <Route exact path="/download/neverland" component={DownloadNeverland} />
                 <Route exact path="/waitlist/user" component={NeverlandWaitlist} />

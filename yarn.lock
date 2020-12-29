@@ -13438,6 +13438,11 @@
   "resolved" "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz"
   "version" "0.1.1"
 
+"shippo@^1.5.0":
+  "integrity" "sha512-ngJQ7XQlViZQenkQdcAQuqZTmxYIfxWiggAhGUYo+ubJTg6RyPgHOuPLT6UBvy9WNsVlbsQNEV176uhqNfnOFw=="
+  "resolved" "https://registry.npmjs.org/shippo/-/shippo-1.5.0.tgz"
+  "version" "1.5.0"
+
 "shortid@^2.2.16":
   "integrity" "sha512-Ugt+GIZqvGXCIItnsL+lvFJOiN7RYqlGy7QE41O3YC1xbNSeDGIRO7xg2JJXIAj1cAGnOeC1r7/T9pgrtQbv4g=="
   "resolved" "https://registry.yarnpkg.com/shortid/-/shortid-2.2.16.tgz"

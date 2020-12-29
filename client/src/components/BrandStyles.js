@@ -62,7 +62,6 @@ const BrandStyles = {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 8,
         marginTop: 4,
       },
       textInput: {
@@ -143,12 +142,16 @@ const BrandStyles = {
       backgroundColor: '#efe6d8',
       display: 'flex',
       flex: 1,
+      paddingRight: 16,
+      paddingLeft: 16,
     },
     container: {
       backgroundColor: '#efe6d8',
       display: 'flex',
       flex: 1,
       justifyContent: 'center',
+      paddingRight: 16,
+      paddingLeft: 16,
     },
     listItemLiteContainer: {
       backgroundColor: '#FFFDFB', //xlightBige

@@ -3,7 +3,8 @@ import { PURGE } from "redux-persist";
 
 var initialState = {
   stores: [],
-  userIdToStoreCache: {}
+  userIdToStoreCache: {},
+  packageProfiles: []
 }
 
 export default (state = initialState, action) => {
@@ -22,6 +23,18 @@ export default (state = initialState, action) => {
       return {
         ...state,
         stores: action.payload
+      }
+    case actionTypes.store.LOAD_PACKAGE_PROFILES:
+      return {
+        ...state,
+        packageProfiles: action.payload
+      }
+    case actionTypes.store.ADD_PACKAGE_PROFILE:
+      let existingPackageProfiles = state.packageProfiles;
+      existingPackageProfiles.push(action.payload);
+      return {
+        ...state,
+        packageProfiles: existingPackageProfiles
       }
     case PURGE:
       return { ...initialState };

@@ -328,9 +328,13 @@ export default class NSelect extends Component {
     labelStyle = {...labelStyle, marginLeft: 16};
     let modalDiv = {...headerStyle, ...extraHeaderStyle, cursor: 'pointer',marginRight: 16, marginLeft: 16, flexDirection: 'column'};
     let title = this.props.title ? <span style={labelStyle}> {this.props.title} </span>: null;
+    let errorMessage = null;
+    if (this.props.error) {
+      errorMessage = <span style={labelStyle}>{this.props.error}</span>;
+    }
     return (
       <StyledTextButton>
-        <span style={labelStyle}>{this.props.error}</span>
+        {errorMessage}
         <div
           style={modalDiv}
           onClick={this._showModal}
@@ -482,8 +486,8 @@ const styles = {
     display: 'flex',
     flex: 1,
     justifyContent: 'center',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     'border-bottom': `2px solid ${BrandStyles.color.maroon}`,
     backgroundColor: BrandStyles.color.warmlightBeige,
     paddingLeft: 16,
@@ -494,8 +498,8 @@ const styles = {
     display: 'flex',
     flex: 1,
     justifyContent: 'center',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     'border-bottom': `2px solid ${BrandStyles.color.blue}`,
     borderBottomWidth: 2,
     backgroundColor: BrandStyles.color.warmlightBeige,

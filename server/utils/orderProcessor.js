@@ -25,29 +25,61 @@ module.exports.getBuyerProtectionSurcharge = async (subtotal) => {
 	return 0;
 }
 
+module.exports.calculateShippingFromBundle = async (order, bundleId) => {
+  const bundle = await Bundle.find({_id: bundleId})
+    .populate({
+      path: 'productOrderItemIds',
+      populate: 'productId'})
+    .populatee({
+      path: 'storeId',
+      populate: 'packageProfileIds'
+    });
+  let length, height, width = 0;
+  let weightLb, weightOz = 0;
+  let zipCodeOrigin = null;
+  bundle.productOrderItemIds.map((item) => {
+    const product = item.productId; 
+    length += product.lengthIn;
+    height += product.heightIn;
+    width += product.widthIn;
+    weightLb += product.weightLb;
+    weightOz += product.weightOz;
+    zipCodeOrigin = item.originZipCode;
+  });
+
+  let reccPackageProfile = null;
+  bundle.packageProfileIds.map((profile) => {
+    if (length <= profile.length && width <= profile.width && height <= profile.height) {
+      reccPackageProfile = profile;
+    }
+  });
+  let shippingAddress = order.shippingAddressId;
+  const shipZip = order.addressZip;
+  // check origin zip codes and make sure equal, otherwise, we need two shipping labels?
+
+  if (profile)  {
+    // get shippo rates for this profile 
+  } else {
+    // get shippo rates for recommended length, height, width  and weight
+  }
+}
+
 module.exports.getFulfillmentMethod = async (carrier, type) => {
 	return rootConfig.fulfillmentOptions[carrier][type];
 }
 
 module.exports.calculateBundleSubTotal = async (bundle) => {
 	let subtotal = 0;
-  console.log(bundle)
-  console.log("calculateBundleSubTotal", bundle.productOrderItemIds);
   let productOrderItems = await OrderProductItem.find({_id: {$in: bundle.productOrderItemIds}})
     .populate('selectedOptionIds').populate('productId');
   let totalPrice = 0;
-  console.log("calculate productorderitem", productOrderItems) ;
   // go through product order items
   productOrderItems.map((productOrderItem) => {
-    console.log(productOrderItem.productId)
     let price = productOrderItem.productId.price.value;
     let basePrice = 0;
-    console.log("BASE PRICE", price)
     if (price && !isNaN(price)) {
       basePrice += parseFloat(price);
     }
-    console.log("after converting", basePrice)
-    console.log(productOrderItem.selectedOptionIds)
     // go through options and add the additional pricing
     for (var i in productOrderItem.selectedOptionIds) {
       let option = productOrderItem.selectedOptionIds[i] ;
@@ -58,7 +90,6 @@ module.exports.calculateBundleSubTotal = async (bundle) => {
     basePrice = basePrice * productOrderItem.quantity;
     totalPrice += basePrice;
   });
-  console.log("Total Price: ", totalPrice);
 	return totalPrice;
 }
 
