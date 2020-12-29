@@ -1,5 +1,6 @@
-import actionTypes from '../constants/newActionTypes';
 import { PURGE } from "redux-persist";
+
+import actionTypes from 'constants/newActionTypes';
 
 export const initialState = {
   loadedProducts: [],
@@ -25,11 +26,11 @@ const productReducer = (state = initialState, action) => {
         }
       };
     case actionTypes.products.ADD_TEST_SELLER_PRODUCT:
-      let newCache = {};
-      for (var key in state.sellerProductsCache) {
+      const newCache = {};
+      for (const key in state.sellerProductsCache) {
         newCache[key] = state.sellerProductsCache[key];
       }
-      let product = {
+      const product = {
         metafields: [],
         style: [],
         colors: [],
@@ -101,13 +102,6 @@ const productReducer = (state = initialState, action) => {
       }
       console.log("REPLACING PRODUCT: ", action.payload._id, action.payload)
       sellerProducts[action.payload._id] = action.payload;
-      let sellerProductscache = {
-        ...state,
-        sellerProductsCache: {
-          ...state.sellerProductscache,
-          [action.payload._id]: action.payload,
-        },
-      };
       return {
         ...state,
         sellerProductsCache: {
@@ -116,11 +110,11 @@ const productReducer = (state = initialState, action) => {
         },
       };
     case actionTypes.products.SET_SELLER_PRODUCTS:
-      let spCache = state.sellerProductsCache;
-      let newSellerCache = {};
+      const newSellerCache = {};
       action.payload.map((item) => {
         newSellerCache[item._id] = item;
-      })
+        return item;
+      });
       return {
         ...state,
         sellerProductsCache: {
@@ -145,7 +139,7 @@ const productReducer = (state = initialState, action) => {
         },
       };
     case actionTypes.products.ADD_RECENTLY_VIEWED_PRODUCT:
-      let rvProducts = state.recentlyViewedProductsCache;
+      const rvProducts = state.recentlyViewedProductsCache;
       if (rvProducts && rvProducts[action.payload._id]) {
         rvProducts[action.payload._id] = action.payload;
       }
@@ -159,9 +153,9 @@ const productReducer = (state = initialState, action) => {
         productTags: action.payload,
       };
     case actionTypes.products.GET_PRODUCT_LIST:
-      let transformedCache = [];
-      for (var i in action.payload) {
-        let prod = action.payload[i];
+      const transformedCache = [];
+      for (const i in action.payload) {
+        const prod = action.payload[i];
         transformedCache[prod._id] = prod;
       }
       return {
@@ -173,7 +167,7 @@ const productReducer = (state = initialState, action) => {
         productsCacheArr: action.payload
       }
     case PURGE:
-      return {...initialState};
+      return { ...initialState };
     default:
       return state;
   }

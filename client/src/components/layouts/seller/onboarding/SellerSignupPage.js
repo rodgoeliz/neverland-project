@@ -1,14 +1,20 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import NButton from '../../../UI/NButton';
+
 import { Spinner } from 'react-bootstrap';
-import BrandStyles from "../../../BrandStyles";
-import PasswordInput from '../../../UI/PasswordInput';
-import EmailInput from '../../../UI/EmailInput';
+
+import NButton from 'components/UI/NButton';
+
+import PasswordInput from 'components/UI/PasswordInput';
+import EmailInput from 'components/UI/EmailInput';
+
+import BrandStyles from 'components/BrandStyles';
+
+import { onSignUpFirebase } from 'actions/auth';
+
 import OnboardingImageWrapper from './OnboardingImageWrapper';
 import OnboardingHeader from './OnboardingHeader';
-import { onSignUpFirebase } from '../../../../actions/auth';
 
 const styles = {
   container: {
@@ -29,8 +35,7 @@ class SellerSignupPage extends React.Component {
       emailError: '',
       passwordError: '',
       isSubmitting: false,
-      isSellerOnboarding: true,
-      toNextStep: false
+      toNextStep: false,
     };
     this.onClickBackButton = this.onClickBackButton.bind(this);
   }
@@ -79,32 +84,19 @@ class SellerSignupPage extends React.Component {
     return isValid;
   }
 
-  redirectToNextStep() {
-
-  }
+  redirectToNextStep() {}
 
   async onSubmitForm() {
     if (this.validateInput()) {
       this.setState({ isLoadingSubmitSignup: true });
 
-      const { onSignUpFirebase } = this.props;
-      this.setState({ success: null, error: null, loading: true });
-      let data = this.state;
       try {
         // transform data
-        let transformedData = {
-          email: data.email.email,
-          password: data.password.password,
-          isSellerOnboarding: this.state.isSellerOnboarding,
-        };
-        const success = await onSignUpFirebase(transformedData, 'default');
-        this.setState({ toNextStep: true, success, error: null, isLoadingSubmitSignup: false });
+        this.setState({ toNextStep: true, isLoadingSubmitSignup: false });
         this.redirectToNextStep();
       } catch (error) {
         this.setState({
           isLoadingSubmitSignup: false,
-          success: null,
-          error: error.message,
         });
       }
     }
@@ -134,6 +126,8 @@ class SellerSignupPage extends React.Component {
       case 'auth/facebook-login-failed':
         message = "We couldn't get your account details. Please try again later.";
         break;
+      default:
+        break;
     }
 
     return <span style={styles.errorMessage}>{message}</span>;
@@ -141,34 +135,31 @@ class SellerSignupPage extends React.Component {
 
   render() {
     if (this.state.toNextStep) {
-      let fromPath = "";
+      let fromPath = '';
       if (this.props && this.props.location && this.props.location.state) {
         fromPath = this.props.location.state.from;
       }
-       
-      return (<Redirect to={{
-        pathname: "/seller/onboarding/basics",
-        state: {from: fromPath}
-        }} />);
+
+      return (
+        <Redirect
+          to={{
+            pathname: '/seller/onboarding/basics',
+            state: { from: fromPath },
+          }}
+        />
+      );
     }
     let spinner = null;
     if (this.state.isSubmitting) {
       spinner = <Spinner />;
     }
-    let emailInputStyle = BrandStyles.components.input;
-    if (this.state.emailError) {
-      emailInputStyle = BrandStyles.components.errorInput;
-    }
-    let passInputStyle = BrandStyles.components.input;
-    if (this.state.passwordError && this.state.passwordError.length > 0) {
-      passInputStyle = BrandStyles.components.errorInput;
-    }
-    let containerStyle = {...BrandStyles.components.onboarding.container, flexDirection: 'column'};
+
+    const containerStyle = { ...BrandStyles.components.onboarding.container, flexDirection: 'column' };
     return (
       <OnboardingImageWrapper>
         <OnboardingHeader onClickBackButton={this.onClickBackButton} />
         <div>
-          <div style={{...containerStyle, alignItems: 'center'}}>
+          <div style={{ ...containerStyle, alignItems: 'center' }}>
             <div style={{ height: 64 }} />
             <span
               style={{
@@ -191,14 +182,11 @@ class SellerSignupPage extends React.Component {
               SIGN UP
             </span>
             <div style={{ height: 32 }} />
-            <div style={{ display: 'flex', flexDirection:'column', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <EmailInput onChange={this.onChangeInput.bind(this)} error={this.state.emailError} />
-              <div style={{height: 8}} />
-              <PasswordInput
-                onChange={this.onChangeInput.bind(this)}
-                error={this.state.passwordError}
-              />
-              <div style={{height: 8}} />
+              <div style={{ height: 8 }} />
+              <PasswordInput onChange={this.onChangeInput.bind(this)} error={this.state.passwordError} />
+              <div style={{ height: 8 }} />
               <div>
                 <NButton
                   buttonStyle={{
@@ -229,10 +217,8 @@ class SellerSignupPage extends React.Component {
     );
   }
 }
-const mapStateToProps = state => {
-  return {
-    auth: state.auth
-  }
-}
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
 
-export default connect(mapStateToProps, {onSignUpFirebase})(SellerSignupPage);
+export default connect(mapStateToProps, { onSignUpFirebase })(SellerSignupPage);

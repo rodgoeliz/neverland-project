@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {Redirect} from "react-router-dom";
 import queryString from 'query-string';
-import { joinWaitlist } from "../../actions/waitlist";
+
+import { joinWaitlist } from "actions/waitlist";
 
 class ModernBasketRewardsHome extends Component {
 	constructor(props) {
@@ -29,14 +30,14 @@ class ModernBasketRewardsHome extends Component {
 	}
 
 	genFunction() {
-		let functions = ["aging", "life", "stress", "sleep"];
+		const functions = ["aging", "life", "stress", "sleep"];
 		return (
 				<span>{functions[this.state.fIndex]}</span>
 		);
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-		let waitlistUser = this.props.waitlist.waitlistUser;
+	componentDidUpdate() {
+		const {waitlistUser} = this.props.waitlist;
 		if (waitlistUser && waitlistUser.referralCode) {
 			this.setState({
 				redirect: true
@@ -45,12 +46,12 @@ class ModernBasketRewardsHome extends Component {
 	}
 
 	validateEmail(email) {
-    	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     	return re.test(String(email).toLowerCase());
 	}
 
 	onClickWaitlist() {
-		//validate email
+		// validate email
 		if (this.validateEmail(this.state.emailInput)) {
 			this.props.joinWaitlist(this.state.emailInput, this.state.inviter);
 			this.setState({
@@ -60,7 +61,7 @@ class ModernBasketRewardsHome extends Component {
 		} else {
 			this.setState({"emailError": "Please enter valid email"})
 		}
-		//window.location = "https://docs.google.com/forms/d/e/1FAIpQLSeZcRVCsn-_cOXdcMyjEfR7PQ9N536zi0NGdVZRbcfE4KUCpg/viewform"
+		// window.location = "https://docs.google.com/forms/d/e/1FAIpQLSeZcRVCsn-_cOXdcMyjEfR7PQ9N536zi0NGdVZRbcfE4KUCpg/viewform"
 	}
 
 	onChangeInput(event) {
@@ -70,10 +71,6 @@ class ModernBasketRewardsHome extends Component {
 	}
 
 	render() {
-		let message = "";
-		if (this.props.waitlist) {
-			message = this.props.waitlist.message;
-		}
 		if (this.state.redirect) {
 			return (<Redirect to="/immunity/blue/waitlist" />);
 		}
@@ -141,10 +138,8 @@ class ModernBasketRewardsHome extends Component {
 	}
 }
 
-const mapStateToProps = state => {
-	return {
+const mapStateToProps = state => ({
 		waitlist: state.waitlist
-	}
-}
+	})
 
 export default connect(mapStateToProps, {joinWaitlist})(ModernBasketRewardsHome);

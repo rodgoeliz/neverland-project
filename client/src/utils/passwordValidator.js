@@ -1,8 +1,8 @@
-const passwordValidator = require('password-validator');
+const PasswordValidator = require('password-validator');
 
 export default function (password) {
   // validate password
-  const passSchema = new passwordValidator();
+  const passSchema = new PasswordValidator();
   passSchema
     .is()
     .min(8)

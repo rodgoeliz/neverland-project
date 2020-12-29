@@ -1,48 +1,16 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import NButton from '../../../UI/NButton';
-import NSelect from "../../../UI/NSelect";
-import styled from 'styled-components';
-import { Spinner } from 'react-bootstrap';
-import BrandStyles from "../../../BrandStyles";
-import BaseInput from "../../../UI/BaseInput";
+
+import NSelect from "components/UI/NSelect";
+import NButton from 'components/UI/NButton';
+import BrandStyles from "components/BrandStyles";
+import BaseInput from "components/UI/BaseInput";
+
+import { createPackageProfile, loadPackageProfiles, deletePackageProfile, updatePackageProfile } from 'actions/shipping';
+import isNumberValid from "utils/numberValidator";
+import PACKAGE_PROFILES from 'constants/packageProfiles';
+
 import SellerDashboardNavWrapper from './SellerDashboardNavWrapper';
-import { createPackageProfile, loadPackageProfiles, deletePackageProfile, updatePackageProfile } from '../../../../actions/shipping';
-import isNumberValid from '../../../../utils/numberValidator';
-import PACKAGE_PROFILES from '../../../../constants/packageProfiles';
-
-const styles = {
-  container: {
-    backgroundColor: BrandStyles.color.beige,
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-};
-
-const TextAreaInput = styled.textarea`
-  background-color: #F6F0E6;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  border: 0px;
-  border-bottom: 2px solid #1E1DCD !important;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  margin-top: 4px;
-  padding-right: 16px;
-  margin-left: 16px;
-  margin-right: 32px;
-  width: 100%;
-  padding: 16px;
-  height: 100px;
-  display: flex;
-  flex-direction: column;
-  &:focus {
-    outline: none
-  } 
-`;
 
 class SellerDashboardShippingPage extends React.Component {
 
@@ -65,14 +33,12 @@ class SellerDashboardShippingPage extends React.Component {
   }
 
   async _loadPackageProfiles() {
-    console.log("loading package profiles for store: ", this.props.user.storeId);
     const profiles = await this.props.loadPackageProfiles(this.props.user.storeId);
-    console.log("PROFILES: ", profiles)
     if (!profiles) {
       this.setState({
         isLoading: false
       });
-      return; 
+       
     } else {
       this.setState({
         existingProfiles: profiles,
@@ -93,16 +59,15 @@ class SellerDashboardShippingPage extends React.Component {
   }
 
   onPackageSizeSelect(key, values) {
-    console.log("nselect values: ", values)
     if (values && values.length > 0) {
       const entry = values[0];
-      let formData = this.state.formData;
-      if (entry.id != 'custom-package-profile') {
-        const sizing = entry.sizing;
-        formData['lengthIn'] = sizing.length;
-        formData['widthIn'] = sizing.width;
-        formData['heightIn'] = sizing.height;
-        formData['packageProfileName'] = entry.name;
+      const {formData} = this.state;
+      if (entry.id !== 'custom-package-profile') {
+        const {sizing} = entry;
+        formData.lengthIn = sizing.length;
+        formData.widthIn = sizing.width;
+        formData.heightIn = sizing.height;
+        formData.packageProfileName = entry.name;
       }
       formData[key] = entry;
       this.setState({
@@ -112,7 +77,7 @@ class SellerDashboardShippingPage extends React.Component {
   }
 
   onChangeBaseInput(key, value) {
-    let newFormData = {...this.state.formData};
+    const newFormData = {...this.state.formData};
     newFormData[key] = value;
     this.setState({
       formData: newFormData
@@ -120,8 +85,7 @@ class SellerDashboardShippingPage extends React.Component {
   }
 
   async addPackageProfile() {
-    console.log(this.state)
-    const formData = this.state.formData;
+    const {formData} = this.state;
     const input = {
       width: formData.widthIn,
       height: formData.heightIn,
@@ -131,17 +95,17 @@ class SellerDashboardShippingPage extends React.Component {
       storeId: this.props.user.storeId
     }
     const newProfile = await this.props.createPackageProfile(input);
-    let existingProfiles = this.state.existingProfiles;
+    const {existingProfiles} = this.state;
     existingProfiles.push(newProfile);
     this.setState({
-      existingProfiles: existingProfiles
+      existingProfiles
     });
   }
 
   async onRemoveProfile(packageProfileId) {
     const deletedPackage = await this.props.deletePackageProfile(packageProfileId);
-    let existingProfiles = this.state.existingProfiles;
-    const newProfiles = existingProfiles.filter((profile) => {return profile._id != deletedPackage._id});
+    const {existingProfiles} = this.state;
+    const newProfiles = existingProfiles.filter((profile) => profile._id !== deletedPackage._id);
     this.setState({
       existingProfiles: newProfiles
     });
@@ -150,19 +114,17 @@ class SellerDashboardShippingPage extends React.Component {
   async onUpdateProfile(packageProfileId, fields) {
     console.log("Saving edits...", this.state.edits)
     const updatedPackage = await this.props.updatePackageProfile(packageProfileId, fields);
-    let existingProfiles = this.state.existingProfiles;
-    const newProfiles = existingProfiles.map((profile) => {
-      return profile._id == updatedPackage._id ? updatedPackage : profile;
-    });
+    const {existingProfiles} = this.state;
+    const newProfiles = existingProfiles.map((profile) => (profile._id === updatedPackage._id) ? updatedPackage : profile);
     this.setState({
       existingProfiles: newProfiles
     })
   }
 
   onChangeEdit(packageProfileId, key, value)  {
-    let edits = this.stat.edits;
+    const {edits} = this.stat;
     if (edits[packageProfileId]) {
-      let packageProfileEdit = edits[packageProfileId];
+      const packageProfileEdit = edits[packageProfileId];
       packageProfileEdit[key] = value;
       edits[packageProfileId] = packageProfileEdit;
     } else {
@@ -176,13 +138,13 @@ class SellerDashboardShippingPage extends React.Component {
   }
 
   renderExistingProfiles() {
-    const existingProfiles = this.state.existingProfiles;
+    const {existingProfiles} = this.state;
     if (!existingProfiles) {
       return null;
     }
-    let profileViews = [];
+    const profileViews = [];
     existingProfiles.map((profile) => {
-      let view = (
+      const view = (
         <div>
           <div>{profile.title}</div>
           <div>{profile.length}</div>
@@ -193,6 +155,7 @@ class SellerDashboardShippingPage extends React.Component {
       profileViews.push(
         view
       );
+      return profile;
     });
     return profileViews;
   }
@@ -212,12 +175,12 @@ class SellerDashboardShippingPage extends React.Component {
           <NSelect 
             items={PACKAGE_PROFILES}
             itemIdKey="id"
-            isSingleSelect={true}
+            isSingleSelect
             values={this.state.formData.packageType}
             title="Package Size"
             itemTitleKey="name"
-            placeholderText={'Select package size...'}
-            error={this.state.errors['packageSize']}
+            placeholderText="Select package size..."
+            error={this.state.errors.packageSize}
             onChangeItems={(values) => {
               this.onPackageSizeSelect('packageSize', values)
             }}/> 
@@ -227,7 +190,7 @@ class SellerDashboardShippingPage extends React.Component {
             label="Package Profile Name"
             placeholder="Enter profile name"
             value={this.state.formData.packageProfileName ? this.state.formData.packageProfileName: null}
-            error={this.state.errors['packageProfileName']} />
+            error={this.state.errors.packageProfileName} />
           <BaseInput
             onChange={this.onChangeBaseInput}
             keyId="lengthIn"
@@ -236,21 +199,21 @@ class SellerDashboardShippingPage extends React.Component {
             placeholder="(In)"
             widthFactor={6}
             value={this.state.formData.lengthIn ? this.state.formData.lengthIn : null}
-            error={this.state.errors['lengthIn']} />
+            error={this.state.errors.lengthIn} />
           <BaseInput
             onChange={this.onChangeBaseInput}
             keyId="widthIn"
             validate={isNumberValid}
             label="Width (In)"
             value={this.state.formData.widthIn ? this.state.formData.widthIn : null}
-            error={this.state.errors['widthIn']} />
+            error={this.state.errors.widthIn} />
           <BaseInput
             onChange={this.onChangeBaseInput}
             keyId="heightIn"
             validate={isNumberValid}
             label="Height (In)"
             value={this.state.formData.heightIn ? this.state.formData.heightIn : null}
-            error={this.state.errors['heightIn']} />
+            error={this.state.errors.heightIn} />
           <NButton title="Add Package Profile" onClick={this.addPackageProfile} />
         </div>
       </div>
@@ -282,10 +245,8 @@ class SellerDashboardShippingPage extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => ({
     user: state.auth,
     store: state.store
-  }
-}
+  })
 export default connect(mapStateToProps, {createPackageProfile, loadPackageProfiles, deletePackageProfile, updatePackageProfile})(SellerDashboardShippingPage);

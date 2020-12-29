@@ -1,48 +1,42 @@
-import actionTypes from '../constants/newActionTypes';
-import { sellerOnBoardingSteps } from "../constants/onBoardingSteps";
-import HandleErrorMessage from '../utils/format-error-messages';
+import actionTypes from 'constants/newActionTypes';
+
+import { sellerOnBoardingSteps } from "constants/onBoardingSteps";
+
+import Api from 'lib/api';
+
 import { setUser } from './auth';
-import Api from '../lib/api';
 
 export const onSubmitStep = ({ stepId, formData, userId }) => async (dispatch) => {
-    const response = await Api.post(`/api/seller/onboarding/submit`, {
-      stepId,
-      formData,
-      userId,
-    });
-    // set user info as well here
-    if (!response.data.success) {
-      //dispatch(
-        //createErrorAction(actionTypes.seller.SUBMIT_SELLER_ONBOARDING_STEP, response.data.error),
-      //);
-    } else {
-      if (stepId === sellerOnBoardingSteps.SIGNUP_BASICS) {
-        const { sellerUser, accountLinks } = response.data.payload;
-        dispatch({
-          type: actionTypes.seller.SET_ACCOUNT_LINKS,
-          payload: accountLinks,
-        });
+  const response = await Api.post(`/api/seller/onboarding/submit`, {
+    stepId,
+    formData,
+    userId,
+  });
+  // set user info as well here
+  if (!response.data.success) {
+    // dispatch(
+    // createErrorAction(actionTypes.seller.SUBMIT_SELLER_ONBOARDING_STEP, response.data.error),
+    // );
+  } else {
+    if (stepId === sellerOnBoardingSteps.SIGNUP_BASICS) {
+      const { sellerUser, accountLinks } = response.data.payload;
+      dispatch({
+        type: actionTypes.seller.SET_ACCOUNT_LINKS,
+        payload: accountLinks,
+      });
 
-        dispatch(setUser(sellerUser));
-      }
-      if (
-        stepId === sellerOnBoardingSteps.SIGNUP_SHOP_BASICS ||
-        stepId === sellerOnBoardingSteps.SIGNUP_PAYMENT
-      ) {
-        dispatch(setUser(response.data.payload));
-      }
+      dispatch(setUser(sellerUser));
     }
+    if (
+      stepId === sellerOnBoardingSteps.SIGNUP_SHOP_BASICS ||
+      stepId === sellerOnBoardingSteps.SIGNUP_PAYMENT
+    ) {
+      dispatch(setUser(response.data.payload));
+    }
+  }
 }
 
-export const launchAppReAuth = (email, inviter) => {
-	return async (dispatch) => {
-
-	}
-}
-
-
-export const getSellerProducts = (sellerId) => {
-  return async (dispatch) => {
+export const getSellerProducts = (sellerId) => async (dispatch) => {
     try {
       const response = await Api.get(`/api/seller/products/get/list?userId=${sellerId}`)
       console.log("LOAD SELLER PRODUCTS: ", response)
@@ -55,12 +49,11 @@ export const getSellerProducts = (sellerId) => {
         payload: response.data.payload
       });
     } catch(error) {
-
+      console.log(error);
     }
   }
-}
 
-export const getSellerAccountLinks = ({ sellerId }, props) => async (dispatch) => {
+export const getSellerAccountLinks = ({ sellerId }) => async (dispatch) => {
   try {
     const response = await Api.get(`/api/seller/account-links/get?sellerId=${sellerId}&source=web`);
     if (response.data.success) {
@@ -68,11 +61,9 @@ export const getSellerAccountLinks = ({ sellerId }, props) => async (dispatch) =
         type: actionTypes.seller.SET_ACCOUNT_LINKS,
         payload: response.data.payload,
       });
-    } else {
-      //dispatch(createErrorAction(actionTypes.seller.SET_ACCOUNT_LINKS, response.data.error));
     }
   } catch (error) {
-    //dispatch(createErrorAction(actionTypes.seller.SET_ACCOUNT_LINKS, error));
+    console.log(error);
   }
 };
 
@@ -110,23 +101,23 @@ export const clearTagsAndCategories = () => async (dispatch) => {
   });
 };
 
-export const loadAllProductCategories = (input) => async (dispatch) => {
+export const loadAllProductCategories = () => async (dispatch) => {
   try {
     const response = await Api.get(`/api/seller/product/categories/get`);
 
     if (response.data.success) {
       dispatch(setAllProductCategories(response.data.payload));
     } else {
-      //handle error message
+      // handle error message
       console.log('loadAllProductCategories error', response);
     }
   } catch (error) {
     console.log('loadAllProductCategories', error)
-    //throw HandleErrorMessage(error);
+    // throw HandleErrorMessage(error);
   }
 };
 
-export const loadAllProductTags = (input) => async (dispatch) => {
+export const loadAllProductTags = () => async (dispatch) => {
   try {
     const response = await Api.get(`/api/seller/product/tags/get`);
 
@@ -149,7 +140,7 @@ export const loadSellerProduct = ({ productId }) => async (dispatch, getState) =
       state.productsCache &&
       state.productsCache.includes((product) => product.productId === productId)
     ) {
-      let product = state.productsCache.find((product) => product.productId === productId);
+      const product = state.productsCache.find((productCached) => productCached.productId === productId);
       dispatch(setCurrentProduct(product));
 
       return product;
@@ -162,16 +153,15 @@ export const loadSellerProduct = ({ productId }) => async (dispatch, getState) =
     }
   } catch (error) {
     console.log('//error getting productid', error)
-    //throw HandleErrorMessage(error);
+    // throw HandleErrorMessage(error);
   }
 };
 
-export const checkSellerPaymentOnBoardingStatus = ({ stripeId }) => async (dispatch) => {
+export const checkSellerPaymentOnBoardingStatus = ({ stripeId }) => async () => {
   try {
-    const response = await Api.get(`/api/seller/onboarding/getPaymentStatus?stripeId=${stripeId}`);
-
+    await Api.get(`/api/seller/onboarding/getPaymentStatus?stripeId=${stripeId}`);
   } catch (error) {
-    //throw HandleErrorMessage(error);
+    console.log(error);
   }
 };
 
@@ -185,7 +175,7 @@ export const getProductsForSeller = ({ sellerId }) => async (dispatch) => {
       console.log('getProductsForSeller ERROR', response);
     }
   } catch (error) {
-    //throw HandleErrorMessage(error);
+    // throw HandleErrorMessage(error);
   }
 };
 
@@ -198,10 +188,10 @@ export const toggleVisibility = ({ productId }) => async (dispatch) => {
     if (response.data.success) {
       dispatch(updateProduct(response.data.payload));
     } else {
-      //dispatch(createErrorAction(actionTypes.seller.TOGGLE_VISIBILITY, response.data.error));
+      // dispatch(createErrorAction(actionTypes.seller.TOGGLE_VISIBILITY, response.data.error));
     }
   } catch (error) {
-    //throw HandleErrorMessage(error);
+    // throw HandleErrorMessage(error);
   }
 };
 
@@ -210,7 +200,9 @@ export const clearAccountLinks = () => async (dispatch) => {
     dispatch({
       type: actionTypes.seller.CLEAR_ACCOUNT_LINKS,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 

@@ -1,31 +1,41 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Redirect} from "react-router-dom";
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import AddressInput from "../../../UI/AddressInput";
-import { getNextOnBoardingStepId } from '../../../../utils/helpers';
-import { sellerOnBoardingSteps } from "../../../../constants/onBoardingSteps";
-import OnboardingHeader from "./OnboardingHeader";
-import OnboardingImageWrapper from "./OnboardingImageWrapper";
-import NSelect from "../../../UI/NSelect";
-import NButton from "../../../UI/NButton";
-import BaseInput from "../../../UI/BaseInput";
-import WebsiteInput from "../../../UI/WebsiteInput";
-import BrandStyles from "../../../BrandStyles";
-import isWebsiteValid from '../../../../utils/websiteValidator';
-import isFullNameValid from '../../../../utils/fullNameValidator';
-import isEmailValid from '../../../../utils/emailValidator';
-import { onSubmitStep } from "../../../../actions/seller";
-import { setOnBoardingStepId } from "../../../../actions/auth";
+
+import { getNextOnBoardingStepId } from 'utils/helpers';
+
+import isWebsiteValid from 'utils/websiteValidator';
+
+import isFullNameValid from 'utils/fullNameValidator';
+
+import isEmailValid from 'utils/emailValidator';
+
+import BrandStyles from 'components/BrandStyles';
+
+import AddressInput from 'components/UI/AddressInput';
+
+import NSelect from 'components/UI/NSelect';
+import NButton from 'components/UI/NButton';
+import BaseInput from 'components/UI/BaseInput';
+import WebsiteInput from 'components/UI/WebsiteInput';
+
+import { onSubmitStep } from 'actions/seller';
+import { setOnBoardingStepId } from 'actions/auth';
+
+import { sellerOnBoardingSteps } from 'constants/onBoardingSteps';
+
+import OnboardingImageWrapper from './OnboardingImageWrapper';
+import OnboardingHeader from './OnboardingHeader';
 
 const STEP_ID = sellerOnBoardingSteps.SIGNUP_SHOP_BASICS;
 
 const TextAreaInput = styled.textarea`
-  background-color: #F6F0E6;
+  background-color: #f6f0e6;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   border: 0px;
-  border-bottom: 2px solid #1E1DCD !important;
+  border-bottom: 2px solid #1e1dcd !important;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   margin-top: 4px;
@@ -38,8 +48,8 @@ const TextAreaInput = styled.textarea`
   display: flex;
   flex-direction: column;
   &:focus {
-    outline: none
-  } 
+    outline: none;
+  }
 `;
 /**
   {
@@ -51,7 +61,7 @@ const TextAreaInput = styled.textarea`
   isShopOwner
   shopOwners
   }
-**/
+* */
 class SellerOnboardingShopPage extends Component {
   constructor(props) {
     super(props);
@@ -59,7 +69,7 @@ class SellerOnboardingShopPage extends Component {
       formData: {
         isShopOwner: 'yes',
       },
-      toNextStep: false
+      toNextStep: false,
     };
 
     this.onChangeAddressInput = this.onChangeAddressInput.bind(this);
@@ -73,21 +83,21 @@ class SellerOnboardingShopPage extends Component {
 
   async onSubmit() {
     if (this.validateShopInput()) {
-      let input = {
+      const input = {
         stepId: STEP_ID,
         formData: this.state.formData,
-        userId: this.props.user._id
+        userId: this.props.user._id,
       };
       await this.props.onSubmitStep(input);
       await this.props.setOnBoardingStepId(getNextOnBoardingStepId(this.props.onboardingStepId, true));
       this.setState({
-        toNextStep: true
+        toNextStep: true,
       });
     }
   }
 
   onChangeAddressInput(addressState) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData.shopAddressInput = addressState;
     this.setState({
       formData: newFormData,
@@ -95,7 +105,7 @@ class SellerOnboardingShopPage extends Component {
   }
 
   onChangeInputText(key, value) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData[key] = value;
     this.setState({
       formData: newFormData,
@@ -103,7 +113,7 @@ class SellerOnboardingShopPage extends Component {
   }
 
   onChangeInput(key, value) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData[key] = value[key];
     this.setState({
       formData: newFormData,
@@ -112,7 +122,7 @@ class SellerOnboardingShopPage extends Component {
 
   onChangeNSelectInput(key, values) {
     if (values.length > 0) {
-      let newFormData = { ...this.state.formData };
+      const newFormData = { ...this.state.formData };
       newFormData[key] = values[0].id;
       this.setState({
         formData: newFormData,
@@ -121,7 +131,7 @@ class SellerOnboardingShopPage extends Component {
   }
 
   onChangePickerInput(key, value) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData[key] = value;
     this.setState({
       formData: newFormData,
@@ -134,24 +144,21 @@ class SellerOnboardingShopPage extends Component {
         shopAddressInputError: 'Please fill out address.',
       });
       return false;
-    } else {
-      this.setState({
-        shopAddressInputError: '',
-      });
-      return !this.state.formData.shopAddressInput.hasError;
     }
+    this.setState({
+      shopAddressInputError: '',
+    });
+    return !this.state.formData.shopAddressInput.hasError;
   }
 
   validateShopInput() {
     let isValid = true;
-    let sTitle = this.state.formData.shopTitle;
-    let sHandle = this.state.formData.shopHandle;
-    let sWebsite = this.state.formData.shopWebsite;
-    let sDesc = this.state.formData.shopDescription;
-    let sAddress = this.state.formData.shopAddressInput;
-    let shopOwnerName = this.state.formData.shopOwnerName;
-    let shopOwnerEmail = this.state.formData.shopOwnerEmail;
-    let isShopOwner = this.state.formData.isShopOwner;
+    const sTitle = this.state.formData.shopTitle;
+    const sWebsite = this.state.formData.shopWebsite;
+    const sDesc = this.state.formData.shopDescription;
+    const { shopOwnerName } = this.state.formData;
+    const { shopOwnerEmail } = this.state.formData;
+    const { isShopOwner } = this.state.formData;
     if (isShopOwner === 'no') {
       if (!shopOwnerName || shopOwnerName === '' || !isFullNameValid(shopOwnerName)) {
         console.log('shopOwnerName not valid');
@@ -201,14 +208,8 @@ class SellerOnboardingShopPage extends Component {
 
     if (!isWebsiteValid(sWebsite)) {
       console.log('website not valid');
-      this.setState({
-        shopWebsiteError: 'Must be a valid website.',
-      });
+
       isValid = false;
-    } else {
-      this.setState({
-        shopWebsiteError: '',
-      });
     }
     isValid = this.validateAddressInfo();
     return isValid;
@@ -220,7 +221,7 @@ class SellerOnboardingShopPage extends Component {
 
   render() {
     if (this.state.toNextStep) {
-      return (<Redirect to="/seller/onboarding/products" />);
+      return <Redirect to="/seller/onboarding/products" />;
     }
     let shopOwnersInput = null;
     if (this.state.formData.isShopOwner === 'no') {
@@ -243,7 +244,7 @@ class SellerOnboardingShopPage extends Component {
         </div>
       );
     }
-    let containerStyle = {...BrandStyles.components.onboarding.container, justifyContent: 'center'};
+    const containerStyle = { ...BrandStyles.components.onboarding.container, justifyContent: 'center' };
     return (
       <OnboardingImageWrapper>
         <OnboardingHeader />
@@ -265,14 +266,14 @@ class SellerOnboardingShopPage extends Component {
             >
               Shop Information
             </span>
-            {/*<TouchableOpacity onPress={this.props.signOut}>
+            {/* <TouchableOpacity onPress={this.props.signOut}>
               <Text>Logout</Text>
-            </TouchableOpacity>*/}
+            </TouchableOpacity> */}
             <form>
               <BaseInput
                 onChange={this.onChangeInputText}
                 keyId="shopTitle"
-                autoCapitalize={'words'}
+                autoCapitalize="words"
                 validate={this.validateTitle}
                 label="Shop Name"
                 error={this.state.shopTitleError}
@@ -289,7 +290,7 @@ class SellerOnboardingShopPage extends Component {
                 Describe your store to buyers.
               </span>
               <TextAreaInput
-                multiline={true}
+                multiline
                 onChange={(value) => {
                   this.onChangeInputText('shopDescription', value.target.value);
                 }}
@@ -311,19 +312,19 @@ class SellerOnboardingShopPage extends Component {
                   { id: 'yes', value: 'Yes' },
                   { id: 'no', value: 'No' },
                 ]}
-                isSingleSelect={true}
+                isSingleSelect
                 itemIdKey="id"
                 itemTitleKey="value"
-                hideSelectedTags={true}
-                placeholderText={'Are you the shop owner...'}
+                hideSelectedTags
+                placeholderText="Are you the shop owner..."
                 onChangeItems={this.onChangeNSelectInput.bind(this, 'isShopOwner')}
               />
               {shopOwnersInput}
-              <span> {/*error message*/}</span>
+              <span> {/* error message */}</span>
               <h3 style={{ fontWeight: 'bold', textAlign: 'center' }}>Business or Shop Address</h3>
               <span>{this.state.shopAddressInputError}</span>
               <AddressInput theme="light" onChange={this.onChangeAddressInput} />
-              <NButton onClick={this.onSubmit} title={'Next'} />
+              <NButton onClick={this.onSubmit} title="Next" />
             </form>
             <div style={{ height: 104 }} />
           </div>
@@ -333,11 +334,9 @@ class SellerOnboardingShopPage extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    user: state.auth,
-    onboardingStepId: state.auth.onboardingStepId,
-  }
-}
+const mapStateToProps = (state) => ({
+  user: state.auth,
+  onboardingStepId: state.auth.onboardingStepId,
+});
 
 export default connect(mapStateToProps, { onSubmitStep, setOnBoardingStepId })(SellerOnboardingShopPage);

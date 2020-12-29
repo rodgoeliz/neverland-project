@@ -1,25 +1,26 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Redirect} from "react-router-dom";
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import {Accordion, Card, Button, Carousel} from 'react-bootstrap';
-import OnboardingHeader from "./OnboardingHeader";
-import OnboardingImageWrapper from "./OnboardingImageWrapper";
-import NSelect from "../../../UI/NSelect";
-import NButton from "../../../UI/NButton";
-import NameInput from "../../../UI/NameInput";
-import AddressInput from "../../../UI/AddressInput";
-import PhoneNumberInput from "../../../UI/PhoneNumberInput";
-import BrandStyles from "../../../BrandStyles";
-import queryString from 'query-string';
-import { getNextOnBoardingStepId } from '../../../../utils/helpers';
-import { sellerOnBoardingSteps } from "../../../../constants/onBoardingSteps";
-import { onSubmitStep } from "../../../../actions/seller";
-import { setOnBoardingStepId } from "../../../../actions/auth";
 
-const stateData = require('../../../../constants/states');
-const sellerProductData = require('../../../../constants/sellerProductsSelect');
-const sellerStores = require('../../../../constants/sellerStores');
+import { getNextOnBoardingStepId } from 'utils/helpers';
+
+import NSelect from 'components/UI/NSelect';
+import NButton from 'components/UI/NButton';
+import NameInput from 'components/UI/NameInput';
+import AddressInput from 'components/UI/AddressInput';
+import PhoneNumberInput from 'components/UI/PhoneNumberInput';
+import BrandStyles from 'components/BrandStyles';
+import { sellerOnBoardingSteps } from 'constants/onBoardingSteps';
+import { onSubmitStep } from 'actions/seller';
+import { setOnBoardingStepId } from 'actions/auth';
+
+import OnboardingImageWrapper from './OnboardingImageWrapper';
+import OnboardingHeader from './OnboardingHeader';
+
+const stateData = require('constants/states');
+const sellerProductData = require('constants/sellerProductsSelect');
+const sellerStores = require('constants/sellerStores');
 
 const STEP_ID = sellerOnBoardingSteps.SIGNUP_BASICS;
 
@@ -74,11 +75,11 @@ const REFERRAL_SOURCE = [
 ];
 
 const TextAreaInput = styled.textarea`
-  background-color: #F6F0E6;
+  background-color: #f6f0e6;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   border: 0px;
-  border-bottom: 2px solid #1E1DCD !important;
+  border-bottom: 2px solid #1e1dcd !important;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   margin-top: 4px;
@@ -93,8 +94,8 @@ const TextAreaInput = styled.textarea`
   display: flex;
   flex-direction: column;
   &:focus {
-    outline: none
-  } 
+    outline: none;
+  }
 `;
 
 class SellerOnboardingBasicsPage extends Component {
@@ -104,10 +105,7 @@ class SellerOnboardingBasicsPage extends Component {
     // personal address
     // random info
     this.state = {
-      fullNameError: '',
-      emailError: '',
       phoneNumberError: '',
-      passwordError: '',
       currIndex: 0,
       toNextStep: false,
       formData: {
@@ -129,16 +127,16 @@ class SellerOnboardingBasicsPage extends Component {
   }
 
   onSubmit() {
-    //validate this last page
+    // validate this last page
     this.props.onSubmitStep({ userId: this.props.currentUser._id, stepId: STEP_ID, formData: this.state.formData });
     this.props.setOnBoardingStepId(getNextOnBoardingStepId(this.props.onboardingStepId, true));
     this.setState({
-      toNextStep: true
+      toNextStep: true,
     });
   }
 
   onChangeAddressInput(addressState) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData.addressInput = addressState;
     this.setState({
       formData: newFormData,
@@ -146,7 +144,7 @@ class SellerOnboardingBasicsPage extends Component {
   }
 
   onChangeInput(key, value) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData[key] = value.target.value;
     this.setState({
       formData: newFormData,
@@ -170,8 +168,8 @@ class SellerOnboardingBasicsPage extends Component {
   }
 
   validateBasicInfo() {
-    let fullNameData = this.state.formData.name;
-    let phoneNumber = this.state.formData.phoneNumber;
+    const fullNameData = this.state.formData.name;
+    const { phoneNumber } = this.state.formData;
     let isValid = true;
     if (
       fullNameData === undefined ||
@@ -234,11 +232,11 @@ class SellerOnboardingBasicsPage extends Component {
     sellerPacking
   }
 }
-  **/
+  * */
   validateAdditionalInfo() {
     // seller interests
     let isValid = true;
-    let sInterest = this.state.formData.sellerInterestReason;
+    const sInterest = this.state.formData.sellerInterestReason;
     if (!sInterest || sInterest.length === 0) {
       this.setState({
         sellerInterestReasonError: 'Must select one answer.',
@@ -251,7 +249,7 @@ class SellerOnboardingBasicsPage extends Component {
     }
 
     // seller referral source
-    let sReferral = this.state.formData.sellerReferralSource;
+    const sReferral = this.state.formData.sellerReferralSource;
     if (!sReferral || sReferral.length === 0) {
       console.log('invlaid sellerReferralSource');
       this.setState({
@@ -265,7 +263,7 @@ class SellerOnboardingBasicsPage extends Component {
     }
 
     // sellerChallenge
-    let sChallenge = this.state.formData.sellerChallenge;
+    const sChallenge = this.state.formData.sellerChallenge;
     if (!sChallenge || sChallenge.length < 30) {
       console.log('invlaid sChallenge');
       this.setState({
@@ -278,7 +276,7 @@ class SellerOnboardingBasicsPage extends Component {
       });
     }
 
-    let sellerProducts = this.state.formData.productSelectedItems;
+    const sellerProducts = this.state.formData.productSelectedItems;
     if (!sellerProducts || sellerProducts.length === 0) {
       console.log('invlaid sellerProducts');
       this.setState({
@@ -291,7 +289,7 @@ class SellerOnboardingBasicsPage extends Component {
       });
     }
 
-    let sStoreItems = this.state.formData.sellerStoreSelectedItems;
+    const sStoreItems = this.state.formData.sellerStoreSelectedItems;
     if (!sStoreItems || sStoreItems.length === 0) {
       console.log('invlaid sStoreItems');
       this.setState({
@@ -304,7 +302,7 @@ class SellerOnboardingBasicsPage extends Component {
       });
     }
 
-    let sProductSource = this.state.formData.sellerProductSource;
+    const sProductSource = this.state.formData.sellerProductSource;
     if (!sProductSource || sProductSource.length < 30) {
       console.log('invlaid sProductSource');
       this.setState({
@@ -317,7 +315,7 @@ class SellerOnboardingBasicsPage extends Component {
       });
     }
 
-    let sPacking = this.state.formData.sellerPacking;
+    const sPacking = this.state.formData.sellerPacking;
     if (!sPacking || sPacking.length < 30) {
       console.log('invlaid sPacking');
       this.setState({
@@ -333,20 +331,20 @@ class SellerOnboardingBasicsPage extends Component {
   }
 
   onChangeInputFinal(key, inputState) {
-    let newFormData = { ...this.state.formData };
-    let error = inputState['error'];
-    let stateKey = key + 'Error';
+    const newFormData = { ...this.state.formData };
+    const { error } = inputState;
+    const stateKey = `${key}Error`;
     if (error && error.length > 0) {
       this.setState({
         [stateKey]: error,
-        [key + 'hasError']: inputState.hasError,
+        [`${key}hasError`]: inputState.hasError,
       });
     } else {
       newFormData[key] = inputState[key];
       this.setState(
         {
           formData: newFormData,
-          [key + 'hasError']: inputState.hasError,
+          [`${key}hasError`]: inputState.hasError,
         },
         () => {},
       );
@@ -357,14 +355,12 @@ class SellerOnboardingBasicsPage extends Component {
     if (this.state.currIndex !== 0) {
       return null;
     }
-    let nameInputStyle = this.state.fullNameError.length == 0 ? BrandStyles.components.input : BrandStyles.components.errorInput;
-    let phoneNumberInputStyle = this.state.phoneNumberError.length == 0 ? BrandStyles.components.input : BrandStyles.components.errorInput;
     return (
-      <div style={{display: 'flex', flexDirection: 'column'}}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <NameInput onChange={this.onChangeInputFinal} error={this.state.nameError} />
         <PhoneNumberInput onChange={this.onChangeInputFinal} error={this.state.phoneNumberError} />
         <div>
-          <NButton onClick={this.onNextSection} title={'Next'} />
+          <NButton onClick={this.onNextSection} title="Next" />
         </div>
       </div>
     );
@@ -390,16 +386,16 @@ class SellerOnboardingBasicsPage extends Component {
           <p>We will send you a welcome gift as well as any business documents you need.</p>
         </div>
         <p>{this.state.addressError}</p>
-        <AddressInput onChange={this.onChangeAddressInput} theme={'light'} />
-        <div style={{marginTop: 32}}>
-          <NButton style={{margin: 'auto'}} onClick={this.onNextSection} title="Next" />
+        <AddressInput onChange={this.onChangeAddressInput} theme="light" />
+        <div style={{ marginTop: 32 }}>
+          <NButton style={{ margin: 'auto' }} onClick={this.onNextSection} title="Next" />
         </div>
       </div>
     );
   }
 
   onChangePickerInput(key, value) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData[key] = value;
 
     this.setState({
@@ -408,7 +404,7 @@ class SellerOnboardingBasicsPage extends Component {
   }
 
   onMultiSelectItemsChange(key, values) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData[key] = values;
 
     this.setState({
@@ -418,7 +414,7 @@ class SellerOnboardingBasicsPage extends Component {
 
   renderAdditionalInfoSection() {
     if (this.state.toNextStep) {
-      return (<Redirect to="/seller/onboarding/shop" />);
+      return <Redirect to="/seller/onboarding/shop" />;
     }
     if (this.state.currIndex !== 2) {
       return null;
@@ -437,8 +433,8 @@ class SellerOnboardingBasicsPage extends Component {
         >
           <h2>Additional Questions</h2>
           <p>
-            Please tell us more information about your store so we can make sure you're set up for
-            success with customers.
+            Please tell us more information about your store so we can make sure you're set up for success with
+            customers.
           </p>
         </div>
         <form>
@@ -448,11 +444,11 @@ class SellerOnboardingBasicsPage extends Component {
           </span>
           <NSelect
             items={WHY_SIGNUP_NVLND}
-            isSingleSelect={true}
+            isSingleSelect
             itemIdKey="id"
             itemTitleKey="name"
-            hideSelectedTags={true}
-            placeholderText={'Select interest'}
+            hideSelectedTags
+            placeholderText="Select interest"
             onChangeItems={(values) => {
               this.onMultiSelectItemsChange('sellerInterestReason', values);
             }}
@@ -466,11 +462,11 @@ class SellerOnboardingBasicsPage extends Component {
             </span>
             <NSelect
               items={REFERRAL_SOURCE}
-              isSingleSelect={true}
+              isSingleSelect
               itemIdKey="id"
               itemTitleKey="name"
-              hideSelectedTags={true}
-              placeholderText={'Select source'}
+              hideSelectedTags
+              placeholderText="Select source"
               onChangeItems={(values) => {
                 this.onMultiSelectItemsChange('sellerReferralSource', values);
               }}
@@ -482,9 +478,9 @@ class SellerOnboardingBasicsPage extends Component {
             {' '}
             What are your biggest challenges as a business?
           </span>
-          <div style={{marginRight: 32}}>
+          <div style={{ marginRight: 32 }}>
             <TextAreaInput
-              multiline={true}
+              multiline
               onChange={(value) => {
                 this.onChangeInput('sellerChallenge', value);
               }}
@@ -494,15 +490,14 @@ class SellerOnboardingBasicsPage extends Component {
           <span>{this.state.sellerChallengeError}</span>
           <div style={{ height: 24 }} />
           <span style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}>
-            Are there states within the USA that you cannot ship to? If so, please list those
-            states.
+            Are there states within the USA that you cannot ship to? If so, please list those states.
           </span>
           <div style={{ flex: 1, borderRadius: 16 }}>
             <NSelect
               items={stateData.default}
               itemIdKey="abbreviation"
               itemTitleKey="name"
-              placeholderText={'Select states...'}
+              placeholderText="Select states..."
               onChangeItems={(values) => {
                 this.onMultiSelectItemsChange('stateSelectedItems', values);
               }}
@@ -517,33 +512,29 @@ class SellerOnboardingBasicsPage extends Component {
             items={sellerProductData.default}
             itemIdKey="id"
             itemTitleKey="name"
-            placeholderText={'Select products...'}
+            placeholderText="Select products..."
             onChangeItems={(values) => {
               this.onMultiSelectItemsChange('productSelectedItems', values);
             }}
           />
           <span>{this.state.productSelectedItemsError}</span>
           <div style={{ height: 24 }} />
-          <span style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}>
-            Where do you currently sell?{' '}
-          </span>
+          <span style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}>Where do you currently sell? </span>
           <NSelect
             items={sellerStores.default}
             itemIdKey="id"
             itemTitleKey="name"
-            placeholderText={'Select places...'}
+            placeholderText="Select places..."
             onChangeItems={(values) => {
               this.onMultiSelectItemsChange('sellerStoreSelectedItems', values);
             }}
           />
 
           <span>{this.state.sellerStoreSelectedItemsError}</span>
-          <span style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}>
-            Where do you source products from?
-          </span>
+          <span style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}>Where do you source products from?</span>
           <TextAreaInput
-            //style={[BrandStyles.components.inputBase.container, { minHeight: 100 }]}
-            multiline={true}
+            // style={[BrandStyles.components.inputBase.container, { minHeight: 100 }]}
+            multiline
             onChange={(value) => {
               this.onChangeInput('sellerProductSource', value);
             }}
@@ -554,8 +545,8 @@ class SellerOnboardingBasicsPage extends Component {
             How do you pack products now for shipping? (if applicable)
           </span>
           <TextAreaInput
-            //style={[BrandStyles.components.inputBase.container, { minHeight: 100 }]}
-            multiline={true}
+            // style={[BrandStyles.components.inputBase.container, { minHeight: 100 }]}
+            multiline
             onChange={(value) => {
               this.onChangeInput('sellerPacking', value);
             }}
@@ -563,53 +554,54 @@ class SellerOnboardingBasicsPage extends Component {
           />
           <span>{this.state.sellerPackingError}</span>
         </form>
-        <div style={{marginTop: 32}}>
-          <NButton style={{margin: 'auto'}} onClick={this.onSubmit} title="Submit" />
+        <div style={{ marginTop: 32 }}>
+          <NButton style={{ margin: 'auto' }} onClick={this.onSubmit} title="Submit" />
         </div>
         <div style={{ height: 84 }} />
       </div>
     );
-  };
+  }
 
   render() {
-    let containerStyle = {...BrandStyles.components.onboarding.container, alignItems: 'center', flexDirection: 'column'};
+    const containerStyle = {
+      ...BrandStyles.components.onboarding.container,
+      alignItems: 'center',
+      flexDirection: 'column',
+    };
     return (
       <OnboardingImageWrapper>
         <OnboardingHeader onPressBack={this.props.onPressBack} />
         <div style={containerStyle}>
           <div style={{ height: 64 }} />
-            <p
-              style={{
-                fontSize: 32,
-                fontWeight: 'bold',
-                textAlign: 'center',
-                padding: 16,
-              }}
-            >
-              Basics
-            </p>
-            <div style={{maxWidth: 800, justifyContent: 'center'}}>
-              {this.renderBasicInfoSection()}
-              {this.renderBasicAddressSection()}
-              {this.renderAdditionalInfoSection()}
-            </div>
-            <div style={{ height: 64 }} />
-            {/*<View>
+          <p
+            style={{
+              fontSize: 32,
+              fontWeight: 'bold',
+              textAlign: 'center',
+              padding: 16,
+            }}
+          >
+            Basics
+          </p>
+          <div style={{ maxWidth: 800, justifyContent: 'center' }}>
+            {this.renderBasicInfoSection()}
+            {this.renderBasicAddressSection()}
+            {this.renderAdditionalInfoSection()}
+          </div>
+          <div style={{ height: 64 }} />
+          {/* <View>
               <TouchableHighlight onPress={this.props.onSignOut}>
                 <Text style={{ textAlign: 'center' }}>Logout</Text>
               </TouchableHighlight>
-            </View>*/}
+            </View> */}
         </div>
       </OnboardingImageWrapper>
     );
   }
-
 }
 
-const mapStateToProps = state => {
-  return {
-    currentUser: state.auth
-  }
-}
+const mapStateToProps = (state) => ({
+  currentUser: state.auth,
+});
 
 export default connect(mapStateToProps, { onSubmitStep, setOnBoardingStepId })(SellerOnboardingBasicsPage);

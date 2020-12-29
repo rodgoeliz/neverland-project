@@ -1,3 +1,3 @@
 export default function (number) {
-  return !isNaN(number);
+  return !Number.isNaN(number);
 }

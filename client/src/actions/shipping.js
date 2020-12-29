@@ -1,5 +1,5 @@
-import actionTypes from '../constants/newActionTypes';
-import Api from '../lib/api';
+import actionTypes from 'constants/newActionTypes';
+import Api from 'lib/api';
 
 export const updatePackageProfile = (packageProfileId, input) => async (dispatch) => {
   try {
@@ -10,9 +10,9 @@ export const updatePackageProfile = (packageProfileId, input) => async (dispatch
         payload: response.data.payload
       });
       return response.data.payload;
-    } else {
+    } 
       console.log("error updatin profile")
-    }
+    
   } catch (error) {
     console.log("error updating profile: ", error)
   }
@@ -27,9 +27,9 @@ export const deletePackageProfile = (packageProfileId) => async (dispatch) => {
         payload: response.data.payload
       });
       return response.data.payload;
-    } else {
+    } 
       console.log("error deleting package..");
-    }
+    
   } catch (error) {
     console.log("Error deleting package profile", error);
   }
@@ -45,9 +45,9 @@ export const loadPackageProfiles = (storeId) => async (dispatch) => {
         payload: response.data.payload
       });
       return response.data.payload;
-    } else {
+    } 
       console.log("error loading package profiles...")
-    }
+    
   } catch (error) {
     console.log("Loading package profiles ahs failed: ", error);
   }
@@ -63,9 +63,9 @@ export const createPackageProfile = (input) => async (dispatch) => {
         payload: {...response.data.payload}
       });
       return response.data.payload;
-    } else {
+    } 
       console.log("error creating a package profile");
-    }
+    
   } catch (error) {
     console.log("error creating package profile", error);
   }

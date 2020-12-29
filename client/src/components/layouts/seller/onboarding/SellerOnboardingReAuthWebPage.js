@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getSellerAccountLinks, clearAccountLinks } from '../../../../actions/seller';
-import BrandStyles from '../../../BrandStyles';
-import SellerLoadingPage from "./SellerLoadingPage";
+
+import { getSellerAccountLinks, clearAccountLinks } from 'actions/seller';
+
+import SellerLoadingPage from './SellerLoadingPage';
 
 class SellerOnboardingReAuthWebPage extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class SellerOnboardingReAuthWebPage extends Component {
   onSubmitForm() {}
 
   render() {
-    return (<SellerLoadingPage />);
+    return <SellerLoadingPage />;
   }
 }
 
@@ -32,8 +33,8 @@ const mapStateToProps = (state) => ({
 });
 
 const actions = {
-  clearAccountLinks: clearAccountLinks,
-  getSellerAccountLinks: getSellerAccountLinks,
+  clearAccountLinks,
+  getSellerAccountLinks,
 };
 
 export default connect(mapStateToProps, actions)(SellerOnboardingReAuthWebPage);

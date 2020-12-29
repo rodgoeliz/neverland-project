@@ -1,7 +1,8 @@
-import actionTypes from '../constants/newActionTypes';
 import { PURGE } from "redux-persist";
 
-var initialState = {
+import actionTypes from 'constants/newActionTypes';
+
+const initialState = {
   stores: [],
   userIdToStoreCache: {},
   packageProfiles: []
@@ -9,9 +10,9 @@ var initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.store.GET_STORE_FOR_USER: 
-      let store = action.payload;
-      let userId = store.userId;
+    case actionTypes.store.GET_STORE_FOR_USER:
+      const store = action.payload;
+      const { userId } = store;
       return {
         ...state,
         userIdToStoreCache: {
@@ -19,7 +20,7 @@ export default (state = initialState, action) => {
           [userId]: store
         }
       }
-    case  actionTypes.store.GET_STORES:
+    case actionTypes.store.GET_STORES:
       return {
         ...state,
         stores: action.payload
@@ -30,7 +31,7 @@ export default (state = initialState, action) => {
         packageProfiles: action.payload
       }
     case actionTypes.store.ADD_PACKAGE_PROFILE:
-      let existingPackageProfiles = state.packageProfiles;
+      const existingPackageProfiles = state.packageProfiles;
       existingPackageProfiles.push(action.payload);
       return {
         ...state,

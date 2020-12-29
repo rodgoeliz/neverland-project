@@ -6,5 +6,5 @@ const config = {
     databaseURL: "https://neverland-282203.firebaseio.com",
 };
 firebase.initializeApp(config);
-export const auth = firebase.auth;
+export const {auth} = firebase;
 export const db = firebase.database();

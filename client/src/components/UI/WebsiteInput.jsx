@@ -1,14 +1,11 @@
 import React from 'react';
-import isWebsiteValid from '../../utils/websiteValidator';
-import {FaRegCheckCircle} from 'react-icons/fa';
-import BrandStyles from '../BrandStyles';
-import styled from "styled-components";
 
-const styles = {
-  container: {
-    'background-color': BrandStyles.color.xlightBeige,
-  },
-};
+import { FaRegCheckCircle } from 'react-icons/fa';
+
+import styled from 'styled-components';
+
+import isWebsiteValid from 'utils/websiteValidator';
+import BrandStyles from 'components/BrandStyles';
 
 const StyledInput = styled.input`
   font-size: 18px;
@@ -17,9 +14,9 @@ const StyledInput = styled.input`
   background-color: transparent;
   border: 0;
   &:focus {
-    outline: none
-  } 
-`
+    outline: none;
+  }
+`;
 
 export default class WebsiteInput extends React.Component {
   constructor(props) {
@@ -36,12 +33,12 @@ export default class WebsiteInput extends React.Component {
   }
 
   componentDidMount() {
-    let error = this.props.error;
-    let website = this.props.value;
+    const { error } = this.props;
+    const website = this.props.value;
     if (website) {
       this.setState({
-        website
-      })
+        website,
+      });
     }
     if (error) {
       this.setState({
@@ -51,13 +48,13 @@ export default class WebsiteInput extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.error != nextProps.error) {
+    if (this.props.error !== nextProps.error) {
       this.setState({ error: nextProps.error });
     }
   }
 
   validateInput() {
-    let hasError = !isWebsiteValid(this.state.website);
+    const hasError = !isWebsiteValid(this.state.website);
     let errorMessage = '';
     if (hasError) {
       errorMessage = 'Please enter a valid website.';
@@ -76,7 +73,7 @@ export default class WebsiteInput extends React.Component {
   }
 
   onChangeInput(key, value) {
-    let typingTimeout = this.state.typingTimeout;
+    const { typingTimeout } = this.state;
     if (typingTimeout) {
       clearTimeout(this.state.typingTimeout);
     }
@@ -90,18 +87,15 @@ export default class WebsiteInput extends React.Component {
   }
 
   render() {
-    let showName = this.props.showName;
-    let nameInput = null;
-    let style = this.state.error ? BrandStyles.components.errorInput : BrandStyles.components.input;
-    let containerStyle = this.state.error
+    const containerStyle = this.state.error
       ? BrandStyles.components.inputBase.errorContainer
       : BrandStyles.components.inputBase.container;
-    let labelStyle = this.state.error
+    const labelStyle = this.state.error
       ? BrandStyles.components.inputBase.errorLabel
       : BrandStyles.components.inputBase.label;
     let validationIcon = null;
     if (!this.state.hasError) {
-      validationIcon = (<FaRegCheckCircle style={BrandStyles.components.inputBase.validationIcon} />);
+      validationIcon = <FaRegCheckCircle style={BrandStyles.components.inputBase.validationIcon} />;
     }
     return (
       <div style={BrandStyles.components.inputBase.wrapper}>

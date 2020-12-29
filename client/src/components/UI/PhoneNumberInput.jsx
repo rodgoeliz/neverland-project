@@ -1,17 +1,17 @@
 import React from 'react';
-import isPhoneNumberValid from '../../utils/phoneNumberValidator';
-import BrandStyles from '../BrandStyles';
-import {FaRegCheckCircle} from 'react-icons/fa';
-import PhoneInput from 'react-phone-number-input';
-import flags from 'react-phone-number-input/flags';
-import 'react-phone-number-input/style.css'
-import {parsePhoneNumber} from 'react-phone-number-input';
+
+import { FaRegCheckCircle } from 'react-icons/fa';
+import PhoneInput, { parsePhoneNumber } from 'react-phone-number-input';
+
+import BrandStyles from 'components/BrandStyles';
+import isPhoneNumberValid from 'utils/phoneNumberValidator';
+import 'react-phone-number-input/style.css';
 
 const styles = {
   inputClass: {
     borderRadius: 0,
     backgroundColor: 'black',
-    fontSize: 18
+    fontSize: 18,
   },
   container: {
     'background-color': BrandStyles.color.xlightBeige,
@@ -21,8 +21,8 @@ const styles = {
 export default class PhoneNumberInput extends React.Component {
   constructor(props) {
     super(props);
-    let hasErrorState = true;
-    let errorState = '';
+    const hasErrorState = true;
+    const errorState = '';
     if (props.error) {
       this.state.hasError = true;
       this.state.error = props.error;
@@ -30,7 +30,7 @@ export default class PhoneNumberInput extends React.Component {
     this.state = {
       phoneNumber: {
         number: '',
-        countryCode: 'US'
+        countryCode: 'US',
       },
       error: errorState,
       hasError: hasErrorState,
@@ -38,13 +38,13 @@ export default class PhoneNumberInput extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.error != nextProps.error) {
+    if (this.props.error !== nextProps.error) {
       this.setState({ error: nextProps.error });
     }
   }
 
   validateInput() {
-    let hasError = !isPhoneNumberValid(this.state.phoneNumber.number);
+    const hasError = !isPhoneNumberValid(this.state.phoneNumber.number);
     let errorMessage = '';
     if (hasError) {
       errorMessage = 'Please enter a valid phone number.';
@@ -63,11 +63,11 @@ export default class PhoneNumberInput extends React.Component {
   }
 
   onChangeInput(key, value) {
-    let typingTimeout = this.state.typingTimeout;
+    const { typingTimeout } = this.state;
     if (!value) {
-      return
+      return;
     }
-    let phonenumber = parsePhoneNumber(value);
+    const phonenumber = parsePhoneNumber(value);
     if (typingTimeout) {
       clearTimeout(this.state.typingTimeout);
     }
@@ -77,7 +77,7 @@ export default class PhoneNumberInput extends React.Component {
         {
           [key]: {
             number: value,
-            countryCode: phonenumber.country
+            countryCode: phonenumber.country,
           },
           typing: false,
           typingTimeout: setTimeout(() => {
@@ -91,7 +91,7 @@ export default class PhoneNumberInput extends React.Component {
     }
   }
 
-  onChangePhoneNumberCountry(key, iso2) {
+  onChangePhoneNumberCountry(key) {
     if (this.phone) {
       this.setState(
         {
@@ -107,19 +107,18 @@ export default class PhoneNumberInput extends React.Component {
     }
   }
 
-  onPressConfirm() {
-  }
+  onPressConfirm() {}
 
   render() {
-    let containerStyle = this.state.error
+    const containerStyle = this.state.error
       ? BrandStyles.components.inputBase.errorContainer
       : BrandStyles.components.inputBase.container;
-    let labelStyle = this.state.error
+    const labelStyle = this.state.error
       ? BrandStyles.components.inputBase.errorLabel
       : BrandStyles.components.inputBase.label;
     let validationIcon = null;
     if (!this.state.hasError) {
-      validationIcon = (<FaRegCheckCircle style={BrandStyles.components.inputBase.validationIcon} />);
+      validationIcon = <FaRegCheckCircle style={BrandStyles.components.inputBase.validationIcon} />;
     }
     return (
       <div style={BrandStyles.components.inputBase.wrapper}>
@@ -127,13 +126,16 @@ export default class PhoneNumberInput extends React.Component {
           <span style={labelStyle}> Phone Number</span>
           <div style={BrandStyles.components.inputBase.contentWrapper}>
             <div>
-            <PhoneInput
-              value={this.state.phoneNumber.number}
-              defaultCountry="US"
-              inputClass={styles.inputClass}
-              containerClass={styles.inputClass}
-              onChange={(value) => {this.onChangeInput('phoneNumber', value);}}/>
-              </div>
+              <PhoneInput
+                value={this.state.phoneNumber.number}
+                defaultCountry="US"
+                inputClass={styles.inputClass}
+                containerClass={styles.inputClass}
+                onChange={(value) => {
+                  this.onChangeInput('phoneNumber', value);
+                }}
+              />
+            </div>
             {validationIcon}
           </div>
         </div>

@@ -1,8 +1,8 @@
-import actionTypes from '../constants/newActionTypes';
-import Api from '../lib/api';
-import {auth} from '../services/firebase';
-import firebase from 'firebase';
-import store from '../store/store';
+import actionTypes from 'constants/newActionTypes';
+
+import Api from 'lib/api';
+import { auth } from 'services/firebase';
+import store from 'store/store';
 /**
  * Transform the endpoint data structure into our redux store format
  * @param {obj} data
@@ -60,7 +60,7 @@ export const logoutFirebase = () => async (dispatch) => {
     await auth().signOut();
     await store.persistor.purge();
     // don't forget to reset mixpanel user
-    //await Mixpanel.reset();
+    // await Mixpanel.reset();
   } catch (error) {
     console.log('Error in logoutFirebase', error.message);
   }
@@ -125,21 +125,14 @@ export const onSignUpFirebase = (data, type) => async (dispatch) => {
       // create a user in our backend with firebase uid and input data.
       const response = await Api.post(`api/user/signup`, transformedData);
       if (response.data.success) {
-        // identify Mixpanel
-        {/*await Mixpanel.identify(`${firebaseUID}`);
-
-        await Mixpanel.set({
-          $email: data.email,
-          // add more props here
-        });*/}
         dispatch(setUser(response.data.data));
         dispatch(setIsAuthorized(true));
         return response.data.data;
-      } else {
-        throw new Error({
-          message: 'Failed to create a user in our backend.',
-        });
       }
+      throw new Error({
+        message: 'Failed to create a user in our backend.',
+      });
+
     }
   } catch (error) {
     console.error(error.message);

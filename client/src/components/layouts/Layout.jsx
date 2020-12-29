@@ -1,25 +1,24 @@
-import React, { Component } from 'react';
-import Header from '../Header.jsx';
-import Footer from '../Footer.jsx';
+import React from 'react';
 
-class Layout extends Component {
-	render() {
-    let pathName = window.location.pathname;
+import Header from 'components/Header';
+import Footer from 'components/Footer';
+
+function Layout({children}){
+    const pathName = window.location.pathname;
     if (pathName.includes('seller/onboarding')) {
       return (
       <div>
-        {this.props.children }
+        {children }
       </div>
       ) 
-    } else {
+    } 
       return (
         <div>
           <Header />
-          <div> {this.props.children} </div>
+          <div> {children} </div>
           <Footer />
         </div>);
-      }
-	}
+      
 }
 
 export default Layout;
