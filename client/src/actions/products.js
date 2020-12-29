@@ -1,6 +1,5 @@
 
 import actionTypes from 'constants/newActionTypes';
-
 import Api from 'lib/api';
 
 export const createTestProduct = () => async (dispatch) => {

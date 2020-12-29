@@ -102,14 +102,13 @@ class AddProductView extends Component {
     if (!variations) {
       variations = [];
     }
-    
+
     let updatedFormData = {
       metaData: {},
     };
 
     // means we are editing the product;
     const loadedProduct = props.product;
-
     if (loadedProduct) {
       updatedFormData = transformProductToFormData(loadedProduct);
     }
@@ -465,6 +464,7 @@ class AddProductView extends Component {
       }
     }
     formData = this.transformToFormData(this.state.formData, formData);
+    console.log("form data:", this.state.formData)
     // if we didn't assign a store, pull user store
     if (!this.state.formData.storeId) {
       formData.append('userId', this.props.user._id);
