@@ -17,6 +17,7 @@ const productVariantOptionStyles = {
     flexDirection: 'row',
     borderRadius: 16,
     borderWidth: 2,
+    borderStyle: 'solid',
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 4,
@@ -146,6 +147,9 @@ class AddProductVariationView extends Component {
 
   onPressCreateNewVariant() {
     const newCustomVariantTitle = this.state.formData.createNewCustomVariation;
+    if (!newCustomVariantTitle) {
+      return;
+    }
     const newCustomVariantHandle = newCustomVariantTitle
       .toLowerCase()
       .replace(/ /g, '-')
@@ -176,7 +180,12 @@ class AddProductVariationView extends Component {
   }
 
   onPressCreateNewOption(variationSlug) {
+    console.log('variationSlug', variationSlug)
     const newOption = this.getOptionInput(variationSlug, 'createNewOption');
+    console.log("NEW OPtiON: ", newOption)
+    if (!newOption) {
+      return;
+    }
     const optionSlug = newOption
       .toLowerCase()
       .replace(/ /g, '-')
@@ -246,10 +255,12 @@ class AddProductVariationView extends Component {
         optionInput = variant[key];
       }
     });
+    console.log("variantslug/key in getoptioninput ", variantSlug, key, optionInput)
     return optionInput;
   }
 
   onChangeOptionInput(variantSlug, key, newOptionValue) {
+    console.log("onchangeoptioninput: ", variantSlug, key, newOptionValue)
     const newFormData = { ...this.state.formData };
     const updatedVariants = newFormData.variations.map((variant) => {
       if (variant.handle === variantSlug) {
@@ -345,6 +356,7 @@ class AddProductVariationView extends Component {
             <span style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}> Add a new option </span>
             <BaseInput
               full
+              disableTimeOut
               keyId="createNewOption"
               autoCapitalize="words"
               widthFactor={1}
@@ -353,6 +365,8 @@ class AddProductVariationView extends Component {
               value={this.getOptionInput(variation.handle, 'createNewOption')}
             />
             <NButton
+              disabled={this.state.isOptionDisabled}
+              size="x-small"
               onClick={() => this.onPressCreateNewOption(variation.handle)}
               title={`Create a new option for ${variation.title}`}
             />
@@ -374,6 +388,7 @@ class AddProductVariationView extends Component {
       isSKUVaried: false,
       isQuantityVaried: false,
       isVisible: true,
+      isCreateOptionEnabled: false
     };
     const formDataCp = this.state.formData;
     if (formDataCp.variations) {
@@ -420,7 +435,7 @@ class AddProductVariationView extends Component {
             label="Create a new product variant"
             error={this.state.shopHandleError}
           />
-          <NButton title="Add a new variant" onClick={this.onPressCreateNewVariant.bind(this)} />
+          <NButton size="x-small" title="Add a new variant" onClick={this.onPressCreateNewVariant.bind(this)} />
         </div>
       );
     }
@@ -473,19 +488,19 @@ class AddProductVariationView extends Component {
           <div>
             <div
               style={{
+                backgroundColor: BrandStyles.color.lightBeige,
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                minHeight: 48,
+                minHeight: 64,
               }}
             >
-              <NButton title="Close" theme="secondary" onClick={this.props.onCloseModal} />
-              <NButton title="Save" onClick={this.props.onCloseModal} />
+              <NButton size="x-small" title="Close" theme="secondary" onClick={this.props.onCloseModal} />
+              <NButton size="x-small" title="Save" onClick={this.props.onCloseModal} />
             </div>
             <div
-              enableResetScrollToCoords={false}
-              keyboardShouldPersistTaps="handled"
               style={{
+                paddingTop: 64,
                 paddingBottom: 64,
                 maxHeight: '100vh - 128px',
               }}

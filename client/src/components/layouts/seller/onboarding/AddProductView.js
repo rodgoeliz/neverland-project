@@ -7,6 +7,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 import Modal from 'react-modal';
 
+
 import { FaPhotoVideo, FaRegEdit } from 'react-icons/fa';
 
 import { GrFormClose } from 'react-icons/gr';
@@ -759,10 +760,30 @@ class AddProductView extends Component {
     );
   }
 
+  renderProductVariantModalHeader() {
+    return(
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                zIndex: 100,
+                backgroundColor: BrandStyles.color.lightBeige,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                minHeight: 64,
+              }}
+            >
+              <NButton size="x-small" title="Close" theme="secondary" onClick={this.onRequestProductVariantModalClose} />
+              <NButton size="x-small" title="Save" onClick={this.onRequestProductVariantModalClose} />
+            </div>
+    ) 
+  }
+
   renderProductVariantModal() {
     return (
       <div>
-        <Modal
+       <Modal
           style={{ content: { borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige } }}
           shouldCloseOnOverlayClick
           animationType="slide"
@@ -1558,7 +1579,16 @@ class AddProductView extends Component {
     if (this.state.isLoading || this.props.isLoadingSellerProduct) {
       return (
         <div>
-          <span>Loading product...</span>
+          <div style={{position: 'absolute', display: 'flex', height: '100%', width: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+            <div style={{padding: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',backgroundColor: 'white', borderRadius: 16}}>
+              <ClipLoader
+                size={45}
+                color="blue"
+                loading={this.state.isSavingProduct}/>
+                <br/>
+              <span>Loading...</span>
+            </div>
+          </div>
         </div>
       );
     }
@@ -1594,8 +1624,8 @@ class AddProductView extends Component {
             minHeight: 48,
           }}
         >
-          <NButton style={{ width: 64 }} title="Close" theme="secondary" onClick={this.onCloseView.bind(this)} />
-          <NButton style={{ width: 64 }} title="Save" onClick={this.onSaveProduct.bind(this)} />
+          <NButton size="x-small" style={{ width: 64 }} title="Close" theme="secondary" onClick={this.onCloseView.bind(this)} />
+          <NButton size="x-small" style={{ width: 64 }} title="Save" onClick={this.onSaveProduct.bind(this)} />
         </div>
         <div
           enableResetScrollToCoords={false}

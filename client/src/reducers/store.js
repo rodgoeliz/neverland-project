@@ -37,6 +37,13 @@ export default (state = initialState, action) => {
         ...state,
         packageProfiles: existingPackageProfiles
       }
+    case actionTypes.store.UPDATE_PACKAGE_PROFILE:
+      const filteredProfiles = state.packageProfiles.filter(profile => profile._id !== action.payload._id);
+      filteredProfiles.push(action.payload);
+      return {
+        ...state,
+        packageProfils: filteredProfiles
+      }
     case PURGE:
       return { ...initialState };
     default:

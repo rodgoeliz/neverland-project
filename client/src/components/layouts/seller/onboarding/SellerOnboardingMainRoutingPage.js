@@ -26,6 +26,14 @@ class SellerOnboardingMainRoutingPage extends Component {
       });
       return;
     }
+    console.log("user", this.props.user, this.props.user.isProfileComplete)
+    // if seller has completed onboarding, send them to product page for now.
+    if (this.props.user.isProfileComplete && this.props.user.isSeller) {
+      this.setState({
+        nextPath: '/seller/onboarding/products'
+      });
+      return;
+    }
 
     if (this.props.user.isActivated && this.props.user.isSeller) {
       this.sestState({

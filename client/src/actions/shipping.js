@@ -1,18 +1,44 @@
 import actionTypes from 'constants/newActionTypes';
 import Api from 'lib/api';
 
+const transformUpdateProfileData = (packageProfileId, input) => {
+  const transformedInput = {
+    edits: {},
+    packageProfileId
+  };
+  if (input.packageProfileName) {
+    transformedInput.edits.title = input.packageProfileName;
+  }
+  if (input.lengthIn) {
+    transformedInput.edits.length = input.lengthIn; 
+  }
+
+  if (input.widthIn) {
+    transformedInput.edits.width = input.widthIn;
+  }
+
+  if (input.heightIn) {
+    transformedInput.edits.height = input.heightIn
+  }
+
+  if (input.packageType) {
+    transformedInput.edits.type = input.packageType;
+  }
+  return transformedInput
+}
+
 export const updatePackageProfile = (packageProfileId, input) => async (dispatch) => {
   try {
-    const response = await Api.post(`/api/shipping/package-profile/update`, {packageProfileId, input});
+    const response = await Api.post(
+      `/api/shipping/package-profile/update`, 
+      transformUpdateProfileData(packageProfileId, input));
     if (response.data.success) {
       dispatch({
         type: actionTypes.store.UPDATE_PACKAGE_PROFILE,
         payload: response.data.payload
       });
       return response.data.payload;
-    } 
-      console.log("error updatin profile")
-    
+    }  
   } catch (error) {
     console.log("error updating profile: ", error)
   }

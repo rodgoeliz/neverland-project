@@ -74,8 +74,7 @@ export default function SellerDashboardNavWrapper({ children }) {
           Logout{' '}
         </Link>
       </div>
-      <div> Mobile nav menu</div>
-      <div style={{ marginBottom: '3em' }}>{children}</div>
+      <div style={{ paddingLeft: '4em', paddingRight: '2em', paddingTop: '2em', marginBottom: '3em' }}>{children}</div>
     </div>
   );
 }

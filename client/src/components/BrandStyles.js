@@ -36,6 +36,18 @@ const BrandStyles = {
     maroon10: 'rgba(158, 36, 87, 0.25)',
   },
   components: {
+    card: {
+      container: {
+        backgroundColor: '#FFFDFB',
+        borderRadius: 8,
+        paddingLeft: 32,
+        paddingRight: 32,
+        paddingTop: 32,
+        paddingBottom: 32,
+        marginTop:8,
+        marginBottom:8
+      },
+    },
     onboarding: {
       container: {
         marginBottom: 32,
@@ -154,7 +166,7 @@ const BrandStyles = {
       paddingLeft: 16,
     },
     listItemLiteContainer: {
-      backgroundColor: '#FFFDFB', // xlightBige
+      backgroundColor: '#FFFDFB', 
       shadowColor: 'rgba(0,0,0, 0.1)',
       shadowOffset: { height: 4, width: 0 },
       shadowOpacity: 0.5,

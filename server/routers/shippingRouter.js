@@ -1,6 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var PackageProfile = require('../models/PackageProfile');
+const { calculateShippingFromBundle} = require('../utils/orderProcessor');
+router.get('/test', async function(req, res) {
+  console.log("in here...")
+  try {
+    await calculateShippingFromBundle({}, '2fjkaljsk');
+  } catch (error) {
+    console.log(error)
+  }
+});
 
 router.get('/package-profile/get/list', async function(req, res) {
   const storeId = req.query.storeId;
@@ -21,10 +30,11 @@ router.get('/package-profile/get/list', async function(req, res) {
 router.post('/package-profile/update', async function(req, res) {
   const packageProfileId = req.body.packageProfileId;
   const edits = req.body.edits;
+  console.log("packageProfileId", packageProfileId, edits)
   try {
     const updatedProfile = await PackageProfile.findOneAndUpdate(
       {
-        _id: packaeProfileId
+        _id: packageProfileId
       }, {
         $set: {
           ...edits

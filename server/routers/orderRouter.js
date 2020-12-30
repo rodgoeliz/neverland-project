@@ -396,6 +396,7 @@ router.post('/create', async function(req, res) {
       bundleId: bundle._id,
       paymentMethod: paymentMethod,
       billingAddress: paymentMethod.billingAddress._id,
+      shippingAddressId: shippingAddress,
       storeId: store._id,
       orderInvoiceId: orderInvoice,
       status: "need-to-fulfill"

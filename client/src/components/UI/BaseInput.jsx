@@ -88,6 +88,13 @@ export default class BaseInput extends React.Component {
   }
 
   onChangeInput(key, value) {
+    if (this.props.disableTimeOut) {
+      this.setState({
+        [key]: value.target.value,
+      }, () => {
+        this.validateInput();
+      })
+    }
     const { typingTimeout } = this.state;
     if (typingTimeout) {
       clearTimeout(this.state.typingTimeout);
