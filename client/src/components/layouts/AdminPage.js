@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {Redirect} from "react-router-dom";
-import queryString from 'query-string';
-import {Accordion, Card, Button, Form, Modal} from 'react-bootstrap';
-import AccordionCard from "../AccordionCard";
-import { createPlant, createProduct, createStore, deleteProduct, handleClickCreateNavigation, loadProductTags, uploadStoreFiles, uploadProductFiles, createProductTags, loadUsers, loadProducts, loadStores} from "../../actions/admin";
+import {Accordion, Button, Form, Modal} from 'react-bootstrap';
+
 import Select from 'react-select';
-import { useHistory } from "react-router-dom";
+
 import CreatableSelect from 'react-select/creatable';
 import DataTable from 'react-data-table-component';
+
+import { createPlant, createProduct, createStore, deleteProduct, handleClickCreateNavigation, loadProductTags, uploadStoreFiles, uploadProductFiles, createProductTags, loadUsers, loadProducts, loadStores} from "actions/admin";
+
+import AccordionCard from "components/AccordionCard";
 
 
 class AdminPage extends Component {
@@ -35,9 +37,6 @@ class AdminPage extends Component {
 		}
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-	}
-
 	loadAllusers = (inputValue, callback) => {
 		setTimeout(() => {
 			callback(this.props.allUsers);
@@ -45,7 +44,7 @@ class AdminPage extends Component {
 	}
 
 	onClickWaitlist() {
-		//validate email
+		// validate email
 		if (this.validateEmail(this.state.emailInput)) {
 			this.props.joinWaitlist(this.state.emailInput, this.state.inviter);
 			this.setState({
@@ -55,18 +54,21 @@ class AdminPage extends Component {
 		} else {
 			this.setState({"emailError": "Please enter valid email"})
 		}
-		//window.location = "https://docs.google.com/forms/d/e/1FAIpQLSeZcRVCsn-_cOXdcMyjEfR7PQ9N536zi0NGdVZRbcfE4KUCpg/viewform"
+		// window.location = "https://docs.google.com/forms/d/e/1FAIpQLSeZcRVCsn-_cOXdcMyjEfR7PQ9N536zi0NGdVZRbcfE4KUCpg/viewform"
 	}
+
 	onPressImportProductCSV = async () => {
 		this.setState({
 			showProductFileModal: true,
 		});
 	}
+
 	onPressShowStoreImportFileModal = async () => {
 		this.setState({
 			showStoreFileModal: true
 		})
 	}
+
 	onHideStoreImportFileModal = () => {
 		this.setState({
 			showStoreFileModal: false
@@ -78,8 +80,9 @@ class AdminPage extends Component {
 			showProductFileModal: false
 		})
 	}
+
 	onImportStoreJSONFiles = async () => {
-		let store = this.state['store'];
+		const {store} = this.state;
 		const formData = new FormData();
 		console.log(store.storeJSONFiles)
 		for (let i = 0; i < store.storeJSONFiles.length; i++) {
@@ -87,11 +90,11 @@ class AdminPage extends Component {
 		}
 		formData.append('fileType', "json");
 		await this.props.uploadStoreFiles(formData);
-		return;
+		
 	}
 
 	onImportStoreCSVFiles = async () => {
-		let store = this.state['store'];
+		const {store} = this.state;
 		const formData = new FormData();
 		console.log(store.storeCSVFiles)
 		for (let i = 0; i < store.storeCSVFiles.length; i++) {
@@ -99,11 +102,11 @@ class AdminPage extends Component {
 		}
 		formData.append('fileType', "csv");
 		await this.props.uploadStoreFiles(formData);
-		return;
+		
 	}
 
 	onImportProductJSONFiles = async () => {
-		let product = this.state['product'];
+		const {product} = this.state;
 		const formData = new FormData();
 		console.log(product.productJSONFiles)
 		for (let i = 0; i < product.productJSONFiles.length; i++) {
@@ -111,10 +114,11 @@ class AdminPage extends Component {
 		}
 		formData.append('fileType', "json");
 		await this.props.uploadProductFiles(formData);
-		return;
+		
 	}
+
 	onImportProductCSVFiles = async () => {
-		let product = this.state['product'];
+		const {product} = this.state;
 		const formData = new FormData();
 		console.log(product.productCSVFiles)
 		for (let i = 0; i < product.productCSVFiles.length; i++) {
@@ -122,11 +126,11 @@ class AdminPage extends Component {
 		}
 		formData.append('fileType', "csv");
 		await this.props.uploadProductFiles(formData);
-		return;
+		
 	}
 
 	async onSubmitCreateProduct() {
-		let product = this.state['product'];
+		const {product} = this.state;
 		const formData = new FormData();
 		for (let i = 0; i < product.imageFiles.length; i++) {
 			formData.append(`imageFile[${i}]`, product.imageFiles[i]);
@@ -140,12 +144,12 @@ class AdminPage extends Component {
 		formData.append('price', product.price);
 		formData.append('tagIds', product.tags)
 		await this.props.createProduct(formData);
-		return;
+		
 	}
 
 	async onSubmitCreateStore() {
-		let store = this.state['store'];
-		let productInput = {
+		const {store} = this.state;
+		const productInput = {
 			userId: store.userId,
 			productIds: store.products
 		};
@@ -153,7 +157,7 @@ class AdminPage extends Component {
 	}
 
 	async onSubmitCreateTags() {
-		let tags = this.state['tags'];
+		const {tags} = this.state;
 		await this.props.createProductTags({tags});
 	}
 
@@ -177,26 +181,24 @@ class AdminPage extends Component {
 			section = {}
 		}
 
-		let allValues = values.map((value) => {
-			return value.value;
-		});
+		const allValues = values.map((value) => value.value);
 		this.setState({
 			[sectionId]: allValues
 		})
 	}
+
 	onMultiInputChange(sectionId, subSectionId, values) {
 		let section = this.state[sectionId];
 		if (!section) {
 			section = {}
 		}
-		let allValues = values.map((value) => {
-			return value.value;
-		});
+		const allValues = values.map((value) => value.value);
 		section[subSectionId] = allValues;
 		this.setState({
 			[sectionId]: section
 		})
 	}
+
 	onChangeFileInput(sectionId, productId, event) {
 		let section = this.state[sectionId];
 		if (!section) {
@@ -207,6 +209,7 @@ class AdminPage extends Component {
 			[sectionId]: section
 		});
 	}
+
 	onChangeInput(sectionId, productId, event) {
 		let section = this.state[sectionId];
 		if (!section) {
@@ -221,7 +224,7 @@ class AdminPage extends Component {
 	onEditProductRow(productId) {
 		this.setState({
 			redirect: true,
-			redirectTo: "/edit/product/" + productId
+			redirectTo: `/edit/product/${  productId}`
 		});
 	}
 
@@ -266,9 +269,9 @@ class AdminPage extends Component {
 				title="Products"
 				columns={columns}
 				data={this.props.allProducts}	
-				pagination={true}
-				striped={true}
-				pointerOnHover={true} />
+				pagination
+				striped
+				pointerOnHover />
 			)
 	}
 
@@ -287,12 +290,10 @@ class AdminPage extends Component {
 		if (this.state.isSubmitting) {
 			return <div style={{justifyContent: 'center'}} className="join-waitlist-loading">Joining the waitlist...</div>;
 		}
-		let createProductButton = <Button onClick={this.onSubmitCreateProduct}>Create Product</Button>;
 		let createProductMessage = "";
 		if (this.props.createdProduct) {
 			createProductMessage =  "Product Created"
 		}
-		let createStoreButton = <Button onClick={this.onSubmitCreateStore}>Create Product</Button>;
 		let createStoreMessage = "";
 		if (this.props.createdStore) {
 			createStoreMessage =  "Store Created"
@@ -433,7 +434,7 @@ class AdminPage extends Component {
 									</Form.Group>
 									<Form.Group>
 										<Form.Label> Products </Form.Label>
-										<Select onChange={(event) => {this.onMultiInputChange('store', 'products', event)}} isMulti={true} options={this.props.allProductsSelectors} />
+										<Select onChange={(event) => {this.onMultiInputChange('store', 'products', event)}} isMulti options={this.props.allProductsSelectors} />
 									</Form.Group>
 									<Form.Group>
 										<Form.Label> Collections </Form.Label>
@@ -456,8 +457,7 @@ class AdminPage extends Component {
 	}
 }
 
-const mapStateToProps = state => {
-	return {
+const mapStateToProps = state => ({
 		isSubmitting: state.admin.isSubmitting,
 		createdPlant: state.admin.createdPlant,
 		createdProduct: state.admin.createdProduct,
@@ -470,7 +470,6 @@ const mapStateToProps = state => {
 		allProductsSelectors: state.admin.allProductsSelectors,
 		allStoresSelectors: state.admin.allStoresSelectors,
 		allProductTagsSelectors: state.admin.allProductTagsSelectors
-	}
-}
+	})
 
 export default connect(mapStateToProps, {handleClickCreateNavigation, uploadStoreFiles, uploadProductFiles, deleteProduct, createPlant, loadProducts, loadUsers, loadStores, loadProductTags, createProduct, createStore, createProductTags})(AdminPage);

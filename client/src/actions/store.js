@@ -1,5 +1,6 @@
-import actionTypes from '../constants/newActionTypes';
-import Api from '../lib/api';
+import actionTypes from 'constants/newActionTypes';
+
+import Api from 'lib/api';
 
 export const updateStore = (storeId, formData) => async (dispatch) => {
   try {
@@ -30,7 +31,7 @@ export const getStore = (userId) => async (dispatch) => {
     }
   } catch (error) {
     console.log(error)
-    console.log("Error retrieving store for user id: " + userId) ;
+    console.log(`Error retrieving store for user id: ${userId}`);
   }
 }
 

@@ -1,7 +1,8 @@
 import React from 'react';
-import { displayPayment } from '../../utils/paymentDisplay';
 
-import BrandStyles from '../BrandStyles';
+import { displayPayment } from 'utils/paymentDisplay';
+
+import BrandStyles from 'components/BrandStyles';
 
 const styles = {
   fullContainer: {

@@ -38,6 +38,7 @@ var navigationRouter = require('./server/routers/navigationRouter');
 var rootRouter = require('./server/routers/rootRouter');
 var orderRouter = require('./server/routers/orderRouter');
 var sellerRouter = require('./server/routers/sellerRouter');
+var shippingRouter = require('./server/routers/shippingRouter');
 var bundleRouter = require('./server/routers/bundleRouter');
 var marketplaceRouter = require('./server/routers/marketplaceRouter');
 var adminRouter = require('./server/routers/adminRouter');
@@ -90,6 +91,7 @@ app.use("/api/seller", sellerRouter);
 app.use("/api/bundle", bundleRouter);
 app.use("/api/marketplace", marketplaceRouter)
 app.use("/api/admin", adminRouter);
+app.use("/api/shipping", shippingRouter);
 app.use(Sentry.Handlers.errorHandler());
 
 

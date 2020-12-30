@@ -972,27 +972,27 @@ h4 {
 
 @media(min-width:1200px) {
   body {
-    font-size: calc(1.25em + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(1.0em + (8 * (100vw - 1440px)) / 1119) !important;
   }
   p {
-    font-size: calc(1.25rem + (8 * (100vw - 1440px)) / 1119) !important;
-    line-height: 1.25;
+    font-size: calc(1.0rem + (8 * (100vw - 1440px)) / 1119) !important;
+    line-height: 1.0;
   }
   li {
-    font-size: calc(1.25rem + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(1.0rem + (8 * (100vw - 1440px)) / 1119) !important;
     line-height: 1.15;
   }
 
   h1 {
-    font-size: calc(4.0rem + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(3.0rem + (8 * (100vw - 1440px)) / 1119) !important;
   }
 
   h2 {
-    font-size: calc(3.5rem + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(2.5rem + (8 * (100vw - 1440px)) / 1119) !important;
   }
 
   h3 {
-    font-size: calc(2.5rem + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(2.0rem + (8 * (100vw - 1440px)) / 1119) !important;
   }
   .neverland-header-img {
     width: 100%;

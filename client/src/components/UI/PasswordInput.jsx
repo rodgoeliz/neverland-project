@@ -1,8 +1,11 @@
 import React from 'react';
-import isPasswordValid from '../../utils/passwordValidator';
-import BrandStyles from '../BrandStyles';
-import {FaRegCheckCircle} from 'react-icons/fa';
+
+import { FaRegCheckCircle } from 'react-icons/fa';
+
 import styled from 'styled-components';
+
+import isPasswordValid from 'utils/passwordValidator';
+import BrandStyles from 'components/BrandStyles';
 
 const StyledInput = styled.input`
   font-size: 18px;
@@ -11,15 +14,9 @@ const StyledInput = styled.input`
   background-color: transparent;
   border: 0;
   &:focus {
-    outline: none
-  } 
-`
-
-const styles = {
-  container: {
-    backgroundColor: BrandStyles.color.xlightBeige,
-  },
-};
+    outline: none;
+  }
+`;
 
 export default class PasswordInput extends React.Component {
   constructor(props) {
@@ -38,11 +35,11 @@ export default class PasswordInput extends React.Component {
   }
 
   validateInput() {
-    let issues = isPasswordValid(this.state.password);
-    let passwordErrorText = [];
+    const issues = isPasswordValid(this.state.password);
+    const passwordErrorText = [];
     if (issues.length > 0) {
       for (const idx in issues) {
-        let issue = issues[idx];
+        const issue = issues[idx];
         if (issue === 'min') {
           passwordErrorText.push('Must be at least 8 characters.');
         } else if (issue === 'uppercase') {
@@ -75,7 +72,7 @@ export default class PasswordInput extends React.Component {
   }
 
   onChangeInput(key, value) {
-    let typingTimeout = this.state.typingTimeout;
+    const { typingTimeout } = this.state;
     if (typingTimeout) {
       clearTimeout(this.state.typingTimeout);
     }
@@ -99,11 +96,11 @@ export default class PasswordInput extends React.Component {
 
     let validationIcon = null;
     if (!this.state.hasError) {
-      validationIcon = (<FaRegCheckCircle style={BrandStyles.components.inputBase.validationIcon} />);
+      validationIcon = <FaRegCheckCircle style={BrandStyles.components.inputBase.validationIcon} />;
     }
     let wrapperStyle = BrandStyles.components.inputBase.wrapper;
     if (this.props.style) {
-      wrapperStyle = {...wrapperStyle, ...this.props.style}
+      wrapperStyle = { ...wrapperStyle, ...this.props.style };
     }
     return (
       <div style={wrapperStyle}>

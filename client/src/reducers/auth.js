@@ -1,5 +1,5 @@
-import actionTypes from '../constants/newActionTypes';
-import { getNextOnBoardingStepId } from '../utils/helpers';
+import actionTypes from 'constants/newActionTypes';
+import { getNextOnBoardingStepId } from 'utils/helpers';
 
 export const initialState = {
   avatarURL: '',
@@ -28,7 +28,7 @@ export const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.auth.SET_USER:
-      let isSeller = action.payload.isSeller;
+      const { isSeller } = action.payload;
       return {
         ...state,
         ...action.payload,

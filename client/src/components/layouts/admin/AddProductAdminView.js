@@ -1,19 +1,30 @@
 import React, { Component } from 'react';
-import { Spinner } from 'react-bootstrap';
 import Switch from 'react-switch';
-//import ImagePicker from 'react-native-image-crop-picker';
 import { connect } from 'react-redux';
 
-import BrandStyles from '../../BrandStyles';
 import ClipLoader from "react-spinners/ClipLoader";
 
-import BaseInput from '../../UI/BaseInput';
 import Modal from 'react-modal';
-import CheckBoxInput from '../../UI/CheckBoxInput';
-import NSelect from '../../UI/NSelect';
-import {FaPhotoVideo, FaRegEdit} from 'react-icons/fa';
+
+import { FaPhotoVideo, FaRegEdit } from 'react-icons/fa';
+
 import { GrFormClose } from 'react-icons/gr';
-import { transformProductToFormData } from '../../../utils/productHelpers';
+
+import BrandStyles from 'components/BrandStyles';
+
+import { transformProductToFormData } from 'utils/productHelpers';
+
+import isZipCodeValid from 'utils/zipcodeValidator';
+
+import isNumberValid from 'utils/numberValidator';
+
+import BaseInput from 'components/UI/BaseInput';
+
+
+import CheckBoxInput from 'components/UI/CheckBoxInput';
+import NSelect from 'components/UI/NSelect';
+
+
 
 import {
   clearSellerCurrentProductCache,
@@ -21,16 +32,15 @@ import {
   loadAllProductTags,
   loadSellerProduct,
   clearTagsAndCategories
-} from '../../../actions/seller';
-import { setOnBoardingStepId, logoutFirebase } from "../../../actions/auth";
-import { getStores } from "../../../actions/store";
-import { createProduct, createTestProduct, updateProduct, getProductSearchMetaData } from '../../../actions/products';
+} from 'actions/seller';
+import { setOnBoardingStepId, logoutFirebase } from "actions/auth";
+import { getStores } from "actions/store";
+import { createProduct, createTestProduct, updateProduct, getProductSearchMetaData } from 'actions/products';
 
-import AddProductVariationView from '../seller/onboarding/AddProductVariationView';
-import NButton from '../../UI/NButton';
+import NButton from 'components/UI/NButton';
 
-import isZipCodeValid from '../../../utils/zipcodeValidator';
-import isNumberValid from '../../../utils/numberValidator';
+import AddProductVariationView from 'components/layouts/seller/onboarding/AddProductVariationView';
+
 
 const PROCESSING_TIME_VALUES = [
   { id: 'twenty-four-hours', value: '24 Hrs' },
@@ -40,38 +50,54 @@ const PROCESSING_TIME_VALUES = [
   { id: 'more-than-two-weeks', value: '2+ weeks' },
 ];
 
-const IMAGE_PICKER_ACTION_SHEET = ['Select from gallery', 'Take a photo', 'Cancel'];
+
+const styles = {
+  optionEditIcon: {
+    marginRight: 4,
+  },
+  optionEditContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    borderRadius: 8,
+    backgroundColor: BrandStyles.color.warmlightBeige,
+    borderBottomWidth: 2,
+    borderColor: BrandStyles.color.blue,
+  },
+  optionEditContentWrapper: {
+    flexDirection: 'column',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flex: 1,
+  },
+  optionEditTextInputWrapper: {
+    flexDirection: 'row',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  optionEditTextInput: {
+    flex: 1,
+    minHeight: 32,
+    marginRight: 4,
+    marginTop: 2,
+    marginLeft: 16,
+  },
+  optionEditLabel: {
+    marginTop: 4,
+    marginLeft: 16,
+  },
+  iconSpacing: {
+    marginRight: 8,
+  },
+};
+
+
 // if the product variations have price varied -> then it's "additional" pricing to main price
 // means we want to display the main price field - always
 //  if sku and quantity varies, then display individual sku and quantity fields, otherwise display main quantity and sku field
 // a
-{
-  /*
-  formData: {
-    processingTime
-    originZipCode
-    handlingFee
-    offerFreeShipping
-    itemWeightLb
-    itemWeightOz
-    itemHeightIn
-    itemWidthIn
-    itemLengthIn
-    primaryColor
-    secondaryColor
-    quantity
-    price
-    sku
-    categorySelectedItems
-    tagSelectedItems
-    isArtifical
-    isOrganic
-    productPhotos
-    title
-    description
-  }
-*/
-}
+
 
 class AddProductAdminView extends Component {
   constructor(props) {
@@ -80,30 +106,8 @@ class AddProductAdminView extends Component {
     if (!variations) {
       variations = [];
     }
-    let formDataBase = {
-      productPhotos: [],
-      productPhotosData: [],
-      variations: variations,
-      variationFormData: {},
-      isVisible: true,
-      isProductVariationsVisible: false,
-      errors:{}
-    };
-    function toValue(key, value) {
-      return { [key]: value };
-    }
 
-    function getProcessingTime(id) {
-      for (let i = 0; i < PROCESSING_TIME_VALUES.length; i++) {
-        let ptValue = PROCESSING_TIME_VALUES[i];
-        if (ptValue.id === id) {
-          return ptValue;
-        }
-      }
-    }
-
-    let formData = {};
-    let loadedProduct = props.product;
+    const loadedProduct = props.product;
     // means we are editing the product;
     let updatedFormData = {
       metaData: {}
@@ -118,7 +122,7 @@ class AddProductAdminView extends Component {
       formData: updatedFormData,
       errors: {}
     };
-    //props.onChange(this.state);
+    // props.onChange(this.state);
     this.onPressChoosePhoto = this.onPressChoosePhoto.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
     this.addPhotosToState = this.addPhotosToState.bind(this);
@@ -151,9 +155,9 @@ class AddProductAdminView extends Component {
       !this.props.allProductTags ||
       !this.props.productSearchMetaDataTags ||
       !this.props.stores ||
-      this.props.stores.length == 0 ||
-      this.props.allProductCategories.length == 0 ||
-      this.props.allProductTags.length == 0
+      this.props.stores.length === 0 ||
+      this.props.allProductCategories.length === 0 ||
+      this.props.allProductTags.length === 0
     ) {
       this.setState(
         {
@@ -163,20 +167,20 @@ class AddProductAdminView extends Component {
       );
     }
 
-    //console.log("creating test product", this.props.createTestProduct)
+    // console.log("creating test product", this.props.createTestProduct)
     // means we are editing a product, so we must pull it
     let passedProductId = this.props.productId;
     if (this.props && this.props.match) {
-      const { match: {params}} = this.props;
+      const { match: { params } } = this.props;
       passedProductId = params.productId;
     }
     if (passedProductId) {
       this.setState({
         isLoading: true
       }, async () => {
-        let sellerProduct = await this.props.loadSellerProduct({ productId: passedProductId});
+        const sellerProduct = await this.props.loadSellerProduct({ productId: passedProductId });
         console.log("Got the product: ", sellerProduct);
-        let transformedProductFD = transformProductToFormData(sellerProduct);
+        const transformedProductFD = transformProductToFormData(sellerProduct);
         console.log("Transformed form data for product: ", transformedProductFD);
         this.setState({
           formData: transformedProductFD,
@@ -189,6 +193,7 @@ class AddProductAdminView extends Component {
       this.props.clearSellerProductCache();
     }
   }
+
   transformToFormData(jsonObj, formData) {
     for (const key in jsonObj) {
       console.log("KEY: ", key)
@@ -222,17 +227,17 @@ class AddProductAdminView extends Component {
         case 'processingTime':
           const processingTime = jsonObj[key];
           if (processingTime.length > 0) {
-            formData.append(key, processingTime[0]['id']);
+            formData.append(key, processingTime[0].id);
           }
           break;
         case 'metaData.light':
         case 'metaData.color':
-        case 'metaData.level': 
+        case 'metaData.level':
         case 'metaData.water-level':
         case 'metaData.style':
         case 'metaData.benefit':
-        case 'metaData.size': 
-        case 'metaData': 
+        case 'metaData.size':
+        case 'metaData':
           console.log("KEYKEYKEY", key)
           if (key && jsonObj[key]) {
             formData.append(key, JSON.stringify(jsonObj[key]));
@@ -246,19 +251,20 @@ class AddProductAdminView extends Component {
     }
     return formData;
   }
+
   updateFormData(formData) {
     this.setState(
       {
         formData,
       },
       () => {
-        //this.props.onChange(this.state);
+        // this.props.onChange(this.state);
       },
     );
   }
 
   onChangeInput(key, value) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData[key] = value;
     this.updateFormData(newFormData);
     // this props on change product input
@@ -269,11 +275,11 @@ class AddProductAdminView extends Component {
     this.onSubmitProduct();
   }
 
-  onPressAddPhoto() {}
+  onPressAddPhoto() { }
 
   addPhotosToFormData(photosArr) {
     console.log("ADD PHOTOS TO FORM DATA: ", photosArr, this.state.formData.productPhotos)
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     let photos = newFormData.productPhotos;
     if (!photos) {
       photos = Array.from(photosArr);
@@ -285,7 +291,7 @@ class AddProductAdminView extends Component {
   }
 
   addPhotosToState(photosArr) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     let photos = newFormData.productPhotosData;
     if (!photos) {
       photos = photosArr;
@@ -296,196 +302,174 @@ class AddProductAdminView extends Component {
     this.updateFormData(newFormData);
   }
 
-  onPressAddPhotoSheetOption(buttonIndex) {
-    if (buttonIndex === 0) {
-      {/*ImagePicker.openPicker({
-        multiple: true,
-      }).then((images) => {
-        this.addPhotosToState(images);
-      });*/}
-    } else if (buttonIndex === 1) {
-      /*ImagePicker.openCamera({}).then((image) => {
-        const transformedImage = {
-          sourceURL: image.path,
-          mime: image.mime,
-          width: image.width,
-          height: image.height,
-          size: image.size,
-        };
-        this.addPhotosToState([transformedImage]);
-      });*/
-    }
-    //this.setState({ actionSheetIdx: buttonIndex });
-  }
+  onPressAddPhotoSheetOption() { }
 
   onPressChoosePhoto() {
 
-    //open action sheet
-    /*ActionSheet.show(
+    // open action sheet
+    /* ActionSheet.show(
       {
         options: IMAGE_PICKER_ACTION_SHEET,
         cancelButtonIndex: IMAGE_PICKER_ACTION_SHEET.length - 1,
         title: 'Add product photo',
       },
       this.onPressAddPhotoSheetOption,
-    );*/
+    ); */
   }
 
   validateInput() {
-    let errors = this.state.errors;
+    const { errors } = this.state;
     if (!this.state.formData) {
-      errors['root'] = 'Please complete the form.';
+      errors.root = 'Please complete the form.';
       this.setState({ errors });
       return;
-    } else {
-      errors['root'] = '';
     }
+    errors.root = '';
+
 
     if (this.state.formData.isProductVariationsVisible) {
-      let variations = this.state.formData.variations;
+      const { variations } = this.state.formData;
       if (variations && variations.length === 0) {
-        errors['variations'] = 'Please add variations or toggle off.';
+        errors.variations = 'Please add variations or toggle off.';
       } else {
-        errors['variations'] = '';
+        errors.variations = '';
       }
     }
 
     if (!this.state.formData.isProductVariationsVisible) {
-      let productPrice = this.state.formData.productPrice;
+      const { productPrice } = this.state.formData;
       if (!productPrice || !productPrice.productPrice || productPrice.productPrice.length < 1) {
-        errors['productPrice'] = 'Enter a valid price.';
+        errors.productPrice = 'Enter a valid price.';
       } else {
-        errors['productPrice'] = '';
+        errors.productPrice = '';
       }
-      let productQuantity = this.state.formData.productQuantity;
+      const { productQuantity } = this.state.formData;
       if (
         !productQuantity ||
         !productQuantity.productQuantity ||
         productQuantity.productQuantity.length < 1
       ) {
-        errors['productQuantity'] = 'Enter a valid quantity.';
+        errors.productQuantity = 'Enter a valid quantity.';
       } else {
-        errors['productQuantity'] = '';
+        errors.productQuantity = '';
       }
-      let productSKU = this.state.formData.productSKU;
+      const { productSKU } = this.state.formData;
       if (!productSKU || !productSKU.productSKU || productSKU.productSKU.length < 3) {
-        errors['productSKU'] = 'Enter a valid SKU.';
+        errors.productSKU = 'Enter a valid SKU.';
       } else {
-        errors['productSKU'] = '';
+        errors.productSKU = '';
       }
     }
 
-    let title = this.state.formData.title;
+    const { title } = this.state.formData;
     if (!title || !title.title || title.title.length < 3) {
-      errors['title'] = 'Please enter a title.';
+      errors.title = 'Please enter a title.';
     } else {
-      errors['title'] = '';
+      errors.title = '';
     }
 
-    let description = this.state.formData.description;
+    const { description } = this.state.formData;
     if (!description || !description.description || description.description.length === 0) {
-      errors['description'] = 'Please enter a description.';
+      errors.description = 'Please enter a description.';
     } else {
-      errors['description'] = '';
+      errors.description = '';
     }
 
     // productTags
-    let productTags = this.state.formData.productTags;
+    const { productTags } = this.state.formData;
     if (!productTags || productTags.length === 0) {
-      errors['productTags'] = 'Please select at least one product tag.';
+      errors.productTags = 'Please select at least one product tag.';
     } else {
-      errors['productTags'] = '';
+      errors.productTags = '';
     }
-    let categories = this.state.formData.categories;
+    const { categories } = this.state.formData;
     if (!categories || categories.length === 0) {
-      errors['categories'] = 'Please select at least one category.';
+      errors.categories = 'Please select at least one category.';
     } else {
-      errors['categories'] = '';
+      errors.categories = '';
     }
 
-    let processingTime = this.state.formData.processingTime;
+    const { processingTime } = this.state.formData;
     if (!processingTime || processingTime.length === 0) {
-      errors['processingTime'] = 'Please select a processing time.';
+      errors.processingTime = 'Please select a processing time.';
     } else {
-      errors['processingTime'] = '';
+      errors.processingTime = '';
     }
 
-    let itemHeightIn = this.state.formData.itemHeightIn;
+    const { itemHeightIn } = this.state.formData;
     if (
       !itemHeightIn ||
       !itemHeightIn.itemHeightIn ||
       itemHeightIn.hasError ||
       itemHeightIn.itemHeightIn.length === 0
     ) {
-      errors['itemHeightIn'] = 'Please enter item height.';
+      errors.itemHeightIn = 'Please enter item height.';
     } else {
-      errors['itemHeightIn'] = '';
+      errors.itemHeightIn = '';
     }
-    let itemLengthIn = this.state.formData.itemLengthIn;
+    const { itemLengthIn } = this.state.formData;
     if (
       !itemLengthIn ||
       !itemLengthIn.itemLengthIn ||
       itemLengthIn.hasError ||
       itemLengthIn.itemLengthIn.length === 0
     ) {
-      errors['itemLengthIn'] = 'Please enter item length.';
+      errors.itemLengthIn = 'Please enter item length.';
     } else {
-      errors['itemLengthIn'] = '';
+      errors.itemLengthIn = '';
     }
-    let itemWeightLb = this.state.formData.itemWeightLb;
+    const { itemWeightLb } = this.state.formData;
     if (
       !itemWeightLb ||
       !itemWeightLb.itemWeightLb ||
       itemWeightLb.hasError ||
       itemWeightLb.itemWeightLb.length === 0
     ) {
-      errors['itemWeightLb'] = 'Please enter item weight.';
+      errors.itemWeightLb = 'Please enter item weight.';
     } else {
-      errors['itemWeightLb'] = '';
+      errors.itemWeightLb = '';
     }
-    let itemWeightOz = this.state.formData.itemWeightOz;
+    const { itemWeightOz } = this.state.formData;
     if (
       !itemWeightOz ||
       !itemWeightOz.itemWeightOz ||
       itemWeightOz.hasError ||
       itemWeightOz.itemWeightOz.length === 0
     ) {
-      errors['itemWeightOz'] = 'Please enter item weight (oz).';
+      errors.itemWeightOz = 'Please enter item weight (oz).';
     } else {
-      errors['itemWeightOz'] = '';
+      errors.itemWeightOz = '';
     }
-    let itemWidthIn = this.state.formData.itemWidthIn;
+    const { itemWidthIn } = this.state.formData;
     if (
       !itemWidthIn ||
       !itemWidthIn.itemWidthIn ||
       itemWidthIn.hasError ||
       itemWidthIn.itemWidthIn.length === 0
     ) {
-      errors['itemWidthIn'] = 'Please enter item width (in).';
+      errors.itemWidthIn = 'Please enter item width (in).';
     } else {
-      errors['itemWidthIn'] = '';
+      errors.itemWidthIn = '';
     }
 
-    let productPhotos = this.state.formData.productPhotos;
+    const { productPhotos } = this.state.formData;
     if (!productPhotos || productPhotos.length === 0) {
-      errors['productPhotos'] = 'Please select product photos.';
+      errors.productPhotos = 'Please select product photos.';
     } else {
-      errors['productPhotos'] = '';
+      errors.productPhotos = '';
     }
 
-    let originZipCode = this.state.formData.originZipCode;
+    const { originZipCode } = this.state.formData;
     if (
       !originZipCode ||
       !originZipCode.originZipCode ||
       originZipCode.hasError ||
       originZipCode.originZipCode.length === 0
     ) {
-      errors['originZipCode'] = 'Please enter zip code.';
+      errors.originZipCode = 'Please enter zip code.';
     } else {
-      errors['originZipCode'] = '';
+      errors.originZipCode = '';
     }
-
-    let variations = this.state.formData.variations;
 
     this.setState({
       errors,
@@ -497,20 +481,20 @@ class AddProductAdminView extends Component {
     if (!currentProduct && this.state.product) {
       currentProduct = this.state.product;
     }
-    /*let valid = this.validateInput();
+    /* let valid = this.validateInput();
     if (!valid) {
       return;
-    }*/
+    } */
     let formData = new FormData();
-    //formData.append('my_photos')
+    // formData.append('my_photos')
     for (let i = 0; i < this.state.formData.productPhotos.length; i++) {
-      let photo = this.state.formData.productPhotos[i];
+      const photo = this.state.formData.productPhotos[i];
       formData.append(`productImageFile[${i}]`, photo);
-     /* {
-        uri: photo.sourceURL,
-        type: photo.mime,
-        name: this.state.formData.title + '-' + this.props.user._id + 'productImage' + i,
-      });*/
+      /* {
+         uri: photo.sourceURL,
+         type: photo.mime,
+         name: this.state.formData.title + '-' + this.props.user._id + 'productImage' + i,
+       }); */
     }
     formData = this.transformToFormData(this.state.formData, formData);
     // if we didn't assign a store, pull user store
@@ -518,22 +502,20 @@ class AddProductAdminView extends Component {
     if (!this.state.formData.storeId) {
       formData.append('userId', this.props.user._id);
       formData.append('storeId', this.props.user.storeId._id);
-    } else {
-      if (this.state.formData.storeId && this.state.formData.storeId.length == 1) {
-        let store = this.state.formData.storeId[0];
-        console.log("STOREID: ", store._id);
-        console.log("vendorId: ", store.userId);
-        formData.append('storeId', store._id);
-        if (typeof store.userId == "object") {
-          formData.append('vendorId', store.userId._id);
-          formData.append('userId', store.userId._id);
-        } else if (typeof store.userId == "string") {
-          formData.append('vendorId', store.userId);
-          formData.append('userId', store.userId);
-        }
+    } else if (this.state.formData.storeId && this.state.formData.storeId.length === 1) {
+      const store = this.state.formData.storeId[0];
+      console.log("STOREID: ", store._id);
+      console.log("vendorId: ", store.userId);
+      formData.append('storeId', store._id);
+      if (typeof store.userId === "object") {
+        formData.append('vendorId', store.userId._id);
+        formData.append('userId', store.userId._id);
+      } else if (typeof store.userId === "string") {
+        formData.append('vendorId', store.userId);
+        formData.append('userId', store.userId);
       }
     }
-    let existingProduct = this.state.product;
+    const existingProduct = this.state.product;
     if (existingProduct) {
       formData.append('productId', existingProduct._id);
       await this.props.updateProduct({ formData });
@@ -552,7 +534,7 @@ class AddProductAdminView extends Component {
   }
 
   onChange(formData) {
-    let errors = this.state.errors;
+    const { errors } = this.state;
     for (const key in formData.formData) {
       if (formData.formData[key]) {
         errors[key] = formData.formData[key].error;
@@ -579,24 +561,22 @@ class AddProductAdminView extends Component {
   }
 
   toggleSelection(key) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData[key] = !newFormData[key];
     this.setState(
       {
         formData: newFormData,
       },
       () => {
-        //this.onChange(this.state);
+        // this.onChange(this.state);
       },
     );
   }
 
   removeImageUrl(productPhoto) {
-    let newFormData = { ...this.state.formData };
-    let productPhotos = newFormData.productPhotosData;
-    let index = productPhotos.findIndex((product) => {
-      return product == productPhoto;
-    });
+    const newFormData = { ...this.state.formData };
+    const productPhotos = newFormData.productPhotosData;
+    const index = productPhotos.findIndex((product) => product === productPhoto);
     productPhotos.splice(index, 1);
     newFormData.productPhotosData = productPhotos;
     this.setState(
@@ -604,31 +584,31 @@ class AddProductAdminView extends Component {
         formData: newFormData,
       },
       () => {
-        //this.props.onChange(this.state);
+        // this.props.onChange(this.state);
       },
     );
   }
 
   onImageFileChange(e) {
-    let promises =[];
+    const promises = [];
     Array.from(e.target.files).forEach((file) => {
-      var url = new Promise(resolve => {
-        let reader = new FileReader();
+      const url = new Promise(resolve => {
+        const reader = new FileReader();
         if (file && file.type.match('image.*')) {
           try {
 
-          reader.readAsDataURL(file);
-          reader.onloadend = function (e) {
-            resolve(reader.result);
-          };
-          }catch(error) {
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+              resolve(reader.result);
+            };
+          } catch (error) {
             console.log("ERROR", error)
           }
         }
+      });
+      promises.push(url);
     });
-        promises.push(url);
-    });
-    let origFiles = e.target.files;
+    const origFiles = e.target.files;
     Promise.all(promises).then(files => {
       this.addPhotosToState(files);
       this.addPhotosToFormData(origFiles);
@@ -636,8 +616,8 @@ class AddProductAdminView extends Component {
   }
 
   renderChosenPhotos() {
-    let photos = this.state.formData.productPhotosData;
-    let spanStyle = {...BrandStyles.components.iconPlaceholder, marginBottom: 16, paddingTop: 16};
+    const photos = this.state.formData.productPhotosData;
+    const spanStyle = { ...BrandStyles.components.iconPlaceholder, marginBottom: 16, paddingTop: 16 };
     if (!photos || photos.length === 0) {
       return (
         <div
@@ -665,11 +645,11 @@ class AddProductAdminView extends Component {
         </div>
       );
     }
-    let productPhotoViews = [];
-    let iconStyle = {...BrandStyles.components.iconPlaceholder, color: BrandStyles.color.xdarkBeige};
-    photos.map((product) => {
+    const productPhotoViews = [];
+    const iconStyle = { ...BrandStyles.components.iconPlaceholder, color: BrandStyles.color.xdarkBeige };
+    photos.forEach((product) => {
       productPhotoViews.push(
-        <div style={{position: 'relative'}}>
+        <div style={{ position: 'relative' }}>
           <div
             onClick={this.removeImageUrl.bind(this, product)}
             style={{
@@ -725,7 +705,7 @@ class AddProductAdminView extends Component {
           {productPhotoViews}
         </div>
         <span> Add Photos </span>
-          <input type="file" onChange={this.onImageFileChange} multiple />
+        <input type="file" onChange={this.onImageFileChange} multiple />
       </div>
     );
   }
@@ -743,7 +723,7 @@ class AddProductAdminView extends Component {
   }
 
   onSaveVariations(variationState) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData.variationFormData = variationState;
 
     this.setState(
@@ -752,26 +732,26 @@ class AddProductAdminView extends Component {
       },
       () => {
         this.onRequestProductVariantModalClose();
-        //this.props.onChange(this.state);
+        // this.props.onChange(this.state);
       },
     );
   }
 
   onChangeVariations(variations) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData.variations = variations;
     this.setState(
       {
         formData: newFormData,
       },
       () => {
-        //this.props.onChange(this.state);
+        // this.props.onChange(this.state);
       },
     );
   }
 
   onMultiSelectItemsChange(key, values) {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData[key] = values;
 
     this.setState(
@@ -779,7 +759,7 @@ class AddProductAdminView extends Component {
         formData: newFormData,
       },
       () => {
-        //this.props.onChange(this.state);
+        // this.props.onChange(this.state);
       },
     );
   }
@@ -790,7 +770,7 @@ class AddProductAdminView extends Component {
         <Modal
           animationType="slide"
           transparent={false}
-          presentationStyle={'fullScreen'}
+          presentationStyle="fullScreen"
           isOpen={this.state.isProductVariantModalVisible}
           onRequestClose={this.onRequestProductVariantModalClose}
         >
@@ -806,18 +786,18 @@ class AddProductAdminView extends Component {
   }
 
   onChangeEditOptionText(optionSlug, key, value) {
-    let newFormData = { ...this.state.formData };
-    let variations = this.state.formData.variations;
+    const newFormData = { ...this.state.formData };
+    const { variations } = this.state.formData;
     if (!variations) {
       return false;
     }
 
-    let updatedVariations = [];
+    const updatedVariations = [];
     for (let i = 0; i < variations.length; i++) {
-      let variation = variations[i];
-      let options = variation.options;
+      const variation = variations[i];
+      const { options } = variation;
       for (let j = 0; j < options.length; j++) {
-        let option = options[j];
+        const option = options[j];
         if (option.handle === optionSlug) {
           option[key] = value;
         }
@@ -831,23 +811,23 @@ class AddProductAdminView extends Component {
         formData: newFormData,
       },
       () => {
-        //this.props.onChange(this.state);
+        // this.props.onChange(this.state);
       },
     );
   }
 
   setEditingState(optionSlug, key, value) {
-    let newFormData = { ...this.state.formData };
-    let variations = this.state.formData.variations;
+    const newFormData = { ...this.state.formData };
+    const { variations } = this.state.formData;
     if (!variations) {
       return false;
     }
-    let updatedVariations = [];
+    const updatedVariations = [];
     for (let i = 0; i < variations.length; i++) {
-      let variation = variations[i];
-      let options = variation.options;
+      const variation = variations[i];
+      const { options } = variation;
       for (let j = 0; j < options.length; j++) {
-        let option = options[j];
+        const option = options[j];
         if (option.handle === optionSlug) {
           option[key] = value;
         }
@@ -861,48 +841,48 @@ class AddProductAdminView extends Component {
         formData: newFormData,
       },
       () => {
-        //this.props.onChange(this.state);
+        // this.props.onChange(this.state);
       },
     );
   }
 
   toggleProductVariationsVisibility() {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData.isProductVariationsVisible = !newFormData.isProductVariationsVisible;
     this.setState(
       {
         formData: newFormData,
       },
       () => {
-        //this.props.onChange(this.state);
+        // this.props.onChange(this.state);
       },
     );
   }
 
   toggleProductVisibility() {
-    let newFormData = { ...this.state.formData };
+    const newFormData = { ...this.state.formData };
     newFormData.isVisible = !newFormData.isVisible;
     this.setState(
       {
         formData: newFormData,
       },
       () => {
-        //this.props.onChange(this.state);
+        // this.props.onChange(this.state);
       },
     );
   }
 
   toggleVisibility(optionSlug, key) {
-    let newFormData = { ...this.state.formData };
-    let variations = newFormData.variations;
+    const newFormData = { ...this.state.formData };
+    const { variations } = newFormData;
     if (!variations) {
       return;
     }
-    for (var i = 0; i < variations.length; i++) {
-      let variation = variations[i];
-      let options = variation.options;
-      for (var j = 0; j < options.length; j++) {
-        let option = options[j];
+    for (let i = 0; i < variations.length; i++) {
+      const variation = variations[i];
+      const { options } = variation;
+      for (let j = 0; j < options.length; j++) {
+        const option = options[j];
         if (option.handle === optionSlug) {
           option[key] = !option[key];
         }
@@ -914,21 +894,21 @@ class AddProductAdminView extends Component {
         formData: newFormData,
       },
       () => {
-        //this.props.onChange(this.state);
+        // this.props.onChange(this.state);
       },
     );
   }
 
   getEditingState(optionSlug, key) {
-    let variations = this.state.formData.variations;
+    const { variations } = this.state.formData;
     if (!variations) {
       return false;
     }
-    for (var i = 0; i < variations.length; i++) {
-      let variation = variations[i];
-      let options = variation.options;
-      for (var j = 0; j < options.length; j++) {
-        let option = options[j];
+    for (let i = 0; i < variations.length; i++) {
+      const variation = variations[i];
+      const { options } = variation;
+      for (let j = 0; j < options.length; j++) {
+        const option = options[j];
         if (option.handle === optionSlug) {
           return option[key];
         }
@@ -937,23 +917,22 @@ class AddProductAdminView extends Component {
   }
 
   renderProductVariationsTable() {
-    let variations = this.state.formData.variations;
-    let variationEditableViews = [];
-    let labelStyle = BrandStyles.components.inputBase.label;
+    const { variations } = this.state.formData;
+    const variationEditableViews = [];
+    const labelStyle = BrandStyles.components.inputBase.label;
     if (variations) {
-      variations.map((variation) => {
-        let skuVaried = variation.isSKUVaried;
-        let visible = variation.isVisible;
-        let priceVaried = variation.isPriceVaried;
-        let quantityVaried = variation.isQuantityVaried;
-        let options = variation.options;
-        let editableOptionViews = [];
-        let iconStyle = {...BrandStyles.components.iconPlaceholder,...styles.iconSpacing};
-        let spanStyle = {...labelStyle, marginLeft: 4};
-        let spanEditStyle = {...labelStyle, ...styles.optionEditLabel};
+      variations.forEach((variation) => {
+        const skuVaried = variation.isSKUVaried;
+        const priceVaried = variation.isPriceVaried;
+        const quantityVaried = variation.isQuantityVaried;
+        const { options } = variation;
+        const editableOptionViews = [];
+        const iconStyle = { ...BrandStyles.components.iconPlaceholder, ...styles.iconSpacing };
+        const spanStyle = { ...labelStyle, marginLeft: 4 };
+        const spanEditStyle = { ...labelStyle, ...styles.optionEditLabel };
         if (options) {
-          for (var i = 0; i < options.length; i++) {
-            let option = options[i];
+          for (let i = 0; i < options.length; i++) {
+            const option = options[i];
             editableOptionViews.push(
               <div>
                 <div
@@ -968,7 +947,7 @@ class AddProductAdminView extends Component {
                   <span style={{ fontWeight: 'bold', fontSize: 14 }}>{option.title}</span>
                   <div style={{ margin: 4, flexDirection: 'column' }}>
                     {/* toggle isVisible */}
-                    <span style={spanStyle}>{'Is Visible'}</span>
+                    <span style={spanStyle}>Is Visible</span>
                     <Switch
                       onChange={this.toggleVisibility.bind(this, option.handle, 'isVisible')}
                       checked={option.isVisible}
@@ -981,7 +960,7 @@ class AddProductAdminView extends Component {
                       {this.getEditingState(option.handle, 'isEditingSku') ? (
                         <div style={styles.optionEditContainer}>
                           <div style={styles.optionEditContentWrapper}>
-                            <span style={spanEditStyle}>{'SKU'}</span>
+                            <span style={spanEditStyle}>SKU</span>
                             <div style={styles.optionEditTextInputWrapper}>
                               <input
                                 style={styles.optionEditTextInput}
@@ -995,7 +974,7 @@ class AddProductAdminView extends Component {
                                 autoFocus
                                 onKeyDown={(e) => {
                                   if (e.keyCode === 13) {
-                                  this.setEditingState(option.handle, 'isEditingSku', false);
+                                    this.setEditingState(option.handle, 'isEditingSku', false);
                                   }
                                 }}
                               />
@@ -1003,34 +982,34 @@ class AddProductAdminView extends Component {
                           </div>
                         </div>
                       ) : (
-                        <div style={styles.optionEditContainer}>
-                          <div style={styles.optionEditContentWrapper}>
-                            <span style={spanEditStyle}>{'SKU'}</span>
-                            <div style={styles.optionEditTextInputWrapper}>
-                              <span
-                                style={styles.optionEditTextInput}
-                                onClick={() => {
-                                  this.setEditingState(option.handle, 'isEditingSku', true);
-                                }}
-                              >
-                                {option.sku}
-                              </span>
-                              <FaRegEdit style={iconStyle} />
+                          <div style={styles.optionEditContainer}>
+                            <div style={styles.optionEditContentWrapper}>
+                              <span style={spanEditStyle}>SKU</span>
+                              <div style={styles.optionEditTextInputWrapper}>
+                                <span
+                                  style={styles.optionEditTextInput}
+                                  onClick={() => {
+                                    this.setEditingState(option.handle, 'isEditingSku', true);
+                                  }}
+                                >
+                                  {option.sku}
+                                </span>
+                                <FaRegEdit style={iconStyle} />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
                     </div>
                   ) : (
-                    <div/>
-                  )}
+                      <div />
+                    )}
                   {priceVaried ? (
                     <div style={{ flex: 1, margin: 4 }}>
                       {this.getEditingState(option.handle, 'isEditingPrice') ? (
                         <div style={styles.optionEditContainer}>
                           <div style={styles.optionEditContentWrapper}>
                             <span style={spanEditStyle}>
-                              {'Additional Cost'}
+                              Additional Cost
                             </span>
                             <div style={styles.optionEditTextInputWrapper}>
                               <input
@@ -1043,46 +1022,46 @@ class AddProductAdminView extends Component {
                                 autoFocus
                                 onKeyDown={(e) => {
                                   if (e.keyCode === 13) {
-                                  this.setEditingState(option.handle, 'isEditingPrice', false);
+                                    this.setEditingState(option.handle, 'isEditingPrice', false);
                                   }
                                 }}
                                 onBlur={() => {
                                   this.setEditingState(option.handle, 'isEditingPrice', false);
                                 }}
                               />
-                              </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div style={styles.optionEditContainer}>
-                          <div style={styles.optionEditContentWrapper}>
-                            <span style={spanEditStyle}>
-                              {'Additional Cost'}
-                            </span>
-                            <div style={styles.optionEditTextInputWrapper}>
-                              <span
-                                style={styles.optionEditTextInput}
-                                onClick={() => {
-                                  this.setEditingState(option.handle, 'isEditingPrice', true);
-                                }}
-                              >
-                                {option.price}
-                              </span>
-                              <FaRegEdit style={iconStyle} />
                             </div>
                           </div>
                         </div>
-                      )}
+                      ) : (
+                          <div style={styles.optionEditContainer}>
+                            <div style={styles.optionEditContentWrapper}>
+                              <span style={spanEditStyle}>
+                                Additional Cost
+                            </span>
+                              <div style={styles.optionEditTextInputWrapper}>
+                                <span
+                                  style={styles.optionEditTextInput}
+                                  onClick={() => {
+                                    this.setEditingState(option.handle, 'isEditingPrice', true);
+                                  }}
+                                >
+                                  {option.price}
+                                </span>
+                                <FaRegEdit style={iconStyle} />
+                              </div>
+                            </div>
+                          </div>
+                        )}
                     </div>
                   ) : (
-                    <div />
-                  )}
+                      <div />
+                    )}
                   {quantityVaried ? (
                     <div style={{ flex: 1, margin: 4 }}>
                       {this.getEditingState(option.handle, 'isEditingQuantity') ? (
                         <div style={styles.optionEditContainer}>
                           <div style={styles.optionEditContentWrapper}>
-                            <span style={spanEditStyle}>{'Quantity'}</span>
+                            <span style={spanEditStyle}>Quantity</span>
                             <div style={styles.optionEditTextInputWrapper}>
                               <input
                                 value={option.quantity}
@@ -1094,7 +1073,7 @@ class AddProductAdminView extends Component {
                                 autoFocus
                                 onKeyDown={(e) => {
                                   if (e.keyCode === 13) {
-                                  this.setEditingState(option.handle, 'isEditingQuantity', false);
+                                    this.setEditingState(option.handle, 'isEditingQuantity', false);
                                   }
                                 }}
                                 onBlur={() => {
@@ -1105,27 +1084,27 @@ class AddProductAdminView extends Component {
                           </div>
                         </div>
                       ) : (
-                        <div style={styles.optionEditContainer}>
-                          <div style={styles.optionEditContentWrapper}>
-                            <span style={spanEditStyle}>{'Quantity'}</span>
-                            <div style={styles.optionEditTextInputWrapper}>
-                              <span
-                                style={styles.optionEditTextInput}
-                                onClick={() => {
-                                  this.setEditingState(option.handle, 'isEditingQuantity', true);
-                                }}
-                              >
-                                {option.quantity}
-                              </span>
-                              <FaRegEdit style={iconStyle} />
+                          <div style={styles.optionEditContainer}>
+                            <div style={styles.optionEditContentWrapper}>
+                              <span style={spanEditStyle}>Quantity</span>
+                              <div style={styles.optionEditTextInputWrapper}>
+                                <span
+                                  style={styles.optionEditTextInput}
+                                  onClick={() => {
+                                    this.setEditingState(option.handle, 'isEditingQuantity', true);
+                                  }}
+                                >
+                                  {option.quantity}
+                                </span>
+                                <FaRegEdit style={iconStyle} />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
                     </div>
                   ) : (
-                    <div />
-                  )}
+                      <div />
+                    )}
                 </div>
               </div>,
             );
@@ -1154,7 +1133,7 @@ class AddProductAdminView extends Component {
   }
 
   onNSelectChangeMetaDataItems(key, newValues) {
-    let formData = this.state.formData;
+    const { formData } = this.state;
     console.log("FORM DATA ON META CHANGE: ", formData)
     formData.metaData[key] = newValues;
     this.setState({
@@ -1166,7 +1145,7 @@ class AddProductAdminView extends Component {
 
   onNSelectChangeNewItems(key, newValues) {
     console.log("CHANGE NEW ITEMS KEY, new Values", key, newValues)
-    let formData = this.state.formData;
+    const { formData } = this.state;
     formData[key] = newValues;
     this.setState({
       formData,
@@ -1180,10 +1159,10 @@ class AddProductAdminView extends Component {
   }
 
   checkVariationEnabled(key) {
-    let variations = this.state.formData.variations;
+    const { variations } = this.state.formData;
     let isVariationKeyEnabled = false;
-    for (var i in variations) {
-      let variation = variations[i];
+    for (const i in variations) {
+      const variation = variations[i];
       if (variation[key]) {
         isVariationKeyEnabled = true;
       }
@@ -1195,7 +1174,7 @@ class AddProductAdminView extends Component {
     // if sku varies for any variation option, don't display
     // if quantity varies for any variation, don't display
     // price always display
-    let pvBaseInfoViews = [];
+    const pvBaseInfoViews = [];
     pvBaseInfoViews.push(
       <BaseInput
         onChange={this.onChangeInput}
@@ -1204,7 +1183,7 @@ class AddProductAdminView extends Component {
         full
         value={this.state.formData.productPrice ? this.state.formData.productPrice : null}
         validate={this.basicTextValidate.bind(this, 2)}
-        error={this.state.errors['productPrice']}
+        error={this.state.errors.productPrice}
       />,
     );
     if (!this.checkVariationEnabled('isSKUVaried')) {
@@ -1216,7 +1195,7 @@ class AddProductAdminView extends Component {
           full
           value={this.state.formData.productSKU ? this.state.formData.productSKU : null}
           validate={this.basicTextValidate.bind(this, 2)}
-          error={this.state.errors['productSKU']}
+          error={this.state.errors.productSKU}
         />,
       );
     }
@@ -1229,7 +1208,7 @@ class AddProductAdminView extends Component {
           full
           value={this.state.formData.productQuantity ? this.state.formData.productQuantity : null}
           validate={this.basicTextValidate.bind(this, 1)}
-          error={this.state.errors['productQuantity']}
+          error={this.state.errors.productQuantity}
         />,
       );
     }
@@ -1237,57 +1216,13 @@ class AddProductAdminView extends Component {
   }
 
   renderProductBasics() {
-    let existingVariations = this.state.formData.variations;
+    const existingVariations = this.state.formData.variations;
     let variationsView = null;
-    let isExistingVariations = existingVariations && existingVariations.length !== 0;
-    // render toggle switch
-    let hasVariationsToggle = (
-      <Switch
-        onChange={this.toggleProductVariationsVisibility.bind(this)}
-        checked={this.state.formData.isProductVariationsVisible}
-      />
-    );
-    let productVariationsToggle = (
-      <div
-        style={{
-          backgroundColor: BrandStyles.color.warmlightBeige,
-          marginLeft: 16,
-          marginRight: 16,
-          marginBottom: 16,
-          borderRadius: 16,
-        }}
-      >
-        <span
-          style={{
-            fontWeight: 'bold',
-            fontSize: 18,
-            textAlign: 'center',
-            padding: 16,
-          }}
-        >
-          Pricing & Product Variations
-        </span>
-        <div
-          style={{
-            display: 'flex',
-            paddingLeft: 16,
-            paddingRight: 16,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingTop: 16,
-            paddingBottom: 16,
-            alignItems: 'center',
-          }}
-        >
-          <span style={{ fontWeight: 'bold', fontSize: 16 }}>Has product variations</span>
-          {hasVariationsToggle}
-        </div>
-      </div>
-    );
-    let productVariationToggleContent = this.genMainProductVariationBaseInfoTable();
-    //if (!this.state.formData.isProductVariationsVisible) {
-    //variationsView = productVariationToggleContent;
-    //} else {
+    const isExistingVariations = existingVariations && existingVariations.length !== 0;
+    const productVariationToggleContent = this.genMainProductVariationBaseInfoTable();
+    // if (!this.state.formData.isProductVariationsVisible) {
+    // variationsView = productVariationToggleContent;
+    // } else {
     if (isExistingVariations) {
       variationsView = (
         <div
@@ -1338,13 +1273,13 @@ class AddProductAdminView extends Component {
         </div>
       );
     }
-    //}
+    // }
 
-    let labelStyle = this.state.errors['variations']
+    const labelStyle = this.state.errors.variations
       ? BrandStyles.components.inputBase.errorLabel
       : BrandStyles.components.inputBase.label;
-    let errorLabelStyle = {...BrandStyles.components.inputBase.errorLabel, textAlign: 'center'};
-    let marginLabelStyle = {...labelStyle, marginLeft: 16};
+    const errorLabelStyle = { ...BrandStyles.components.inputBase.errorLabel, textAlign: 'center' };
+    const marginLabelStyle = { ...labelStyle, marginLeft: 16 };
     return (
       <form>
         <div>
@@ -1353,7 +1288,7 @@ class AddProductAdminView extends Component {
             Product Photos{' '}
           </span>
           <span style={errorLabelStyle}>
-            {this.state.errors['productPhotos']}
+            {this.state.errors.productPhotos}
           </span>
           {this.renderChosenPhotos()}
         </div>
@@ -1384,21 +1319,21 @@ class AddProductAdminView extends Component {
           label="Title"
           value={this.state.formData.title ? this.state.formData.title : null}
           validate={this.basicTextValidate.bind(this, 3)}
-          error={this.state.errors['title']}
+          error={this.state.errors.title}
         />
         <BaseInput
           onChange={this.onChangeInput}
-          multiline={true}
+          multiline
           keyId="description"
           label="Description"
           value={this.state.formData.description ? this.state.formData.description : null}
           validate={this.basicTextValidate.bind(this, 30)}
-          error={this.state.errors['description']}
+          error={this.state.errors.description}
         />
-        <div style={{ flexDirection: 'row', marginTop: 16, marginBottom: 16, display: 'flex'}}>
+        <div style={{ flexDirection: 'row', marginTop: 16, marginBottom: 16, display: 'flex' }}>
           <CheckBoxInput
             value={this.state.formData.isOrganic}
-            label={'Organic'}
+            label="Organic"
             onValueChange={this.toggleSelection.bind(this, 'isOrganic')}
             error={this.state.isOrganicSelectedError}
           />
@@ -1410,7 +1345,7 @@ class AddProductAdminView extends Component {
           />
         </div>
         {productVariationToggleContent}
-        <span style={marginLabelStyle}>{this.state.errors['variations']}</span>
+        <span style={marginLabelStyle}>{this.state.errors.variations}</span>
         {variationsView}
         <NSelect
           items={this.props.allProductCategories}
@@ -1418,9 +1353,9 @@ class AddProductAdminView extends Component {
           values={this.state.formData.categories}
           title="Product Categories"
           itemTitleKey="title"
-          placeholderText={'Select categories...'}
+          placeholderText="Select categories..."
           newItems={this.state.formData.isShopOwnerNewValues}
-          error={this.state.errors['categories']}
+          error={this.state.errors.categories}
           onChangeNewItems={this.onNSelectChangeNewItems.bind(this, 'categories')}
           onChangeItems={(values) => {
             this.onMultiSelectItemsChange('categories', values);
@@ -1432,9 +1367,9 @@ class AddProductAdminView extends Component {
           itemIdKey="_id"
           itemTitleKey="title"
           title="Product Tags"
-          placeholderText={'Select tags...'}
-          searchEnabled={true}
-          error={this.state.errors['productTags']}
+          placeholderText="Select tags..."
+          searchEnabled
+          error={this.state.errors.productTags}
           newItems={this.state.formData.isShopOwnerNewValues}
           onChangeNewItems={this.onNSelectChangeNewItems.bind(this, 'productTags')}
           onChangeItems={(values) => {
@@ -1454,54 +1389,51 @@ class AddProductAdminView extends Component {
           itemIdKey="_id"
           itemTitleKey="title"
           title="Store"
-          placeholderText={'Select store...'}
-          searchEnabled={true}
-          error={this.state.errors['store']}
-          isSingleSelect={true}
-          renderItem={({item}) => {
-            return <span>{item.title} - {item._id}</span>
-          }}
+          placeholderText="Select store..."
+          searchEnabled
+          error={this.state.errors.store}
+          isSingleSelect
+          renderItem={({ item }) => <span>{item.title} - {item._id}</span>}
           onChangeItems={
             this.onNSelectChangeNewItems.bind(this, 'storeId')
-          }/>
+          } />
       </div>
     );
   }
 
   renderAdminSearchMetaData() {
     // add a new field
-    let metaDataTags = this.props.productSearchMetaDataTags;
+    const metaDataTags = this.props.productSearchMetaDataTags;
     console.log("META DATA TAGS...", metaDataTags)
-    let metaNSelects = [];
-    for (var key in metaDataTags) {
-      let renderItem=({item}) => {
+    const metaNSelects = [];
+    for (const key in metaDataTags) {
+      const renderItem = ({ item }) => {
         console.log("inrenderitem", item)
-        let hex = item.metaData ? item.metaData.hex : '#fff'
-            return (
-              <div style={{display: 'flex', flexDirection: 'row'}}>
-                <div style={{height: 20, width: 20, backgroundColor: hex}}></div>
-                <span>{item.title}</span>
-              </div>);
+        const hex = item.metaData ? item.metaData.hex : '#fff'
+        return (
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ height: 20, width: 20, backgroundColor: hex }} />
+            <span>{item.title}</span>
+          </div>);
       }
       metaNSelects.push(
-        <NSelect 
+        <NSelect
           items={metaDataTags[key]}
-          values={this.state.formData.metaData? this.state.formData.metaData[key]: []}
+          values={this.state.formData.metaData ? this.state.formData.metaData[key] : []}
           itemIdKey="_id"
           itemTitleKey="title"
           title={key}
-          renderItem={key == 'color' ? renderItem : null}
+          renderItem={key === 'color' ? renderItem : null}
           placeholderText={`Select ${key}...`}
-          searchEnabled={true}
+          searchEnabled
           error={this.state.errors[`metaData$${key}`]}
           onChangeItems={this.onNSelectChangeMetaDataItems.bind(this, `${key}`)}
-          />
+        />
       );
     }
-    let newMetaField = (<div><NButton title="Add a new metafield" /></div>);
     return (
       <div>
-       {metaNSelects} 
+        {metaNSelects}
       </div>
     );
   }
@@ -1543,14 +1475,14 @@ class AddProductAdminView extends Component {
         <form>
           <NSelect
             items={PROCESSING_TIME_VALUES}
-            isSingleSelect={true}
+            isSingleSelect
             title="Processing & Fulfillment Time"
             itemIdKey="id"
             itemTitleKey="value"
-            hideSelectedTags={true}
-            placeholderText={'Select time...'}
+            hideSelectedTags
+            placeholderText="Select time..."
             values={this.state.formData.processingTime ? this.state.formData.processingTime : null}
-            error={this.state.errors['processingTime']}
+            error={this.state.errors.processingTime}
             onChangeItems={this.onChangeInput.bind(this, 'processingTime')}
           />
           <BaseInput
@@ -1560,14 +1492,9 @@ class AddProductAdminView extends Component {
             value={this.state.formData.originZipCode ? this.state.formData.originZipCode : null}
             widthFactor={1}
             validate={isZipCodeValid}
-            error={this.state.errors['originZipCode']}
+            error={this.state.errors.originZipCode}
           />
-          {/*<CheckBoxInput
-            value={this.state.formData.offerFreeShipping}
-            label="Offer Free Shipping"
-            onValueChange={this.toggleSelection.bind(this, 'offerFreeShipping')}
-            error={this.state.offerFreeShippingError}
-          />*/}
+          
           <div style={{ height: 16 }} />
           <span
             style={{
@@ -1588,7 +1515,7 @@ class AddProductAdminView extends Component {
               value={this.state.formData.itemWeightLb ? this.state.formData.itemWeightLb : null}
               widthFactor={2}
               validate={isNumberValid}
-              error={this.state.errors['itemWeightLb']}
+              error={this.state.errors.itemWeightLb}
             />
             <BaseInput
               onChange={this.onChangeInput}
@@ -1598,7 +1525,7 @@ class AddProductAdminView extends Component {
               value={this.state.formData.itemWeightOz ? this.state.formData.itemWeightOz : null}
               validate={isNumberValid}
               widthFactor={2}
-              error={this.state.errors['itemWeightOz']}
+              error={this.state.errors.itemWeightOz}
             />
           </div>
           <span
@@ -1620,7 +1547,7 @@ class AddProductAdminView extends Component {
               validate={isNumberValid}
               value={this.state.formData.itemHeightIn ? this.state.formData.itemHeightIn : null}
               widthFactor={3}
-              error={this.state.errors['itemHeightIn']}
+              error={this.state.errors.itemHeightIn}
             />
             <BaseInput
               onChange={this.onChangeInput}
@@ -1630,7 +1557,7 @@ class AddProductAdminView extends Component {
               validate={isNumberValid}
               widthFactor={3}
               value={this.state.formData.itemWidthIn ? this.state.formData.itemWidthIn : null}
-              error={this.state.errors['itemWidthIn']}
+              error={this.state.errors.itemWidthIn}
             />
             <BaseInput
               onChange={this.onChangeInput}
@@ -1640,7 +1567,7 @@ class AddProductAdminView extends Component {
               keyboardType="numeric"
               value={this.state.formData.itemLengthIn ? this.state.formData.itemLengthIn : null}
               widthFactor={3}
-              error={this.state.errors['itemLengthIn']}
+              error={this.state.errors.itemLengthIn}
             />
           </div>
         </form>
@@ -1650,27 +1577,26 @@ class AddProductAdminView extends Component {
 
   render() {
     console.log("AddProductAdminView", this.props)
-    if (this.state.isLoading || this.props.isLoadingSellerProduct || !this.state.formData || Object.keys(this.state.formData).length == 0) {
+    if (this.state.isLoading || this.props.isLoadingSellerProduct || !this.state.formData || Object.keys(this.state.formData).length === 0) {
       return (
         <div>
           <span>Loading product...</span>
         </div>
       );
     }
-    let loader = this.state.isSavingProduct ? (
-      <div style={{position: 'absolute', display: 'flex', height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center'}}>
-        <div style={{padding: 8, backgroundColor: 'white', borderRadius: 16}}>
+    const loader = this.state.isSavingProduct ? (
+      <div style={{ position: 'absolute', display: 'flex', height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ padding: 8, backgroundColor: 'white', borderRadius: 16 }}>
           <ClipLoader
             size={45}
-            color={'blue'}
-            loading={this.state.isSavingProduct}/>
+            color="blue"
+            loading={this.state.isSavingProduct} />
         </div>
       </div>
     ) : null;
 
-    let containerStyle = {...BrandStyles.components.onboarding.container, flexDirection: 'column'};
     return (
-      <div style={{marginLeft: 32, marginRight: 32, maxWidth: 800, margin: 'auto'}}>
+      <div style={{ marginLeft: 32, marginRight: 32, maxWidth: 800, margin: 'auto' }}>
         <div style={{ height: 64 }} />
         <div
           style={{
@@ -1680,8 +1606,8 @@ class AddProductAdminView extends Component {
             minHeight: 48,
           }}
         >
-          <NButton style={{width: 64}} title="Close" theme="secondary" onClick={this.onCloseView.bind(this)} />
-          <NButton style={{width: 64}} title="Save" onClick={this.onSaveProduct.bind(this)} />
+          <NButton style={{ width: 64 }} title="Close" theme="secondary" onClick={this.onCloseView.bind(this)} />
+          <NButton style={{ width: 64 }} title="Save" onClick={this.onSaveProduct.bind(this)} />
         </div>
         <div
           enableResetScrollToCoords={false}
@@ -1691,7 +1617,7 @@ class AddProductAdminView extends Component {
         >
           {loader}
           <div>
-            <span>{this.state.errors['root']}</span>
+            <span>{this.state.errors.root}</span>
             {this.renderProductBasics()}
             <div style={{ height: 24 }} />
             {this.renderStoreData()}
@@ -1715,47 +1641,6 @@ class AddProductAdminView extends Component {
   }
 }
 
-const styles = {
-  optionEditIcon: {
-    marginRight: 4,
-  },
-  optionEditContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    borderRadius: 8,
-    backgroundColor: BrandStyles.color.warmlightBeige,
-    borderBottomWidth: 2,
-    borderColor: BrandStyles.color.blue,
-  },
-  optionEditContentWrapper: {
-    flexDirection: 'column',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    flex: 1,
-  },
-  optionEditTextInputWrapper: {
-    flexDirection: 'row',
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  optionEditTextInput: {
-    flex: 1,
-    minHeight: 32,
-    marginRight: 4,
-    marginTop: 2,
-    marginLeft: 16,
-  },
-  optionEditLabel: {
-    marginTop: 4,
-    marginLeft: 16,
-  },
-  iconSpacing: {
-    marginRight: 8,
-  },
-};
-
 const mapStateToProps = (state) => ({
   allProductCategories: state.seller.allProductCategories,
   allProductTags: state.seller.allProductTags,
@@ -1766,18 +1651,18 @@ const mapStateToProps = (state) => ({
 
 const actions = {
   logOut: logoutFirebase,
-  setOnBoardingStepId: setOnBoardingStepId,
+  setOnBoardingStepId,
   getStores,
   createProduct,
   updateProduct,
   loadSellerProduct,
   getProductSearchMetaData,
-  clearTagsAndCategories: clearTagsAndCategories,
-  createTestProduct: createTestProduct,
+  clearTagsAndCategories,
+  createTestProduct,
   loadAllTags: loadAllProductTags,
   loadAllCategories: loadAllProductCategories,
   clearSellerProductCache: clearSellerCurrentProductCache,
   // getSellerProducts: getSellerProducts
 };
 
-export default connect(mapStateToProps, actions) (AddProductAdminView);
+export default connect(mapStateToProps, actions)(AddProductAdminView);

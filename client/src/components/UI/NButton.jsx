@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
+
 import { Spinner } from 'react-bootstrap';
+
 import { connect } from 'react-redux';
-import BrandStyles from '../BrandStyles';
+
 import styled from 'styled-components';
 
+import BrandStyles from 'components/BrandStyles';
+
 const HoverCursorWrapper = styled.div`
-  min-width: 300px;
   margin: 0 auto;
   &:hover {
     cursor: pointer;
@@ -13,22 +16,26 @@ const HoverCursorWrapper = styled.div`
 `;
 
 const styles = {
+  buttonXSmall: {
+    maxHeight: 48, 
+  },
   buttonSecondary: {
     borderColor: BrandStyles.color.blue,
     borderWidth: 2,
+    borderRadius: 8,
+    borderStyle: 'solid',
     minHeight: 50,
     marginTop: 4,
     marginBottom: 4,
-    borderRadius: 32,
-    minWidth: '20vw',
-    maxWidth: '40vw',
+    marginLeft: 16,
+    marginRight: 16,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     '&:hover': {
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   buttonDisabled: {
     backgroundImage: `linear-gradient(to bottom right, rgb(196 192 183), rgb(168 159 140))`,
@@ -37,7 +44,7 @@ const styles = {
     marginBottom: 4,
     marginLeft: 16,
     marginRight: 16,
-    borderRadius: 32,
+    borderRadius: 8,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -53,31 +60,34 @@ const styles = {
     marginBottom: 4,
     marginLeft: 16,
     marginRight: 16,
-    borderRadius: 32,
+    borderRadius: 8,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     '&:hover': {
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   linearGradient: {
     flex: 1,
-    paddingLeft: 15,
-    paddingRight: 15,
     borderRadius: 32,
-    height: 60,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     '&:hover': {
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
+  },
+  contentContainer: {
+    paddingLeft: 16,
+    paddingRight: 16,
+    display: 'flex',
+    flexDirection: 'row'
   },
   shadowButton: {
-    boxShadow: `0px 2px 4px ${BrandStyles.color.blue}`
+    boxShadow: `0px 2px 4px ${BrandStyles.color.blue}`,
   },
   shadowButtonDisabled: {
     boxShadow: `0px 2px 4px rgb(168 159 140)`
@@ -85,12 +95,12 @@ const styles = {
   buttonTitleTextPrimary: {
     color: BrandStyles.color.beige,
     fontWeight: 'bold',
-    textTransform: 'uppercase' 
+    textTransform: 'uppercase',
   },
   buttonTitleTextSecondary: {
     color: BrandStyles.color.blue,
     fontWeight: 'bold',
-    textTransform: 'uppercase' 
+    textTransform: 'uppercase',
   },
   secondaryHorizontalPadding: {
     paddingHorizontal: 32,
@@ -100,20 +110,18 @@ const styles = {
     width: 16,
     marginHorizontal: 8,
     marginLeft: 16,
-    display: 'flex'
+    display: 'flex',
   },
 };
 
 class NButton extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isLoading: props.isLoading ? props.isLoading : false,
-    };
+    this.state = {};
   }
 
   onClick = async () => {
-    const { id, onClick } = this.props;
+    const { onClick } = this.props;
     if (this.props.disabled) {
       return;
     }
@@ -122,38 +130,54 @@ class NButton extends Component {
     }
   };
 
+  getWidthStyle() {
+    switch (this.props.size) {
+      case 'x-small':
+        const xSmallHeight = 48;
+        return { 
+          height: xSmallHeight,
+        }
+      default:
+        const defaultHeight = 60;
+       return {
+        height: defaultHeight,
+        width: 300
+       }
+    }
+  }
+
   render() {
-    console.log("isLoading", this.props.isLoading)
-    let spinner = this.props.isLoading ? (
+    console.log('isLoading', this.props.isLoading);
+    const spinner = this.props.isLoading ? (
       <div style={styles.spinnerContainer}>
-        <Spinner animation="border" variant="light" size="sm"/>
+        <Spinner animation="border" variant="light" size="sm" />
       </div>
     ) : null;
 
     let themeStyle = this.props.theme === 'secondary' ? styles.buttonSecondary : styles.button;
+    console.log("theme: ", this.props.theme, this.props.title)
+    console.log(themeStyle)
     if (this.props.disabled) {
       themeStyle = styles.buttonDisabled
     }
     let buttonStyles = themeStyle;
     if (this.props.buttonStyle) {
-      buttonStyles = {...buttonStyles, ...this.props.buttonStyle};
+      buttonStyles = { ...buttonStyles, ...this.props.buttonStyle };
     }
+    const widthStyle = this.getWidthStyle();
     if (this.props.theme === 'secondary') {
-      buttonStyles = {...buttonStyles, ...styles.secondaryHorizontalPadding};
+      buttonStyles = { ...buttonStyles, ...styles.secondaryHorizontalPadding };
 
       return (
-        <HoverCursorWrapper>
-        <div
-          style={buttonStyles}
-          {...this.props}
-          onClick={this.onClick}
-          disabled={this.props.disabled}
-        >
-          {this.props.iconLeft}
-          <p style={styles.buttonTitleTextSecondary}>{this.props.title}</p>
-          {this.props.iconRight}
-          {spinner}
-        </div>
+        <HoverCursorWrapper style={widthStyle}>
+          <div style={{...buttonStyles, ...widthStyle}} {...this.props} onClick={this.onClick} disabled={this.props.disabled}>
+            <div style={styles.contentContainer}>
+              {this.props.iconLeft}
+              <span style={styles.buttonTitleTextSecondary}>{this.props.title}</span>
+              {this.props.iconRight}
+              {spinner}
+            </div>
+          </div>
         </HoverCursorWrapper>
       );
     }
@@ -164,23 +188,19 @@ class NButton extends Component {
     }
     return (
       <HoverCursorWrapper>
-      <div
-        {...this.props}
-        style={buttonStyles}
-        onClick={this.onClick}
-        disabled={this.props.disabled}
-      >
-        <div
-          style={styles.linearGradient}>
-          {this.props.iconLeft}
-          <span style={styles.buttonTitleTextPrimary}>{this.props.title}</span>
-          {this.props.iconRight}
-          {spinner}
+        <div {...this.props} style={buttonStyles} onClick={this.onClick} disabled={this.props.disabled}>
+          <div style={{...styles.linearGradient, ...widthStyle}}>
+            <div style={styles.contentContainer}>
+              {this.props.iconLeft}
+              <span style={styles.buttonTitleTextPrimary}>{this.props.title}</span>
+              {this.props.iconRight}
+              {spinner}
+          </div>
+          </div>
         </div>
-      </div>
       </HoverCursorWrapper>
     );
   }
 }
 
-export default connect(null, { })(NButton);
+export default connect(null, {})(NButton);

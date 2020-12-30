@@ -5,12 +5,8 @@ import BaseInput from './BaseInput';
 import NameInput from './NameInput';
 
 const styles = {
-  container: {
-    //backgroundColor: BrandStyles.color.xlightBeige,
-  },
-  darkContainer: {
-    //backgroundColor: BrandStyles.color.beige,
-  },
+  container: {},
+  darkContainer: {},
 };
 
 export default class AddressInput extends React.Component {
@@ -42,8 +38,8 @@ export default class AddressInput extends React.Component {
     let hasError = false;
 
     // Full Name
-    let fullName = this.state['name'];
-    let validFullName = /^([\w]{2,})+\s+([\w\s]{2,})+$/.test(fullName);
+    const fullName = this.state.name;
+    const validFullName = /^([\w]{2,})+\s+([\w\s]{2,})+$/.test(fullName);
     if (!validFullName && this.props.showName && (key === 'name' || key === undefined)) {
       hasError = true;
       this.setState({
@@ -59,7 +55,7 @@ export default class AddressInput extends React.Component {
     }
 
     // state
-    let state = this.state['state'];
+    const { state } = this.state;
 
     if ((!state || state.length !== 2) && (key === 'state' || key === undefined)) {
       this.setState({
@@ -77,7 +73,7 @@ export default class AddressInput extends React.Component {
     }
 
     // zip code
-    let zipCode = this.state['zip_code'];
+    const zipCode = this.state.zip_code;
     if ((!zipCode || zipCode.length !== 5) && (key === 'zip_code' || key === undefined)) {
       this.setState({
         zipCodeError: 'Must be a valid zipcode.',
@@ -100,7 +96,7 @@ export default class AddressInput extends React.Component {
         [key]: value[key],
       },
       () => {
-        let hasError = this.validateInput(key);
+        const hasError = this.validateInput(key);
         this.setState(
           {
             hasError,
@@ -114,18 +110,17 @@ export default class AddressInput extends React.Component {
   }
 
   onChangeAddressDetails(details) {
-    let addressLine1 = details.name;
-    let addressComponents = details.address_components;
+    const addressComponents = details.address_components;
     let streetNumber = '';
     let route = '';
     let state = '';
     let county = '';
     let zipCode = '';
     let city = '';
-    for (var i in addressComponents) {
-      let component = addressComponents[i];
+    for (const i in addressComponents) {
+      const component = addressComponents[i];
       if (component.types && component.types.length > 0) {
-        let mainType = component.types[0];
+        const mainType = component.types[0];
         switch (mainType) {
           case 'street_number':
             streetNumber = component.long_name;
@@ -145,18 +140,20 @@ export default class AddressInput extends React.Component {
           case 'locality':
             city = component.long_name;
             break;
+          default:
+            break;
         }
       }
     }
-    let newState = {
-      street: streetNumber + ' ' + route,
-      city: city,
-      county: county,
+    const newState = {
+      street: `${streetNumber} ${route}`,
+      city,
+      county,
       zip_code: zipCode,
-      state: state,
+      state,
     };
     this.setState(newState, () => {
-      let hasError = this.validateInput();
+      const hasError = this.validateInput();
       this.setState(
         {
           hasError,
@@ -169,9 +166,8 @@ export default class AddressInput extends React.Component {
   }
 
   render() {
-    const { themeTypeKey, showName } = this.props;
-    const backgroundContainerStyle =
-      themeTypeKey || themeTypeKey === 'light' ? styles.container : styles.darkContainer;
+    const { themeTypeKey } = this.props;
+    const backgroundContainerStyle = themeTypeKey || themeTypeKey === 'light' ? styles.container : styles.darkContainer;
 
     return (
       <div style={backgroundContainerStyle}>
@@ -190,12 +186,7 @@ export default class AddressInput extends React.Component {
             value={this.state.street_two}
             label="Apt/Suite/Other (Optional)"
           />
-          <BaseInput
-            onChange={this.onChangeAddressInput}
-            keyId="city"
-            value={this.state.city}
-            label="City"
-          />
+          <BaseInput onChange={this.onChangeAddressInput} keyId="city" value={this.state.city} label="City" />
           <div
             style={{
               display: 'flex',

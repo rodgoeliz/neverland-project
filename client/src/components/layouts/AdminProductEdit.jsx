@@ -1,15 +1,14 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {Redirect} from "react-router-dom";
-import queryString from 'query-string';
-import {Accordion, Card, Button, Form} from 'react-bootstrap';
-import AccordionCard from "../AccordionCard";
-import { createPlant, loadProduct, updateProduct, createProduct, createStore, deleteProduct, loadProductTags, createProductTags, loadUsers, loadProducts, loadStores} from "../../actions/admin";
+import {Button, Form} from 'react-bootstrap';
+
 import Select from 'react-select';
-import { useHistory } from "react-router-dom";
+
 import CreatableSelect from 'react-select/creatable';
-import DataTable from 'react-data-table-component';
 import { List, arrayMove } from 'react-movable';
+
+import { loadProduct, updateProduct, deleteProduct, loadProductTags, loadStores} from "actions/admin";
 
 class AdminProductEdit extends Component {
 	constructor(props) {
@@ -30,8 +29,8 @@ class AdminProductEdit extends Component {
 		this.props.loadStores();
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.product == null && this.props.product) {
+	componentDidUpdate(prevProps) {
+		if (prevProps.product === null && this.props.product) {
 			this.setState({
 				title: this.props.product.title,
 				description: this.props.product.description,
@@ -49,8 +48,9 @@ class AdminProductEdit extends Component {
 			imageURLs: imageUrls
 		});
 	}
+
 	onClickWaitlist() {
-		//validate email
+		// validate email
 		if (this.validateEmail(this.state.emailInput)) {
 			this.props.joinWaitlist(this.state.emailInput, this.state.inviter);
 			this.setState({
@@ -60,7 +60,7 @@ class AdminProductEdit extends Component {
 		} else {
 			this.setState({"emailError": "Please enter valid email"})
 		}
-		//window.location = "https://docs.google.com/forms/d/e/1FAIpQLSeZcRVCsn-_cOXdcMyjEfR7PQ9N536zi0NGdVZRbcfE4KUCpg/viewform"
+		// window.location = "https://docs.google.com/forms/d/e/1FAIpQLSeZcRVCsn-_cOXdcMyjEfR7PQ9N536zi0NGdVZRbcfE4KUCpg/viewform"
 	}
 
 	async onSubmitUpdateProduct() {
@@ -72,10 +72,8 @@ class AdminProductEdit extends Component {
 				formData.append(`imageFile[${i}]`, this.state.imageFiles[i]);
 			}
 		}
-		let tagIds = this.state.tags.map((tag) => {
-			return tag.value;
-		});
-		let storeId = this.state.storeId.value;
+		const tagIds = this.state.tags.map((tag) => tag.value);
+		const storeId = this.state.storeId.value;
 		formData.append('title', this.state.title);
 		formData.append('description', this.state.description);
 		formData.append('handle', this.state.handle);
@@ -93,8 +91,8 @@ class AdminProductEdit extends Component {
 	}
 
 	async onSubmitCreateStore() {
-		let store = this.state['store'];
-		let productInput = {
+		const {store} = this.state;
+		const productInput = {
 			userId: store.userId,
 			productIds: store.products
 		};
@@ -102,7 +100,7 @@ class AdminProductEdit extends Component {
 	}
 
 	async onSubmitCreateTags() {
-		let tags = this.state['tags'];
+		const {tags} = this.state;
 		await this.props.createProductTags({tags});
 	}
 
@@ -121,26 +119,24 @@ class AdminProductEdit extends Component {
 			section = {}
 		}
 
-		let allValues = values.map((value) => {
-			return value.value;
-		});
+		const allValues = values.map((value) => value.value);
 		this.setState({
 			[sectionId]: allValues
 		})
 	}
+
 	onMultiInputChange(key, values) {
-		let allValues = values.map((value) => {
-			return value.value;
-		});
 		this.setState({
 			[key]: values 
 		})
 	}
+
 	onChangeFileInput(key, event) {
 		this.setState({
 			[key]: event.target.files
 		});
 	}
+
 	onChangeInput(key, event) {
 		this.setState({
 			[key]:event.target.value 
@@ -150,7 +146,7 @@ class AdminProductEdit extends Component {
 	onEditProductRow(productId) {
 		this.setState({
 			redirect: true,
-			redirectTo: "/edit/product/" + productId
+			redirectTo: `/edit/product/${  productId}`
 		});
 	}
 
@@ -174,8 +170,7 @@ class AdminProductEdit extends Component {
 		if (this.state.isSubmitting) {
 			return <div style={{justifyContent: 'center'}} className="join-waitlist-loading">Joining the waitlist...</div>;
 		}
-		let product = this.props.product;
-		let setImageURLs = product.imageURLs;
+		const {product} = this.props;
 		let currImageUrls = product.imageURLs;
 		if (this.state.imageURLs.length > 0) {
 			currImageUrls = this.state.imageURLs;
@@ -240,8 +235,7 @@ class AdminProductEdit extends Component {
 	}
 }
 
-const mapStateToProps = state => {
-	return {
+const mapStateToProps = state => ({
 		product: state.admin.product,
 		isSubmitting: state.admin.isSubmitting,
 		isLoading: state.admin.isLoading,
@@ -256,7 +250,6 @@ const mapStateToProps = state => {
 		allProductsSelectors: state.admin.allProductsSelectors,
 		allStoresSelectors: state.admin.allStoresSelectors,
 		allProductTagsSelectors: state.admin.allProductTagsSelectors
-	}
-}
+	})
 
 export default connect(mapStateToProps, {deleteProduct, updateProduct, loadProductTags, loadStores, loadProduct})(AdminProductEdit);

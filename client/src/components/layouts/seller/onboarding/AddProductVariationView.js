@@ -1,12 +1,53 @@
 import React, { Component } from 'react';
-import { Spinner } from 'react-bootstrap';
 
-import BrandStyles from '../../../BrandStyles';
-import CheckBoxInput from '../../../UI/CheckBoxInput';
-import BaseInput from '../../../UI/BaseInput';
-import NSelect from '../../../UI/NSelect';
-import NButton from '../../../UI/NButton';
 import { GrFormClose } from 'react-icons/gr';
+
+import BrandStyles from 'components/BrandStyles';
+
+import CheckBoxInput from 'components/UI/CheckBoxInput';
+import BaseInput from 'components/UI/BaseInput';
+import NSelect from 'components/UI/NSelect';
+import NButton from 'components/UI/NButton';
+
+const productVariantOptionStyles = {
+  container: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderStyle: 'solid',
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 4,
+    paddingBottom: 4,
+    borderColor: BrandStyles.color.black,
+    marginLeft: 4,
+    marginRight: 4,
+    marginTop: 2,
+    marginBottom: 2,
+  },
+  iconContainer: {
+    paddingLeft: 8,
+  },
+};
+
+const styles = {
+  sectionContainer: {
+    margin: 16,
+    marginBottom: 16,
+    marginTop: 16,
+    backgroundColor: BrandStyles.color.xlightBeige,
+    padding: 16,
+    borderRadius: 16,
+    shadowColor: 'rgba(0,0,0, 0.2)',
+    shadowOffset: { height: 4, width: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+};
 
 /**
  *
@@ -21,26 +62,12 @@ class ProductVariantOptionTag extends React.PureComponent {
     return (
       <div style={productVariantOptionStyles.container}>
         <span>{this.props.item[this.props.itemTitleKey]}</span>
-        <div
-          style={productVariantOptionStyles.iconContainer}
-          onClick={this.props.onPressDeleteItem}
-        >
+        <div style={productVariantOptionStyles.iconContainer} onClick={this.props.onPressDeleteItem}>
           <GrFormClose style={BrandStyles.components.icon} />
         </div>
       </div>
     );
   }
-}
-
-{
-  /*
- formData: {
-  isPriceVaried
-  isSkuVaried
-  isQuantityVaried
-  options: []
- }
-*/
 }
 
 class AddProductVariationView extends Component {
@@ -96,9 +123,7 @@ class AddProductVariationView extends Component {
 
     const updatedVariants = variants.map((variant) => {
       if (variantSlug === variant.handle) {
-        const updatedOptions = variant.options.filter((option) => {
-          return option.handle !== optionHandle;
-        });
+        const updatedOptions = variant.options.filter((option) => option.handle !== optionHandle);
         variant.options = updatedOptions;
       }
       return variant;
@@ -113,8 +138,8 @@ class AddProductVariationView extends Component {
     return (
       <ProductVariantOptionTag
         item={option}
-        itemIdKey={'handle'}
-        itemTitleKey={'title'}
+        itemIdKey="handle"
+        itemTitleKey="title"
         onPressDeleteItem={this.onRemoveVariationOption.bind(this, variantSlug, option.handle)}
       />
     );
@@ -122,6 +147,9 @@ class AddProductVariationView extends Component {
 
   onPressCreateNewVariant() {
     const newCustomVariantTitle = this.state.formData.createNewCustomVariation;
+    if (!newCustomVariantTitle) {
+      return;
+    }
     const newCustomVariantHandle = newCustomVariantTitle
       .toLowerCase()
       .replace(/ /g, '-')
@@ -152,18 +180,23 @@ class AddProductVariationView extends Component {
   }
 
   onPressCreateNewOption(variationSlug) {
-    let newOption = this.getOptionInput(variationSlug, 'createNewOption');
-    let optionSlug = newOption
+    console.log('variationSlug', variationSlug)
+    const newOption = this.getOptionInput(variationSlug, 'createNewOption');
+    console.log("NEW OPtiON: ", newOption)
+    if (!newOption) {
+      return;
+    }
+    const optionSlug = newOption
       .toLowerCase()
       .replace(/ /g, '-')
       .replace(/[^\w-]+/g, '');
-    let option = {
+    const option = {
       title: newOption,
       handle: optionSlug,
     };
-    let newFormData = { ...this.state.formData };
-    let variations = newFormData.variations;
-    let newVariations = variations.map((variation) => {
+    const newFormData = { ...this.state.formData };
+    const { variations } = newFormData;
+    const newVariations = variations.map((variation) => {
       if (variation.handle === variationSlug) {
         let existingOptions = variation.options;
         if (!existingOptions) {
@@ -175,7 +208,7 @@ class AddProductVariationView extends Component {
       return variation;
     });
     newFormData.variations = newVariations;
-    //clear out new option
+    // clear out new option
     newFormData.createNewOption = '';
     this.onChangeOptionInput(variationSlug, 'createNewOption', '');
     this.updateFormData(newFormData);
@@ -205,7 +238,7 @@ class AddProductVariationView extends Component {
     const { variations } = this.state.formData;
     for (let i = 0; i < variations.length; i++) {
       const variation = variations[i];
-      if (variation.handle == variationSlug) {
+      if (variation.handle === variationSlug) {
         return variation[key];
       }
     }
@@ -217,15 +250,17 @@ class AddProductVariationView extends Component {
     if (!this.state.formData.variations) {
       return '';
     }
-    this.state.formData.variations.map((variant) => {
-      if (variant.handle == variantSlug) {
+    this.state.formData.variations.forEach((variant) => {
+      if (variant.handle === variantSlug) {
         optionInput = variant[key];
       }
     });
+    console.log("variantslug/key in getoptioninput ", variantSlug, key, optionInput)
     return optionInput;
   }
 
   onChangeOptionInput(variantSlug, key, newOptionValue) {
+    console.log("onchangeoptioninput: ", variantSlug, key, newOptionValue)
     const newFormData = { ...this.state.formData };
     const updatedVariants = newFormData.variations.map((variant) => {
       if (variant.handle === variantSlug) {
@@ -240,10 +275,10 @@ class AddProductVariationView extends Component {
 
   onPressRemoveVariation(variationHandle) {
     const newFormData = { ...this.state.formData };
-    let variations = newFormData.variations;
+    let { variations } = newFormData;
     if (variations) {
       for (const idx in variations) {
-        let variation = variations[idx];
+        const variation = variations[idx];
         if (variation.handle === variationHandle) {
           variations = variations.splice(idx, 1);
         }
@@ -252,8 +287,6 @@ class AddProductVariationView extends Component {
       newFormData.variation = variations;
       this.updateFormData(newFormData);
     }
-
-    return;
   }
 
   renderProductVariations(variations) {
@@ -261,14 +294,14 @@ class AddProductVariationView extends Component {
       return [];
     }
     const variationViews = [];
-    variations.map((variation) => {
+    variations.forEach((variation) => {
       const optionsViews = [];
       let variationOptions = [];
       if (variation.options) {
         variationOptions = variation.options;
       }
 
-      variationOptions.map((option) => {
+      variationOptions.forEach((option) => {
         optionsViews.push(this.renderVariationOption(option, variation.handle));
       });
       variationViews.push(
@@ -280,9 +313,7 @@ class AddProductVariationView extends Component {
               justifyContent: 'space-between',
             }}
           >
-            <span style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>
-              {variation.title}
-            </span>
+            <span style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 8 }}>{variation.title}</span>
             <div onClick={this.onPressRemoveVariation.bind(this, variation.handle)}>
               <GrFormClose style={BrandStyles.components.icon} />
             </div>
@@ -322,12 +353,10 @@ class AddProductVariationView extends Component {
               marginBottom: 8,
             }}
           >
-            <span style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}>
-              {' '}
-              Add a new option{' '}
-            </span>
+            <span style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}> Add a new option </span>
             <BaseInput
-              full={true}
+              full
+              disableTimeOut
               keyId="createNewOption"
               autoCapitalize="words"
               widthFactor={1}
@@ -336,13 +365,13 @@ class AddProductVariationView extends Component {
               value={this.getOptionInput(variation.handle, 'createNewOption')}
             />
             <NButton
+              disabled={this.state.isOptionDisabled}
+              size="x-small"
               onClick={() => this.onPressCreateNewOption(variation.handle)}
               title={`Create a new option for ${variation.title}`}
             />
           </div>
-          <div style={{ display: 'flex', flexDirection: 'row', marginTop: 8 }}>
-            {optionsViews}
-          </div>
+          <div style={{ display: 'flex', flexDirection: 'row', marginTop: 8 }}>{optionsViews}</div>
         </div>,
       );
     });
@@ -350,17 +379,18 @@ class AddProductVariationView extends Component {
   }
 
   createNewVariation(title, handle) {
-    let newCustomVariantTitle = title;
-    let newCustomVariantHandle = handle;
-    let newCustomVariant = {
+    const newCustomVariantTitle = title;
+    const newCustomVariantHandle = handle;
+    const newCustomVariant = {
       title: newCustomVariantTitle,
       handle: newCustomVariantHandle,
       isPriceVaried: false,
       isSKUVaried: false,
       isQuantityVaried: false,
       isVisible: true,
+      isCreateOptionEnabled: false
     };
-    let formDataCp = this.state.formData;
+    const formDataCp = this.state.formData;
     if (formDataCp.variations) {
       formDataCp.variations.push(newCustomVariant);
     } else {
@@ -378,7 +408,7 @@ class AddProductVariationView extends Component {
 
   onChangeNSelectInput(key, itemIdKey, values) {
     if (values && values.length > 0) {
-      let value = values[0][itemIdKey];
+      const value = values[0][itemIdKey];
       return this.onChangePickerInput(key, value);
     }
   }
@@ -386,7 +416,7 @@ class AddProductVariationView extends Component {
   onChangePickerInput(key, value) {
     const newFormData = { ...this.state.formData };
     newFormData[key] = value;
-    let title = value.charAt(0).toUpperCase() + value.slice(1);
+    const title = value.charAt(0).toUpperCase() + value.slice(1);
     if (value === 'size' || value === 'color') {
       return this.createNewVariation(title, value);
     }
@@ -394,8 +424,7 @@ class AddProductVariationView extends Component {
   }
 
   renderCreateNewProductVariationPicker() {
-    const displayCreateCustomVariationView =
-      this.state.formData.createNewVariation == 'create-new-variant';
+    const displayCreateCustomVariationView = this.state.formData.createNewVariation === 'create-new-variant';
     let createCustomVariationInputView = null;
     if (displayCreateCustomVariationView) {
       createCustomVariationInputView = (
@@ -406,12 +435,12 @@ class AddProductVariationView extends Component {
             label="Create a new product variant"
             error={this.state.shopHandleError}
           />
-          <NButton title="Add a new variant" onClick={this.onPressCreateNewVariant.bind(this)} />
+          <NButton size="x-small" title="Add a new variant" onClick={this.onPressCreateNewVariant.bind(this)} />
         </div>
       );
     }
 
-    let addProductVariationView = (
+    const addProductVariationView = (
       <NSelect
         items={[
           { id: 'color', value: 'Color' },
@@ -419,11 +448,11 @@ class AddProductVariationView extends Component {
           { id: 'create-new-variant', value: 'Create a new variant' },
         ]}
         title="Add a product variation"
-        isSingleSelect={true}
+        isSingleSelect
         itemIdKey="id"
         itemTitleKey="value"
-        hideSelectedTags={true}
-        placeholderText={'Select product variation...'}
+        hideSelectedTags
+        placeholderText="Select product variation..."
         onChangeItems={this.onChangeNSelectInput.bind(this, 'createNewVariation', 'id')}
       />
     );
@@ -433,45 +462,15 @@ class AddProductVariationView extends Component {
         {createCustomVariationInputView}
       </div>
     );
-    {/*
-    return (
-      {/*<div>
-        <div>
-          <NSelect
-            items={[
-
-              ]}
-          <Picker
-            mode="dropdown"
-            iosIcon={<Icon name="arrow-down" />}
-            style={{ width: undefined }}
-            placeholder="Add a variation"
-            placeholderStyle={{ color: '#bfc6ea' }}
-            placeholderIconColor="#007aff"
-            selectedValue={this.state.formData.createNewVariation}
-            onValueChange={(value) => {
-              this.onChangePickerInput('createNewVariation', value);
-            }}
-          >
-            <Picker.Item label="Color" value="color" />
-            <Picker.Item label="Size" value="size" />
-            <Picker.Item label="Create a new variant" value="create-new-variant" />
-          </Picker>
-        </div>
-        {createCustomVariationInputView}
-      </div>
-    );*/}
   }
 
   render() {
-    let { variations, isSavingProduct } = this.props;
+    const { variations } = this.props;
     let existingVariationViews = null;
     if (variations && variations.length > 0) {
       existingVariationViews = (
         <div style={{ paddingTop: 16 }}>
-          <span style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}>
-            Your Product Variations
-          </span>
+          <span style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}>Your Product Variations</span>
           {this.renderProductVariations(variations)}
         </div>
       );
@@ -481,7 +480,7 @@ class AddProductVariationView extends Component {
         <div
           style={{
             backgroundColor: BrandStyles.color.lightBeige,
-            height:'100vh',
+            height: '100vh',
             paddingLeft: 16,
             paddingRight: 16,
           }}
@@ -489,37 +488,35 @@ class AddProductVariationView extends Component {
           <div>
             <div
               style={{
+                backgroundColor: BrandStyles.color.lightBeige,
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                minHeight: 48,
+                minHeight: 64,
               }}
             >
-              <NButton title="Close" theme="secondary" onClick={this.props.onCloseModal} />
-              <NButton title="Save" onClick={this.props.onCloseModal} />
+              <NButton size="x-small" title="Close" theme="secondary" onClick={this.props.onCloseModal} />
+              <NButton size="x-small" title="Save" onClick={this.props.onCloseModal} />
             </div>
             <div
-              enableResetScrollToCoords={false}
-              keyboardShouldPersistTaps="handled"
               style={{
+                paddingTop: 64,
                 paddingBottom: 64,
-                maxHeight: '100vh - 128px', 
+                maxHeight: '100vh - 128px',
               }}
             >
-            <div style={{display: 'flex', flexDirection: 'column'}}>
-              <span
-                style={{
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  marginBottom: 6,
-                }}
-              >
-                Product Variations
-              </span>
-              <span style={{ marginLeft: 12, marginBottom: 8 }}>
-                You can have maximum 2 variations{' '}
-              </span>
-            </div>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span
+                  style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    marginBottom: 6,
+                  }}
+                >
+                  Product Variations
+                </span>
+                <span style={{ marginLeft: 12, marginBottom: 8 }}>You can have maximum 2 variations </span>
+              </div>
               {this.renderCreateNewProductVariationPicker()}
               {existingVariationViews}
             </div>
@@ -530,42 +527,4 @@ class AddProductVariationView extends Component {
   }
 }
 
-const productVariantOptionStyles = {
-  container: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    borderRadius: 16,
-    borderWidth: 2,
-    paddingLeft: 8,
-    paddingRight: 8,
-    paddingTop: 4,
-    paddingBottom: 4,
-    borderColor: BrandStyles.color.black,
-    marginLeft: 4,
-    marginRight: 4,
-    marginTop: 2,
-    marginBottom: 2,
-  },
-  iconContainer: {
-    paddingLeft: 8,
-  },
-};
-
-const styles = {
-  sectionContainer: {
-    margin: 16,
-    marginBottom: 16,
-    marginTop: 16,
-    backgroundColor: BrandStyles.color.xlightBeige,
-    padding: 16,
-    borderRadius: 16,
-    shadowColor: 'rgba(0,0,0, 0.2)',
-    shadowOffset: { height: 4, width: 4 },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-};
 export default AddProductVariationView;

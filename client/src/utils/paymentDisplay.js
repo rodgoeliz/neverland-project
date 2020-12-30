@@ -1,8 +1,5 @@
 import { formatPrice } from './helpers';
 
-const MIN_PRICE_DEFAULT = 10000000000;
-const MAX_PRICE_DEFAULT = 0;
-
 export function displayPayment(product, selectedVariations = {}) {
   if (!product || !product.price || !product.price.value) {
     return 'Pricing Unavailable';

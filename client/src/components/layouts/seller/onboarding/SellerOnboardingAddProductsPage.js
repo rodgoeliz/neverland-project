@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Redirect} from "react-router-dom";
-import NButton from "../../../UI/NButton";
-import ProductListItem from "../../../UI/ProductListItem";
-import FlatList from "../../../UI/FlatList";
-import OnboardingHeader from "./OnboardingHeader";
-import AddProductView from "./AddProductView";
-import OnboardingImageWrapper from "./OnboardingImageWrapper";
-import BrandStyles from "../../../BrandStyles";
-import SellerLoadingPage from './SellerLoadingPage';
+import { Redirect } from 'react-router-dom';
+
 import Modal from 'react-modal';
+
+import { getNextOnBoardingStepId } from 'utils/helpers';
+
+import NButton from 'components/UI/NButton';
+import ProductListItem from 'components/UI/ProductListItem';
+import FlatList from 'components/UI/FlatList';
+
+import BrandStyles from 'components/BrandStyles';
 import {
   clearSellerCurrentProductCache,
   loadAllProductCategories,
@@ -17,31 +18,32 @@ import {
   loadSellerProduct,
   clearTagsAndCategories,
   getSellerProducts,
-} from '../../../../actions/seller';
-import { setOnBoardingStepId, logoutFirebase } from "../../../../actions/auth";
-import { createProduct, createTestProduct, updateProduct } from '../../../../actions/products';
-import { getNextOnBoardingStepId } from '../../../../utils/helpers';
-import screenNames from '../../../../constants/screenNames';
+} from 'actions/seller';
+import { setOnBoardingStepId, logoutFirebase } from 'actions/auth';
+import { createProduct, createTestProduct, updateProduct } from 'actions/products';
+
+import OnboardingImageWrapper from './OnboardingImageWrapper';
+import AddProductView from './AddProductView';
+import OnboardingHeader from './OnboardingHeader';
+import SellerLoadingPage from './SellerLoadingPage';
+
 
 class SellerOnboardingAddProductsPage extends Component {
   constructor(props) {
     super(props);
-    let sellerProducts = [];
+    const sellerProducts = [];
     if (props.sellerProducts) {
       for (const key in props.sellerProducts) {
         sellerProducts.push(props.sellerProducts[key]);
       }
     }
-    this.state = {
-      products: sellerProducts,
-    };
+    this.state = { };
 
     this.renderProductItem = this.renderProductItem.bind(this);
     this._closeModal = this._closeModal.bind(this);
   }
 
   async onSubmitProduct() {
-    this.setState({ isSavingProduct: true });
     this.saveProduct();
   }
 
@@ -57,19 +59,14 @@ class SellerOnboardingAddProductsPage extends Component {
   }
 
   async saveProduct() {
-    let currentProduct = this.props.product ? this.props.product : this.props.currentSellerProduct;
-    /*let valid = this.validateInput();
-    if (!valid) {
-      return;
-    }*/
     let formData = new FormData();
-    //formData.append('my_photos')
+    // formData.append('my_photos')
     for (let i = 0; i < this.state.formData.productPhotos.length; i++) {
-      let photo = this.state.formData.productPhotos[i];
+      const photo = this.state.formData.productPhotos[i];
       formData.append(`productImageFile[${i}]`, {
         uri: photo.sourceURL,
         type: photo.mime,
-        name: this.state.formData.title + '-' + this.props.user._id + 'productImage' + i,
+        name: `${this.state.formData.title}-${this.props.user._id}productImage${i}`,
       });
     }
     formData = this.transformToFormData(this.state.formData, formData);
@@ -89,14 +86,13 @@ class SellerOnboardingAddProductsPage extends Component {
     }
 
     await this.props.createProduct({ formData });
-    this.setState({ isSavingProduct: false });
     this.props.navigation.goBack();
   }
 
   onPressAddProduct = () => {
     // popup a modal to add product
     this.setState({
-      isAddProductModalVisible: true
+      isAddProductModalVisible: true,
     });
   };
 
@@ -104,8 +100,8 @@ class SellerOnboardingAddProductsPage extends Component {
     const product = this.props.sellerProducts[itemId];
     this.setState({
       product,
-      isAddProductModalVisible: true
-    }) 
+      isAddProductModalVisible: true,
+    });
   };
 
   _closeModal() {
@@ -117,7 +113,7 @@ class SellerOnboardingAddProductsPage extends Component {
   onPressNext = () => {
     this.props.setOnBoardingStepId(getNextOnBoardingStepId(this.props.onboardingStepId, true));
     this.setState({
-      toNextStep: true
+      toNextStep: true,
     });
   };
 
@@ -127,38 +123,30 @@ class SellerOnboardingAddProductsPage extends Component {
 
   render() {
     if (this.state.toNextStep) {
-      return (<Redirect to="/seller/onboarding/payment" />);
+      return <Redirect to="/seller/onboarding/payment" />;
     }
-    const isLoading = this.state.isLoading;
-    /*const currentProduct =
+    const {isLoading} = this.state;
+    /* const currentProduct =
       this.props.product ?? this.props.currentSellerProduct ?? this.props.route.params
         ? this.props.route.params.product
-        : null;*/
-    //let currentProduct = this.props.product ? this.props.product : this.props.currentSellerProduct;
-    let sellerProducts = [];
+        : null; */
+    // let currentProduct = this.props.product ? this.props.product : this.props.currentSellerProduct;
+    const sellerProducts = [];
     if (this.props.sellerProducts) {
       for (const key in this.props.sellerProducts) {
         sellerProducts.push(this.props.sellerProducts[key]);
       }
     }
-    let nextButton = null;
+    const nextButton = <NButton title="Next Step" onClick={this.onPressNext} />;
     // if greater than 3 products, allow to move on
-    //if (sellerProducts && sellerProducts.length > 2) {
-      if (true) {
-        nextButton = <NButton title={'Next Step'} onClick={this.onPressNext} />;
-      }
-    let containerStyle = {...BrandStyles.components.onboarding.container, justifyContent: 'center', paddingTop: 42};
+    // if (sellerProducts && sellerProducts.length > 2) {
+    const containerStyle = {...BrandStyles.components.onboarding.container, justifyContent: 'center', paddingTop: 42};
     if (isLoading) return <SellerLoadingPage />; 
     return (
       <OnboardingImageWrapper>
         <OnboardingHeader />
-        <div
-          style={containerStyle}
-        >
-          <div
-            enableResetScrollToCoords={false}
-            keyboardShouldPersistTaps="handled"
-          >
+        <div style={containerStyle}>
+          <div enableResetScrollToCoords={false} keyboardShouldPersistTaps="handled">
             <div
               style={{
                 textAlign: 'center',
@@ -173,14 +161,14 @@ class SellerOnboardingAddProductsPage extends Component {
             <div style={{ height: 16 }} />
             <div>
               <Modal
-                style={{content: {borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige}}}
+                style={{ content: { borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige } }}
                 isOpen={this.state.isAddProductModalVisible}
                 animationType="slide"
-                shouldCloseOnOverlayClick={true}
+                shouldCloseOnOverlayClick
                 transparent={false}
                 onRequestClose={this._closeModal}
-                >
-                <AddProductView onChange={this.onChange} onClose={this._closeModal} product={this.state.product}/>
+              >
+                <AddProductView onChange={this.onChange} onClose={this._closeModal} product={this.state.product} />
               </Modal>
             </div>
             <NButton onClick={this.onPressAddProduct} title="Add product" />
@@ -193,33 +181,32 @@ class SellerOnboardingAddProductsPage extends Component {
             />
             <div style={{ height: 64 }} />
           </div>
-          {/*<div onClick={this.props.logOut}> <span>Logout</span> </div>*/}
+          {/* <div onClick={this.props.logOut}> <span>Logout</span> </div> */}
         </div>
       </OnboardingImageWrapper>
     );
   }
 }
 
-
 const mapStateToProps = (state) => ({
   sellerProducts: state.products.sellerProductsCache,
   products: state.products.productsCache,
   onboardingStepId: state.auth.onboardingStepId,
-  user: state.auth
+  user: state.auth,
 });
 
 const actions = {
   logOut: logoutFirebase,
-  setOnBoardingStepId: setOnBoardingStepId,
+  setOnBoardingStepId,
   createProduct,
   updateProduct,
   loadSellerProduct,
-  clearTagsAndCategories: clearTagsAndCategories,
-  createTestProduct: createTestProduct,
+  clearTagsAndCategories,
+  createTestProduct,
   loadAllTags: loadAllProductTags,
   loadAllCategories: loadAllProductCategories,
   clearSellerProductCache: clearSellerCurrentProductCache,
-  getSellerProducts: getSellerProducts
+  getSellerProducts
 };
 
 export default connect(mapStateToProps, actions)(SellerOnboardingAddProductsPage);

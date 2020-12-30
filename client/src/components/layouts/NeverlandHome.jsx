@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import {Redirect} from "react-router-dom";
-import {Accordion, Card, Button, Carousel} from 'react-bootstrap';
+import {Carousel} from 'react-bootstrap';
 import queryString from 'query-string';
-import { joinWaitlist, joinNewsletter } from "../../actions/waitlist";
+
+import { joinWaitlist, joinNewsletter } from "actions/waitlist";
 
 
 class NeverlandHome extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			fIndex: 0,
 			emailInput: '',
 			emailError: "",
 			isSubmitting: false ,
@@ -31,8 +31,8 @@ class NeverlandHome extends Component {
 		}
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-		let waitlistUser = this.props.waitlist.waitlistUser;
+	componentDidUpdate() {
+		const {waitlistUser} = this.props.waitlist;
 		if (waitlistUser && waitlistUser.referralCode) {
 			this.setState({
 				redirect: true
@@ -41,12 +41,12 @@ class NeverlandHome extends Component {
 	}
 
 	validateEmail(email) {
-    	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     	return re.test(String(email).toLowerCase());
 	}
 
 	onClickWaitlist() {
-		//validate email
+		// validate email
 		if (this.validateEmail(this.state.emailInput)) {
 			this.props.joinWaitlist(this.state.emailInput, this.state.inviter);
 			this.setState({
@@ -56,7 +56,7 @@ class NeverlandHome extends Component {
 		} else {
 			this.setState({"emailError": "Please enter valid email"})
 		}
-		//window.location = "https://docs.google.com/forms/d/e/1FAIpQLSeZcRVCsn-_cOXdcMyjEfR7PQ9N536zi0NGdVZRbcfE4KUCpg/viewform"
+		// window.location = "https://docs.google.com/forms/d/e/1FAIpQLSeZcRVCsn-_cOXdcMyjEfR7PQ9N536zi0NGdVZRbcfE4KUCpg/viewform"
 	}
 
 	onChangeInput(event) {
@@ -66,17 +66,13 @@ class NeverlandHome extends Component {
 	}
 
 
-  handleOnSelectNext(selectedIndex, e) {
+  handleOnSelectNext(selectedIndex) {
     this.setState({
       carouselIndex: selectedIndex 
     });
   }
 
 	render() {
-		let message = "";
-		if (this.props.waitlist) {
-			message = this.props.waitlist.message;
-		}
 		if (this.state.redirect) {
 			window.scrollTo(0,0);
 			return (<Redirect to="/waitlist/user" />);
@@ -162,11 +158,11 @@ class NeverlandHome extends Component {
           </Carousel>
         <img style={{width: '100%'}} src="/images/neverland-divider.png" />
 				<div className="row-nm" style={{minHeight: '80vh'}}>
-					{/*<div className="col-md-6 display-mobile" style={{margin: 'auto'}}>
+					{/* <div className="col-md-6 display-mobile" style={{margin: 'auto'}}>
 						<div className="nvlnd-about-main-background-box" />
 						<div className="nvlnd-about-main-background-box-bottom" />
 						<div className="nvlnd-about-main-background-box" />
-						<div className="nvlnd-about-main-background-box" />*/}
+						<div className="nvlnd-about-main-background-box" /> */}
 					<div className="col-md-6 display-desktop" style={{margin: 'auto', 'text-align': 'center', 'align-items': 'center', 'justify-content': 'center'}}>
 					   <img className="app-img" src="/images/about-neverland.png"/>
             </div>	
@@ -189,10 +185,8 @@ class NeverlandHome extends Component {
 	}
 }
 
-const mapStateToProps = state => {
-	return {
+const mapStateToProps = state => ({
 		waitlist: state.waitlist
-	}
-}
+	})
 
 export default connect(mapStateToProps, {joinWaitlist, joinNewsletter})(NeverlandHome);

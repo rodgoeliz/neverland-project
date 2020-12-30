@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import waitlist from "../reducers/waitlist";
+
+import waitlist from "reducers/waitlist";
 
 const store = createStore(
 	combineReducers({
