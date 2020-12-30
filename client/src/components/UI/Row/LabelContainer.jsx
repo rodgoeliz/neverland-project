@@ -13,7 +13,7 @@ const LabelStyled = styled(Box)`
     width: 100%;
     font-weight: 700;
     line-height: 40px;
-    padding: 0 ${props => props.theme.space.space1};
+    padding: 0 ${props => props.theme.spacing.one};
 `
 
 const LabelContentStyled = styled(Box)`

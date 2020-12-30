@@ -18,7 +18,7 @@ const LinkText = styled.p`
   color: rgb(30,29,205);
 `
 
-const DescriptionContainer = styled(Box)`
+const OrderDescriptionContainer = styled(Box)`
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -26,9 +26,9 @@ const DescriptionContainer = styled(Box)`
   flex-grow: 1;
 `
 
-export default function Desctiption({ order, title, content }) {
+export default function OrderDescription({ order, title, content }) {
   return (
-    <DescriptionContainer>
+    <OrderDescriptionContainer>
       <OrderText>
         Order #: {order}
       </OrderText>
@@ -42,6 +42,6 @@ export default function Desctiption({ order, title, content }) {
           </LinkText>
         ))
       }
-    </DescriptionContainer>
+    </OrderDescriptionContainer>
   );
 }

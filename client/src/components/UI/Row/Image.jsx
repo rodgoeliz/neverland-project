@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 const ImageContainer = styled(Box)`
     width: 100px; 
-    padding: 0 ${props => props.theme.space.space1};
+    padding: 0 ${props => props.theme.spacing.one};
 
     & > * {
       object-fit: cover;

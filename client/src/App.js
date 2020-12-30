@@ -39,8 +39,9 @@ import SellerDashboardMainPage from "components/layouts/seller/dashboard/SellerD
 
 import SellerDashboardShopPage from "components/layouts/seller/dashboard/SellerDashboardShopPage";
 import SellerLoadingPage from "components/layouts/seller/onboarding/SellerLoadingPage";
-
-import SellerDashboardShippingPage from "./components/layouts/seller/dashboard/SellerDashboardShippingPage";
+import SellerDashboardShippingPage from "components/layouts/seller/dashboard/SellerDashboardShippingPage";
+import SellerDashboardOrdersPage from 'components/layouts/seller/dashboard/SellerDashboardOrdersPage';
+import BrandStyles from 'components/BrandStyles';
 
 import store from './store/store';
 import { auth } from './services/firebase';
@@ -125,24 +126,6 @@ function PublicRoute({ component: Component, authenticated, ...rest }) {
   )
 }
 
-// Spacing factor = 8
-function computeGoldenRatio(exp) {
-  return Math.round(8 * 1.618 ** exp);
-}
-
-const basicSpaces = {
-  space0: `${computeGoldenRatio(0)}px`, // 8
-  space1: `${computeGoldenRatio(1)}px`, // 13
-  space2: `${computeGoldenRatio(2)}px`, // 21
-  space3: `${computeGoldenRatio(3)}px`, // 34
-  space4: `${computeGoldenRatio(4)}px`, // 55
-  space5: `${computeGoldenRatio(5)}px`, // 89
-};
-
-const theme = {
-  space: basicSpaces
-}
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -175,7 +158,7 @@ class App extends Component {
         <Provider store={store.store}>
           <PersistGate loading={null} persistor={store.persistor}>
             <BrowserRouter>
-              <ThemeProvider theme={theme}>
+              <ThemeProvider theme={BrandStyles}>
                 <Layout className="App">
                   <div>
                     <Route exact path="/" component={NeverlandHome} />
@@ -189,6 +172,7 @@ class App extends Component {
                     <PublicRoute exact path="/seller/onboarding/login" authenticated={this.state.authenticated} component={SellerLoginPage} />
                     <PublicRoute exact path="/seller/onboarding/auth" authenticated={this.state.authenticated} component={SellerOnboardingAuthPage} />
                     <PublicRoute exact path="/seller/onboarding/main" authenticated={this.state.authenticated} component={SellerOnboardingMainRoutingPage} />
+                    <Route exact path="/seller/dashboard/orders" component={SellerDashboardOrdersPage} />
                     <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/basics" authenticated={this.state.authenticated} component={SellerOnboardingBasicsPage} />
                     <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/shop" authenticated={this.state.authenticated} component={SellerOnboardingShopPage} />
                     <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/products" authenticated={this.state.authenticated} component={SellerOnboardingAddProductsPage} />
