@@ -7,5 +7,5 @@ export default styled(Box)`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: ${props => props.theme.spacing.one}
+  margin-bottom: ${props => props.theme.spacing.one}px
 `;
