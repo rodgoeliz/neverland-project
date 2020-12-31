@@ -8,7 +8,7 @@ var Store = require('../models/Store');
 var Product = require('../models/Product');
 var ProductTag = require('../models/ProductTag');
 var NavigationItem = require('../models/NavigationItem');
-const {sendEmail} = require("../email/emailClient");
+const { sendEmail } = require("../email/emailClient");
 var SellerProfile = require('../models/SellerProfile');
 
 const SELLER_SIGNUP_BASICS_STEP_ID = 'seller_signup_basics';
@@ -20,79 +20,82 @@ const SHOP_STEP_ID = "seller-onboarding-shop-basics-step"
 const { getEnvVariable } = require("../utils/envWrapper");
 const stripe = require('stripe')(getEnvVariable('STRIPE_SECRET_KEY'));
 
-router.get(`/onboarding/stripe/reauth`, async function(req, res, next) {
+router.get(`/onboarding/stripe/reauth`, async function (req, res, next) {
 	let stripeId = req.query.stripeId;
 });
 
-router.get(`/onboarding/stripe/continue`, async function(req, res, next) {
+router.get(`/onboarding/stripe/continue`, async function (req, res, next) {
 	let stripeId = req.query.stripeId;
 	const account = await stripe.accounts.retrieve(accountId);
 
 });
 
-router.get(`/product/categories/get`, async function(req, res, next) {
-  // if no id specified, we get all categories
-  let categoryId = req.query.id;
-  let query = {};
-  try {
-  	let categories = await NavigationItem.find(query);
-  	res.json({
-  		success: true,
-  		payload: categories
-  	});
-  } catch (error) {
-  	res.json({
-  		success: false,
-  		payload: error.message
-  	});
-  }
+router.get(`/product/categories/get`, async function (req, res, next) {
+	// if no id specified, we get all categories
+	let categoryId = req.query.id;
+	let query = {};
+	try {
+		let categories = await NavigationItem.find(query);
+		res.json({
+			success: true,
+			payload: categories
+		});
+	} catch (error) {
+		res.json({
+			success: false,
+			payload: error.message
+		});
+	}
 });
 
-router.get('/products/get', async function(req, res, next) {
-  console.log("Get product")
-  console.log(req.query)
-  let productId = req.query.productId;
-  let product = await Product.findOne({_id: productId})
-    .populate({
-      path: 'storeId', 
-      populate: {
-        path: 'userId', 
-        model: 'User'
-    }})
-    .populate('userId')
-    .populate('categoryIds')
-    .populate({
-      path: 'variationIds',
-      populate: {
-        path: 'optionIds'
-    }})
-    .populate('tagIds');
-  res.json({
-    success: true,
-    payload: product});
+router.get('/products/get', async function (req, res, next) {
+	console.log("Get product")
+	console.log(req.query)
+	let productId = req.query.productId;
+	let product = await Product.findOne({ _id: productId })
+		.populate({
+			path: 'storeId',
+			populate: {
+				path: 'userId',
+				model: 'User'
+			}
+		})
+		.populate('userId')
+		.populate('categoryIds')
+		.populate({
+			path: 'variationIds',
+			populate: {
+				path: 'optionIds'
+			}
+		})
+		.populate('tagIds');
+	res.json({
+		success: true,
+		payload: product
+	});
 });
 
-router.get(`/product/tags/get`, async function(req, res, next) {
-  console.log("get all product tags")
-  // if no id specified, we get all tags
-  let tagId = req.query.id;
-  let query = {};
-  try {
-    let productTags = await ProductTag.find(query);
-    res.json({
-      success: true,
-      payload: productTags
-    });
-  } catch (error) {
-    console.log(error);
-    res.json({
-      success: false,
-      error: "Failed to fetch product tags."
-    });
-  }
+router.get(`/product/tags/get`, async function (req, res, next) {
+	console.log("get all product tags")
+	// if no id specified, we get all tags
+	let tagId = req.query.id;
+	let query = {};
+	try {
+		let productTags = await ProductTag.find(query);
+		res.json({
+			success: true,
+			payload: productTags
+		});
+	} catch (error) {
+		console.log(error);
+		res.json({
+			success: false,
+			error: "Failed to fetch product tags."
+		});
+	}
 });
 
-router.get(`/onboarding/getPaymentStatus`, async function(req, res, next) {
+router.get(`/onboarding/getPaymentStatus`, async function (req, res, next) {
 	let accountId = req.body.stripeId;
 	const account = await stripe.accounts.retrieve(accountId);
 	res.json({
@@ -127,52 +130,52 @@ router.get(`/onboarding/getPaymentStatus`, async function(req, res, next) {
 		sellerPacking
 	}
 }**/
-router.get(`/account-links/get`, async function(req, res, next) {
-  console.log("account links get....")
-  console.log(process.env)
-  let sellerId = req.query.sellerId;
-  let source = req.query.source;
-  let user = await User.findOne({_id: sellerId}).populate('sellerProfile');
-  if (!user || !user.sellerProfile) {
-    res.json({
-      success: false,
-      error: "Couldn't find this seller."
-    });
-    return;
-  }
-  console.log(user)
-  let stripeUID = user.sellerProfile.stripeUID;
-  console.log(stripeUID)
-  let env = process.env.NODE_ENV || 'development';
-  let baseURL = "https://www.enterneverland.com";
-  if (env == 'development') {
-    baseURL = "http://localhost:3000"
-  }
-  let accountLinks = await stripe.accountLinks.create({
-      account: stripeUID,
-      refresh_url: `${baseURL}/seller-onboarding/reauth/${stripeUID}`,
-      return_url: `${baseURL}/seller-onboarding/return/${stripeUID}`,
-      type: 'account_onboarding',
-  });
-  if (source == 'web') {
-    console.log("creating a web link...")
-    accountLinks = await stripe.accountLinks.create({
-      account: stripeUID,
-      refresh_url: `${baseURL}/seller/onboarding/reauth/web/${stripeUID}`,
-      return_url: `${baseURL}/seller/onboarding/return/web/${stripeUID}`,
-      type: 'account_onboarding',
-    });
-  }
-  console.log("account links created", accountLinks)
-  res.json({
-    success: true,
-    payload: accountLinks
-  });
+router.get(`/account-links/get`, async function (req, res, next) {
+	console.log("account links get....")
+	console.log(process.env)
+	let sellerId = req.query.sellerId;
+	let source = req.query.source;
+	let user = await User.findOne({ _id: sellerId }).populate('sellerProfile');
+	if (!user || !user.sellerProfile) {
+		res.json({
+			success: false,
+			error: "Couldn't find this seller."
+		});
+		return;
+	}
+	console.log(user)
+	let stripeUID = user.sellerProfile.stripeUID;
+	console.log(stripeUID)
+	let env = process.env.NODE_ENV || 'development';
+	let baseURL = "https://www.enterneverland.com";
+	if (env == 'development') {
+		baseURL = "http://localhost:3000"
+	}
+	let accountLinks = await stripe.accountLinks.create({
+		account: stripeUID,
+		refresh_url: `${baseURL}/seller-onboarding/reauth/${stripeUID}`,
+		return_url: `${baseURL}/seller-onboarding/return/${stripeUID}`,
+		type: 'account_onboarding',
+	});
+	if (source == 'web') {
+		console.log("creating a web link...")
+		accountLinks = await stripe.accountLinks.create({
+			account: stripeUID,
+			refresh_url: `${baseURL}/seller/onboarding/reauth/web/${stripeUID}`,
+			return_url: `${baseURL}/seller/onboarding/return/web/${stripeUID}`,
+			type: 'account_onboarding',
+		});
+	}
+	console.log("account links created", accountLinks)
+	res.json({
+		success: true,
+		payload: accountLinks
+	});
 });
 
-router.get(`/onboarding/getStripeSetupLink`, async function(req, res, next) {
+router.get(`/onboarding/getStripeSetupLink`, async function (req, res, next) {
 	let userId = req.query.userId;
-	let user = await User.findOne({_id: userId}).populate('sellerProfile');
+	let user = await User.findOne({ _id: userId }).populate('sellerProfile');
 	if (!user.sellerProfile) {
 		res.json({
 			success: false,
@@ -182,49 +185,49 @@ router.get(`/onboarding/getStripeSetupLink`, async function(req, res, next) {
 	let stripeUID = user.sellerProfile.stripeUID;
 
 	const accountLinks = await stripe.accountLinks.create({
-		  account: stripeUID,
-		  refresh_url: 'http://localhost:3000/seller-onboarding/reauth/' + stripeUID,
-		  return_url: 'http://localhost:3000/seller-onboarding/return/' + stripeUID,
-		  type: 'account_onboarding',
+		account: stripeUID,
+		refresh_url: 'http://localhost:3000/seller-onboarding/reauth/' + stripeUID,
+		return_url: 'http://localhost:3000/seller-onboarding/return/' + stripeUID,
+		type: 'account_onboarding',
 	});
 });
 
-router.get(`/products/get/list`, async function(req, res, next) {
+router.get(`/products/get/list`, async function (req, res, next) {
 	let userId = req.query.userId;
-	let user = await User.findOne({_id: userId}).populate('storeId');
+	let user = await User.findOne({ _id: userId }).populate('storeId');
 	if (!user) {
 		res.json({
 			success: false,
 			error: "Failed to find user: " + userId
 		});
 	}
-	let products = await Product.find({vendorId: userId}).populate({path: 'variationIds', populate: { path: 'optionIds'}}).populate('vendorId').populate('tagIds');
+	let products = await Product.find({ vendorId: userId }).populate({ path: 'variationIds', populate: { path: 'optionIds' } }).populate('vendorId').populate('tagIds');
 	res.json({
 		success: true,
 		payload: products
 	});
 });
 
-router.post('/onboarding/submit', async function(req, res, next) {
+router.post('/onboarding/submit', async function (req, res, next) {
 	let stepId = req.body.stepId;
 	let formData = req.body.formData;
 	let userId = req.body.userId;
-  let source = req.body.source;
+	let source = req.body.source;
 	let now = new Date();
 	let sellerUser = null;
 	console.log("Submitting step", stepId)
 	console.log("user id: ", userId)
 	console.log("form data", formData)
-  let env = process.env.NODE_ENV || 'development';
+	let env = process.env.NODE_ENV || 'development';
 	//create a stripe express account
 	if (stepId == SELLER_SIGNUP_BASICS_STEP_ID) {
 		let email = formData.email;
 		let firebaseUser = formData.firebaseUser;
-		let user = await User.findOne({_id: userId}).populate('sellerProfile');
-    if (user.email && env != 'development') {
-      sendEmail('vera@enterneverland.com', `[Neverland Auto Notif] ${user.email} completed seller onboarding basics step!`, "templates/sellerSignUp.hbs", {email: user.email});
-      sendEmail('hayley@enterneverland.com', `[Neverland Auto Notif] ${user.email} completed seller onboarding basics step!`, "templates/sellerSignUp.hbs", {email: user.email});
-    }
+		let user = await User.findOne({ _id: userId }).populate('sellerProfile');
+		if (user.email && env != 'development') {
+			sendEmail('vera@enterneverland.com', `[Neverland Auto Notif] ${user.email} completed seller onboarding basics step!`, "templates/sellerSignUp.hbs", { email: user.email });
+			sendEmail('hayley@enterneverland.com', `[Neverland Auto Notif] ${user.email} completed seller onboarding basics step!`, "templates/sellerSignUp.hbs", { email: user.email });
+		}
 		if (!user) {
 			console.log("couldn't find a registered user -- how did this happen?")
 			res.json({
@@ -253,24 +256,24 @@ router.post('/onboarding/submit', async function(req, res, next) {
 
 		// create a stripe account
 		const account = await stripe.accounts.create({
-		  type: 'express',
-		  email: user.email,
+			type: 'express',
+			email: user.email,
 		});
 		// create a stripe account link
 		let accountLinks = await stripe.accountLinks.create({
-		  account: account.id,
-		  refresh_url: 'https://www.enterneverland.com/seller-onboarding/reauth/' + account.id,
-		  return_url: 'https://www.enterneverland.com/seller-onboarding/return/' + account.id,
-		  type: 'account_onboarding',
+			account: account.id,
+			refresh_url: 'https://www.enterneverland.com/seller-onboarding/reauth/' + account.id,
+			return_url: 'https://www.enterneverland.com/seller-onboarding/return/' + account.id,
+			type: 'account_onboarding',
 		});
-    if (source == 'web') {
-      accountLinks = await stripe.accountLinks.create({
-        account: account.id,
-        refresh_url: 'https://www.enterneverland.com/seller-onboarding/reauth/web' + account.id,
-        return_url: 'https://www.enterneverland.com/seller-onboarding/return/web' + account.id,
-        type: 'account_onboarding',
-      });
-    }
+		if (source == 'web') {
+			accountLinks = await stripe.accountLinks.create({
+				account: account.id,
+				refresh_url: 'https://www.enterneverland.com/seller-onboarding/reauth/web' + account.id,
+				return_url: 'https://www.enterneverland.com/seller-onboarding/return/web' + account.id,
+				type: 'account_onboarding',
+			});
+		}
 
 		if (!account) {
 			res.json({
@@ -280,7 +283,7 @@ router.post('/onboarding/submit', async function(req, res, next) {
 		}
 		console.log("Created a stripe accounts link...")
 		console.log("accountLinks", accountLinks);
-		const transformData = function(key, data, isSingle) {
+		const transformData = function (key, data, isSingle) {
 			let transformedData = [];
 			for (var idx in data) {
 				let item = data[idx];
@@ -314,7 +317,7 @@ router.post('/onboarding/submit', async function(req, res, next) {
 		console.log(newSellerProfile)
 
 		console.log("updating user with new seller profile info...")
-		let result = await User.findOneAndUpdate({_id: userId}, {
+		let result = await User.findOneAndUpdate({ _id: userId }, {
 			$set: {
 				isSeller: true,
 				firebaseUID: firebaseUID,
@@ -324,14 +327,15 @@ router.post('/onboarding/submit', async function(req, res, next) {
 				name: formData.fullName,
 				onboardingStepId: stepId,
 			}
-		}, {new: true}).populate({path: 'sellerProfile', populate: {path: 'personalAddress'}});
+		}, { new: true }).populate({ path: 'sellerProfile', populate: { path: 'personalAddress' } });
 		console.log(result)
 		res.json({
 			success: true,
 			payload: {
 				sellerUser: result,
 				accountLinks
-		}});
+			}
+		});
 	}
 	/**
 	{
@@ -345,9 +349,9 @@ router.post('/onboarding/submit', async function(req, res, next) {
 	}**/
 	if (stepId == SELLER_SIGNUP_SHOP_BASICS) {
 		let userId = req.body.userId;
-    console.log("SELLER SIGNUP SHOP BASICS", formData)
+		console.log("SELLER SIGNUP SHOP BASICS", formData)
 		// pull user id and see if store exists
-		let user = await User.findOne({_id: userId}).populate('storeId').populate({path: 'sellerProfile', populate: {path: 'personalAddress'}});
+		let user = await User.findOne({ _id: userId }).populate('storeId').populate({ path: 'sellerProfile', populate: { path: 'personalAddress' } });
 		if (!user.storeId) {
 			let newSellerBusinessAddress = new Address({
 				createdAt: now,
@@ -376,14 +380,16 @@ router.post('/onboarding/submit', async function(req, res, next) {
 				userId: userId
 			});
 			newStore = await newStore.save();
-			let updatedUser = await User.findOneAndUpdate({_id: userId}, {$set: {
-				storeId: newStore,
-				onboardingStepId: stepId
-			}}, {new: true}).populate('storeId').populate({path: 'sellerProfile', populate: {path: 'personalAddress'}});
-      if (updatedUser && env != 'development') {
-        sendEmail('vera@enterneverland.com', `[Neverland Auto Notif]${updatedUser.email} completed seller onboarding shop step!`, "templates/sellerSignUp.hbs", {email: updatedUser.email});
-        sendEmail('hayley@enterneverland.com', `[Neverland Auto Notif]${updatedUser.email} completed seller onboarding shop step!`, "templates/sellerSignUp.hbs", {email: updatedUser.email});
-      }
+			let updatedUser = await User.findOneAndUpdate({ _id: userId }, {
+				$set: {
+					storeId: newStore,
+					onboardingStepId: stepId
+				}
+			}, { new: true }).populate('storeId').populate({ path: 'sellerProfile', populate: { path: 'personalAddress' } });
+			if (updatedUser && env != 'development') {
+				sendEmail('vera@enterneverland.com', `[Neverland Auto Notif]${updatedUser.email} completed seller onboarding shop step!`, "templates/sellerSignUp.hbs", { email: updatedUser.email });
+				sendEmail('hayley@enterneverland.com', `[Neverland Auto Notif]${updatedUser.email} completed seller onboarding shop step!`, "templates/sellerSignUp.hbs", { email: updatedUser.email });
+			}
 			res.json({
 				success: true,
 				payload: updatedUser
@@ -391,17 +397,19 @@ router.post('/onboarding/submit', async function(req, res, next) {
 		} else {
 			let store = user.storeId;
 			// update store
-			let updatedStore = await Store.findOneAndUpdate({_id: user.storeId}, { $set: {
-				updatedAt: now,
-				isActive: true,
-				isShippingAddress: true,
-				description: formData.shopDescription,
-				title: formData.shopTitle,
-				website: formData.website
-			}}, {new: true});
+			let updatedStore = await Store.findOneAndUpdate({ _id: user.storeId }, {
+				$set: {
+					updatedAt: now,
+					isActive: true,
+					isShippingAddress: true,
+					description: formData.shopDescription,
+					title: formData.shopTitle,
+					website: formData.website
+				}
+			}, { new: true });
 			// update Address
 			let businessAddressId = updatedStore.businessAddress;
-			let updatedBusinessAddress = await Address.findOneAndUpdate({_id: businessAddressId}, {
+			let updatedBusinessAddress = await Address.findOneAndUpdate({ _id: businessAddressId }, {
 				$set: {
 					updatedAt: now,
 					isActive: true,
@@ -415,9 +423,11 @@ router.post('/onboarding/submit', async function(req, res, next) {
 					addressZip: formData.shopAddressInput.zip_code,
 				}
 			});
-			let updatedUser = await User.findOneAndUpdate({_id: userId}, {$set: {
-				onboardingStepId: formData.stepId
-			}}, {new: true}).populate('storeId').populate({path: 'sellerProfile', populate: {path: 'personalAddress'}});
+			let updatedUser = await User.findOneAndUpdate({ _id: userId }, {
+				$set: {
+					onboardingStepId: formData.stepId
+				}
+			}, { new: true }).populate('storeId').populate({ path: 'sellerProfile', populate: { path: 'personalAddress' } });
 			console.log("STORE EXISTS")
 			console.log("updatedUser", updatedUser)
 			res.json({

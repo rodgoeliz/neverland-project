@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
 
 import AOS from 'aos';
+import { ThemeProvider } from 'styled-components';
 
 import './App.scss';
 import NeverlandHome from 'components/layouts/NeverlandHome';
@@ -36,8 +37,9 @@ import SellerDashboardMainPage from "components/layouts/seller/dashboard/SellerD
 
 import SellerDashboardShopPage from "components/layouts/seller/dashboard/SellerDashboardShopPage";
 import SellerLoadingPage from "components/layouts/seller/onboarding/SellerLoadingPage";
-
-import SellerDashboardShippingPage from "./components/layouts/seller/dashboard/SellerDashboardShippingPage";
+import SellerDashboardShippingPage from "components/layouts/seller/dashboard/SellerDashboardShippingPage";
+import SellerDashboardOrdersPage from 'components/layouts/seller/dashboard/SellerDashboardOrdersPage';
+import BrandStyles from 'components/BrandStyles';
 
 import store from './store/store';
 import { auth } from './services/firebase';
@@ -153,40 +155,43 @@ class App extends Component {
         <Provider store={store.store}>
           <PersistGate loading={null} persistor={store.persistor}>
             <BrowserRouter>
-              <Layout className="App">
-                <div>
-                  <Route exact path="/" component={NeverlandHome} />
-                  <AdminRoute exact path="/admin" store={store.store} component={AdminPage} />
-                  <Route exact path="/adminTwo" component={NeverlandOurStory} />
-                  <AdminRoute exact path="/admin/product" store={store.store} component={ProductAdminView} />
-                  <AdminRoute exact path="/admin/product/:productId" store={store.store} component={AddProductAdminView} />
-                  <Route exact path="/admin/product/new" component={AddProductAdminView} />
-                  <Route exact path="/story" component={NeverlandOurStory} />
-                  <PublicRoute exact path="/seller/onboarding/signup" authenticated={this.state.authenticated} component={SellerSignupPage} />
-                  <PublicRoute exact path="/seller/onboarding/login" authenticated={this.state.authenticated} component={SellerLoginPage} />
-                  <PublicRoute exact path="/seller/onboarding/auth" authenticated={this.state.authenticated} component={SellerOnboardingAuthPage} />
-                  <PublicRoute exact path="/seller/onboarding/main" authenticated={this.state.authenticated} component={SellerOnboardingMainRoutingPage} />
-                  <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/basics" authenticated={this.state.authenticated} component={SellerOnboardingBasicsPage} />
-                  <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/shop" authenticated={this.state.authenticated} component={SellerOnboardingShopPage} />
-                  <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/products" authenticated={this.state.authenticated} component={SellerOnboardingAddProductsPage} />
-                  <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/payment" authenticated={this.state.authenticated} component={SellerOnboardingPaymentPage} />
-                  <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/activation-pending" authenticated={this.state.authenticated} component={SellerOnboardingPendingActivationPage} />
-                  <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/main" authenticated={this.state.authenticated} component={SellerDashboardMainPage} />
-                  <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shop" authenticated={this.state.authenticated} component={SellerDashboardShopPage} />
-                  <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/product/add" authenticated={this.state.authenticated} component={AddProductView} />
-                  <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shipping" authenticated={this.state.authenticated} component={SellerDashboardShippingPage} />
-                  <Route exact path="/privacy" component={PrivacyPolicy} />
-                  <Route exact path="/download/neverland" component={DownloadNeverland} />
-                  <Route exact path="/waitlist/user" component={NeverlandWaitlist} />
-                  <Route exact path="/faq" component={NeverlandFAQ} />
-                  <Route exact path="/contactus" component={NeverlandContactUs} />
-                  <Route exact path="/seller/onboarding/reauth/web/:accountId" component={SellerOnboardingReAuthWebPage} />
-                  <Route exact path="/seller/onboarding/return/web/:accountId" component={SellerOnboardingPaymentRoutingRoomPage} />
-                  <Route exact path="/seller-onboarding/reauth/:accountId" component={SellerOnboardingReAuth} />
-                  <Route exact path="/seller-onboarding/return/:accountId" component={SellerOnboardingRouting} />
-                  <Route path="/edit/product/:productId" component={AdminProductEdit} />
-                </div>
-              </Layout>
+              <ThemeProvider theme={BrandStyles}>
+                <Layout className="App">
+                  <div>
+                    <Route exact path="/" component={NeverlandHome} />
+                    <AdminRoute exact path="/admin" store={store.store} component={AdminPage} />
+                    <Route exact path="/adminTwo" component={NeverlandOurStory} />
+                    <AdminRoute exact path="/admin/product" store={store.store} component={ProductAdminView} />
+                    <AdminRoute exact path="/admin/product/:productId" store={store.store} component={AddProductAdminView} />
+                    <Route exact path="/admin/product/new" component={AddProductAdminView} />
+                    <Route exact path="/story" component={NeverlandOurStory} />
+                    <PublicRoute exact path="/seller/onboarding/signup" authenticated={this.state.authenticated} component={SellerSignupPage} />
+                    <PublicRoute exact path="/seller/onboarding/login" authenticated={this.state.authenticated} component={SellerLoginPage} />
+                    <PublicRoute exact path="/seller/onboarding/auth" authenticated={this.state.authenticated} component={SellerOnboardingAuthPage} />
+                    <PublicRoute exact path="/seller/onboarding/main" authenticated={this.state.authenticated} component={SellerOnboardingMainRoutingPage} />
+                    <Route exact path="/seller/dashboard/orders" component={SellerDashboardOrdersPage} />
+                    <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/basics" authenticated={this.state.authenticated} component={SellerOnboardingBasicsPage} />
+                    <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/shop" authenticated={this.state.authenticated} component={SellerOnboardingShopPage} />
+                    <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/products" authenticated={this.state.authenticated} component={SellerOnboardingAddProductsPage} />
+                    <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/payment" authenticated={this.state.authenticated} component={SellerOnboardingPaymentPage} />
+                    <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/activation-pending" authenticated={this.state.authenticated} component={SellerOnboardingPendingActivationPage} />
+                    <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/main" authenticated={this.state.authenticated} component={SellerDashboardMainPage} />
+                    <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shop" authenticated={this.state.authenticated} component={SellerDashboardShopPage} />
+                    <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/product/add" authenticated={this.state.authenticated} component={AddProductView} />
+                    <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shipping" authenticated={this.state.authenticated} component={SellerDashboardShippingPage} />
+                    <Route exact path="/privacy" component={PrivacyPolicy} />
+                    <Route exact path="/download/neverland" component={DownloadNeverland} />
+                    <Route exact path="/waitlist/user" component={NeverlandWaitlist} />
+                    <Route exact path="/faq" component={NeverlandFAQ} />
+                    <Route exact path="/contactus" component={NeverlandContactUs} />
+                    <Route exact path="/seller/onboarding/reauth/web/:accountId" component={SellerOnboardingReAuthWebPage} />
+                    <Route exact path="/seller/onboarding/return/web/:accountId" component={SellerOnboardingPaymentRoutingRoomPage} />
+                    <Route exact path="/seller-onboarding/reauth/:accountId" component={SellerOnboardingReAuth} />
+                    <Route exact path="/seller-onboarding/return/:accountId" component={SellerOnboardingRouting} />
+                    <Route path="/edit/product/:productId" component={AdminProductEdit} />
+                  </div>
+                </Layout>
+              </ThemeProvider>
             </BrowserRouter>
           </PersistGate>
         </Provider>

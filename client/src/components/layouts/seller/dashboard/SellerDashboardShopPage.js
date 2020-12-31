@@ -120,7 +120,7 @@ class SellerDashboardShopPage extends React.Component {
       {
         formData: newFormData,
       },
-      () => {},
+      () => { },
     );
   }
 
@@ -131,7 +131,7 @@ class SellerDashboardShopPage extends React.Component {
       {
         formData: newFormData,
       },
-      () => {},
+      () => { },
     );
   }
 

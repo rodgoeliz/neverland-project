@@ -37,21 +37,21 @@ export const onSubmitStep = ({ stepId, formData, userId }) => async (dispatch) =
 }
 
 export const getSellerProducts = (sellerId) => async (dispatch) => {
-    try {
-      const response = await Api.get(`/api/seller/products/get/list?userId=${sellerId}`)
-      console.log("LOAD SELLER PRODUCTS: ", response)
-      dispatch({
-        type: actionTypes.products.SET_SELLER_PRODUCTS,
-        payload: response.data.payload
-      });
-      dispatch({
-        type: actionTypes.seller.GET_SELLER_PRODUCTS,
-        payload: response.data.payload
-      });
-    } catch(error) {
-      console.log(error);
-    }
+  try {
+    const response = await Api.get(`/api/seller/products/get/list?userId=${sellerId}`)
+    console.log("LOAD SELLER PRODUCTS: ", response)
+    dispatch({
+      type: actionTypes.products.SET_SELLER_PRODUCTS,
+      payload: response.data.payload
+    });
+    dispatch({
+      type: actionTypes.seller.GET_SELLER_PRODUCTS,
+      payload: response.data.payload
+    });
+  } catch (error) {
+    console.log(error);
   }
+}
 
 export const getSellerAccountLinks = ({ sellerId }) => async (dispatch) => {
   try {
@@ -203,6 +203,14 @@ export const clearAccountLinks = () => async (dispatch) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+
+export const changeSellerPage = (page) => (dispatch) => {
+  dispatch({
+    type: actionTypes.seller.CHAHGE_SELLER_PRODUCTS_PAGE,
+    payload: page
+  });
 };
 
 
