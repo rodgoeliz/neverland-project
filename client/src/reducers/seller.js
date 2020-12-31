@@ -8,6 +8,7 @@ export const initialState = {
   productsCache: [],
   allProductTags: [],
   allProductCategories: [],
+  currentPage: 0 // TODO: take current page from url
 };
 
 const sellerReducer = (state = initialState, action) => {
@@ -64,6 +65,11 @@ const sellerReducer = (state = initialState, action) => {
       return {
         ...state,
         allProductTags: action.payload,
+      };
+    case actionTypes.seller.CHAHGE_SELLER_PRODUCTS_PAGE:
+      return {
+        ...state,
+        currentPage: Number(action.payload),
       };
     case PURGE:
       return { ...initialState };
