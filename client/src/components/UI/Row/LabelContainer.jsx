@@ -3,7 +3,7 @@ import { Box } from '@material-ui/core';
 import styled from "styled-components";
 
 const LabelContainerStyled = styled(Box)`
-    width: 100%;
+    width: calc(100% - 200px);
     display: flex;
     flex-direction: column;
 `

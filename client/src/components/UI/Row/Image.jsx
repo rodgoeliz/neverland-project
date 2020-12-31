@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 
 const ImageContainer = styled(Box)`
+    min-width: 100px; 
     width: 100px; 
     padding: 0 ${props => props.theme.spacing.one}px;
 
