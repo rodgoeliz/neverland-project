@@ -16,6 +16,7 @@ class SellerDashboardOrdersPage extends React.Component {
     }
 
     changePage = (event, value) => {
+        // -1 for start with 0 page.
         this.props.changeSellerPage(value - 1);
     }
 
@@ -29,7 +30,8 @@ class SellerDashboardOrdersPage extends React.Component {
                     this.props.seller.productsCache.slice(
                         // Page switching with redux store.
                         // Current page could be stored in page url
-                        currentPage - 1, currentPage + 5
+                        // Additionaly we can switch count of elements dynamically
+                        currentPage, currentPage + 5
                     ).map(product => (
                         <RowContainer>
                             <LabelContainer labelText="11/20/2020 - Today">
