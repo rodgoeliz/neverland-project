@@ -1,5 +1,7 @@
-const crypto = require("crypto");
 require('dotenv').config();
+const algoliasearch = require("algoliasearch");
+const algoliaClient = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
+const crypto = require("crypto");
 const express = require("express");
 const firebase = require('firebase');
 const firebaseConfig = require('../utils/firebaseConfig');
@@ -9,6 +11,7 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 const WaitlistUser = require('../models/waitlistUser');
 const { createStripeAccountForUser } = require("../utils/paymentProcessor");
+const { getEnvVariable } = require("../utils/envWrapper");
 const { sendEmail } = require("../email/emailClient");
 const router = express.Router();
 const Logger = require('../utils/errorLogger');
@@ -16,6 +19,39 @@ const {sendBird, genSendBirdUserID, sbConnect, sbUpdateCurrentUserInfo, sbCreate
 
 firebase.initializeApp(firebaseConfig);
 
+/** INTERNAL METHODS BEGIN **/
+router.get('/algolia/load', async function (req, res) {
+  console.log("Uploading stores to algolia....")
+  const users = await User.find({})
+    .populate('userInterestTags')
+    .populate('sellerProfile')
+    .populate('storeId')
+  const tUsers = users.map((user) => {
+    try {
+      let userObj = user.toObject();
+      userObj.objectID = user._id;
+      return userObj;
+    } catch (error) {
+      console.log(error)
+    }
+  });
+  console.log(tUsers.length)
+  try {
+    console.log("initializing " + getEnvVariable('ALGOLIA_USER_INDEX'))
+    const index = algoliaClient.initIndex(getEnvVariable('ALGOLIA_USER_INDEX'));
+    index.saveObjects(tUsers, {'autoGenerateObjectIDIfNotExist': true})
+      .then(({objectIDs}) => {
+        console.log("Loaded users into algolia...")
+      }).catch(err => {
+        // log error
+        console.log("error updating to algolia user index: ", err)
+      });
+  } catch (error) {
+    console.log(error)
+  }
+});
+
+/** PUBLIC METHODS BEGIN **/
 router.post('/firebase/login', async function(req, res, next) {
   const email = req.body.email;
   const pass = req.body.password;

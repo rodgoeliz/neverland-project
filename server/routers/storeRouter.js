@@ -8,9 +8,48 @@ var User = require('../models/User');
 const {sendEmail} = require("../email/emailClient");
 var Mailchimp = require('mailchimp-api-v3')
 var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
+const algoliasearch = require("algoliasearch");
+const algoliaClient = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
+const { getEnvVariable } = require("../utils/envWrapper");
 const mongoose = require('mongoose');
 const fs = require('fs');
 
+/** INTERNAL METHODS **/
+router.get('/algolia/load', async function (req, res) {
+  console.log("Uploading stores to algolia....")
+  const stores = await Store.find({})
+    .populate('userId')
+    .populate('categoryTagIds')
+    .populate('packageProfileIds')
+    .populate('businessAddress')
+    .populate('address');
+  const transformedStores = stores.map((store) => {
+    try {
+      let storeObj = store.toObject();
+      storeObj.objectID = store._id;
+      return storeObj;
+    } catch (error) {
+      console.log(error)
+    }
+  });
+  console.log(transformedStores.length)
+  try {
+    console.log("initializing " + getEnvVariable('ALGOLIA_STORE_INDEX'))
+    const index = algoliaClient.initIndex(getEnvVariable('ALGOLIA_STORE_INDEX'));
+    index.saveObjects(transformedStores, {'autoGenerateObjectIDIfNotExist': true})
+      .then(({objectIDs}) => {
+        console.log("Loaded stores into algolia...")
+      }).catch(err => {
+        // log error
+        console.log("error updating to algolia store index: ", err)
+      });
+  } catch (error) {
+    console.log(error)
+  }
+});
+
+
+/** PUBLIC METHODS **/
 router.post(`/update`, async function(req, res, next) {
   let storeId = req.body.storeId;
   let formData = req.body.formData;
@@ -212,6 +251,8 @@ router.post('/upload/file', async function(req, res, next) {
 	Promise.allSettled(allFilePromises).then(function(date, err) {
 	});
 });
+
+
 router.post('/create', function(req, res, next) {
 	let products = req.body.productIds;
 	let userId = req.body.userId;

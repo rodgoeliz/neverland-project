@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
 const Schema = mongoose.Schema;
+const { getEnvVariable } = require("../utils/envWrapper");
+const Logger = require('../utils/errorLogger');
+const algoliasearch = require("algoliasearch");
+const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
 
 const userSchema = new mongoose.Schema({
 	createdAt: Date,
@@ -45,20 +49,60 @@ const userSchema = new mongoose.Schema({
 	},
 });
 
+userSchema.post('updateOne', async function() {
+  //sync up with algolia
+  const index = client.initIndex(getEnvVariable('ALGOLIA_USER_INDEX'));
+  const docToUpdate = await this.model.findOne(this.getQuery());
+  await docToUpdate
+    .populate('storeId')
+    .populate('userInterestTags')
+    .populate('sellerProfile')
+    .execPopulate();
+  docToUpdate.set('objectID', docToUpdate._id);
+  // add to update query the tagHandles
+  index.saveObjects([docToUpdate], {'autoGenerateObjectIDIfNotExist': true})
+    .then(({objectIDs}) => {
+    }).catch(err => {
+      // log error
+      console.log("error updating to algolia order index: ", err)
+    });
+});
+
+userSchema.post('findOneAndUpdate', async function() {
+  //sync up with algolia
+  const index = client.initIndex(getEnvVariable('ALGOLIA_USER_INDEX'));
+  const docToUpdate = await this.model.findOne(this.getQuery());
+  await docToUpdate
+    .populate('storeId')
+    .populate('userInterestTags')
+    .populate('sellerProfile')
+    .execPopulate();
+  docToUpdate.set('objectID', docToUpdate._id);
+  index.saveObjects([docToUpdate], {'autoGenerateObjectIDIfNotExist': true})
+    .then(({objectIDs}) => {
+    }).catch(err => {
+      // log error
+      console.log("error updating to algolia: ", err)
+      Logger.logError(err);
+    });
+});
+
 // add password comparison and passport auth
-userSchema.pre('save', function(next) {
-	var user = this;
-	if (!user.isModified('password')) return next();
-
-	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-		if (err) return next(err);
-		bcrypt.hash(user.password, salt, function(err, hash) {
-			if (err) return next(err);
-
-			user.password = hash;
-			next();
-		});
-	});
+userSchema.pre('save', async function ( next ) {
+  const index = client.initIndex(getEnvVariable('ALGOLIA_USER_INDEX'));
+  await this
+    .populate('storeId')
+    .populate('userInterestTags')
+    .populate('sellerProfile')
+    .execPopulate();
+  let object = this;
+  object.set('objectID', this._id)
+  index.saveObjects([this], {'autoGenerateObjectIDIfNotExist': true})
+    .then(({objectIDs}) => {
+    }).catch(err => {
+      console.log("error updating to algolia: ", err)
+      Logger.logError(err);
+    });
 });
 
 userSchema.methods.toJSON = function() {

@@ -24,6 +24,8 @@ const StyledInput = styled.input`
     outline: none;
   }
 `;
+
+
 export default class BaseInput extends React.Component {
   constructor(props) {
     super(props);

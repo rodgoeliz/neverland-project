@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { getEnvVariable } = require("../utils/envWrapper");
+const algoliasearch = require("algoliasearch");
+const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
 
 const productSchema = new mongoose.Schema({
 	createdAt: Date,
@@ -71,17 +74,16 @@ const productSchema = new mongoose.Schema({
 
 productSchema.post('updateOne', async function() {
   //sync up with algolia
-  const algoliasearch = require("algoliasearch");
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
-  const index = client.initIndex("dev_neverland_products");
+  const index = client.initIndex(getEnvVariable('ALGOLIA_PRODUCT_INDEX'));
   const docToUpdate = await this.model.findOne(this.getQuery());
   await docToUpdate.populate('storeId').populate('tagIds').execPopulate();
   let tagHandles = [];
   for (var i in this.tagIds) {
     tagHandles.push(this.tagIds[i].handle);
   }
-  docToUpdate.objectID = docToUpdate._id;
-  docToUpdate.tagHandles = tagHandles;
+  let object = docToUpdate;
+  object.set('objectID', docToUpdate._id)
+  object.set('tagHandles', tagHandles)
   // add to update query the tagHandles
   index.saveObjects([docToUpdate], {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
@@ -93,17 +95,16 @@ productSchema.post('updateOne', async function() {
 
 productSchema.post('findOneAndUpdate', async function() {
   //sync up with algolia
-  const algoliasearch = require("algoliasearch");
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
-  const index = client.initIndex("dev_neverland_products");
+  const index = client.initIndex(getEnvVariable('ALGOLIA_PRODUCT_INDEX'));
   const docToUpdate = await this.model.findOne(this.getQuery());
   await docToUpdate.populate('storeId').populate('tagIds').execPopulate();
   let tagHandles = [];
   for (var i in docToUpdate.tagIds) {
     tagHandles.push(docToUpdate.tagIds[i].handle);
   }
-  docToUpdate.objectID = docToUpdate._id;
-  docToUpdate.tagHandles = tagHandles;
+  let object = docToUpdate;
+  object.set('objectID', docToUpdate._id)
+  object.set('tagHandles', tagHandles)
   index.saveObjects([docToUpdate], {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
     }).catch(err => {
@@ -114,9 +115,7 @@ productSchema.post('findOneAndUpdate', async function() {
 
 productSchema.pre('save', async function(next) {
   //sync up with algolia
-  const algoliasearch = require("algoliasearch");
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
-  const index = client.initIndex("dev_neverland_products");
+  const index = client.initIndex(getEnvVariable('ALGOLIA_PRODUCT_INDEX'));
   await this.populate('storeId').populate('tagIds').execPopulate();
   let tagHandles = [];
   for (var i in this.tagIds) {

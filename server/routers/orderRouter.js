@@ -13,8 +13,45 @@ var OrderIntent = require('../models/OrderIntent');
 var Order = require('../models/Order');
 var OrderProductItem = require('../models/OrderProductItem');
 const Logger = require('../utils/errorLogger');
+const algoliasearch = require("algoliasearch");
+const algoliaClient = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
+const { getEnvVariable } = require("../utils/envWrapper");
 
 const { getBuyerProtectionSurcharge, getStripeFee, calculateBundleSubTotal, getFulfillmentMethod, calculateTaxSurcharge } = require("../utils/orderProcessor");
+
+/** INTERNAL METHODS **/
+router.get('/algolia/load', async function (req, res) {
+  console.log("Uploading orders to algolia....")
+  let orders = await Order.find({})
+    .populate('userId')
+    .populate('orderInvoiceId')
+    .populate({path: 'paymentMethod', populate: 'billingAddress'})
+    .populate('shippingAddressId');
+  const transformedOrders = orders.map((order) => {
+    try {
+      let object = order.toObject();
+      object.objectID = order._id;
+      return object;
+    } catch (error) {
+      console.log(error)
+    }
+  });
+  console.log(transformedOrders.length)
+  try {
+    console.log("initializing " + getEnvVariable('ALGOLIA_ORDER_INDEX'))
+    const index = algoliaClient.initIndex(getEnvVariable('ALGOLIA_ORDER_INDEX'));
+    index.saveObjects(transformedOrders, {'autoGenerateObjectIDIfNotExist': true})
+      .then(({objectIDs}) => {
+        console.log("Loaded orders into algolia...")
+      }).catch(err => {
+        // log error
+        console.log("error updating to algolia order index: ", err)
+      });
+
+  } catch (error) {
+    console.log(error)
+  }
+});
 
 router.post('/product/remove', async function(req, res) {
   let productOrderItemId = req.body.productOrderItemId;

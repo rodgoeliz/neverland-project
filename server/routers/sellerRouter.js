@@ -71,6 +71,7 @@ router.get('/products/get', async function(req, res, next) {
     success: true,
     payload: product});
 });
+
 router.get(`/product/tags/get`, async function(req, res, next) {
   console.log("get all product tags")
   // if no id specified, we get all tags
@@ -202,7 +203,6 @@ router.get(`/products/get/list`, async function(req, res, next) {
 		success: true,
 		payload: products
 	});
-
 });
 
 router.post('/onboarding/submit', async function(req, res, next) {
