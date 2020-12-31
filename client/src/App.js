@@ -4,8 +4,6 @@ import { Provider } from 'react-redux';
 
 import { PersistGate } from 'redux-persist/integration/react'
 
-import { ParallaxProvider } from "react-scroll-parallax";
-
 import AOS from 'aos';
 
 import './App.scss';
@@ -152,7 +150,6 @@ class App extends Component {
   render() {
     AOS.init();
     return (
-      <ParallaxProvider>
         <Provider store={store.store}>
           <PersistGate loading={null} persistor={store.persistor}>
             <BrowserRouter>
@@ -193,7 +190,6 @@ class App extends Component {
             </BrowserRouter>
           </PersistGate>
         </Provider>
-      </ParallaxProvider>
     );
   }
 }
