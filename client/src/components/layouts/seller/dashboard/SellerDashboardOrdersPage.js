@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Pagination from '@material-ui/lab/Pagination';
 import { TextField } from '@material-ui/core';
 
-import { OrderDescription, LabelContainer, Image, NavigationArrow, RowContainer, Price, Status } from 'components/UI/Row'
+import { ToggleVisibility, SoldAndQuantity, OrderDescription, LabelContainer, Image, NavigationArrow, RowContainer, Price, Status } from 'components/UI/Row'
 import SellerDashboardNavWrapper from 'components/layouts/seller/dashboard/SellerDashboardNavWrapper';
 import NButton from 'components/UI/NButton';
 
@@ -35,6 +35,24 @@ class SellerDashboardOrdersPage extends React.Component {
                     </Status>
                     <NavigationArrow to='/home' />
                 </RowContainer>
+
+                Product rows:
+                <RowContainer>
+                    <Image src='https://www.interfacemedia.com/media/2350/img-vr-tilt-brush-website-hero-shot.jpg' />
+                    <OrderDescription
+                        order='100333'
+                        title='Hayley Leibson'
+                        content={['Lorem ipsum dolor sit amet, consectetur adipiscing elit.']}
+                    />
+                    <Price>
+                        100$
+                        </Price>
+                    <SoldAndQuantity sold={99} quantity={50} />
+                    <ToggleVisibility text='IS VISIBLE' />
+                    <NavigationArrow to='/home' />
+                </RowContainer>
+
+
                 <Pagination count={10} size="large" />
             </SellerDashboardNavWrapper>
         );
