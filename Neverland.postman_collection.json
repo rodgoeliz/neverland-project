@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "2d0db2a4-09ae-485f-aaf2-5e6e4dad87a3",
+		"name": "Neverland",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Product tags get",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/seller/product/tags/get",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"seller",
+						"product",
+						"tags",
+						"get"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All seller products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/seller/products/getAll?userId=5fea0d7663ac3c00177a45ec",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"seller",
+						"products",
+						"getAll"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "5fea0d7663ac3c00177a45ec"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/seller/products/get?productId=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"seller",
+						"products",
+						"get"
+					],
+					"query": [
+						{
+							"key": "productId",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/seller/product/categories/get",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"seller",
+						"product",
+						"categories",
+						"get"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Store List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/store/get/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"store",
+						"get",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/store/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"store",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Products list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/seller/products/get/list?userId=5fea0d7663ac3c00177a45ec",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"seller",
+						"products",
+						"get",
+						"list"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "5fea0d7663ac3c00177a45ec"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

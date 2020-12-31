@@ -67,7 +67,6 @@ class SellerDashboardOrdersPage extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    store: state.store,
     auth: state.auth,
     seller: state.seller
 });
