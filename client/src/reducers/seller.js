@@ -8,6 +8,7 @@ export const initialState = {
   productsCache: [],
   allProductTags: [],
   allProductCategories: [],
+  ordersCache: [],
   currentPage: 0 // TODO: take current page from url
 };
 

@@ -8,6 +8,10 @@ import AOS from 'aos';
 import { ThemeProvider } from 'styled-components';
 
 import './App.scss';
+
+import SellerDashboardProductsPageContainer from 'containers/seller/dashboard/SellerDashboardProductsPageContainer';
+import SellerDashboardOrdersPageContainer from 'containers/seller/dashboard/SellerDashboardOrdersPageContainer';
+
 import NeverlandHome from 'components/layouts/NeverlandHome';
 import NeverlandOurStory from 'components/layouts/NeverlandOurStory';
 import NeverlandWaitlist from "components/layouts/NeverlandWaitlist";
@@ -38,7 +42,6 @@ import SellerDashboardMainPage from "components/layouts/seller/dashboard/SellerD
 import SellerDashboardShopPage from "components/layouts/seller/dashboard/SellerDashboardShopPage";
 import SellerLoadingPage from "components/layouts/seller/onboarding/SellerLoadingPage";
 import SellerDashboardShippingPage from "components/layouts/seller/dashboard/SellerDashboardShippingPage";
-import SellerDashboardOrdersPage from 'components/layouts/seller/dashboard/SellerDashboardOrdersPage';
 import BrandStyles from 'components/BrandStyles';
 
 import store from './store/store';
@@ -169,7 +172,6 @@ class App extends Component {
                     <PublicRoute exact path="/seller/onboarding/login" authenticated={this.state.authenticated} component={SellerLoginPage} />
                     <PublicRoute exact path="/seller/onboarding/auth" authenticated={this.state.authenticated} component={SellerOnboardingAuthPage} />
                     <PublicRoute exact path="/seller/onboarding/main" authenticated={this.state.authenticated} component={SellerOnboardingMainRoutingPage} />
-                    <Route exact path="/seller/dashboard/orders" component={SellerDashboardOrdersPage} />
                     <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/basics" authenticated={this.state.authenticated} component={SellerOnboardingBasicsPage} />
                     <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/shop" authenticated={this.state.authenticated} component={SellerOnboardingShopPage} />
                     <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/products" authenticated={this.state.authenticated} component={SellerOnboardingAddProductsPage} />
@@ -179,6 +181,9 @@ class App extends Component {
                     <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shop" authenticated={this.state.authenticated} component={SellerDashboardShopPage} />
                     <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/product/add" authenticated={this.state.authenticated} component={AddProductView} />
                     <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shipping" authenticated={this.state.authenticated} component={SellerDashboardShippingPage} />
+                    <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/orders" authenticated={this.state.authenticated} component={SellerDashboardOrdersPageContainer} />
+                    <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/products" authenticated={this.state.authenticated} component={SellerDashboardProductsPageContainer} />
+
                     <Route exact path="/privacy" component={PrivacyPolicy} />
                     <Route exact path="/download/neverland" component={DownloadNeverland} />
                     <Route exact path="/waitlist/user" component={NeverlandWaitlist} />

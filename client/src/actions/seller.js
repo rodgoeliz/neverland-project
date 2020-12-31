@@ -6,6 +6,11 @@ import Api from 'lib/api';
 
 import { setUser } from './auth';
 
+const algoliasearch = require('algoliasearch');
+
+const searchClient = algoliasearch('PAPXFJG9H7', '0800ce10f5b7726f39a626cb1c935299');
+
+
 export const onSubmitStep = ({ stepId, formData, userId }) => async (dispatch) => {
   const response = await Api.post(`/api/seller/onboarding/submit`, {
     stepId,
@@ -34,6 +39,14 @@ export const onSubmitStep = ({ stepId, formData, userId }) => async (dispatch) =
       dispatch(setUser(response.data.payload));
     }
   }
+}
+
+export const getSellerOrders = (sellerId) => async (dispatch) => {
+  console.log(sellerId)
+  dispatch({
+    type: actionTypes.seller.GET_SELLER_PRODUCTS,
+    payload: {}
+  })
 }
 
 export const getSellerProducts = (sellerId) => async (dispatch) => {
@@ -213,4 +226,8 @@ export const changeSellerPage = (page) => (dispatch) => {
   });
 };
 
+
+export const getAlgoliaSearchClient = () => {
+  return searchClient;
+}
 
