@@ -68,7 +68,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx",
-    "lint:fix": "eslint . --ext .js,.jsx --fix"
+    "lint:fix": "prettier --write \"**/*.*\" && eslint . --ext .js,.jsx --fix"
   },
   "husky": {
     "hooks": {
