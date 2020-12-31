@@ -27,6 +27,7 @@ module.exports = {
     FileReader: true,
   },
   rules: {
+    'import/no-extraneous-dependencies': 'off',
     'import/prefer-default-export': 'off',
     'jsx-a11y/no-autofocus': 'off',
     'no-param-reassign': ['error', { props: false }],

@@ -1,24 +1,23 @@
 import React from 'react';
-
 import { connect } from 'react-redux';
+import Pagination from '@material-ui/lab/Pagination';
+import { TextField } from '@material-ui/core';
 
-import { SoldAndQuantity, OrderDescription, ToggleVisibility, LabelContainer, Image, NavigationArrow, RowContainer, Price, Status } from 'components/UI/Row'
+import { OrderDescription, LabelContainer, Image, NavigationArrow, RowContainer, Price, Status } from 'components/UI/Row'
+import SellerDashboardNavWrapper from 'components/layouts/seller/dashboard/SellerDashboardNavWrapper';
+import NButton from 'components/UI/NButton';
+
 
 class SellerDashboardOrdersPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            checked: true
-        }
-    }
-
     componentDidMount() {
 
     }
 
     render() {
         return (
-            <>
+            <SellerDashboardNavWrapper>
+                <TextField variant="outlined" label="Search" />
+                <NButton title="Search" />
                 <RowContainer>
                     <LabelContainer labelText="11/20/2020 - Today">
                         <Image src='https://www.interfacemedia.com/media/2350/img-vr-tilt-brush-website-hero-shot.jpg' />
@@ -36,34 +35,8 @@ class SellerDashboardOrdersPage extends React.Component {
                     </Status>
                     <NavigationArrow to='/home' />
                 </RowContainer>
-
-
-                <RowContainer>
-                    <Image src='https://www.interfacemedia.com/media/2350/img-vr-tilt-brush-website-hero-shot.jpg' />
-                    <OrderDescription
-                        order='100333'
-                        title='Hayley Leibson'
-                        content={['Lorem ipsum dolor sit amet, consectetur adipiscing elit.']}
-                    />
-                    <Price flexGrow="1">
-                        100$
-                    </Price>
-                </RowContainer>
-
-
-                <RowContainer>
-                    <Image src='https://www.interfacemedia.com/media/2350/img-vr-tilt-brush-website-hero-shot.jpg' />
-                    <ToggleVisibility
-                        text="IS VISIBLE"
-                        checked={this.state.checked}
-                        toggleChecked={() => { this.setState({ checked: !this.state.checked }) }}
-                    />
-                    <SoldAndQuantity sold={44} quantity={99} />
-                    <Price>
-                        100$
-                    </Price>
-                </RowContainer>
-            </>
+                <Pagination count={10} size="large" />
+            </SellerDashboardNavWrapper>
         );
     }
 }
