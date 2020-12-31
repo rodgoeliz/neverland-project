@@ -2,14 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Layout from 'components/layouts/seller/dashboard/SellerDashboardOrdersPage';
-import { getSellerOrders, getAlgoliaSearchClient } from 'actions';
+import { getSellerOrders, getAlgoliaSearchClient, getAlgoliaSellerOrderIndex } from 'actions';
             
 class SellerDashboardProductsPageContainer extends React.Component {
 
     constructor(props) {
       super(props);
       this.state ={
-        currentPage: 0
+        currentPage: 0,
+        hitsPerPage : 10
       };
     }
 
@@ -26,14 +27,16 @@ class SellerDashboardProductsPageContainer extends React.Component {
     }
 
     render() {
-      console.log("algolia search", getAlgoliaSearchClient())
+      const filterQuery = `storeId.userId:${this.props.auth._id}`;
         return (
           <Layout 
             searchClient={getAlgoliaSearchClient()}
-            indexName="neverland_order_test"
+            indexName={getAlgoliaSellerOrderIndex()}
+            filterQuery={filterQuery}
             changePage={this.changePage.bind(this)}
             sellerOrders={this.props.seller.ordersCache}
             currentPage={this.state.currentPage}
+            hitsPerPage={this.state.hitsPerPage}
           />
         );
     }

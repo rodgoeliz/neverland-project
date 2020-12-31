@@ -231,3 +231,15 @@ export const getAlgoliaSearchClient = () => {
   return searchClient;
 }
 
+export const getAlgoliaSellerOrderIndex = () => {
+  console.log('node_env', process.env.NODE_ENV === 'development', (!process.env.NODE_ENV || process.env.NODE_NEV === 'development'))
+  if (!process.env.NODE_ENV) {
+    return 'neverland_order_test';
+  }
+  if (process.env.NODE_ENV === 'development') {
+    return 'neverland_order_test';
+  }
+  return 'neverland_order_prod';
+}
+
+

@@ -25,6 +25,7 @@ router.get('/algolia/load', async function (req, res) {
   let orders = await Order.find({})
     .populate('userId')
     .populate('orderInvoiceId')
+    .populate('storeId')
     .populate({path: 'paymentMethod', populate: 'billingAddress'})
     .populate('shippingAddressId');
   const transformedOrders = orders.map((order) => {

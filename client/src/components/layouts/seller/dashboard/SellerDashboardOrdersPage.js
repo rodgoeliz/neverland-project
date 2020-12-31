@@ -14,12 +14,12 @@ import SellerDashboardNavWrapper from 'components/layouts/seller/dashboard/Selle
 import NButton from 'components/UI/NButton';
 
 
-export default function SellerDashboardOrdersPage({ currentPage, sellerOrders, indexName, searchClient, changePage }) {
+export default function SellerDashboardOrdersPage({ currentPage, sellerOrders, indexName, filterQuery, searchClient, changePage }) {
         return (
             <SellerDashboardNavWrapper>
                 <TextField variant="outlined" label="Search" />
                 <NButton title="Search" />
-                <AlgoliaSearch hitComponent={OrderHit} indexName={indexName}  searchClient={searchClient} />
+                <AlgoliaSearch hitComponent={OrderHit} indexName={indexName} filterQuery={filterQuery} searchClient={searchClient} />
                 { sellerOrders ?
                     sellerOrders.slice(
                         // Page switching with the stat store.
