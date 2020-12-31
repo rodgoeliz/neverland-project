@@ -6,7 +6,7 @@ import styled from "styled-components";
 import arrow from "images/arrow.svg";
 
 
-const NavigationContiner = styled(Box)`
+const NavigationContainer = styled(Box)`
     height: 100%;
     width: 100px;
     display: flex;
@@ -17,9 +17,9 @@ const NavigationContiner = styled(Box)`
 export default function NavigationArrow({ to }) {
   return (
     <Link to={to}>
-      <NavigationContiner>
+      <NavigationContainer>
         <img src={arrow} height="50px" alt="" />
-      </NavigationContiner>
+      </NavigationContainer>
     </Link>
   );
 }
