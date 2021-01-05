@@ -18,7 +18,7 @@ export default class AlgoliaSearch extends React.Component {
   }
 
   render() {
-    const {indexName, searchClient, filterQuery, hitComponent, hitsPerPage} = this.props;
+    const {indexName, searchClient, filterQuery, hitComponent, hitsPerPage, filterAttribute} = this.props;
     return (
       <div>
         <InstantSearch 
@@ -29,7 +29,7 @@ export default class AlgoliaSearch extends React.Component {
           </div>
           <div>
             <ClearRefinements />
-            <RefinementList attribute="status" />
+            <RefinementList attribute={filterAttribute} />
             <Configure filters={filterQuery} hitsPerPage={hitsPerPage} />
           </div>
           <div>
