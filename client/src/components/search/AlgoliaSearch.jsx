@@ -10,7 +10,6 @@ import {
 } from 'react-instantsearch-dom';
 
 export default class AlgoliaSearch extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
