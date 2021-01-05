@@ -3,12 +3,15 @@ import {
   InstantSearch,
   Pagination,
   // ClearRefinements,
-  // RefinementList,
+  connectRefinementList,
   Configure,
   Hits,
   SearchBox
 } from 'react-instantsearch-dom';
 
+import CustomRefinementList from './CustomRefinementList';
+
+const RefinementList = connectRefinementList(CustomRefinementList);
 export default class AlgoliaSearch extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +24,7 @@ export default class AlgoliaSearch extends React.Component {
   }
 
   render() {
-    const { indexName, searchClient, filterQuery, hitComponent, hitsPerPage } = this.props;
+    const { indexName, searchClient, filterQuery, hitComponent, filterAttribute, hitsPerPage } = this.props;
     searchClient.clearCache()
     return (
       <div>
@@ -33,7 +36,7 @@ export default class AlgoliaSearch extends React.Component {
           </div>
           <div>
             {/* <ClearRefinements /> */}
-            {/* <RefinementList attribute={filterAttribute} /> */}
+            <RefinementList attribute={filterAttribute} />
             <Configure filters={filterQuery} hitsPerPage={hitsPerPage} />
           </div>
           <div>

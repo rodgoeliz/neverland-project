@@ -9,8 +9,8 @@ import arrow from "images/arrow.svg";
 // TODO: remove bg and make media queries for different screen resolutions
 const NavigationContainer = styled(Box)`
     height: 100%;
-    min-width: 150px; 
-    width: 150px; 
+    min-width: 100px; 
+    width: 100px; 
     display: flex;
     align-items: center;
     justify-content: center;
