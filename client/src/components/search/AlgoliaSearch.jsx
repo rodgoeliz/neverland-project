@@ -19,7 +19,6 @@ export default class AlgoliaSearch extends React.Component {
 
   render() {
     const {indexName, searchClient, filterQuery, hitComponent, hitsPerPage} = this.props;
-
     return (
       <div>
         <InstantSearch 

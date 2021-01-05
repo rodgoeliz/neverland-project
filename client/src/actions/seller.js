@@ -242,4 +242,14 @@ export const getAlgoliaSellerOrderIndex = () => {
   return 'neverland_order_prod';
 }
 
+export const getAlgoliaSellerProductIndex = () => {
+  console.log('node_env', process.env.NODE_ENV === 'development', (!process.env.NODE_ENV || process.env.NODE_NEV === 'development'))
+  if (!process.env.NODE_ENV) {
+    return 'dev_neverland_products';
+  }
+  if (process.env.NODE_ENV === 'development') {
+    return 'dev_neverland_products';
+  }
+  return 'neverland_products_prod';
+}
 

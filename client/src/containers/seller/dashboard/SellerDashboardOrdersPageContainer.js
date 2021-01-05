@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Layout from 'components/layouts/seller/dashboard/SellerDashboardOrdersPage';
 import { getSellerOrders, getAlgoliaSearchClient, getAlgoliaSellerOrderIndex } from 'actions';
             
-class SellerDashboardProductsPageContainer extends React.Component {
+class SellerDashboardOrdersPageContainer extends React.Component {
 
     constructor(props) {
       super(props);
@@ -34,7 +34,7 @@ class SellerDashboardProductsPageContainer extends React.Component {
             indexName={getAlgoliaSellerOrderIndex()}
             filterQuery={filterQuery}
             changePage={this.changePage.bind(this)}
-            sellerOrders={this.props.seller.ordersCache}
+            sellerProducts={this.props.seller.ordersCache}
             currentPage={this.state.currentPage}
             hitsPerPage={this.state.hitsPerPage}
           />
@@ -47,4 +47,4 @@ const mapStateToProps = state => ({
     seller: state.seller
 });
 
-export default connect(mapStateToProps, { getSellerOrders, getAlgoliaSearchClient })( SellerDashboardProductsPageContainer );
+export default connect(mapStateToProps, { getSellerOrders, getAlgoliaSearchClient })( SellerDashboardOrdersPageContainer );

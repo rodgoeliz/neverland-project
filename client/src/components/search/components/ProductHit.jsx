@@ -1,34 +1,31 @@
 import React from 'react';
 
-import { OrderDescription, LabelContainer, NavigationArrow, RowContainer, Price, Status } from 'components/UI/Row'
+import { OrderDescription, LabelContainer, NavigationArrow, RowContainer, Status } from 'components/UI/Row'
 
 export default class ProductHit extends React.Component{
   constructor(props) {
    super(props);
-   this.onClickOrder = this.onClickOrder.bind(this);
+   this.onClickProduct = this.onClickProduct.bind(this);
   }
 
   onClickProduct() {
-    console.log("CLICK ORDEAR")
+    console.log("CLICK Product")
   }
 
   render() {
     const { hit }  = this.props;
-    const order = hit;
+    const product = hit;
     return (
       <RowContainer onClick={this.onClickOrder}>
-        <LabelContainer labelText={order.createdAt}>
+        <LabelContainer labelText={product.createdAt}>
         {/* <Image src={product.imageURLs[0]} /> */}
         <OrderDescription
-          order={order._id}
-          title={order.userId ? order.userId.name : 'User name'}
+          order={product._id}
+          title={product.title ? product.title: 'Product'}
           />
-            <Price>
-              {order.orderInvoiceId.price.value} {order.orderInvoiceId.price.currency}
-            </Price>
-            </LabelContainer>
+        </LabelContainer>
             <Status>
-              {order.status} 
+              {product.title} 
             </Status>
             <NavigationArrow to='/home' />
       </RowContainer>
