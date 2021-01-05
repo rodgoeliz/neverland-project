@@ -183,7 +183,7 @@ class App extends Component {
                     <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shipping" authenticated={this.state.authenticated} component={SellerDashboardShippingPage} />
                     <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/orders" authenticated={this.state.authenticated} component={SellerDashboardOrdersPageContainer} />
                     <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/products" authenticated={this.state.authenticated} component={SellerDashboardProductsPageContainer} />
-
+                    <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/product/:productId" authenticated={this.state.authenticated} component={AddProductView} />
                     <Route exact path="/privacy" component={PrivacyPolicy} />
                     <Route exact path="/download/neverland" component={DownloadNeverland} />
                     <Route exact path="/waitlist/user" component={NeverlandWaitlist} />

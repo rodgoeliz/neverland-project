@@ -27,7 +27,7 @@ export default class ProductHit extends React.Component{
             <Status>
               {product.title} 
             </Status>
-            <NavigationArrow to='/home' />
+            <NavigationArrow to={`/seller/dashboard/product/${product._id}`} />
       </RowContainer>
 
       )

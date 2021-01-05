@@ -164,7 +164,12 @@ class AddProductView extends Component {
     }
 
     // means we are editing a product, so we must pull it
-    const passedProductId = this.props.productId; // ? this.props.productId : params.productId;
+    let passedProductId = this.props.productId; // ? this.props.productId : params.productId;
+    if (this.props && this.props.match) {
+      const { match: { params } } = this.props;
+      passedProductId = params.productId;
+    }
+    console.log("passed product id: ", passedProductId)
     if (passedProductId) {
       this.setState(
         {
@@ -172,6 +177,7 @@ class AddProductView extends Component {
         },
         async () => {
           const sellerProduct = await this.props.loadSellerProduct({ productId: passedProductId });
+          console.log("SELLER PRODUCT: ", sellerProduct)
           const transformedProductFD = transformProductToFormData(sellerProduct);
           this.setState({
             formData: transformedProductFD,

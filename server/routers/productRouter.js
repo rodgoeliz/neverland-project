@@ -7,7 +7,10 @@ var ProductTag = require('../models/ProductTag');
 var NavigationItem = require('../models/NavigationItem');
 var ProductVariation = require('../models/ProductVariation');
 var ProductSearchMetaData = require('../models/ProductSearchMetaData');
+const { getEnvVariable } = require("../utils/envWrapper");
 var ProductVariationOption = require('../models/ProductVariationOption');
+const algoliasearch = require("algoliasearch");
+const algoliaClient = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
 var RecentlyViewedProduct = require('../models/RecentlyViewedProducts');
 var FavoriteProduct = require('../models/FavoriteProduct');
 var Store = require('../models/Store');
@@ -71,6 +74,34 @@ router.get('/favorite/get/list', async function(req, res) {
       success: false,
       error: error
     });
+  }
+});
+router.get('/algolia/load', async function (req, res) {
+  console.log("Uploading orders to algolia....")
+  let orders = await Product.find({});
+  const transformedOrders = orders.map((order) => {
+    try {
+      let object = order.toObject();
+      object.objectID = order._id;
+      return object;
+    } catch (error) {
+      console.log(error)
+    }
+  });
+  console.log(transformedOrders.length)
+  try {
+    console.log("initializing " + getEnvVariable('ALGOLIA_PRODUCT_INDEX'))
+    const index = algoliaClient.initIndex(getEnvVariable('ALGOLIA_PRODUCT_INDEX'));
+    index.saveObjects(transformedOrders, {'autoGenerateObjectIDIfNotExist': true})
+      .then(({objectIDs}) => {
+        console.log("Loaded products into algolia...")
+      }).catch(err => {
+        // log error
+        console.log("error updating to algolia order index: ", err)
+      });
+
+  } catch (error) {
+    console.log(error)
   }
 });
 
@@ -1106,8 +1137,6 @@ router.get('/getMany', async function(req, res, next) {
 
 //change to getOne
 router.get('/get', async function(req, res, next) {
-	console.log("Get product")
-	console.log(req.query)
 	let productId = req.query.productId;
 	let product = await Product.findOne({_id: productId})
 		.populate({
