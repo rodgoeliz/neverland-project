@@ -21,6 +21,7 @@ class SellerDashboardShippingPage extends React.Component {
       edits: {},
       formData: {
       },
+      existingProfiles: [],
       errors: {
         edits: {}
       }

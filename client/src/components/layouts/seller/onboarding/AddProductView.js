@@ -531,6 +531,7 @@ class AddProductView extends Component {
 
   onCloseView() {
     if (this.props.onClose) {
+      console.log("ON CLOSE function")
       this.props.onClose();
     } else {
       window.location.reload();

@@ -9,8 +9,10 @@ import { ThemeProvider } from 'styled-components';
 
 import './App.scss';
 
+import SellerDashboardAddOrEditProductPageContainer from "containers/seller/dashboard/SellerDashboardAddOrEditProductPageContainer";
 import SellerDashboardProductsPageContainer from 'containers/seller/dashboard/SellerDashboardProductsPageContainer';
 import SellerDashboardOrdersPageContainer from 'containers/seller/dashboard/SellerDashboardOrdersPageContainer';
+import SellerDashboardShippingPage from "components/layouts/seller/dashboard/SellerDashboardShippingPage";
 
 import NeverlandHome from 'components/layouts/NeverlandHome';
 import NeverlandOurStory from 'components/layouts/NeverlandOurStory';
@@ -38,10 +40,8 @@ import SellerOnboardingReAuthWebPage from "components/layouts/seller/onboarding/
 import SellerOnboardingPendingActivationPage from "components/layouts/seller/onboarding/SellerOnboardingPendingActivationPage";
 import SellerOnboardingMainRoutingPage from "components/layouts/seller/onboarding/SellerOnboardingMainRoutingPage";
 import SellerDashboardMainPage from "components/layouts/seller/dashboard/SellerDashboardMainPage";
-
 import SellerDashboardShopPage from "components/layouts/seller/dashboard/SellerDashboardShopPage";
 import SellerLoadingPage from "components/layouts/seller/onboarding/SellerLoadingPage";
-import SellerDashboardShippingPage from "components/layouts/seller/dashboard/SellerDashboardShippingPage";
 import BrandStyles from 'components/BrandStyles';
 
 import store from './store/store';
@@ -183,7 +183,7 @@ class App extends Component {
                     <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shipping" authenticated={this.state.authenticated} component={SellerDashboardShippingPage} />
                     <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/orders" authenticated={this.state.authenticated} component={SellerDashboardOrdersPageContainer} />
                     <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/products" authenticated={this.state.authenticated} component={SellerDashboardProductsPageContainer} />
-                    <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/product/:productId" authenticated={this.state.authenticated} component={AddProductView} />
+                    <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/product/:productId" authenticated={this.state.authenticated} component={SellerDashboardAddOrEditProductPageContainer} />
                     <Route exact path="/privacy" component={PrivacyPolicy} />
                     <Route exact path="/download/neverland" component={DownloadNeverland} />
                     <Route exact path="/waitlist/user" component={NeverlandWaitlist} />

@@ -15,10 +15,14 @@ export default class AlgoliaSearch extends React.Component {
     this.state = {
 
     }
+    if (props.searchClient) {
+      props.searchClient.clearCache();
+    }
   }
 
   render() {
     const {indexName, searchClient, filterQuery, hitComponent, hitsPerPage, filterAttribute} = this.props;
+    searchClient.clearCache()
     return (
       <div>
         <InstantSearch 

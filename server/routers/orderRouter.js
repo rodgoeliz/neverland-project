@@ -236,6 +236,8 @@ router.get('/get', async function(req, res) {
   let order = await Order.findOne({_id: orderId})
     .populate('paymentMethod')
     .populate('storeId')
+    .populate('shippingAddressId')
+    .populate('billingAddress')
     .populate({
       path: 'bundleId',
       populate: {
