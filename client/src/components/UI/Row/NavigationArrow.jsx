@@ -8,7 +8,8 @@ import arrow from "images/arrow.svg";
 
 const NavigationContainer = styled(Box)`
     height: 100%;
-    width: 100px;
+    min-width: 150px; 
+    width: 150px; 
     display: flex;
     align-items: center;
     justify-content: center;

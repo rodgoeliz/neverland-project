@@ -3,9 +3,9 @@ import styled from "styled-components";
 
 export default styled(Box)`
   background-color: #FFFDFB;
-  height: 150px;
-  width: calc(100vw - 460px);
+  height: 180px;
+  width: calc(100vw - 540px);
   display: flex;
   justify-content: space-between;
-  margin-bottom: ${props => props.theme.spacing.one}px
+  margin-bottom: ${props => props.theme.spacing.three}px
 `;

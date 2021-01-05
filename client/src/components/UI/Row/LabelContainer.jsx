@@ -13,7 +13,7 @@ const LabelStyled = styled(Box)`
     width: 100%;
     font-weight: 700;
     line-height: 40px;
-    padding: 0 ${props => props.theme.spacing.one}px;
+    padding: 0 ${props => props.theme.spacing.two}px;
 `
 
 const LabelContentStyled = styled(Box)`
@@ -28,7 +28,7 @@ export default function LabelContainer({ children, labelText }) {
     return (
         <LabelContainerStyled>
             <LabelStyled>
-                {labelText}
+                {(new Date(labelText)).toLocaleDateString("en-US")}
             </LabelStyled>
             <LabelContentStyled>
                 {children}

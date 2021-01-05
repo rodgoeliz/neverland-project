@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { OrderDescription, LabelContainer, NavigationArrow, RowContainer, Status } from 'components/UI/Row'
+import { OrderDescription, LabelContainer, NavigationArrow, RowContainer, Status, Image } from 'components/UI/Row'
 
 export default class ProductHit extends React.Component{
   constructor(props) {
@@ -18,7 +18,7 @@ export default class ProductHit extends React.Component{
     return (
       <RowContainer onClick={this.onClickOrder}>
         <LabelContainer labelText={product.createdAt}>
-        {/* <Image src={product.imageURLs[0]} /> */}
+        <Image src={product.imageURLs && product.imageURLs[0]} />
         <OrderDescription
           order={product._id}
           title={product.title ? product.title: 'Product'}
