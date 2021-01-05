@@ -17,8 +17,6 @@ import NButton from 'components/UI/NButton';
 export default function SellerDashboardOrdersPage({ currentPage, sellerOrders, indexName, filterQuery, searchClient, changePage }) {
         return (
             <SellerDashboardNavWrapper>
-                <TextField variant="outlined" label="Search" />
-                <NButton title="Search" />
                 <AlgoliaSearch hitComponent={OrderHit} indexName={indexName} filterQuery={filterQuery} searchClient={searchClient} />
                 { sellerOrders ?
                     sellerOrders.slice(
@@ -46,7 +44,6 @@ export default function SellerDashboardOrdersPage({ currentPage, sellerOrders, i
                         </RowContainer>
                     )) : <TextField> Nothing exists </TextField>
                 }
-                <Pagination count={10} size="large" onChange={changePage} />
             </SellerDashboardNavWrapper>
         );
     }
