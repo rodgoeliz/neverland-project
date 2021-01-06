@@ -6,34 +6,45 @@ module.exports = ({ orderId, products, currentOrder }) => {
           <meta charset="utf-8">
           <title>Order ${orderId}</title>
           <style>
+            .orderDetails {
 
+            }
+
+            .shippingContainer {
+               display: flex;
+            }
+
+            .shippingColumn {
+               display: flex;
+               flex-direction: column;
+            }
           </style>
        </head>
        <body>
+       <h1>Order# ${orderId}</h1>
+       <div
+          class="orderDetails"
+       >
+          <div class="MuiCardContent-root">
+          <div class="shippingContainer">
+             <div class="shippingColumn">
+                <strong>Billing Address</strong>
+                <span>${currentOrder.billingAddress.addressCountry}</span>
+                <span>${currentOrder.billingAddress.addressState}</span>
+                <span>${currentOrder.billingAddress.addressLine1}</span>
+             </div>
+             <div class="shippingColumn">
+                <strong">Billing Address</strong>
+                <span>${currentOrder.billingAddress.addressCountry}</span>
+                <span>${currentOrder.billingAddress.addressState}</span>
+                <span>${currentOrder.billingAddress.addressLine1}</span>
+             </div>
+          </div>
+          </div>
+       </div>
+
        ${products.map(product => (
-      `
-      <h1>Order# ${orderId}</h1>
-      <div
-         class="MuiPaper-root MuiCard-root sc-bBXqnf bfSAfY MuiPaper-elevation1 MuiPaper-rounded"
-      >
-         <div class="MuiCardContent-root">
-         <div class="sc-iwyYcG edtAEI">
-         <div class="sc-cxFLnm bqwsBM">
-            <strong class="sc-lmoMRL ePAGas">Billing Address</strong>
-            <span>${currentOrder.billingAddress.addressCountry}</span>
-            <span>${currentOrder.billingAddress.addressState}</span>
-            <span>${currentOrder.billingAddress.addressLine1}</span>
-         </div>
-         <div class="sc-cxFLnm bqwsBM">
-            <strong class="sc-lmoMRL ePAGas">Billing Address</strong>
-            <span>${currentOrder.billingAddress.addressCountry}</span>
-            <span>${currentOrder.billingAddress.addressState}</span>
-            <span>${currentOrder.billingAddress.addressLine1}</span>
-         </div>
-         </div>
-         </div>
-      </div>
-    
+      `    
             <div class="MuiBox-root MuiBox-root-5 sc-kEjbxe glGZIs">
                <div class="MuiBox-root MuiBox-root-6 sc-pFZIQ bfoFZq">
                   <img src="${product.imageURLs.length && product.imageURLs[0]}" style="width:100%; max-width:156px;" alt="">
@@ -46,6 +57,41 @@ module.exports = ({ orderId, products, currentOrder }) => {
             </div>
             `
    ))}
+
+         <table cellpadding="0" cellspacing="0" width="100%">
+            <tr class="information">
+               <td>
+                  Subtotal
+               </td>
+               <td>
+                  ${currentOrder.orderInvoiceId.price.currency} ${currentOrder.orderInvoiceId.subtotal}
+               </td>
+            </tr>
+            <tr class="information">
+               <td>
+                  Services
+               </td>
+               <td>
+                  ${currentOrder.orderInvoiceId.price.currency} ${currentOrder.orderInvoiceId.surcharges}
+               </td>
+            </tr>      
+            <tr class="information">
+               <td>
+               S&amp;H
+               </td>
+               <td>
+               ${currentOrder.orderInvoiceId.price.currency} ${currentOrder.orderInvoiceId.shipping}
+               </td>
+            </tr>      
+            <tr class="information">
+               <td>
+                  Total
+               </td>
+               <td>
+                  ${currentOrder.orderInvoiceId.price.currency} ${currentOrder.orderInvoiceId.total}
+               </td>
+            </tr>
+         </table>
        </body>
     </html>
     `;
