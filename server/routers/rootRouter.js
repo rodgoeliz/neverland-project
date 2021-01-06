@@ -20,7 +20,7 @@ const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADM
 const index = client.initIndex("dev_neverland_products");
 
 
-router.post('/test-data/init/algolia', async function(req, res, next) {
+router.post('/test-data/init/algolia', async function (req, res, next) {
   console.log("ROOT ROUTER TEST")
   /*index.saveObjects(products, {'autoGenerateObjectIDIfNotExist': true})
     .then(({objectIDs}) => {
@@ -31,7 +31,7 @@ router.post('/test-data/init/algolia', async function(req, res, next) {
     });*/
 });
 
-router.post('/test-data/init', async function(req, res, next) {
+router.post('/test-data/init', async function (req, res, next) {
   let now = new Date();
 
   // todo update store id in user
@@ -40,7 +40,7 @@ router.post('/test-data/init', async function(req, res, next) {
   for (var idx in users) {
     let user = users[idx];
     userHandleToOldUser[user.id] = user;
-    let userObj = await User.findOne({email: user.email});
+    let userObj = await User.findOne({ email: user.email });
     if (userObj) {
       userHandleToUserId[user.id] = userObj;
     } else {
@@ -77,7 +77,7 @@ router.post('/test-data/init', async function(req, res, next) {
   let productHandleToIdMap = {};
   let productHandleToOldProductMap = {};
   let toAlgoliaImport = [];
-  for (var idx in products)  {
+  for (var idx in products) {
     let product = products[idx];
     productHandleToOldProductMap[product.handle] = product;
     let newId = mongoose.Types.ObjectId();
@@ -85,7 +85,7 @@ router.post('/test-data/init', async function(req, res, next) {
     let tagIds = []
     for (var jdx in tagHandles) {
       let tagHandle = tagHandles[jdx];
-      let tag = await ProductTag.findOne({handle: tagHandle});
+      let tag = await ProductTag.findOne({ handle: tagHandle });
       if (tag) {
         tagIds.push(tag);
       } else {
@@ -145,15 +145,15 @@ router.post('/test-data/init', async function(req, res, next) {
   console.log(productHandleToIdMap);
 
   console.log("Import to algolia...")
-  index.saveObjects(toAlgoliaImport, {'autoGenerateObjectIDIfNotExist': true})
-    .then(({objectIDs}) => {
+  index.saveObjects(toAlgoliaImport, { 'autoGenerateObjectIDIfNotExist': true })
+    .then(({ objectIDs }) => {
       console.log("Saved objects")
-      res.json({success: true})
+      res.json({ success: true })
     }).catch(err => {
       console.log(err)
-      res.json({success: false})
+      res.json({ success: false })
     });
-  console.log("Generated all the stores...")   
+  console.log("Generated all the stores...")
   let storeHandletoStore = {};
   // create stores
   for (var idx in stores) {
@@ -175,11 +175,11 @@ router.post('/test-data/init', async function(req, res, next) {
     let storeObj = await newStoreSchema.save();
     storeHandletoStore[store.handle] = storeObj;
   }
-  console.log("Generated all the stores...")   
+  console.log("Generated all the stores...")
   console.log(storeHandletoStore)
   // update user and products with the right store id
-  for (var key in userHandleToUserId)  {
-    let user = userHandleToUserId[key] ;
+  for (var key in userHandleToUserId) {
+    let user = userHandleToUserId[key];
     let oldUser = userHandleToOldUser[key];
     user.storeId = storeHandletoStore[oldUser.storeId];
     await user.save();
@@ -194,102 +194,102 @@ router.post('/test-data/init', async function(req, res, next) {
   }
   res.json({
     success: true
-  })     
+  })
 });
 
 /**
  Load navigation, default payment method, default billing address, default shipping address
  **/
-router.get('/init', async function(req, res, next) {
-	console.log("init app")
+router.get('/init', async function (req, res, next) {
+  console.log("init app")
 
-	let userId = req.query.userId;
-	let menuHandle = req.query.menuHandle;
-	let allInitPromises = [];
-	console.log("init app for")
-	console.log(userId)
-	let menu = await NavigationMenu
-		.findOne({handle: menuHandle})
-		.then(async (menu) => {
-			let menuItems = await NavigationItem.find({menuId: menu._id});
-			return {
-				menu: menu,
-				menuItems: menuItems
-			};
-		});
-	allInitPromises.push(menu);
+  let userId = req.query.userId;
+  let menuHandle = req.query.menuHandle;
+  let allInitPromises = [];
+  console.log("init app for")
+  console.log(userId)
+  let menu = await NavigationMenu
+    .findOne({ handle: menuHandle })
+    .then(async (menu) => {
+      let menuItems = await NavigationItem.find({ menuId: menu._id });
+      return {
+        menu: menu,
+        menuItems: menuItems
+      };
+    });
+  allInitPromises.push(menu);
 
 
-	// Find default payment method for user
-	let paymentMethod = await PaymentMethod.findOne({
-		userId,
-		isDefault: true,
-		isActive: true
-	}).populate('card').populate('billingAddress');
-	allInitPromises.push(paymentMethod);
+  // Find default payment method for user
+  let paymentMethod = await PaymentMethod.findOne({
+    userId,
+    isDefault: true,
+    isActive: true
+  }).populate('card').populate('billingAddress');
+  allInitPromises.push(paymentMethod);
 
-	// Find default shipping address
-	let shippingAddress = await Address.findOne({
-		isDefault: true,
-		userId: userId,
-		isShippingAddress: true,
-		isActive: true
-	}).populate('userId');
-	allInitPromises.push(shippingAddress);
+  // Find default shipping address
+  let shippingAddress = await Address.findOne({
+    isDefault: true,
+    userId: userId,
+    isShippingAddress: true,
+    isActive: true
+  }).populate('userId');
+  allInitPromises.push(shippingAddress);
 
-	// find all shipping addresses
-	let allShippingAddresses = await Address.find({
-		isActive: true,
-		isShippingAddress: true,
-		userId: userId
-	}).populate('userId');
-	allInitPromises.push(allShippingAddresses);
+  // find all shipping addresses
+  let allShippingAddresses = await Address.find({
+    isActive: true,
+    isShippingAddress: true,
+    userId: userId
+  }).populate('userId');
+  allInitPromises.push(allShippingAddresses);
 
-	// find all payment methods
-	let allPaymentMethods = await PaymentMethod.find({
-		isActive: true,
-		userId
-	}).populate('card').populate('billingAddress');
-	allInitPromises.push(allPaymentMethods);
+  // find all payment methods
+  let allPaymentMethods = await PaymentMethod.find({
+    isActive: true,
+    userId
+  }).populate('card').populate('billingAddress');
+  allInitPromises.push(allPaymentMethods);
 
-	// get user orders
-	let allOrders = await Order.find({
-		userId
-	}).populate('storeId').populate('orderInvoiceId').populate('bundleId');
-	allInitPromises.push(allOrders);
+  // get user orders
+  let allOrders = await Order.find({
+    userId
+  }).populate('storeId').populate('orderInvoiceId').populate('bundleId');
+  allInitPromises.push(allOrders);
 
-	let user = await User.findOne({
-		_id: userId
-	});
-	allInitPromises.push(user);
-	Promise.all(allInitPromises).then((results) => {
-		// parse results and return to client
-		let navigationMenu = results[0];
-		let paymentMethod = results[1];
-		let shippingAddress = results[2];
-		let allShippingAddresses = results[3];
-		let allPaymentMethods = results[4];
-		let allOrders = results[5];
-		let user = results[6]
-		console.log("Orders")
-		console.log(allOrders)
-		console.log("USER is profile complete: ", user.isProfileComplete)
-		console.log("Onboarding step id: ", user.onboardingStepId)
-		res.json({
-			success: true,
-			payload: {
-				navigationMenu: navigationMenu,
-				shippingAddress: shippingAddress,
-				paymentMethod: paymentMethod,
-				allShippingAddresses: allShippingAddresses,
-				allPaymentMethods: allPaymentMethods,
-				allOrders: allOrders,
-				isProfileComplete: user.isProfileComplete,
-				stepId: user.onboardingStepId,
+  let user = await User.findOne({
+    _id: userId
+  });
+  allInitPromises.push(user);
+  Promise.all(allInitPromises).then((results) => {
+    // parse results and return to client
+    let navigationMenu = results[0];
+    let paymentMethod = results[1];
+    let shippingAddress = results[2];
+    let allShippingAddresses = results[3];
+    let allPaymentMethods = results[4];
+    let allOrders = results[5];
+    let user = results[6]
+    console.log("Orders")
+    console.log(allOrders)
+    console.log("USER is profile complete: ", user.isProfileComplete)
+    console.log("Onboarding step id: ", user.onboardingStepId)
+    res.json({
+      success: true,
+      payload: {
+        navigationMenu: navigationMenu,
+        shippingAddress: shippingAddress,
+        paymentMethod: paymentMethod,
+        allShippingAddresses: allShippingAddresses,
+        allPaymentMethods: allPaymentMethods,
+        allOrders: allOrders,
+        isProfileComplete: user.isProfileComplete,
+        stepId: user.onboardingStepId,
         isSeller: user.isSeller
-			}
-		})
-	});
+      }
+    })
+  });
 });
 
 module.exports = router;

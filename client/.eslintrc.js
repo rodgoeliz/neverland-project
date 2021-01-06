@@ -25,6 +25,7 @@ module.exports = {
     document: true,
     FormData: true,
     FileReader: true,
+    Blob: true,
   },
   rules: {
     'import/no-extraneous-dependencies': 'off',

@@ -12,6 +12,9 @@ var OrderInvoice = require('../models/OrderInvoice');
 var OrderIntent = require('../models/OrderIntent');
 var Order = require('../models/Order');
 var OrderProductItem = require('../models/OrderProductItem');
+const pdf = require('html-pdf');
+const fs = require('fs');
+const orderTemplate = require('../documents/orderTemplate');
 const Logger = require('../utils/errorLogger');
 const algoliasearch = require("algoliasearch");
 const algoliaClient = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
@@ -499,5 +502,24 @@ router.post('/update', async function (req, res) {
 router.post('/updateTracking', async function (req, res) {
 
 });
+
+
+router.post('/order-pdf', (req, res) => {
+  pdf.create(orderTemplate(req.body)).toFile(`${__dirname}/documents/order.${req.query.id}.pdf`, (err) => {
+    if (err) {
+      res.send(Promise.reject());
+    }
+    res.send(Promise.resolve());
+  });
+});
+
+router.get('/order-pdf', (req, res) => {
+  res.sendFile(`${__dirname}/documents/order.${req.query.id}.pdf`);
+})
+
+router.delete('/order-pdf', (req, res) => {
+  fs.unlinkSync(`${__dirname}/documents/order.${req.query.id}.pdf`);
+  res.send({});
+})
 
 module.exports = router;

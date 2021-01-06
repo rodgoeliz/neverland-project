@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Typography } from '@material-ui/core';
 
-import { getOrderById, getProductById } from 'actions';
+import { createOrderPdf, getOrderById, getProductById } from 'actions';
 import { RowContainer, Image, OrderDescription, Price } from 'components/UI/Row';
 import Invoice from 'components/UI/Invoice';
 import ShippingDetails from 'components/UI/ShippingDetails';
@@ -46,6 +46,11 @@ export default function SellerDashboardSingleOrderPage() {
       (productId) => dispatch(getProductById(productId))
     ), [currentOrder])
 
+  const handlePrintInvoice = () => {
+    const products = currentOrder.storeId.productIds.map(id => productsCache[id]);
+    dispatch(createOrderPdf({ orderId, products, currentOrder }));
+  }
+
   return (
     <SellerDashboardNavWrapper>
 
@@ -55,6 +60,8 @@ export default function SellerDashboardSingleOrderPage() {
 
       <OrderDetails currentOrder={currentOrder} orderId={orderId} />
 
+      <Typography variant='h1' component='h2'>Products</Typography>
+      <button onClick={handlePrintInvoice}>Print invoice</button>
       {/* Display products in order */}
       {currentOrder.storeId?.productIds.map((productId) => (
         // Products data taken from products reducer, ids from order (seller reducer)
