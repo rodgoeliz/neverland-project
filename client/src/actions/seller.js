@@ -226,6 +226,20 @@ export const changeSellerPage = (page) => (dispatch) => {
   });
 };
 
+export const getOrderById = (orderId) => async (dispatch) => {
+  try {
+    const response = await Api.get(`/api/order/get?id=${orderId}`);
+    if (response.data.success) {
+      dispatch({
+        type: actionTypes.seller.UPDATE_SINGLE_ORDER,
+        payload: response.data.payload
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
 export const getAlgoliaSearchClient = () => {
   return searchClient;
