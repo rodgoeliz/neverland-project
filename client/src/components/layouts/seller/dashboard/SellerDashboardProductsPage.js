@@ -8,14 +8,15 @@ import SellerDashboardNavWrapper from 'components/layouts/seller/dashboard/Selle
 
 
 export default function SellerDashboardProductsPage({ indexName, searchClient }) {
-        return (
-            <SellerDashboardNavWrapper>
-                <AlgoliaSearch 
-                  filterAttribute="tagHandles" 
-                  hitComponent={ProductHit} 
-                  indexName={indexName} 
-                  searchClient={searchClient} />
-            </SellerDashboardNavWrapper>
-        );
-    }
+    return (
+        <SellerDashboardNavWrapper>
+            <AlgoliaSearch
+                filterAttribute="tagHandles"
+                hitComponent={ProductHit}
+                indexName={indexName}
+                searchClient={searchClient}
+            />
+        </SellerDashboardNavWrapper>
+    );
+}
 

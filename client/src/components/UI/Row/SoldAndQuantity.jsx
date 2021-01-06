@@ -14,6 +14,9 @@ const CounterContainer = styled.div`
     justify-content: end;
     align-items: center;
     font-weight: 700;
+    &:first-child {
+        margin-bottom: ${props => props.theme.spacing.two}px;
+    }
 `
 
 const CounterBox = styled.div`

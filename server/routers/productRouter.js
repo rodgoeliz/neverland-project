@@ -15,7 +15,7 @@ var RecentlyViewedProduct = require('../models/RecentlyViewedProducts');
 var FavoriteProduct = require('../models/FavoriteProduct');
 var Store = require('../models/Store');
 var ProductTag = require('../models/ProductTag');
-const {sendEmail} = require("../email/emailClient");
+const { sendEmail } = require("../email/emailClient");
 var Mailchimp = require('mailchimp-api-v3')
 var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
 const mongoose = require('mongoose');
@@ -29,167 +29,167 @@ const s3 = new AWS.S3({
 	secretAccessKey: 'HCf4LX2aihuWLESvcRvospHdElKtKMLhj1jme6Tl'
 });
 
-router.get('/meta-data/get/list', async function(req, res) {
-  const type = req.query.type;
-  let query = {};
-  if (type) {
-    query = {type};
-  }
-  let prodMetaData = await ProductSearchMetaData.find(query);//.toArray();
-  if (!type) {
-    let byTypeMap = {};
-    for (var i in prodMetaData) {
-      let metaData = prodMetaData[i];
-      let type = metaData.type;
-      if (byTypeMap[type]) {
-        let exArr = byTypeMap[type];
-        exArr.push(metaData);
-        byTypeMap[type] = exArr;
-      } else {
-        byTypeMap[type] = [metaData];
-      }
-    }
-    res.json({
-      success: true,
-      payload: byTypeMap 
-    });
-  } else {
-    res.json({
-      success: true,
-      payload: prodMetaData
-    });
-  }
+router.get('/meta-data/get/list', async function (req, res) {
+	const type = req.query.type;
+	let query = {};
+	if (type) {
+		query = { type };
+	}
+	let prodMetaData = await ProductSearchMetaData.find(query);//.toArray();
+	if (!type) {
+		let byTypeMap = {};
+		for (var i in prodMetaData) {
+			let metaData = prodMetaData[i];
+			let type = metaData.type;
+			if (byTypeMap[type]) {
+				let exArr = byTypeMap[type];
+				exArr.push(metaData);
+				byTypeMap[type] = exArr;
+			} else {
+				byTypeMap[type] = [metaData];
+			}
+		}
+		res.json({
+			success: true,
+			payload: byTypeMap
+		});
+	} else {
+		res.json({
+			success: true,
+			payload: prodMetaData
+		});
+	}
 });
 
-router.get('/favorite/get/list', async function(req, res) {
-  let userId = req.query.userId;
-  try {
-    let products = await FavoriteProduct.find({userId});
-    res.json({
-      success: true,
-      payload: products
-    });
-  } catch(error) {
-    res.json({
-      success: false,
-      error: error
-    });
-  }
+router.get('/favorite/get/list', async function (req, res) {
+	let userId = req.query.userId;
+	try {
+		let products = await FavoriteProduct.find({ userId });
+		res.json({
+			success: true,
+			payload: products
+		});
+	} catch (error) {
+		res.json({
+			success: false,
+			error: error
+		});
+	}
 });
 router.get('/algolia/load', async function (req, res) {
-  console.log("Uploading orders to algolia....")
-  let orders = await Product.find({});
-  const transformedOrders = orders.map((order) => {
-    try {
-      let object = order.toObject();
-      object.objectID = order._id;
-      return object;
-    } catch (error) {
-      console.log(error)
-    }
-  });
-  console.log(transformedOrders.length)
-  try {
-    console.log("initializing " + getEnvVariable('ALGOLIA_PRODUCT_INDEX'))
-    const index = algoliaClient.initIndex(getEnvVariable('ALGOLIA_PRODUCT_INDEX'));
-    index.saveObjects(transformedOrders, {'autoGenerateObjectIDIfNotExist': true})
-      .then(({objectIDs}) => {
-        console.log("Loaded products into algolia...")
-      }).catch(err => {
-        // log error
-        console.log("error updating to algolia order index: ", err)
-      });
+	console.log("Uploading orders to algolia....")
+	let orders = await Product.find({});
+	const transformedOrders = orders.map((order) => {
+		try {
+			let object = order.toObject();
+			object.objectID = order._id;
+			return object;
+		} catch (error) {
+			console.log(error)
+		}
+	});
+	console.log(transformedOrders.length)
+	try {
+		console.log("initializing " + getEnvVariable('ALGOLIA_PRODUCT_INDEX'))
+		const index = algoliaClient.initIndex(getEnvVariable('ALGOLIA_PRODUCT_INDEX'));
+		index.saveObjects(transformedOrders, { 'autoGenerateObjectIDIfNotExist': true })
+			.then(({ objectIDs }) => {
+				console.log("Loaded products into algolia...")
+			}).catch(err => {
+				// log error
+				console.log("error updating to algolia order index: ", err)
+			});
 
-  } catch (error) {
-    console.log(error)
-  }
+	} catch (error) {
+		console.log(error)
+	}
 });
 
 router.post('/favorite/create', async function (req, res, next) {
-  let productId = req.body.productId;
-  let userId = req.body.userId;
-  try {
-    let existingProduct = await FavoriteProduct.findOne({userId, productId});
-    if (existingProduct) {
-      res.json({
-        success: true,
-        payload: existingProduct
-      });
-      return;
-    }
-    const newFavProd = await new FavoriteProduct({
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      productId,
-      userId
-    }).save();
-    res.json({
-      success: true,
-      payload: newFavProd
-    });
-  } catch (error) {
-    res.json({
-      success: false,
-      error: error
-    });
-  }
+	let productId = req.body.productId;
+	let userId = req.body.userId;
+	try {
+		let existingProduct = await FavoriteProduct.findOne({ userId, productId });
+		if (existingProduct) {
+			res.json({
+				success: true,
+				payload: existingProduct
+			});
+			return;
+		}
+		const newFavProd = await new FavoriteProduct({
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			productId,
+			userId
+		}).save();
+		res.json({
+			success: true,
+			payload: newFavProd
+		});
+	} catch (error) {
+		res.json({
+			success: false,
+			error: error
+		});
+	}
 });
 
-router.get('/test/updateAlgolia', async function(req, res, next) {
-  let action = req.query.action;
-  let id = req.query.id;
-  // creating a new object
-  let newProduct = new Product({
-      title: "Test Product",
-      description: "Test description for test product - algolia.",
-      handle: "test-product-alg",
-      inventoryAvailableToSell: 20,
-      inventoryInStock: 20,
-      imageURLs: [],
-      isVisible: true,
-      sku: 'sku',
-      width: 20,
-      height: 20,
-      weight: 10,
-      price: '10.99',
-      tagIds: ['5f890d6c801d1c0a3a071fd3','5f890d6c801d1c0a3a071fd0' ] 
-  });
-  let newProd = await newProduct.save();
-  if (action == 'create') {
-    console.log("Testing sync to create a new product", newProd._id)
-    res.json({
-      success: true
-    });
-  }
+router.get('/test/updateAlgolia', async function (req, res, next) {
+	let action = req.query.action;
+	let id = req.query.id;
+	// creating a new object
+	let newProduct = new Product({
+		title: "Test Product",
+		description: "Test description for test product - algolia.",
+		handle: "test-product-alg",
+		inventoryAvailableToSell: 20,
+		inventoryInStock: 20,
+		imageURLs: [],
+		isVisible: true,
+		sku: 'sku',
+		width: 20,
+		height: 20,
+		weight: 10,
+		price: '10.99',
+		tagIds: ['5f890d6c801d1c0a3a071fd3', '5f890d6c801d1c0a3a071fd0']
+	});
+	let newProd = await newProduct.save();
+	if (action == 'create') {
+		console.log("Testing sync to create a new product", newProd._id)
+		res.json({
+			success: true
+		});
+	}
 
-  if (action == 'update') {
-  console.log("Testing updating product...", id);
+	if (action == 'update') {
+		console.log("Testing updating product...", id);
 
-    let updates = {
-      $set: {
-        title: 'Updated Test Product',
-        tagIds: ['5f890ce8a9eace09fe5b7b59']
-      }
-    };
-    let product = await Product.findOneAndUpdate({_id: id}, updates, {new: true});
-  console.log("updated product....", product._id) 
-  }
+		let updates = {
+			$set: {
+				title: 'Updated Test Product',
+				tagIds: ['5f890ce8a9eace09fe5b7b59']
+			}
+		};
+		let product = await Product.findOneAndUpdate({ _id: id }, updates, { new: true });
+		console.log("updated product....", product._id)
+	}
 });
 
-router.post('/recentlyviewed/create', async function(req, res, next) {
+router.post('/recentlyviewed/create', async function (req, res, next) {
 	let userId = req.body.userId;
 	let productId = req.body.productId;
 	let now = new Date();
-  let existingRVP = await RecentlyViewedProduct.findOne({productId, userId});
-  if (existingRVP) {
-    res.json({
-      success: true,
-      payload: existingRVP
-    });
-    return;
-  }
+	let existingRVP = await RecentlyViewedProduct.findOne({ productId, userId });
+	if (existingRVP) {
+		res.json({
+			success: true,
+			payload: existingRVP
+		});
+		return;
+	}
 	let recentlyViewedProductSchema = new RecentlyViewedProduct({
-		createdAt:	now,
+		createdAt: now,
 		updatedAt: now,
 		userId: userId,
 		productId: productId
@@ -199,7 +199,7 @@ router.post('/recentlyviewed/create', async function(req, res, next) {
 			res.json({
 				success: true,
 				payload: result
-			})		
+			})
 		})
 		.catch((error) => {
 			res.json({
@@ -210,7 +210,7 @@ router.post('/recentlyviewed/create', async function(req, res, next) {
 });
 
 
-router.post('/tags/create', function(req, res, next) {
+router.post('/tags/create', function (req, res, next) {
 	let tags = req.body.tags;
 	let promises = tags.map((tag) => {
 		let handle = tag;
@@ -220,8 +220,8 @@ router.post('/tags/create', function(req, res, next) {
 			title: tag,
 			handle: handle
 		});
-		return new Promise ((resolve, reject) => {
-			newProductTag.save(function(err, productTag) {
+		return new Promise((resolve, reject) => {
+			newProductTag.save(function (err, productTag) {
 				if (err) {
 					reject(err);
 				}
@@ -234,18 +234,18 @@ router.post('/tags/create', function(req, res, next) {
 	});
 });
 
-router.post('/upload/file', async function(req, res, next) {
-	let files= Object.values(req.files);
+router.post('/upload/file', async function (req, res, next) {
+	let files = Object.values(req.files);
 	let type = req.body.fileType;
 	if (files.length > 0) {
 		files = files[0]
 	}
 	parseFileAndSave = async (file, type) => {
-		createProduct = async ( productJson) => {
+		createProduct = async (productJson) => {
 
 			let tags = productJson.tagIds;
 			//find all the tag ids
-			let allTags = await ProductTag.find({handle: {$in: tags}});
+			let allTags = await ProductTag.find({ handle: { $in: tags } });
 			let allTagIds = [];
 			if (allTags) {
 				allTagIds = allTags.map((tag) => {
@@ -253,7 +253,7 @@ router.post('/upload/file', async function(req, res, next) {
 				})
 			};
 			let storeHandle = productJson.storeId;
-			let store = await Store.findOne({handle: storeHandle});
+			let store = await Store.findOne({ handle: storeHandle });
 			let newProduct = new Product({
 				title: productJson.title,
 				description: productJson.description,
@@ -279,18 +279,18 @@ router.post('/upload/file', async function(req, res, next) {
 			return newProduct;
 
 		}
-		return new Promise(function(resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			// read file 
 			if (type === "json") {
 				let readFile = fs.readFileSync(file.path, 'utf8')
 				var jsonObj = JSON.parse(readFile);
-				jsonObj.map( async (productJson) => {
+				jsonObj.map(async (productJson) => {
 					let newProduct = await createProduct(productJson);
 					newProduct.save((err, data) => {
 					});
 				});
-			//	resolve();
-			} 
+				//	resolve();
+			}
 			if (type === "csv") {
 				const converter = csv()
 					.fromFile(file.path)
@@ -299,7 +299,7 @@ router.post('/upload/file', async function(req, res, next) {
 							let newProduct = createProduct(productJson);
 							newProduct.save((err, data) => {
 								console.log(err)
-								console.log("Saved product")	
+								console.log("Saved product")
 							});
 						});
 					});
@@ -309,29 +309,29 @@ router.post('/upload/file', async function(req, res, next) {
 	}
 
 	let allFilePromises = [];
-	for (var i = 0; i < files.length;i++) {
+	for (var i = 0; i < files.length; i++) {
 		allFilePromises.push(parseFileAndSave(files[i], type));
 	}
-	Promise.allSettled(allFilePromises).then(function(date, err) {
+	Promise.allSettled(allFilePromises).then(function (date, err) {
 	});
 });
 
 /**
  Updates an existing product. Based on FormData only because of image upload.
  */
-router.post('/update', async function(req, res, next) {
+router.post('/update', async function (req, res, next) {
 	//const form = formidable({multiples: true});
 	const uploadFileToS3 = (file, storeId, productId) => {
 		const fileContent = fs.readFileSync(file.path);
 		const params = {
 			Bucket: "enter-neverland",
-			Key: "product/"+storeId+"/"+productId+"/"+file.originalFilename,
+			Key: "product/" + storeId + "/" + productId + "/" + file.originalFilename,
 			ContentType: file.mimetype,
 			Body: fileContent
 		};
 		return s3.upload(params).promise();
 	}
-	const files= Object.values(req.files)
+	const files = Object.values(req.files)
 	let productId = req.body.productId;
 	let title = req.body.title;
 	let description = req.body.description;
@@ -339,9 +339,9 @@ router.post('/update', async function(req, res, next) {
 	let inventoryAvailableToSell = req.body.inventoryAvailable;
 	let storeId = req.body.storeId;
 	let tagIds = req.body.tagIds.split(',');
-	let product = await Product.findOne({_id: productId});
+	let product = await Product.findOne({ _id: productId });
 	if (!product) {
-		res.json({success: false});
+		res.json({ success: false });
 		return;
 	}
 
@@ -361,7 +361,7 @@ router.post('/update', async function(req, res, next) {
 	product.storeId = storeId;
 	var fileUploadPromises = [];
 	if (files.length == 0) {
-		product.save(function(err, result) {
+		product.save(function (err, result) {
 			res.json(result);
 			return;
 		});
@@ -370,17 +370,17 @@ router.post('/update', async function(req, res, next) {
 		files[0].map((file) => {
 			fileUploadPromises.push(uploadFileToS3(file, storeId, productId));
 		});
-		Promise.allSettled(fileUploadPromises).then(function(data) {
+		Promise.allSettled(fileUploadPromises).then(function (data) {
 			let newImageURLs = [];
 			for (let i = 0; i < data.length; i++) {
 				newImageURLs.push(data[i].value.Location);
 			}
 
 			product.imageURLs = product.imageURLs.concat(newImageURLs);
-			product.save(function(err, result) {
+			product.save(function (err, result) {
 				res.json(result);
 			})
-		}).catch(function(err) {
+		}).catch(function (err) {
 			console.log(err)
 		});
 	}
@@ -413,48 +413,267 @@ router.post('/update', async function(req, res, next) {
 		description
 	}
 **/
-router.post('/seller/create', async function(req, res, next) {
-  try {
+router.post('/seller/create', async function (req, res, next) {
+	try {
 
-	const files= Object.values(req.files)
+		const files = Object.values(req.files)
+		let formData = req.body;
+		let quantity = formData.productQuantity;
+		let price = formData.productPrice;
+		let sku = formData.productSKU;
+		let categorySelectedItems = formData.categories ? JSON.parse(formData.categories) : [];
+		let tagSelectedItems = formData.productTags ? JSON.parse(formData.productTags) : [];
+		let productPhotos = formData.productPhotos;
+		let description = formData.description;
+		let lightLevel = formData.lightLevel;
+		let benefit = formData.benefit;
+		let userLevel = formData.userLevel;
+		let style = formData.style;
+		let variations = formData.variations ? JSON.parse(formData.variations) : [];
+		let now = new Date();
+
+		let processingTime = formData.processingTime;
+		let colors = formData.colors;
+		let offerFreeShipping = formData.offerFreeShipping ? formData.offerFreeShipping : false;
+		let title = formData.title;
+		let originZipCode = formData.originZipCode;
+		let handlingFee = formData.handlingFee;
+		let vendorId = formData.userId;
+		let isArtificial = formData.isArtificial ? formData.isArtificial : false;
+		let isOrganic = formData.isOrganic ? formData.isOrganic : false;
+		let itemWeightLb = formData.itemWeightLb ? parseFloat(formData.itemWeightLb) : 0;
+		let itemWeightOz = formData.itemWeightOz ? parseFloat(formData.itemWeightOz) : 0;
+		let itemHeightIn = formData.itemHeightIn ? parseFloat(formData.itemHeightIn) : 0;
+		let itemWidthIn = formData.itemWidthIn ? parseFloat(formData.itemWidthIn) : 0;
+		let itemLengthIn = formData.itemLengthIn ? parseFloat(formData.itemLengthIn) : 0;
+		let productSKU = formData.productSKU;
+		let newProductId = mongoose.Types.ObjectId();
+		let storeId = formData.storeId ? formData.storeId : formData.store;
+		let isVisible = formData.isVisible ? formData.isVisible : false;
+		// search metadata, metaData.style..
+		let searchMetaData = null;
+		if (formData.metaData) {
+			searchMetaData = JSON.parse(formData.metaData);
+		}
+
+		const genHandle = (title) => {
+			return title.toLowerCase();
+		}
+
+		// upload image photos here...
+		// extract category tags, extract tag tags
+		const uploadFileToS3 = (file, storeId, productId) => {
+			const fileContent = fs.readFileSync(file.path);
+			const params = {
+				Bucket: "enter-neverland",
+				Key: "product/" + storeId + "/" + productId + "/" + file.originalFilename,
+				ContentType: file.mimetype,
+				Body: fileContent
+			};
+			return s3.upload(params).promise();
+		}
+		let variationPromises = [];
+		let variationIds = []
+		for (var idx in variations) {
+			let variation = variations[idx];
+			let optionIds = [];
+			for (var idx in variation.options) {
+				let option = variation.options[idx];
+				var optionId = mongoose.Types.ObjectId();
+				optionIds.push(optionId);
+				let priceValue = option.price ? option.price * 100 : 0;
+				let newVariationOptionSchema = new ProductVariationOption({
+					_id: optionId,
+					title: option.title,
+					handle: option.handle,
+					sku: option.sku,
+					isVisible: option.isVisible,
+					price: {
+						value: priceValue,
+						currency: 'USD'
+					},
+					quantity: option.quantity
+				});
+				variationPromises.push(newVariationOptionSchema.save());
+			}
+			let variationId = mongoose.Types.ObjectId();
+			variationIds.push(variationId);
+			let newVariationSchema = new ProductVariation({
+				_id: variationId,
+				createdAt: now,
+				udatedAt: now,
+				title: variation.title,
+				handle: variation.handle,
+				isPriceVaried: variation.isPriceVaried,
+				isSKUVaried: variation.isSKUVaried,
+				isQuantityVaried: variation.isQuantityVaried,
+				isVisible: variation.isVisible,
+				optionIds: optionIds
+			});
+			variationPromises.push(newVariationSchema.save());
+		}
+		var fileUploadPromises = [];
+		if (files.length > 0) {
+			files[0].map((file) => {
+				fileUploadPromises.push(uploadFileToS3(file, storeId, newProductId));
+			});
+		}
+		Promise.allSettled(fileUploadPromises).then(async function (data) {
+			console.log("Uploaded image files for product...", data)
+			let imageURLs = [];
+			for (let i = 0; i < data.length; i++) {
+				imageURLs.push(data[i].value.Location);
+			}
+			Promise.allSettled(variationPromises).then(async (results) => {
+				console.log("Uploaded image files for product...")
+				// find product tags
+				// find categories
+				tagSelectedItems = tagSelectedItems.map((item) => { return item._id });
+				categorySelectedItems = categorySelectedItems.map((item) => { return item._id });
+				let tagIds = await ProductTag.find({ _id: { $in: tagSelectedItems } });
+				let categories = await NavigationItem.find({ _id: { $in: categorySelectedItems } });
+				Promise.allSettled([tagIds, categories]).then(async (results) => {
+					let tags = results[0].value;
+					let categories = results[1].value;
+					let newProductMap = {
+						createdAt: now,
+						updatedAt: now,
+						title: title,
+						variationIds: variationIds,
+						tagIds: tags,
+						categoryIds: categories,
+						description: description,
+						originZipCode: originZipCode,
+						offerFreeShipping: offerFreeShipping,
+						handlingFee: handlingFee,
+						handle: genHandle(title),
+						inventoryInStock: quantity,
+						inventoryAvailableToSell: quantity,
+						isVisible: isVisible,
+						imageURLs: imageURLs,
+						processingTime: processingTime,
+						colors: colors,
+						benefit: benefit,
+						style: style,
+						userLevel: userLevel,
+						lightLevel: lightLevel,
+						weightLb: itemWeightLb,
+						weightOz: itemWeightOz,
+						heightIn: itemHeightIn,
+						sku: productSKU,
+						widthIn: itemWidthIn,
+						lengthIn: itemLengthIn,
+						isOrganic: isOrganic,
+						isArtificial: isArtificial,
+						storeId: storeId,
+						vendorId: vendorId,
+					}
+					if (searchMetaData) {
+						newProductMap.searchMetaData = searchMetaData;
+					}
+					if (price) {
+						newProductMap.price = {
+							value: parseFloat(price) * 100,
+							currency: 'USD'
+						}
+					}
+					let newProductSchema = new Product(newProductMap);
+
+					let newProduct = await newProductSchema
+						.save()
+						.then(async (product) => {
+							await product.populate({ path: 'variationIds', populate: { path: 'optionIds' } }).execPopulate();
+							// update store
+							const store = await Store.findOne({ _id: storeId });
+							let productIds = store.productIds;
+							if (!productIds) {
+								productIds = [product._id]
+							} else {
+								productIds.push(product._id)
+							}
+							await Store
+								.findOneAndUpdate({ _id: storeId }, { $set: { productIds } });
+							res.json({
+								success: true,
+								payload: product
+							})
+						});
+					/*Product.populate(newProduct, {path: 'variationIds'}
+							console.log("Created a new product", newProduct);
+							res.json({
+								success: true,
+								payload: newProduct
+							});*/
+				})
+			});
+		});
+	} catch (error) {
+		console.log(error);
+		console.log(error.message)
+		res.json({
+			success: false,
+			error: error.message
+		});
+	}
+});
+
+router.post('/seller/update', async function (req, res, next) {
+	const files = Object.values(req.files)
 	let formData = req.body;
+	console.log("seller update product endpoint...", formData)
+	console.log("SELLER FILES: ", files)
 	let quantity = formData.productQuantity;
-	let price = formData.productPrice;
+	let price = parseFloat(formData.productPrice);
 	let sku = formData.productSKU;
 	let categorySelectedItems = formData.categories ? JSON.parse(formData.categories) : [];
 	let tagSelectedItems = formData.productTags ? JSON.parse(formData.productTags) : [];
-	let productPhotos = formData.productPhotos;
+	let productPhotos = (formData.productPhotos || formData.productPhotos != '') ? formData.productPhotos : [];
+	console.log("PRODUCT PHOTOS", productPhotos)
+	if (typeof productPhotos == 'string') {
+		productPhotos = JSON.parse(productPhotos);
+	}
 	let description = formData.description;
 	let lightLevel = formData.lightLevel;
 	let benefit = formData.benefit;
 	let userLevel = formData.userLevel;
 	let style = formData.style;
-	let variations = formData.variations ? JSON.parse(formData.variations) : [];
+	let variations = JSON.parse(formData.variations);
 	let now = new Date();
 
 	let processingTime = formData.processingTime;
 	let colors = formData.colors;
-	let offerFreeShipping = formData.offerFreeShipping ? formData.offerFreeShipping: false;
+	let offerFreeShipping = formData.offerFreeShipping ? formData.offerFreeShipping : false;
 	let title = formData.title;
 	let originZipCode = formData.originZipCode;
 	let handlingFee = formData.handlingFee;
+	let storeId = formData.storeId;
 	let vendorId = formData.userId;
-	let isArtificial = formData.isArtificial? formData.isArtificial:false;
-	let isOrganic = formData.isOrganic ? formData.isOrganic: false;
+	let isArtificial = formData.isArtificial ? formData.isArtificial : false;
+	let isOrganic = formData.isOrganic ? formData.isOrganic : false;
+	let isVisible = formData.isVisible ? formData.isVisible : false;
 	let itemWeightLb = formData.itemWeightLb ? parseFloat(formData.itemWeightLb) : 0;
 	let itemWeightOz = formData.itemWeightOz ? parseFloat(formData.itemWeightOz) : 0;
 	let itemHeightIn = formData.itemHeightIn ? parseFloat(formData.itemHeightIn) : 0;
-	let itemWidthIn = formData.itemWidthIn ? parseFloat(formData.itemWidthIn): 0;
-	let itemLengthIn = formData.itemLengthIn ? parseFloat(formData.itemLengthIn): 0;
-  let productSKU = formData.productSKU;
-	let newProductId = mongoose.Types.ObjectId();
-  let storeId = formData.storeId ? formData.storeId : formData.store;
-  let isVisible = formData.isVisible ? formData.isVisible : false;
-  // search metadata, metaData.style..
-  let searchMetaData = null;
-  if (formData.metaData) {
-    searchMetaData = JSON.parse(formData.metaData);
-  }
+	let itemWidthIn = formData.itemWidthIn ? parseFloat(formData.itemWidthIn) : 0;
+	let itemLengthIn = formData.itemLengthIn ? parseFloat(formData.itemLengthIn) : 0;
+	let productSKU = formData.productSKU;
+	let productId = formData.productId;
+	console.log("STORE ID: ", storeId);
+	let searchMetaData = null;
+	if (formData.metaData) {
+		searchMetaData = JSON.parse(formData.metaData);
+	}
+	console.log("FormData from request: ", formData)
+	console.log("Metadata from request: ", formData.metaData)
+	console.log("Search Meta Data: ", searchMetaData);
+	let existingProduct = await Product.find({ _id: productId });
+	if (!existingProduct) {
+		res.json({
+			success: false,
+			error: "Failed to find this product in our database."
+		});
+		return;
+	}
 
 	const genHandle = (title) => {
 		return title.toLowerCase();
@@ -466,7 +685,7 @@ router.post('/seller/create', async function(req, res, next) {
 		const fileContent = fs.readFileSync(file.path);
 		const params = {
 			Bucket: "enter-neverland",
-			Key: "product/"+storeId+"/"+productId+"/"+file.originalFilename,
+			Key: "product/" + storeId + "/" + productId + "/" + file.originalFilename,
 			ContentType: file.mimetype,
 			Body: fileContent
 		};
@@ -474,33 +693,40 @@ router.post('/seller/create', async function(req, res, next) {
 	}
 	let variationPromises = [];
 	let variationIds = []
+	// if _id exists, then it's an existing variation - update it
+	// if new id, then add a new variation and new options
 	for (var idx in variations) {
 		let variation = variations[idx];
+		// existing variation
 		let optionIds = [];
+		let optionId = mongoose.Types.ObjectId();
 		for (var idx in variation.options) {
 			let option = variation.options[idx];
-			var optionId = mongoose.Types.ObjectId();
-			optionIds.push(optionId);
-      let priceValue = option.price ? option.price * 100 : 0;
-			let newVariationOptionSchema = new ProductVariationOption({
-				_id: optionId,
+			let optionSchema = {
 				title: option.title,
 				handle: option.handle,
 				sku: option.sku,
 				isVisible: option.isVisible,
 				price: {
-					value: priceValue,
+					value: option.price * 100,
 					currency: 'USD'
 				},
 				quantity: option.quantity
-			});
-			variationPromises.push(newVariationOptionSchema.save());
+			}
+			if (option._id) {
+				optionId = option._id
+				await ProductVariationOption.findOneAndUpdate({ _id: option._id }, {
+					$set: optionSchema
+				}, { new: true });
+			} else {
+				optionSchema._id = optionId;
+				optionSchema.createdAt = new Date();
+				let newVariationOptionSchema = new ProductVariationOption(optionSchema);
+				variationPromises.push(newVariationOptionSchema.save());
+			}
+			optionIds.push(optionId);
 		}
-		let variationId = mongoose.Types.ObjectId();
-		variationIds.push(variationId);
-		let newVariationSchema = new ProductVariation({
-			_id: variationId,
-			createdAt: now,
+		let variationSchema = {
 			udatedAt: now,
 			title: variation.title,
 			handle: variation.handle,
@@ -509,365 +735,139 @@ router.post('/seller/create', async function(req, res, next) {
 			isQuantityVaried: variation.isQuantityVaried,
 			isVisible: variation.isVisible,
 			optionIds: optionIds
-		});
-		variationPromises.push(newVariationSchema.save());
+		}
+		let variationId = mongoose.Types.ObjectId();
+		if (variation._id) {
+			variationId = variation._id;
+			await ProductVariation.findOneAndUpdate({ _id: variation._id }, {
+				$set: variationSchema
+			}, { new: true });
+		} else {
+			let newVariationSchema = new ProductVariation({
+				_id: variationId,
+				createdAt: now,
+				udatedAt: now,
+				title: variation.title,
+				handle: variation.handle,
+				isPriceVaried: variation.isPriceVaried,
+				isSKUVaried: variation.isSKUVaried,
+				isQuantityVaried: variation.isQuantityVaried,
+				isVisible: variation.isVisible,
+				optionIds: optionIds
+			});
+			variationPromises.push(newVariationSchema.save());
+		}
+		variationIds.push(variationId);
 	}
+	// check to see if new imges or old
 	var fileUploadPromises = [];
+	let productPhotoUrls = [];
 	if (files.length > 0) {
 		files[0].map((file) => {
-			fileUploadPromises.push(uploadFileToS3(file, storeId, newProductId));
+			console.log("CHECKING PHOTO FILES: ", file);
+			if (file.uri && file.uri.includes('http:/')) {
+				productPhotoUrls.push(file.uri);
+			} else {
+				fileUploadPromises.push(uploadFileToS3(file, storeId, productId));
+			}
 		});
 	}
-	Promise.allSettled(fileUploadPromises).then(async function(data) {
-		console.log("Uploaded image files for product...", data)
-		let imageURLs = [];
-		for (let i = 0; i < data.length; i++) {
-			imageURLs.push(data[i].value.Location);
+	if (productPhotos) {
+		for (var i in productPhotos) {
+			if (productPhotos[i].sourceURL) {
+				productPhotoUrls.push(productPhotos[i].sourceURL);
+			}
 		}
+	}
+	Promise.allSettled(fileUploadPromises).then(async function (data) {
+		console.log("Uploaded image files for product...")
+		for (let i = 0; i < data.length; i++) {
+			productPhotoUrls.push(data[i].value.Location);
+		}
+		console.log("PRODUCT PHOTO URLS:", productPhotoUrls);
 		Promise.allSettled(variationPromises).then(async (results) => {
 			console.log("Uploaded image files for product...")
 			// find product tags
 			// find categories
-			tagSelectedItems = tagSelectedItems.map((item) => {return item._id});
-			categorySelectedItems = categorySelectedItems.map((item) => {return item._id});
-			let tagIds = await ProductTag.find({_id: {$in: tagSelectedItems}});
-			let categories = await NavigationItem.find({_id: {$in: categorySelectedItems}});
-			Promise.allSettled([tagIds, categories]).then( async (results) => {
+			tagSelectedItems = tagSelectedItems.map((item) => { return item._id });
+			categorySelectedItems = categorySelectedItems.map((item) => { return item._id });
+			let tagIds = await ProductTag.find({ _id: { $in: tagSelectedItems } });
+			let categories = await NavigationItem.find({ _id: { $in: categorySelectedItems } });
+			Promise.allSettled([tagIds, categories]).then(async (results) => {
 				let tags = results[0].value;
 				let categories = results[1].value;
-        let newProductMap = {
-          createdAt: now,
-          updatedAt: now,
-          title: title,
-          variationIds: variationIds,
-          tagIds: tags,
-          categoryIds: categories,
-          description: description,
-          originZipCode: originZipCode,
-          offerFreeShipping: offerFreeShipping,
-          handlingFee: handlingFee,
-          handle: genHandle(title),
-          inventoryInStock: quantity,
-          inventoryAvailableToSell: quantity,
-          isVisible: isVisible,
-          imageURLs: imageURLs,
-          processingTime: processingTime,
-          colors: colors,
-          benefit: benefit,
-          style: style,
-          userLevel: userLevel,
-          lightLevel: lightLevel,
-          weightLb: itemWeightLb,
-          weightOz: itemWeightOz,
-          heightIn: itemHeightIn,
-          sku: productSKU,
-          widthIn: itemWidthIn,
-          lengthIn: itemLengthIn,
-          isOrganic: isOrganic,
-          isArtificial: isArtificial,
-          storeId: storeId,
-          vendorId: vendorId,
-        }
-        if (searchMetaData) {
-          newProductMap.searchMetaData = searchMetaData;
-        }
-        if (price) {
-          newProductMap.price = {
-            value: parseFloat(price) * 100,
-            currency: 'USD'
-          } 
-        }
-				let newProductSchema = new Product(newProductMap);
-
-				let newProduct = await newProductSchema
-          .save()
-          .then(async (product) => {
-            await product.populate({path: 'variationIds', populate: {path: 'optionIds'}}).execPopulate();
-            // update store
-            const store = await Store.findOne({_id: storeId});
-            let productIds = store.productIds;
-            if (!productIds) {
-              productIds = [product._id]
-            } else {
-              productIds.push(product._id)
-            }
-            await Store 
-              .findOneAndUpdate({_id: storeId}, {$set: {productIds}});
-              res.json({
-                success: true,
-                payload: product
-              })
-            });
-        /*Product.populate(newProduct, {path: 'variationIds'}
-				console.log("Created a new product", newProduct);
+				let newProductSchema = {
+					updatedAt: now,
+					title: title,
+					variationIds: variationIds,
+					tagIds: tags,
+					categoryIds: categories,
+					description: description,
+					originZipCode: originZipCode,
+					offerFreeShipping: offerFreeShipping,
+					handlingFee: handlingFee,
+					handle: genHandle(title),
+					inventoryInStock: quantity,
+					inventoryAvailableToSell: quantity,
+					isVisible: isVisible,
+					imageURLs: productPhotoUrls,
+					processingTime: processingTime,
+					colors: colors,
+					benefit: benefit,
+					style: style,
+					sku: productSKU,
+					userLevel: userLevel,
+					lightLevel: lightLevel,
+					weightLb: itemWeightLb,
+					weightOz: itemWeightOz,
+					heightIn: itemHeightIn,
+					widthIn: itemWidthIn,
+					lengthIn: itemLengthIn,
+					isOrganic: isOrganic,
+					isArtificial: isArtificial,
+					storeId: storeId,
+					vendorId: vendorId,
+					searchMetaData
+				};
+				if (searchMetaData) {
+					newProductSchema.searchMetaData = searchMetaData;
+				}
+				console.log("IS PRICE DEFINED", price)
+				if (price) {
+					newProductSchema.price = {
+						value: price * 100,
+						currency: 'USD'
+					}
+				}
+				console.log("updating product with", productId, newProductSchema)
+				let test = await Product.findOne({ _id: productId });
+				console.log("TEST", productId, test)
+				console.log("TEST222")
+				let newProduct = await Product
+					.findOneAndUpdate({ _id: productId }, { $set: newProductSchema }, { new: true })
+					.populate({ path: 'variationIds', populate: { 'path': 'optionIds' } })
+					.populate('tagIds')
+					.populate('categoryIds')
+					.exec();
+				console.log("CONVERT")
+				console.log("SENDING BACK NEW PRODUCT", newProduct)
 				res.json({
 					success: true,
 					payload: newProduct
-				});*/
+				});
 			})
 		});
 	});
-  } catch (error) {
-    console.log(error);
-    console.log(error.message)
-    res.json({
-      success: false,
-      error: error.message
-    });
-  }
 });
 
-router.post('/seller/update', async function(req, res, next) {
-  const files= Object.values(req.files)
-  let formData = req.body;
-  console.log("seller update product endpoint...", formData)
-  console.log("SELLER FILES: ", files)
-  let quantity = formData.productQuantity;
-  let price = parseFloat(formData.productPrice);
-  let sku = formData.productSKU;
-  let categorySelectedItems = formData.categories ? JSON.parse(formData.categories) : [];
-  let tagSelectedItems = formData.productTags ? JSON.parse(formData.productTags) : [];
-  let productPhotos = (formData.productPhotos || formData.productPhotos != '') ? formData.productPhotos : [];
-  console.log("PRODUCT PHOTOS", productPhotos)
-  if (typeof productPhotos == 'string') {
-    productPhotos = JSON.parse(productPhotos);
-  }
-  let description = formData.description;
-  let lightLevel = formData.lightLevel;
-  let benefit = formData.benefit;
-  let userLevel = formData.userLevel;
-  let style = formData.style;
-  let variations = JSON.parse(formData.variations);
-  let now = new Date();
-
-  let processingTime = formData.processingTime;
-  let colors = formData.colors;
-  let offerFreeShipping = formData.offerFreeShipping ? formData.offerFreeShipping : false;
-  let title = formData.title;
-  let originZipCode = formData.originZipCode;
-  let handlingFee = formData.handlingFee;
-  let storeId = formData.storeId;
-  let vendorId = formData.userId;
-  let isArtificial = formData.isArtificial ? formData.isArtificial : false;
-  let isOrganic = formData.isOrganic ? formData.isOrganic : false;
-  let isVisible = formData.isVisible ? formData.isVisible: false;
-  let itemWeightLb = formData.itemWeightLb ? parseFloat(formData.itemWeightLb) : 0;
-  let itemWeightOz = formData.itemWeightOz ? parseFloat(formData.itemWeightOz) : 0;
-  let itemHeightIn = formData.itemHeightIn ? parseFloat(formData.itemHeightIn) : 0;
-  let itemWidthIn = formData.itemWidthIn ? parseFloat(formData.itemWidthIn): 0;
-  let itemLengthIn = formData.itemLengthIn ? parseFloat(formData.itemLengthIn): 0;
-  let productSKU = formData.productSKU;
-  let productId = formData.productId;
-  console.log("STORE ID: ", storeId);
-  let searchMetaData = null;
-  if (formData.metaData) {
-    searchMetaData = JSON.parse(formData.metaData);
-  }
-  console.log("FormData from request: ", formData)
-  console.log("Metadata from request: ", formData.metaData)
-  console.log("Search Meta Data: ", searchMetaData);
-  let existingProduct = await Product.find({_id: productId});
-  if (!existingProduct) {
-    res.json({
-      success: false,
-      error: "Failed to find this product in our database."
-    });
-    return;
-  }
-
-  const genHandle = (title) => {
-    return title.toLowerCase();
-  }
-
-  // upload image photos here...
-  // extract category tags, extract tag tags
-  const uploadFileToS3 = (file, storeId, productId) => {
-    const fileContent = fs.readFileSync(file.path);
-    const params = {
-      Bucket: "enter-neverland",
-      Key: "product/"+storeId+"/"+productId+"/"+file.originalFilename,
-      ContentType: file.mimetype,
-      Body: fileContent
-    };
-    return s3.upload(params).promise();
-  }
-  let variationPromises = [];
-  let variationIds = []
-  // if _id exists, then it's an existing variation - update it
-  // if new id, then add a new variation and new options
-  for (var idx in variations) {
-    let variation = variations[idx];
-    // existing variation
-    let optionIds = [];
-    let optionId = mongoose.Types.ObjectId();
-    for (var idx in variation.options) {
-      let option = variation.options[idx];
-        let optionSchema={
-          title: option.title,
-          handle: option.handle,
-          sku: option.sku,
-          isVisible: option.isVisible,
-          price: {
-            value: option.price * 100,
-            currency: 'USD'
-          },
-          quantity: option.quantity
-        }
-      if (option._id) {
-        optionId = option._id
-        await ProductVariationOption.findOneAndUpdate({_id: option._id}, {
-          $set: optionSchema
-        }, {new: true});
-      } else {
-        optionSchema._id = optionId;
-        optionSchema.createdAt = new Date();
-        let newVariationOptionSchema = new ProductVariationOption(optionSchema);
-        variationPromises.push(newVariationOptionSchema.save());
-      }
-      optionIds.push(optionId);
-    }
-    let variationSchema = {
-      udatedAt: now,
-      title: variation.title,
-      handle: variation.handle,
-      isPriceVaried: variation.isPriceVaried,
-      isSKUVaried: variation.isSKUVaried,
-      isQuantityVaried: variation.isQuantityVaried,
-      isVisible: variation.isVisible,
-      optionIds: optionIds
-    }
-    let variationId = mongoose.Types.ObjectId();
-    if (variation._id) {
-        variationId = variation._id;
-        await ProductVariation.findOneAndUpdate({_id: variation._id}, {
-          $set: variationSchema 
-        }, {new: true});
-    } else {
-      let newVariationSchema = new ProductVariation({
-        _id: variationId,
-        createdAt: now,
-        udatedAt: now,
-        title: variation.title,
-        handle: variation.handle,
-        isPriceVaried: variation.isPriceVaried,
-        isSKUVaried: variation.isSKUVaried,
-        isQuantityVaried: variation.isQuantityVaried,
-        isVisible: variation.isVisible,
-        optionIds: optionIds
-      });
-      variationPromises.push(newVariationSchema.save());
-    }
-    variationIds.push(variationId);
-  }
-  // check to see if new imges or old
-  var fileUploadPromises = [];
-  let productPhotoUrls = [];
-  if (files.length > 0) {
-    files[0].map((file) => {
-      console.log("CHECKING PHOTO FILES: ", file);
-      if (file.uri && file.uri.includes('http:/')) {
-        productPhotoUrls.push(file.uri);
-      } else {
-        fileUploadPromises.push(uploadFileToS3(file, storeId, productId));
-      }
-    });
-  }
-  if (productPhotos)  {
-    for (var i in productPhotos) {
-      if (productPhotos[i].sourceURL) {
-        productPhotoUrls.push(productPhotos[i].sourceURL);
-      }
-    }
-  }
-  Promise.allSettled(fileUploadPromises).then(async function(data) {
-    console.log("Uploaded image files for product...")
-    for (let i = 0; i < data.length; i++) {
-      productPhotoUrls.push(data[i].value.Location);
-    }
-    console.log("PRODUCT PHOTO URLS:", productPhotoUrls);
-    Promise.allSettled(variationPromises).then(async (results) => {
-      console.log("Uploaded image files for product...")
-      // find product tags
-      // find categories
-      tagSelectedItems = tagSelectedItems.map((item) => {return item._id});
-      categorySelectedItems = categorySelectedItems.map((item) => {return item._id});
-      let tagIds = await ProductTag.find({_id: {$in: tagSelectedItems}});
-      let categories = await NavigationItem.find({_id: {$in: categorySelectedItems}});
-      Promise.allSettled([tagIds, categories]).then( async (results) => {
-        let tags = results[0].value;
-        let categories = results[1].value;
-        let newProductSchema = {
-          updatedAt: now,
-          title: title,
-          variationIds: variationIds,
-          tagIds: tags,
-          categoryIds: categories,
-          description: description,
-          originZipCode: originZipCode,
-          offerFreeShipping: offerFreeShipping,
-          handlingFee: handlingFee,
-          handle: genHandle(title),
-          inventoryInStock: quantity,
-          inventoryAvailableToSell: quantity,
-          isVisible: isVisible,
-          imageURLs: productPhotoUrls,
-          processingTime: processingTime,
-          colors: colors,
-          benefit: benefit,
-          style: style,
-          sku: productSKU,
-          userLevel: userLevel,
-          lightLevel: lightLevel,
-          weightLb: itemWeightLb,
-          weightOz: itemWeightOz,
-          heightIn: itemHeightIn,
-          widthIn: itemWidthIn,
-          lengthIn: itemLengthIn,
-          isOrganic: isOrganic,
-          isArtificial: isArtificial,
-          storeId: storeId,
-          vendorId: vendorId,
-          searchMetaData
-        };
-        if (searchMetaData) {
-          newProductSchema.searchMetaData = searchMetaData;
-        }
-        console.log("IS PRICE DEFINED", price)
-        if (price) {
-          newProductSchema.price = {
-            value: price * 100,
-            currency: 'USD'
-          } 
-        }
-        console.log("updating product with", productId, newProductSchema)
-        let test = await Product.findOne({_id: productId});
-        console.log("TEST", productId, test)
-        console.log("TEST222")
-        let newProduct = await Product
-          .findOneAndUpdate({_id: productId}, {$set: newProductSchema}, { new: true})
-          .populate({path: 'variationIds', populate: {'path': 'optionIds'}})
-          .populate('tagIds')
-          .populate('categoryIds')
-          .exec();
-        console.log("CONVERT")
-        console.log("SENDING BACK NEW PRODUCT", newProduct)
-        res.json({
-          success: true,
-          payload: newProduct 
-        });
-      })
-    });
-  });
-});
-
-router.post('/toggleVisibility', async function(req, res, next) {
+router.post('/toggleVisibility', async function (req, res, next) {
 	let productId = req.body.productId;
-	let product = await Product.findById(productId);
-	product.isVisible = !product.isVisible;
-	product.save().then((product) => {
+	Product.updateOne(
+		{ _id: productId },
+		{ isVisible: req.body.isVisible }
+	).then(() => {
 		res.json({
 			success: true,
-			payload: product
 		})
 	}).catch((error) => {
 		res.json({
@@ -1044,19 +1044,19 @@ router.post('/seller/update', async function(req, res, next) {
 /**
   Creates a new product. Based on FormData only because of image upload.
   **/
-router.post('/create', function(req, res, next) {
+router.post('/create', function (req, res, next) {
 	//const form = formidable({multiples: true});
 	const uploadFileToS3 = (file, storeId, productId) => {
 		const fileContent = fs.readFileSync(file.path);
 		const params = {
 			Bucket: "enter-neverland",
-			Key: "product/"+storeId+"/"+productId+"/"+file.originalFilename,
+			Key: "product/" + storeId + "/" + productId + "/" + file.originalFilename,
 			ContentType: file.mimetype,
 			Body: fileContent
 		};
 		return s3.upload(params).promise();
 	}
-	const files= Object.values(req.files)
+	const files = Object.values(req.files)
 	let title = req.body.title;
 	let description = req.body.description;
 	let handle = req.body.handle;
@@ -1082,21 +1082,21 @@ router.post('/create', function(req, res, next) {
 		fileUploadPromises.push(uploadFileToS3(file, storeId, productId));
 	});
 
-	Promise.allSettled(fileUploadPromises).then(function(data) {
+	Promise.allSettled(fileUploadPromises).then(function (data) {
 		let imageURLs = [];
 		for (let i = 0; i < data.length; i++) {
 			imageURLs.push(data[i].value.Location);
 		}
 		newProduct.imageURLs = imageURLs;
-		newProduct.save(function(err, result) {
+		newProduct.save(function (err, result) {
 			res.json(result);
 		})
-	}).catch(function(err) {
+	}).catch(function (err) {
 		console.log(err)
 	});
 });
 
-router.get('/getMany', async function(req, res, next) {
+router.get('/getMany', async function (req, res, next) {
 	const sortByEnum = {
 		recent: 'recent',
 		popular: 'popular',
@@ -1113,16 +1113,16 @@ router.get('/getMany', async function(req, res, next) {
 	console.log(offset)
 	console.log("LIMIT: ")
 	console.log(limit)
-	let productsCount = await Product.count({tagIds: {$in: [tag]}});
-	let products = await Product.find({tagIds: {$in: [tag]}}).skip(offset).limit(limit);
+	let productsCount = await Product.count({ tagIds: { $in: [tag] } });
+	let products = await Product.find({ tagIds: { $in: [tag] } }).skip(offset).limit(limit);
 	console.log("RESULTS: ")
 	console.log(products.length)
-	console.log("HAS NEXT: " + (offset<productsCount))
+	console.log("HAS NEXT: " + (offset < productsCount))
 	let results = {
 		success: true,
 		products: products,
 		hasNext: offset < productsCount,
-		offset: offset+limit
+		offset: offset + limit
 	};
 	console.log("RESULTS")
 	console.log(results)
@@ -1130,79 +1130,84 @@ router.get('/getMany', async function(req, res, next) {
 		success: true,
 		products: products,
 		hasNext: offset < productsCount,
-		offset: offset+limit
+		offset: offset + limit
 	});
 	//TODO: implement sort and filter mechanisms
 });
 
 //change to getOne
-router.get('/get', async function(req, res, next) {
+router.get('/get', async function (req, res, next) {
 	let productId = req.query.productId;
-	let product = await Product.findOne({_id: productId})
+	let product = await Product.findOne({ _id: productId })
 		.populate({
-			path: 'storeId', 
+			path: 'storeId',
 			populate: {
-				path: 'userId', 
+				path: 'userId',
 				model: 'User'
-		}})
-    .populate('userId')
-    .populate({
-      path: 'variationIds',
-      populate: {
-        path: 'optionIds'
-    }})
-    .populate('tagIds');
+			}
+		})
+		.populate('userId')
+		.populate({
+			path: 'variationIds',
+			populate: {
+				path: 'optionIds'
+			}
+		})
+		.populate('tagIds');
 	res.json({
 		success: true,
-		payload: product});
+		payload: product
+	});
 });
 
-router.post('/delete', async function(req, res, next) {
-	await Product.deleteOne({_id: req.body.productId});
+router.post('/delete', async function (req, res, next) {
+	await Product.deleteOne({ _id: req.body.productId });
 	res.json({});
 });
 
-router.get('/tags/all', async function(req, res, next) {
+router.get('/tags/all', async function (req, res, next) {
 	let allProductTags = await ProductTag.find({});
 	res.json(allProductTags);
 });
 
-router.get('/get/list', async function(req, res, next) {
-  try {
-  	let allProducts = await Product.find({})
-      .populate({
-        path: 'storeId', 
-        populate: {
-          path: 'userId', 
-          model: 'User'
-      }})
-      .populate('userId')
-      .populate({
-        path: 'variationIds',
-        populate: {
-          path: 'optionIds'
-      }})
-      .populate('tagIds')
-      .populate({
-        path: 'vendorId',
-        populate: [{
-          path: 'userId',
-          model: 'User'
-        }, {
-          path: 'storeId',
-          model: 'Store'
-        }]
-      })
-    	res.json({
-        success: true,
-        payload: allProducts
-      });
-  } catch (error) {
-    res.json({
-      success: false,
-      error: error
-    });
-  }
+router.get('/get/list', async function (req, res, next) {
+	try {
+		let allProducts = await Product.find({})
+			.populate({
+				path: 'storeId',
+				populate: {
+					path: 'userId',
+					model: 'User'
+				}
+			})
+			.populate('userId')
+			.populate({
+				path: 'variationIds',
+				populate: {
+					path: 'optionIds'
+				}
+			})
+			.populate('tagIds')
+			.populate({
+				path: 'vendorId',
+				populate: [{
+					path: 'userId',
+					model: 'User'
+				}, {
+					path: 'storeId',
+					model: 'Store'
+				}]
+			})
+		res.json({
+			success: true,
+			payload: allProducts
+		});
+	} catch (error) {
+		res.json({
+			success: false,
+			error: error
+		});
+	}
 })
 
 module.exports = router;
