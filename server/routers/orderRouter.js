@@ -26,7 +26,7 @@ router.get('/algolia/load', async function (req, res) {
     .populate('userId')
     .populate('orderInvoiceId')
     .populate('storeId')
-    .populate({path: 'paymentMethod', populate: 'billingAddress'})
+    .populate({ path: 'paymentMethod', populate: 'billingAddress' })
     .populate('shippingAddressId');
   const transformedOrders = orders.map((order) => {
     try {
@@ -41,8 +41,8 @@ router.get('/algolia/load', async function (req, res) {
   try {
     console.log("initializing " + getEnvVariable('ALGOLIA_ORDER_INDEX'))
     const index = algoliaClient.initIndex(getEnvVariable('ALGOLIA_ORDER_INDEX'));
-    index.saveObjects(transformedOrders, {'autoGenerateObjectIDIfNotExist': true})
-      .then(({objectIDs}) => {
+    index.saveObjects(transformedOrders, { 'autoGenerateObjectIDIfNotExist': true })
+      .then(({ objectIDs }) => {
         console.log("Loaded orders into algolia...")
       }).catch(err => {
         // log error
@@ -54,30 +54,31 @@ router.get('/algolia/load', async function (req, res) {
   }
 });
 
-router.post('/product/remove', async function(req, res) {
+router.post('/product/remove', async function (req, res) {
   let productOrderItemId = req.body.productOrderItemId;
   let bundleId = req.body.bundleId;
   let orderIntentId = req.body.orderIntentId;
   // look up bundleId and remove the productOrderItem
-  let orderIntent = await OrderIntent.findOne({_id: orderIntentId})
+  let orderIntent = await OrderIntent.findOne({ _id: orderIntentId })
     .populate('bundleId')
     .populate({
       path: 'storeId',
       populate: {
         path: 'address'
-      }})
+      }
+    })
     .populate('shippingAddressId')
-  let bundle = await Bundle.findOne({_id: bundleId});
+  let bundle = await Bundle.findOne({ _id: bundleId });
   let productOrderItems = bundle.productOrderItemIds.filter((product) => {
     return product._id != productOrderItemId;
   });
-  const newBundle = await Bundle.findOneAndUpdate({_id: bundleId}, {
+  const newBundle = await Bundle.findOneAndUpdate({ _id: bundleId }, {
     $set: {
       productOrderItemIds: productOrderItems
     }
-  }, {new: true});
+  }, { new: true });
 
-  await OrderProductItem.findOneAndDelete({_id: productOrderItemId});
+  await OrderProductItem.findOneAndDelete({ _id: productOrderItemId });
 
   const subtotal = await calculateBundleSubTotal(newBundle);
   console.log("NEW SUBTOTAL AFTER REMOAL: ", subtotal)
@@ -89,7 +90,7 @@ router.post('/product/remove', async function(req, res) {
   const surcharge = buyerSurcharge + shippingCharge;
   // if orderproductitem part of an order intent, we need to update the order intent with the new value and price
   let newOrderIntent = await OrderIntent.findOneAndUpdate(
-    {_id: orderIntentId},
+    { _id: orderIntentId },
     {
       $set: {
         subtotal,
@@ -104,13 +105,13 @@ router.post('/product/remove', async function(req, res) {
         total
       }
     },
-   {new: true});
+    { new: true });
   console.log("NEW ORDER INTENT: ", newOrderIntent)
   res.json({
     success: true,
     payload: {
       bundle,
-      orderIntent: newOrderIntent 
+      orderIntent: newOrderIntent
     }
   });
   // find order Intent and remove the associated index with productOrderItemId
@@ -118,18 +119,19 @@ router.post('/product/remove', async function(req, res) {
   // return updated orderIntentId
 });
 
-router.post('/quantity/update', async function(req, res) {
+router.post('/quantity/update', async function (req, res) {
   let productOrderItemId = req.body.productOrderItemId;
   let orderIntentId = req.body.orderIntentId;
   let amount = req.body.amount;
-  let item = await OrderProductItem.findOne({_id: productOrderItemId});
-  let orderIntent = await OrderIntent.findOne({_id: orderIntentId})
+  let item = await OrderProductItem.findOne({ _id: productOrderItemId });
+  let orderIntent = await OrderIntent.findOne({ _id: orderIntentId })
     .populate('bundleId')
     .populate({
       path: 'storeId',
       populate: {
         path: 'address'
-      }})
+      }
+    })
     .populate('shippingAddressId')
   if (!item) {
     res.json({
@@ -148,13 +150,13 @@ router.post('/quantity/update', async function(req, res) {
   //const newAmount = Math.max(oldQ - amount, 0);
   let updateQuery = {
     $set: {
-      quantity: amount 
+      quantity: amount
     }
   };
   let product = await OrderProductItem.findOneAndUpdate(
-  { _id: productOrderItemId }, 
-  updateQuery, 
-  { new: true });
+    { _id: productOrderItemId },
+    updateQuery,
+    { new: true });
   const subtotal = await calculateBundleSubTotal(orderIntent.bundleId);
   const buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
   const shippingMethod = await getFulfillmentMethod("usps", "priority");
@@ -164,7 +166,7 @@ router.post('/quantity/update', async function(req, res) {
   const surcharge = buyerSurcharge + shippingCharge;
   // if orderproductitem part of an order intent, we need to update the order intent with the new value and price
   let newOrderIntent = await OrderIntent.findOneAndUpdate(
-    {_id: orderIntentId},
+    { _id: orderIntentId },
     {
       $set: {
         subtotal,
@@ -179,50 +181,54 @@ router.post('/quantity/update', async function(req, res) {
         total
       }
     },
-   {new: true});
-  let updatedBundle = await Bundle.findOne({_id: orderIntent.bundleId}).populate('productOrderItemIds')
+    { new: true });
+  let updatedBundle = await Bundle.findOne({ _id: orderIntent.bundleId }).populate('productOrderItemIds')
   res.json({
     success: true,
     payload: {
       product: product,
       orderIntent: newOrderIntent
-  }});
+    }
+  });
 });
 
-router.get('/get/list', async function(req, res) {
+router.get('/get/list', async function (req, res) {
   let userId = req.query.userId;
   try {
 
-  let orders = await Order.find({userId: userId})
-    .populate({
-      path: 'paymentMethod', 
-      populate: {
-        path: 'billingAddress'
-    }})
-    .populate('shippingAddressId')
-    .populate('billingAddress')
-    .populate('storeId')
-    .populate({
-      path: 'bundleId',
-      populate: {
-        path: 'productOrderItemIds',
-        populate: [{
-          path: 'productId',
-          populate: {
-            path: 'variationIds',
+    let orders = await Order.find({ userId: userId })
+      .populate({
+        path: 'paymentMethod',
+        populate: {
+          path: 'billingAddress'
+        }
+      })
+      .populate('shippingAddressId')
+      .populate('billingAddress')
+      .populate('storeId')
+      .populate({
+        path: 'bundleId',
+        populate: {
+          path: 'productOrderItemIds',
+          populate: [{
+            path: 'productId',
             populate: {
-              path: 'optionIds'
+              path: 'variationIds',
+              populate: {
+                path: 'optionIds'
+              }
             }
-          }
-        }, {
-          path: 'selectedOptionIds'
-        }]}})
-    .populate('orderInvoiceId');
+          }, {
+            path: 'selectedOptionIds'
+          }]
+        }
+      })
+      .populate('orderInvoiceId');
     res.json({
       success: true,
       payload: orders
     });
-  } catch(error) {
+  } catch (error) {
     res.json({
       success: false,
       error: error
@@ -230,35 +236,43 @@ router.get('/get/list', async function(req, res) {
   }
 });
 
-router.get('/get', async function(req, res) {
+router.get('/get', async function (req, res) {
   let orderId = req.query.id;
   try {
-  let order = await Order.findOne({_id: orderId})
-    .populate('paymentMethod')
-    .populate('storeId')
-    .populate('shippingAddressId')
-    .populate('billingAddress')
-    .populate({
-      path: 'bundleId',
-      populate: {
-        path: 'productOrderItemIds',
-        populate: [{
-          path: 'productId',
-          populate: {
-            path: 'variationIds',
+    let order = await Order.findOne({ _id: orderId })
+      .populate('paymentMethod')
+      .populate('storeId')
+      .populate('shippingAddressId')
+      .populate({
+        path: 'billingAddress',
+        populate: {
+          path: 'userId',
+          select: 'name'
+        }
+      })
+      .populate({
+        path: 'bundleId',
+        populate: {
+          path: 'productOrderItemIds',
+          populate: [{
+            path: 'productId',
             populate: {
-              path: 'optionIds'
+              path: 'variationIds',
+              populate: {
+                path: 'optionIds'
+              }
             }
-          }
-         }, {
-          path: 'selectedOptionIds'
-        }]}})
-    .populate('orderInvoiceId');
+          }, {
+            path: 'selectedOptionIds'
+          }]
+        }
+      })
+      .populate('orderInvoiceId');
     res.json({
       success: true,
       payload: order
     });
-  } catch(error){
+  } catch (error) {
     res.json({
       success: false,
       error: `Failed to fetch order ${orderId}`
@@ -266,7 +280,7 @@ router.get('/get', async function(req, res) {
   }
 });
 
-router.post('/intent/create', async function(req, res) {
+router.post('/intent/create', async function (req, res) {
   let productId = req.body.productId;
   let bundleId = req.body.bundleId;
   let userId = req.body.userId;
@@ -277,14 +291,14 @@ router.post('/intent/create', async function(req, res) {
   let variationOptionIds = req.body.selectedOptions;
   let now = new Date();
 
-  if (productId && !bundleId)  {
+  if (productId && !bundleId) {
     // create new order produt item
     let newOrderProductItem = new OrderProductItem({
       userId: userId,
       storeId: storeId,
       productId: productId,
       quantity: quantity,
-      selectedOptionIds: variationOptionIds 
+      selectedOptionIds: variationOptionIds
     });
     let nOPI = await newOrderProductItem.save();
     newBundle = new Bundle({
@@ -298,21 +312,21 @@ router.post('/intent/create', async function(req, res) {
     bundle = await newBundle.save();
 
     bundleId = bundle._id;
-  } 
-  
+  }
+
   let loadAllPromises = [];
-  let shippingAddress = await Address.findOne({_id: shippingAddressId});
-  let paymentMethod = await PaymentMethod.findOne({_id: paymentMethodId}).populate('card').populate('billingAddress');
-  let user = await User.findOne({_id: userId});
-  let store = await Store.findOne({_id: storeId}).populate('store');
+  let shippingAddress = await Address.findOne({ _id: shippingAddressId });
+  let paymentMethod = await PaymentMethod.findOne({ _id: paymentMethodId }).populate('card').populate('billingAddress');
+  let user = await User.findOne({ _id: userId });
+  let store = await Store.findOne({ _id: storeId }).populate('store');
   loadAllPromises.push(shippingAddress);
   loadAllPromises.push(paymentMethod);
   loadAllPromises.push(user);
   loadAllPromises.push(store);
   // if bundle is null, meaning we didn't load bundleId and we didn't have to create a bundle to 
   // wrap around product
-  loadAllPromises.push(await Bundle.findOne({_id: bundleId}).populate('productIds')
-    .populate({path: 'productOrderItemIds', populate: [{path:'productId'}, {path: 'selectedOptionIds'}]}));
+  loadAllPromises.push(await Bundle.findOne({ _id: bundleId }).populate('productIds')
+    .populate({ path: 'productOrderItemIds', populate: [{ path: 'productId' }, { path: 'selectedOptionIds' }] }));
   Promise.all(loadAllPromises).then(async (results) => {
     let shippingAddress = results[0];
     let paymentMethod = results[1];
@@ -330,12 +344,12 @@ router.post('/intent/create', async function(req, res) {
       createdAt: now,
       updatedAt: now,
       userId: userId,
-      billingAddress: paymentMethod? paymentMethod.billingAddress._id: "",
+      billingAddress: paymentMethod ? paymentMethod.billingAddress._id : "",
       shippingAddressId: shippingAddress,
       storeId: storeId,
       price: {
         value: subtotal,
-        currency: 'USD' 
+        currency: 'USD'
       },
       storeId: storeId,
       bundleId: bundleId,
@@ -355,51 +369,53 @@ router.post('/intent/create', async function(req, res) {
       success: true,
       payload: {
         orderIntent: newOrder,
-        newBundle: bundle 
+        newBundle: bundle
       }
     })
 
   });
 });
 
-router.post('/create', async function(req, res) {
+router.post('/create', async function (req, res) {
   // order intent
   let orderIntentId = req.body.orderIntentId;
-  const orderIntent = await OrderIntent.findOne({_id: orderIntentId})
+  const orderIntent = await OrderIntent.findOne({ _id: orderIntentId })
     .populate('shippingAddressId')
-    .populate({path: 'bundleId', 
+    .populate({
+      path: 'bundleId',
       populate: {
-      path: 'productOrderItemIds',
-      populate: 'productIds'
-    }})
-    .populate({path: 'paymentMethod', populate: 'billingAddress'})
+        path: 'productOrderItemIds',
+        populate: 'productIds'
+      }
+    })
+    .populate({ path: 'paymentMethod', populate: 'billingAddress' })
     .populate('storeId')
     .populate('userId');
-	let productId = req.body.productId;
-	let bundleId = req.body.bundleId;
+  let productId = req.body.productId;
+  let bundleId = req.body.bundleId;
   let productOrderItemId = req.body.productOrderItemId;
-	let userId = req.body.userId;
-	let storeId = req.body.storeId;
-	let shippingAddressId = req.body.shippingAddressId;
-	let paymentMethodId = req.body.paymentMethodId;
+  let userId = req.body.userId;
+  let storeId = req.body.storeId;
+  let shippingAddressId = req.body.shippingAddressId;
+  let paymentMethodId = req.body.paymentMethodId;
   let quantity = req.body.quantity;
   let variationOptionIds = req.body.variationOptionIds;
-	let now = new Date();
-	// Load shipping address, payment method, user, paymentMethod
-	let loadAllPromises = [];
-	const shippingAddress = orderIntent.shippingAddressId;
-	const paymentMethod = orderIntent.paymentMethod;
-	const user = orderIntent.userId;
-	const store = orderIntent.storeId;
+  let now = new Date();
+  // Load shipping address, payment method, user, paymentMethod
+  let loadAllPromises = [];
+  const shippingAddress = orderIntent.shippingAddressId;
+  const paymentMethod = orderIntent.paymentMethod;
+  const user = orderIntent.userId;
+  const store = orderIntent.storeId;
   const bundle = orderIntent.bundleId;
-	// if bundle is null, meaning we didn't load bundleId and we didn't have to create a bundle to 
-	// wrap around product
-	const subtotal = await calculateBundleSubTotal(bundle);
-	const buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
-	const shippingMethod = await getFulfillmentMethod("usps", "priority");
-	const shippingCharge = shippingMethod.price;
-	const taxSurcharge = await calculateTaxSurcharge(subtotal, shippingAddress, shippingCharge, store.address);
-	const total = subtotal + buyerSurcharge + shippingCharge;
+  // if bundle is null, meaning we didn't load bundleId and we didn't have to create a bundle to 
+  // wrap around product
+  const subtotal = await calculateBundleSubTotal(bundle);
+  const buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
+  const shippingMethod = await getFulfillmentMethod("usps", "priority");
+  const shippingCharge = shippingMethod.price;
+  const taxSurcharge = await calculateTaxSurcharge(subtotal, shippingAddress, shippingCharge, store.address);
+  const total = subtotal + buyerSurcharge + shippingCharge;
   const stripeFee = await getStripeFee(total);
   let surcharge = shippingCharge + buyerSurcharge;
   if (taxSurcharge) {
@@ -410,76 +426,77 @@ router.post('/create', async function(req, res) {
   console.log("SELLER PAYOUT: ", sellerPayout)
   if (total == orderIntent.total) {
     try {
-    let newOrderInvoice = new OrderInvoice({
-      createdAt: now,
-      updatedAt: now,
-      sellerPayout,
-      bundleId: bundle._id,
-      price: {
-        value: subtotal,
-        currency: 'USD' 
-      },
-      effectiveTaxRate: taxSurcharge.rate,
-      surcharges: surcharge,
-      subtotal: subtotal,
-      shipping: shippingCharge,
-      taxes: taxSurcharge.taxAmoun,
-      taxableAmount: taxSurcharge.taxableAmount,
-      total: total
-    });
-    let orderInvoice = await newOrderInvoice.save();
-    let newOrderObject = new Order({
-      createdAt: now,
-      updatedAt: now,
-      userId: userId,
-      sellerPayout,
-      bundleId: bundle._id,
-      paymentMethod: paymentMethod,
-      billingAddress: paymentMethod.billingAddress._id,
-      shippingAddressId: shippingAddress,
-      storeId: store._id,
-      orderInvoiceId: orderInvoice,
-      status: "need-to-fulfill"
-    });
-    let newOrder = await newOrderObject.save();
-    let updatedOrder = await Order.findOne({_id: newOrder._id})
-      .populate('paymentMethod')
-      .populate('billingAddress')
-      .populate('storeId')
-      .populate('orderInvoiceId')
-      .populate({
-        path: 'bundleId',
-        populate: {
-          path: 'productOrderItemIds',
-          populate: [{
-            path: 'productId'
-          }, {
-            path: 'selectedOptionIds'
-          }]
-        }});
-    // stripe create a new  connect payment
-    res.json({
-      success: true,
-      payload: updatedOrder 
-    }) 
-  }catch(error) {
-    console.log(error);
-    Logger.logError(error);
-  }
+      let newOrderInvoice = new OrderInvoice({
+        createdAt: now,
+        updatedAt: now,
+        sellerPayout,
+        bundleId: bundle._id,
+        price: {
+          value: subtotal,
+          currency: 'USD'
+        },
+        effectiveTaxRate: taxSurcharge.rate,
+        surcharges: surcharge,
+        subtotal: subtotal,
+        shipping: shippingCharge,
+        taxes: taxSurcharge.taxAmoun,
+        taxableAmount: taxSurcharge.taxableAmount,
+        total: total
+      });
+      let orderInvoice = await newOrderInvoice.save();
+      let newOrderObject = new Order({
+        createdAt: now,
+        updatedAt: now,
+        userId: userId,
+        sellerPayout,
+        bundleId: bundle._id,
+        paymentMethod: paymentMethod,
+        billingAddress: paymentMethod.billingAddress._id,
+        shippingAddressId: shippingAddress,
+        storeId: store._id,
+        orderInvoiceId: orderInvoice,
+        status: "need-to-fulfill"
+      });
+      let newOrder = await newOrderObject.save();
+      let updatedOrder = await Order.findOne({ _id: newOrder._id })
+        .populate('paymentMethod')
+        .populate('billingAddress')
+        .populate('storeId')
+        .populate('orderInvoiceId')
+        .populate({
+          path: 'bundleId',
+          populate: {
+            path: 'productOrderItemIds',
+            populate: [{
+              path: 'productId'
+            }, {
+              path: 'selectedOptionIds'
+            }]
+          }
+        });
+      // stripe create a new  connect payment
+      res.json({
+        success: true,
+        payload: updatedOrder
+      })
+    } catch (error) {
+      console.log(error);
+      Logger.logError(error);
+    }
   } else {
     console.log("ORDER TOTAL DOESN't EQUAL INTENT ORDER TOTAL");
   }
 });
 
-router.post('/delete', async function(req, res) {
+router.post('/delete', async function (req, res) {
 
 });
 
-router.post('/update', async function(req, res) {
+router.post('/update', async function (req, res) {
 
 });
 
-router.post('/updateTracking', async function(req, res) {
+router.post('/updateTracking', async function (req, res) {
 
 });
 

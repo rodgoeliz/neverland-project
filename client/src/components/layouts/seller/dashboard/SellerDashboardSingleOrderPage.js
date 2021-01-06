@@ -1,12 +1,31 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Typography } from '@material-ui/core';
 
 import { getOrderById, getProductById } from 'actions';
 import { RowContainer, Image, OrderDescription, Price } from 'components/UI/Row';
 import Invoice from 'components/UI/Invoice';
+import ShippingDetails from 'components/UI/ShippingDetails';
 
 import SellerDashboardNavWrapper from './SellerDashboardNavWrapper';
+
+const OrderDetails = ({ currentOrder, orderId }) => (
+  <>
+    <Typography variant="h2" component="h2">
+      Order# {orderId}
+    </Typography>
+    <span>
+      <b>Date:</b> {(new Date(currentOrder.updatedAt)).toLocaleDateString('en-US')}
+    </span>
+    <Typography variant="h2" component="h2">
+      {currentOrder.billingAddress?.userId.name}
+    </Typography>
+
+    {/* Shipping address */}
+    <ShippingDetails {...currentOrder.billingAddress} />
+  </>
+)
 
 export default function SellerDashboardSingleOrderPage() {
   const { orderId } = useParams();
@@ -19,15 +38,22 @@ export default function SellerDashboardSingleOrderPage() {
     dispatch(getOrderById(orderId));
   }, [orderId]);
 
+  // Fetch all products, listed in order
+  // Will be stored in products reducer
   useEffect(() =>
+    // TODO: add logic of checking in store. Could be cached
     currentOrder.storeId?.productIds?.forEach(
       (productId) => dispatch(getProductById(productId))
     ), [currentOrder])
 
   return (
     <SellerDashboardNavWrapper>
-      <div>{currentOrder.billingAddress?.addressLine1}</div>
 
+      {/* Navigation */}
+      {/* eslint-disable-next-line */}
+      <Link to={'/seller/dashboard/orders'}>{'<< Back to orders'}</Link>
+
+      <OrderDetails currentOrder={currentOrder} orderId={orderId} />
 
       {/* Display products in order */}
       {currentOrder.storeId?.productIds.map((productId) => (
@@ -38,12 +64,13 @@ export default function SellerDashboardSingleOrderPage() {
             title={productsCache[productId].title}
             content={[productsCache[productId].description]}
           />
-          <Price>
+          <Price flexGrow={1} >
             {productsCache[productId].price.value} {productsCache[productId].price.currency}
           </Price>
         </RowContainer>
       ))}
 
+      {/* Invoice section */}
       <Invoice
         currency={currentOrder.orderInvoiceId?.price.currency}
         sh={currentOrder.orderInvoiceId?.shipping}
