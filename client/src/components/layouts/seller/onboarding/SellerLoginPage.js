@@ -89,7 +89,7 @@ class SellerLoginPage extends React.Component {
 
   redirectToNextStep() {
     this.setState({
-      nextPath: '/seller/onboarding/main',
+      nextPath: '/seller/onboarding/products',
     });
     // redirect to main routing which will then redirect to the right step
   }

@@ -181,7 +181,7 @@ class SellerOnboardingAddProductsPage extends Component {
             />
             <div style={{ height: 64 }} />
           </div>
-          {/* <div onClick={this.props.logOut}> <span>Logout</span> </div> */}
+           {/* <div onClick={this.props.logOut}> <span>Logout</span> </div> */}
         </div>
       </OnboardingImageWrapper>
     );
