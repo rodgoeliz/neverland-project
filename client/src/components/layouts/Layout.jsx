@@ -5,7 +5,7 @@ import Footer from 'components/Footer';
 
 function Layout({children}){
     const pathName = window.location.pathname;
-    if (pathName.includes('seller/onboarding')) {
+    if (pathName.includes('seller/onboarding') || pathName.includes('seller/logout')) {
       return (
       <div>
         {children }
