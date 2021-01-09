@@ -474,6 +474,8 @@ class AddProductView extends Component {
     }
     formData = this.transformToFormData(this.state.formData, formData);
     // if we didn't assign a store, pull user store
+    console.log("STOREID: ", this.state.formData.storeId[0]);
+    console.log("USERID : ", this.props.user._id);
     if (!this.state.formData.storeId) {
       formData.append('userId', this.props.user._id);
       if (typeof this.props.user.storeId === 'string') {
@@ -485,28 +487,30 @@ class AddProductView extends Component {
         const store = this.state.formData.storeId[0];
         if (typeof store === "object") {
           formData.append('storeId', store._id);
+          formData.append('userId', this.props.user._id);
         } else if (typeof store.storeId === "string") {
           formData.append('storeId', store)
-        }
-        if (typeof store.userId === "object") {
-          formData.append('vendorId', store.userId._id);
-          formData.append('userId', store.userId._id);
-        } else if (typeof store.userId === "string") {
-          formData.append('vendorId', store.userId);
-          formData.append('userId', store.userId);
+          if (typeof store.userId === "object") {
+            formData.append('vendorId', store.userId._id);
+            formData.append('userId', store.userId._id);
+          } else if (typeof store.userId === "string") {
+            formData.append('vendorId', store.userId);
+            formData.append('userId', store.userId);
+          }
         }
       }
     const existingProduct = this.state.product;
+    console.log("FORM DATA", formData)
     if (existingProduct) {
       formData.append('productId', existingProduct._id);
-      await this.props.updateProduct({ formData });
-      this.onCloseView();
+      // await this.props.updateProduct({ formData });
+    //  this.onCloseView();
       return;
     }
 
-    await this.props.createProduct({ formData });
+    // await this.props.createProduct({ formData });
     this.setState({ isSavingProduct: false });
-    this.onCloseView();
+    // this.onCloseView();
   }
 
   async onSubmitProduct() {
