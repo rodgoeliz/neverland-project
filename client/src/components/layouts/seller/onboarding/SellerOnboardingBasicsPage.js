@@ -251,7 +251,7 @@ class SellerOnboardingBasicsPage extends Component {
     // seller referral source
     const sReferral = this.state.formData.sellerReferralSource;
     if (!sReferral || sReferral.length === 0) {
-      console.log('invlaid sellerReferralSource');
+      // console.log('invlaid sellerReferralSource');
       this.setState({
         sellerReferralSourceError: 'Must select one.',
       });
@@ -265,7 +265,7 @@ class SellerOnboardingBasicsPage extends Component {
     // sellerChallenge
     const sChallenge = this.state.formData.sellerChallenge;
     if (!sChallenge || sChallenge.length < 30) {
-      console.log('invlaid sChallenge');
+      // console.log('invlaid sChallenge');
       this.setState({
         sellerChallengeError: 'Please give us more details.',
       });
@@ -278,7 +278,7 @@ class SellerOnboardingBasicsPage extends Component {
 
     const sellerProducts = this.state.formData.productSelectedItems;
     if (!sellerProducts || sellerProducts.length === 0) {
-      console.log('invlaid sellerProducts');
+      // console.log('invlaid sellerProducts');
       this.setState({
         productSelectedItemsError: 'Please select products you sell.',
       });
@@ -291,7 +291,7 @@ class SellerOnboardingBasicsPage extends Component {
 
     const sStoreItems = this.state.formData.sellerStoreSelectedItems;
     if (!sStoreItems || sStoreItems.length === 0) {
-      console.log('invlaid sStoreItems');
+      // console.log('invlaid sStoreItems');
       this.setState({
         sellerStoreSelectedItemsError: 'Please select existing platforms you sell on.',
       });
@@ -304,7 +304,7 @@ class SellerOnboardingBasicsPage extends Component {
 
     const sProductSource = this.state.formData.sellerProductSource;
     if (!sProductSource || sProductSource.length < 30) {
-      console.log('invlaid sProductSource');
+      // console.log('invlaid sProductSource');
       this.setState({
         sellerProductSourceError: 'Please give us more details.',
       });
@@ -317,7 +317,7 @@ class SellerOnboardingBasicsPage extends Component {
 
     const sPacking = this.state.formData.sellerPacking;
     if (!sPacking || sPacking.length < 30) {
-      console.log('invlaid sPacking');
+      // console.log('invlaid sPacking');
       this.setState({
         sellerPackingError: 'Please give us more details.',
       });

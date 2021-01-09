@@ -15,7 +15,7 @@ export const updateStore = (storeId, formData) => async (dispatch) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }
 
@@ -30,8 +30,8 @@ export const getStore = (userId) => async (dispatch) => {
       return response.data.payload;
     }
   } catch (error) {
-    console.log(error)
-    console.log(`Error retrieving store for user id: ${userId}`);
+    // console.log(error)
+    // console.log(`Error retrieving store for user id: ${userId}`);
   }
 }
 
@@ -44,9 +44,9 @@ export const getStores = () => async (dispatch) => {
         payload: response.data.payload
       });
     } else {
-      console.log("Error retrieving stores...", response.data.error);
+      // console.log("Error retrieving stores...", response.data.error);
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }

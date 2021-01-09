@@ -67,9 +67,7 @@ class SellerDashboardShopPage extends React.Component {
         store,
         isLoading: false,
       });
-    } else {
-      console.log('TROUBLE LOADING STORE');
-    }
+    } 
   }
 
   _loadStoreIntoForm(store) {

@@ -110,7 +110,6 @@ class AddProductView extends Component {
 
     // means we are editing the product;
     const loadedProduct = props.product;
-    console.log("loadedProduct:", props.product);
     if (loadedProduct) {
       updatedFormData = transformProductToFormData(loadedProduct);
     }
@@ -177,7 +176,6 @@ class AddProductView extends Component {
         },
         async () => {
           const sellerProduct = await this.props.loadSellerProduct({ productId: passedProductId });
-          console.log("SELLER PRODUCT: ", sellerProduct)
           const transformedProductFD = transformProductToFormData(sellerProduct);
           this.setState({
             formData: transformedProductFD,
@@ -193,7 +191,6 @@ class AddProductView extends Component {
 
   transformToFormData(jsonObj, formData) {
     for (const key in jsonObj) {
-      console.log(key, JSON.stringify(jsonObj[key]))
       switch (key) {
         case 'variations':
           formData.append(key, JSON.stringify(jsonObj[key]));
@@ -458,7 +455,6 @@ class AddProductView extends Component {
     if (!currentProduct && this.state.product) {
       currentProduct = this.state.product;
     }
-    console.log("saveProduct", this.state)
     let formData = new FormData();
     // formData.append('my_photos')
     if (this.state.formData.productPhotos) {
@@ -474,8 +470,6 @@ class AddProductView extends Component {
     }
     formData = this.transformToFormData(this.state.formData, formData);
     // if we didn't assign a store, pull user store
-    console.log("USERID : ", this.props.user._id);
-    console.log("STOREID : ", this.props.user.storeId);
     if (!this.state.formData.storeId) {
       formData.append('userId', this.props.user._id);
       if (typeof this.props.user.storeId === 'string') {
@@ -484,7 +478,6 @@ class AddProductView extends Component {
         formData.append('storeId', this.props.user.storeId._id);
       }
     } else if (this.state.formData.storeId && this.state.formData.storeId.length === 1) {
-        console.log("STOREID: ", this.state.formData.storeId[0]);
         const store = this.state.formData.storeId[0];
         if (typeof store === "object") {
           formData.append('storeId', store._id);
@@ -501,17 +494,16 @@ class AddProductView extends Component {
         }
       }
     const existingProduct = this.state.product;
-    console.log("FORM DATA", formData)
     if (existingProduct) {
       formData.append('productId', existingProduct._id);
-      // await this.props.updateProduct({ formData });
-    //  this.onCloseView();
+      await this.props.updateProduct({ formData });
+      this.onCloseView();
       return;
     }
 
-    // await this.props.createProduct({ formData });
+    await this.props.createProduct({ formData });
     this.setState({ isSavingProduct: false });
-    // this.onCloseView();
+    this.onCloseView();
   }
 
   async onSubmitProduct() {
