@@ -474,8 +474,8 @@ class AddProductView extends Component {
     }
     formData = this.transformToFormData(this.state.formData, formData);
     // if we didn't assign a store, pull user store
-    console.log("STOREID: ", this.state.formData.storeId[0]);
     console.log("USERID : ", this.props.user._id);
+    console.log("STOREID : ", this.props.user.storeId);
     if (!this.state.formData.storeId) {
       formData.append('userId', this.props.user._id);
       if (typeof this.props.user.storeId === 'string') {
@@ -484,6 +484,7 @@ class AddProductView extends Component {
         formData.append('storeId', this.props.user.storeId._id);
       }
     } else if (this.state.formData.storeId && this.state.formData.storeId.length === 1) {
+        console.log("STOREID: ", this.state.formData.storeId[0]);
         const store = this.state.formData.storeId[0];
         if (typeof store === "object") {
           formData.append('storeId', store._id);
