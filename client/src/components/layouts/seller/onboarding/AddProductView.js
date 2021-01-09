@@ -110,6 +110,7 @@ class AddProductView extends Component {
 
     // means we are editing the product;
     const loadedProduct = props.product;
+    console.log("loadedProduct:", props.product);
     if (loadedProduct) {
       updatedFormData = transformProductToFormData(loadedProduct);
     }
@@ -169,7 +170,6 @@ class AddProductView extends Component {
       const { match: { params } } = this.props;
       passedProductId = params.productId;
     }
-    console.log("passed product id: ", passedProductId)
     if (passedProductId) {
       this.setState(
         {
@@ -193,6 +193,7 @@ class AddProductView extends Component {
 
   transformToFormData(jsonObj, formData) {
     for (const key in jsonObj) {
+      console.log(key, JSON.stringify(jsonObj[key]))
       switch (key) {
         case 'variations':
           formData.append(key, JSON.stringify(jsonObj[key]));
@@ -457,6 +458,7 @@ class AddProductView extends Component {
     if (!currentProduct && this.state.product) {
       currentProduct = this.state.product;
     }
+    console.log("saveProduct", this.state)
     let formData = new FormData();
     // formData.append('my_photos')
     if (this.state.formData.productPhotos) {
@@ -471,7 +473,6 @@ class AddProductView extends Component {
       }
     }
     formData = this.transformToFormData(this.state.formData, formData);
-    console.log("form data:", this.state.formData)
     // if we didn't assign a store, pull user store
     if (!this.state.formData.storeId) {
       formData.append('userId', this.props.user._id);
@@ -531,7 +532,6 @@ class AddProductView extends Component {
 
   onCloseView() {
     if (this.props.onClose) {
-      console.log("ON CLOSE function")
       this.props.onClose();
     } else {
       window.location.reload();

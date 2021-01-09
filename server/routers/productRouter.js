@@ -713,6 +713,7 @@ router.post('/seller/update', async function(req, res, next) {
           },
           quantity: option.quantity
         }
+        console.log("OPTION SCHEMA: ", optionSchema, option._id)
       if (option._id) {
         optionId = option._id
         await ProductVariationOption.findOneAndUpdate({_id: option._id}, {
@@ -726,6 +727,7 @@ router.post('/seller/update', async function(req, res, next) {
       }
       optionIds.push(optionId);
     }
+
     let variationSchema = {
       udatedAt: now,
       title: variation.title,
@@ -1182,6 +1184,7 @@ router.get('/get/list', async function(req, res, next) {
         populate: {
           path: 'optionIds'
       }})
+      .populate('categoryIds')
       .populate('tagIds')
       .populate({
         path: 'vendorId',

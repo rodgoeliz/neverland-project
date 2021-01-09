@@ -9,7 +9,7 @@ const productCollectionsSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Product'
 	}
-});
+}, {timestamps: true});
 
 const ProductCollection = mongoose.model('ProductCollection', productCollectionsSchema);
 module.exports = ProductCollection;

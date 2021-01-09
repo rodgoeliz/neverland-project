@@ -17,7 +17,7 @@ const productVariationOptionSchema = new mongoose.Schema({
     ref: 'ProductVariation'
   },
 	quantity: String
-});
+}, {timestamps: true});
 
 const ProductVariationOption = mongoose.model('ProductVariationOption', productVariationOptionSchema);
 module.exports = ProductVariationOption;
