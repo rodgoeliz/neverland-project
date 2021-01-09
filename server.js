@@ -18,13 +18,14 @@ Sentry.init({
 });
 const port = process.env.PORT || 5000;
 const bodyParser = require('body-parser');
-var cors = require('cors');
-var cookieParser = require("cookie-parser");
-var path = require("path");
+const cors = require('cors');
+const cookieParser = require("cookie-parser");
+const path = require("path");
 const session = require('express-session');
-var mongoose = require('mongoose');
-const { getEnvVariable } = require("./server/utils/envWrapper");
+const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
+
+const { getEnvVariable } = require("./server/utils/envWrapper");
 var waitlistRouter = require('./server/routers/waitlistRouter');
 var userRouter = require('./server/routers/loginOrSignUpRouter');
 var bundleRouter = require('./server/routers/bundleRouter');
@@ -47,6 +48,14 @@ const formData = require('express-form-data');
 const dotenv = require('dotenv');
 dotenv.config();
 
+if ( process.env.NODE_ENV === 'production' ) {
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https')
+      res.redirect(`https://${req.header('host')}${req.url}`)
+    else
+      next();
+  });
+}
 
 // RequestHandler creates a separate execution context using domains, so that every
 // transaction/span/breadcrumb is attached to its own Hub instance
