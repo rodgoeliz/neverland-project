@@ -1,28 +1,30 @@
 var express = require("express");
 require('dotenv').config();
 var router = express.Router();
-var WaitlistUser = require('../models/waitlistUser');
-var Product = require('../models/Product');
-var ProductTag = require('../models/ProductTag');
-var NavigationItem = require('../models/NavigationItem');
-var ProductVariation = require('../models/ProductVariation');
-var ProductSearchMetaData = require('../models/ProductSearchMetaData');
-const { getEnvVariable } = require("../utils/envWrapper");
-var ProductVariationOption = require('../models/ProductVariationOption');
 const algoliasearch = require("algoliasearch");
 const algoliaClient = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
-var RecentlyViewedProduct = require('../models/RecentlyViewedProducts');
-var FavoriteProduct = require('../models/FavoriteProduct');
-var Store = require('../models/Store');
-var ProductTag = require('../models/ProductTag');
-const {sendEmail} = require("../email/emailClient");
-var Mailchimp = require('mailchimp-api-v3')
-var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
-const mongoose = require('mongoose');
-const formidable = require('formidable');
 const AWS = require('aws-sdk');
-const fs = require('fs');
 const csv = require('csvtojson');
+const formidable = require('formidable');
+const fs = require('fs');
+const Mailchimp = require('mailchimp-api-v3')
+const mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
+const mongoose = require('mongoose');
+
+const FavoriteProduct = require('../models/FavoriteProduct');
+const Logger = require('../utils/errorLogger');
+const NavigationItem = require('../models/NavigationItem');
+const Product = require('../models/Product');
+const ProductTag = require('../models/ProductTag');
+const ProductSearchMetaData = require('../models/ProductSearchMetaData');
+const ProductVariation = require('../models/ProductVariation');
+const ProductVariationOption = require('../models/ProductVariationOption');
+const RecentlyViewedProduct = require('../models/RecentlyViewedProducts');
+const Store = require('../models/Store');
+const WaitlistUser = require('../models/waitlistUser');
+
+const { getEnvVariable } = require("../utils/envWrapper");
+const { sendEmail } = require("../email/emailClient");
 
 const s3 = new AWS.S3({
 	accessKeyId: 'AKIAICO4I2GPW7SSMN6A',
@@ -618,6 +620,8 @@ router.post('/seller/create', async function(req, res, next) {
 });
 
 router.post('/seller/update', async function(req, res, next) {
+  try {
+
   const files= Object.values(req.files)
   let formData = req.body;
   console.log("seller update product endpoint...", formData)
@@ -702,18 +706,18 @@ router.post('/seller/update', async function(req, res, next) {
     let optionId = mongoose.Types.ObjectId();
     for (var idx in variation.options) {
       let option = variation.options[idx];
+      let optionPrice = option.price ? option.price : 0;
         let optionSchema={
           title: option.title,
           handle: option.handle,
           sku: option.sku,
           isVisible: option.isVisible,
           price: {
-            value: option.price * 100,
+            value: optionPrice * 100,
             currency: 'USD'
           },
           quantity: option.quantity
         }
-        console.log("OPTION SCHEMA: ", optionSchema, option._id)
       if (option._id) {
         optionId = option._id
         await ProductVariationOption.findOneAndUpdate({_id: option._id}, {
@@ -766,7 +770,6 @@ router.post('/seller/update', async function(req, res, next) {
   let productPhotoUrls = [];
   if (files.length > 0) {
     files[0].map((file) => {
-      console.log("CHECKING PHOTO FILES: ", file);
       if (file.uri && file.uri.includes('http:/')) {
         productPhotoUrls.push(file.uri);
       } else {
@@ -782,13 +785,10 @@ router.post('/seller/update', async function(req, res, next) {
     }
   }
   Promise.allSettled(fileUploadPromises).then(async function(data) {
-    console.log("Uploaded image files for product...")
     for (let i = 0; i < data.length; i++) {
       productPhotoUrls.push(data[i].value.Location);
     }
-    console.log("PRODUCT PHOTO URLS:", productPhotoUrls);
     Promise.allSettled(variationPromises).then(async (results) => {
-      console.log("Uploaded image files for product...")
       // find product tags
       // find categories
       tagSelectedItems = tagSelectedItems.map((item) => {return item._id});
@@ -834,25 +834,19 @@ router.post('/seller/update', async function(req, res, next) {
         if (searchMetaData) {
           newProductSchema.searchMetaData = searchMetaData;
         }
-        console.log("IS PRICE DEFINED", price)
         if (price) {
           newProductSchema.price = {
             value: price * 100,
             currency: 'USD'
           } 
         }
-        console.log("updating product with", productId, newProductSchema)
         let test = await Product.findOne({_id: productId});
-        console.log("TEST", productId, test)
-        console.log("TEST222")
         let newProduct = await Product
           .findOneAndUpdate({_id: productId}, {$set: newProductSchema}, { new: true})
           .populate({path: 'variationIds', populate: {'path': 'optionIds'}})
           .populate('tagIds')
           .populate('categoryIds')
           .exec();
-        console.log("CONVERT")
-        console.log("SENDING BACK NEW PRODUCT", newProduct)
         res.json({
           success: true,
           payload: newProduct 
@@ -860,6 +854,11 @@ router.post('/seller/update', async function(req, res, next) {
       })
     });
   });
+} catch (error) {
+  console.log(error)
+  // sent to Sentry
+  Logger.logError(error);
+}
 });
 
 router.post('/toggleVisibility', async function(req, res, next) {
