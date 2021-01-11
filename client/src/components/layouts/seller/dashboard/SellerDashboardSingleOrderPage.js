@@ -7,9 +7,12 @@ import { createOrderPdf, getOrderById, getProductById } from 'actions';
 import { RowContainer, Image, OrderDescription, Price } from 'components/UI/Row';
 import Invoice from 'components/UI/Invoice';
 import ShippingDetails from 'components/UI/ShippingDetails';
+import NButton from 'components/UI/NButton';
 
 import SellerDashboardNavWrapper from './SellerDashboardNavWrapper';
 
+
+// TODO: fix structure and export into single component beside this page
 const OrderDetails = ({ currentOrder, orderId }) => (
   <>
     <Typography variant="h2" component="h2">
@@ -41,40 +44,43 @@ export default function SellerDashboardSingleOrderPage() {
   // Fetch all products, listed in order
   // Will be stored in products reducer
   useEffect(() =>
+
     // TODO: add logic of checking in store. Could be cached
-    currentOrder.storeId?.productIds?.forEach(
+    currentOrder.bundleId?.productIds?.forEach(
       (productId) => dispatch(getProductById(productId))
     ), [currentOrder])
 
   const handlePrintInvoice = () => {
-    const products = currentOrder.storeId.productIds.map(id => productsCache[id]);
+    const products = currentOrder.bundleId.productIds.map(id => productsCache[id]);
     dispatch(createOrderPdf({ orderId, products, currentOrder }));
   }
 
   return (
     <SellerDashboardNavWrapper>
 
-      {/* Navigation */}
       {/* eslint-disable-next-line */}
       <Link to={'/seller/dashboard/orders'}>{'<< Back to orders'}</Link>
-
       <OrderDetails currentOrder={currentOrder} orderId={orderId} />
 
       <Typography variant='h1' component='h2'>Products</Typography>
-      <button onClick={handlePrintInvoice}>Print invoice</button>
+      <NButton theme="secondary" title='Print invoice' onClick={handlePrintInvoice} />
+
       {/* Display products in order */}
-      {currentOrder.storeId?.productIds.map((productId) => (
+      {currentOrder.bundleId?.productIds.map((productId) => (
+
         // Products data taken from products reducer, ids from order (seller reducer)
-        <RowContainer key={productId}>
-          <Image src={productsCache[productId].imageURLs[0]} />
-          <OrderDescription
-            title={productsCache[productId].title}
-            content={[productsCache[productId].description]}
-          />
-          <Price flexGrow={1} >
-            {productsCache[productId].price.value} {productsCache[productId].price.currency}
-          </Price>
-        </RowContainer>
+        productsCache[productId] && (
+          <RowContainer key={productId}>
+            <Image src={productsCache[productId].imageURLs[0]} />
+            <OrderDescription
+              title={productsCache[productId].title}
+              content={[productsCache[productId].description]}
+            />
+            <Price flexGrow={1} >
+              {productsCache[productId].price.value} {productsCache[productId].price.currency}
+            </Price>
+          </RowContainer>
+        )
       ))}
 
       {/* Invoice section */}
