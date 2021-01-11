@@ -650,8 +650,8 @@ router.post('/seller/update', async function(req, res, next) {
   let title = formData.title;
   let originZipCode = formData.originZipCode;
   let handlingFee = formData.handlingFee;
-  //let storeId = formData.storeId;
-  //let vendorId = formData.userId;
+  let storeId = formData.storeId;
+  let vendorId = formData.userId;
   let isArtificial = formData.isArtificial ? formData.isArtificial : false;
   let isOrganic = formData.isOrganic ? formData.isOrganic : false;
   let isVisible = formData.isVisible ? formData.isVisible: false;
@@ -827,8 +827,8 @@ router.post('/seller/update', async function(req, res, next) {
           lengthIn: itemLengthIn,
           isOrganic: isOrganic,
           isArtificial: isArtificial,
-          storeId: storeId,
-          vendorId: vendorId,
+          //storeId: storeId,
+          //vendorId: vendorId,
           searchMetaData
         };
         if (searchMetaData) {
