@@ -1,4 +1,6 @@
+import { showMessage } from 'actions/ui';
 import actionTypes from 'constants/newActionTypes';
+import { UI } from 'constants/ui';
 
 import Api from 'lib/api';
 import { auth } from 'services/firebase';
@@ -62,12 +64,11 @@ export const logoutFirebase = () => async (dispatch) => {
     // don't forget to reset mixpanel user
     // await Mixpanel.reset();
   } catch (error) {
-    console.log('Error in logoutFirebase', error.message);
+    dispatch(showMessage({ type: UI.MESSAGES.ERROR, text: `Error in logoutFirebase ${error.message}` }))
   }
 
   dispatch({ type: actionTypes.auth.LOGOUT });
 };
-
 
 export const loginFirebase = (data) => async (dispatch) => {
   const { email, password } = data;

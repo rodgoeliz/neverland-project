@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 import storage from 'redux-persist/lib/storage';
 
 import waitlist from "reducers/waitlist";
+import ui from "reducers/ui";
 import admin from "reducers/admin";
 import auth from "reducers/auth";
 import seller from "reducers/seller";
@@ -18,6 +19,7 @@ const persistConfig = {
 }
 
 const rootReducers = combineReducers({
+  ui,
   waitlist,
   admin,
   auth,
