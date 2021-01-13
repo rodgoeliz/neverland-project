@@ -9,6 +9,7 @@ export const initialState = {
   allProductTags: [],
   allProductCategories: [],
   ordersCache: [],
+  currentOrder: {},
   currentPage: 0 // TODO: take current page from url
 };
 
@@ -71,6 +72,11 @@ const sellerReducer = (state = initialState, action) => {
       return {
         ...state,
         currentPage: Number(action.payload),
+      };
+    case actionTypes.seller.UPDATE_SINGLE_ORDER:
+      return {
+        ...state,
+        currentOrder: action.payload,
       };
     case PURGE:
       return { ...initialState };
