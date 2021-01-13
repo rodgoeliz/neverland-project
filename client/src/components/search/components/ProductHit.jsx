@@ -1,33 +1,27 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
-import { OrderDescription, Image, LabelContainer, NavigationArrow, RowContainer, Status } from 'components/UI/Row'
+import { OrderDescription, NavigationArrow, RowContainer, Image, ToggleVisibility, SoldAndQuantity } from 'components/UI/Row'
+import { toggleVisibility } from 'actions';
 
-export default class ProductHit extends React.Component{
-  constructor(props) {
-   super(props);
-   this.onClickProduct = this.onClickProduct.bind(this);
-  }
-
-  onClickProduct() {  }
-
-  render() {
-    const { hit }  = this.props;
+export default function ProductHit({hit, onClickProduct}) {
     const product = hit;
+    const dispatch = useDispatch();
+    const handleToggleVisibility = (isVisible) => {
+      dispatch(toggleVisibility(product._id, isVisible));
+    }
+
     return (
-      <RowContainer onClick={this.onClickOrder}>
+      <RowContainer onClick={onClickProduct}>
         <LabelContainer labelText={product.createdAt}>
-        <Image src={product.imageURLs[0]} />
+        <Image src={product.imageURLs && product.imageURLs[0]} />
         <OrderDescription
           order={product._id}
-          title={product.title ? product.title: 'Product'}
-          />
-        </LabelContainer>
-            <Status>
-              {product.title} 
-            </Status>
-            <NavigationArrow to={`/seller/dashboard/product/${product._id}`} />
+          title={product.title ? product.title : 'Product'}
+        />
+        <SoldAndQuantity quantity={product.inventoryAvailableToSell} sold={product.inventoryInStock} />
+        <ToggleVisibility checked={product.isVisible} text='IS VISIBLE' toggleChecked={handleToggleVisibility} />
+        <NavigationArrow to={`/seller/dashboard/product/${product._id}`} />
       </RowContainer>
-
-      )
-  }
+    )
 }

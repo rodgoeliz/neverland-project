@@ -192,19 +192,18 @@ export const getProductsForSeller = ({ sellerId }) => async (dispatch) => {
   }
 };
 
-export const toggleVisibility = ({ productId }) => async (dispatch) => {
+export const toggleVisibility = (productId, isVisible) => async (dispatch) => {
   try {
-    dispatch.seller.toggleProductVisibility(productId);
     const response = await Api.post(`/api/product/toggleVisibility`, {
       productId,
+      isVisible
     });
+
     if (response.data.success) {
       dispatch(updateProduct(response.data.payload));
-    } else {
-      // dispatch(createErrorAction(actionTypes.seller.TOGGLE_VISIBILITY, response.data.error));
     }
   } catch (error) {
-    // throw HandleErrorMessage(error);
+    console.log(error);
   }
 };
 

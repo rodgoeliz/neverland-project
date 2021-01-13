@@ -39,7 +39,7 @@ export default function ToggleVisibility({ text, checked, toggleChecked }) {
     return (
         <ToggleVisibilityStyled>
             {text}
-            <SwitchStyled size="normal" checked={checked} onChange={toggleChecked} />
+            <SwitchStyled size="normal" checked={checked} onChange={() => toggleChecked(!checked)} />
         </ToggleVisibilityStyled>
     )
 }
