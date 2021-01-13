@@ -1,27 +1,27 @@
-$theme-blue: #1E1DCD;
+$theme-blue: #1e1dcd;
 $theme-green: #477138;
-$theme-yellow: #DCBC4D;
-$theme-purple: #6227AD;
-$theme-maroon: #9F2458;
-$theme-black: #312A2D;
-$theme-beige: #EFE6D8;
+$theme-yellow: #dcbc4d;
+$theme-purple: #6227ad;
+$theme-maroon: #9f2458;
+$theme-black: #312a2d;
+$theme-beige: #efe6d8;
 $theme-dark-blue: #11109c;
 $theme-dark-yellow: #a98d2e;
-$theme-light-beige:#FAF6F0;
-$theme-xlight-beige: #FFFDFB;
-$theme-warm-light-beige: #F6F0E6;
+$theme-light-beige: #faf6f0;
+$theme-xlight-beige: #fffdfb;
+$theme-warm-light-beige: #f6f0e6;
 
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap");
 
 @font-face {
   font-family: Cognace;
-  src: url("fonts/Cognace-Regular.otf") format('opentype');
+  src: url("fonts/Cognace-Regular.otf") format("opentype");
 }
 
 body {
-  font-family: 'Open Sans', sans-serif !important;
-  font-size: 24px ;
-  background-color: $theme-beige !important;
+  font-family: "Open Sans", sans-serif !important;
+  font-size: 24px;
+  background-color: $theme-light-beige !important;
 }
 
 input {
@@ -35,15 +35,15 @@ textarea {
     font-size: 18px;
     flex: 1;
     padding-left: 4px;
-    background-color: 'transparent' !important;
+    background-color: "transparent" !important;
     &:focus {
-      outline: 'none' !important;  
+      outline: "none" !important;
     }
   }
 }
 
 .PhoneInputInput {
-  background-color: $theme-warm-light-beige!important;
+  background-color: $theme-warm-light-beige !important;
   border: 0px;
   border-top-right-radius: 16px;
   border-top-left-radius: 16px;
@@ -56,26 +56,26 @@ textarea {
 }
 
 .carousel-control-next-icon {
-    width: 32px !important;
-    height: 32px !important;
-    margin-left: 32px;
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+  width: 32px !important;
+  height: 32px !important;
+  margin-left: 32px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
 }
 
 .carousel-control-prev-icon {
-    width: 32px !important;
-   height: 32px !important;
-    margin-left: -32px;
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+  width: 32px !important;
+  height: 32px !important;
+  margin-left: -32px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
 }
 .carousel-indicators li {
-  background-color: $theme-black  !important;
+  background-color: $theme-black !important;
 }
 
 h1 {
-  font-family: 'Cognace';
+  font-family: "Cognace";
   font-size: 3.5rem !important;
-  line-height: 1.0 !important;
+  line-height: 1 !important;
 }
 
 a {
@@ -89,46 +89,46 @@ a:focus {
   color: $theme-blue !important;
 }
 .nvlnd-about-main-background-box-bottom {
-    width: 300px;
-    height: 300px;
-    position: absolute;
-    background-color: $theme-blue;
-    margin-left: -16px;
-    margin-bottom: -16px;
-    bottom: 0;
-    z-index: -100;
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  background-color: $theme-blue;
+  margin-left: -16px;
+  margin-bottom: -16px;
+  bottom: 0;
+  z-index: -100;
 }
 .nvlnd-about-main-background-box {
-    width: 300px;
-    height: 300px;
-    position: absolute;
-    background-color: $theme-blue;
-    margin-left: -16px;
-    margin-top: -16px;
-    z-index: -100;
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  background-color: $theme-blue;
+  margin-left: -16px;
+  margin-top: -16px;
+  z-index: -100;
 }
 .h2-cognace-blue,
 .h2-cognace {
-  font-family: 'Cognace';
+  font-family: "Cognace";
   font-size: calc(2.75rem + (4 * (100vw - 360px)) / 407) !important;
 }
 .h2-cognace-blue {
-  color: #1E1DCD
+  color: #1e1dcd;
 }
 .h3-cognace {
-  font-family: 'Cognace';
+  font-family: "Cognace";
   font-size: calc(2.25rem + (4 * (100vw - 360px)) / 407) !important;
 }
 
 .h4-cognace {
-  font-family: 'Cognace';
+  font-family: "Cognace";
   font-size: calc(1.75rem + (4 * (100vw - 360px)) / 407) !important;
 }
 
-.h4-secondary{
-  font-family: 'Open Sans';
+.h4-secondary {
+  font-family: "Open Sans";
   font-size: 1.5rem !important;
-  font-weight: bold
+  font-weight: bold;
 }
 
 h2 {
@@ -139,7 +139,7 @@ h4 {
   font-size: 1.25rem;
 }
 
-.carousel-item-content-container{
+.carousel-item-content-container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -158,37 +158,37 @@ h4 {
 }
 
 .carousel-item-text-header {
-  text-align: center  
+  text-align: center;
 }
 
 .carousel-item-image {
-  width: 80%
+  width: 80%;
 }
 
 .join-waitlist-loading {
   height: 80vh;
   display: flex;
   align-items: center;
-  font-weight: bold
+  font-weight: bold;
 }
 .app-img {
   width: 40vw;
 }
 .swash {
-  font-feature-settings: 'swsh'
+  font-feature-settings: "swsh";
 }
 .ss-n {
-  font-feature-settings: 'ss03'
+  font-feature-settings: "ss03";
 }
 .ss-h {
-  font-feature-settings: 'ss01'
+  font-feature-settings: "ss01";
 }
 .ss-v {
-  font-feature-settings: 'ss06'
+  font-feature-settings: "ss06";
 }
 .step-subtitle {
   font-size: 14px;
-  text-align: 'center';
+  text-align: "center";
   font-weight: bold;
   display: flex;
   margin: auto;
@@ -205,7 +205,6 @@ h4 {
   right: 0%;
   height: 40vh;
   animation: float_hor 15s ease-in-out infinite;
-
 }
 .step-title {
   color: $theme-blue;
@@ -232,11 +231,11 @@ h4 {
 .our-team-image {
   position: relative;
   width: 100%;
-  z-index:-1000;
+  z-index: -1000;
 }
 .our-team-container {
   margin-top: -15em;
-  z-index:200;
+  z-index: 200;
 }
 .plant-pack-square-green,
 .plant-pack-square-blue,
@@ -247,11 +246,11 @@ h4 {
   padding-bottom: 3em !important;
   padding-top: 3em !important;
 }
-.plant-pack-row-yellow{
+.plant-pack-row-yellow {
   background-color: $theme-yellow;
   color: $theme-black;
   position: relative;
-  background: url('./images/plantpackyellow.png') no-repeat;
+  background: url("./images/plantpackyellow.png") no-repeat;
   background-size: cover;
   padding-bottom: 6em;
   z-index: 500;
@@ -282,7 +281,7 @@ h4 {
   background-color: $theme-green;
   color: $theme-beige;
   position: relative;
-  background: url('./images/plantpackgreen.png') no-repeat;
+  background: url("./images/plantpackgreen.png") no-repeat;
   background-size: cover;
   padding-bottom: 6em;
   z-index: 200;
@@ -294,7 +293,7 @@ h4 {
   background-color: $theme-maroon;
   color: $theme-beige;
   position: relative;
-  background: url('./images/plantpackmaroon.png') no-repeat;
+  background: url("./images/plantpackmaroon.png") no-repeat;
   background-size: cover;
   padding-bottom: 6em;
   z-index: 600;
@@ -305,11 +304,11 @@ h4 {
   padding-left: 4em !important;
 }
 .plant-pack-row-blue {
-  z-index:1000;
+  z-index: 1000;
   background-color: $theme-blue;
   position: relative;
   color: $theme-beige;
-  background: url('./images/plantpackblue.png') no-repeat;
+  background: url("./images/plantpackblue.png") no-repeat;
   background-size: cover;
   padding-bottom: 6em;
 }
@@ -317,7 +316,7 @@ h4 {
   display: none;
 }
 .neverland-header-nav {
-  display: flex; 
+  display: flex;
   flex-direction: row;
   align-items: center;
   margin-left: auto;
@@ -339,9 +338,9 @@ h4 {
   }
 
   &::placeholder {
-     color: $theme-black;
-     font-size: 18px;
-     padding: 8px;
+    color: $theme-black;
+    font-size: 18px;
+    padding: 8px;
   }
 }
 
@@ -351,15 +350,15 @@ h4 {
   border: 4px solid $theme-blue;
   border-radius: 8px;
   background-color: transparent;
-  padding-top:8px;
+  padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 8px;
 
   &::placeholder {
-     color: $theme-blue;
-     font-weight: bold;
-     font-size: 18px;
-     padding: 8px;
+    color: $theme-blue;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 8px;
   }
 
   &:focus {
@@ -367,23 +366,23 @@ h4 {
   }
 
   &::placeholder {
-     color: $theme-blue;
-     font-size: 18px;
-     padding: 8px;
+    color: $theme-blue;
+    font-size: 18px;
+    padding: 8px;
   }
 }
 .neverland-input-footer,
 .neverland-input-yellow {
   border: 4px solid $theme-yellow;
   &::placeholder {
-     color: $theme-yellow;
-   }
+    color: $theme-yellow;
+  }
 }
 
 .neverland-input-footer {
   &::placeholder {
     color: $theme-yellow;
-    font-weight: bold
+    font-weight: bold;
   }
   &:focus {
     color: $theme-yellow;
@@ -397,7 +396,7 @@ h4 {
   border: 2px solid $theme-yellow;
   font-weight: bold;
   height: 58px;
-  margin: 4px; 
+  margin: 4px;
   font-size: 18px;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -456,7 +455,7 @@ h4 {
 }
 .our-story-container {
   margin: auto;
-  max-width: 800px
+  max-width: 800px;
 }
 .our-story-monologo {
   max-width: 300px;
@@ -475,22 +474,22 @@ h4 {
   flex-wrap: wrap;
 }
 .row-nmc {
-  justify-content: center
+  justify-content: center;
 }
 .romaine-calm-container {
   margin: auto;
-  padding-left: '2em' !important;
+  padding-left: "2em" !important;
   max-width: 500px;
 }
 .neverland-paintbrush {
   width: 40%;
 }
 .guarantee-container {
-      max-width: 600px;
-    margin: auto;
-    border: 8px solid $theme-black;
-    padding: 4em;
-    border-radius: 50%;
+  max-width: 600px;
+  margin: auto;
+  border: 8px solid $theme-black;
+  padding: 4em;
+  border-radius: 50%;
 }
 .header {
 }
@@ -501,10 +500,10 @@ h4 {
   background-color: $theme-beige;
 }
 .neverland-header {
- // background: url('/images/neverlandheader.png') no-repeat;
- // height: 120vh;
+  // background: url('/images/neverlandheader.png') no-repeat;
+  // height: 120vh;
   //background-size: 100%;
-  height : 100vh
+  height: 100vh;
 }
 .cloud_two {
   position: absolute;
@@ -512,7 +511,7 @@ h4 {
   left: 55vw;
   top: 20vw;
   animation: float_two 6s ease-in-out infinite;
-  z-index:100
+  z-index: 100;
 }
 .step-pick {
   height: 250px;
@@ -520,10 +519,10 @@ h4 {
   margin: auto;
 }
 .elevate-img-lg {
-    display: block;
+  display: block;
 }
 .elevate-img-sm {
-    display: none;
+  display: none;
 }
 .door {
   position: absolute;
@@ -533,10 +532,10 @@ h4 {
 }
 .chairplant {
   position: absolute;
-  height: 50vh; 
+  height: 50vh;
   right: 0;
   top: 35vh;
-  z-index: 150
+  z-index: 150;
 }
 .cloud {
   height: 10vw;
@@ -592,9 +591,9 @@ h4 {
   margin-left: 2em;
 }
 .neverland-header-img {
-      width: 100%;
-    position: absolute;
-    z-index: -1000;
+  width: 100%;
+  position: absolute;
+  z-index: -1000;
 }
 
 .padding-right {
@@ -618,7 +617,7 @@ h4 {
 .waitlist-status-container {
   margin-top: 4em;
   margin-bottom: 4em;
-  text-align: center
+  text-align: center;
 }
 
 .waitlist-referral-rewards {
@@ -634,16 +633,14 @@ h4 {
 }
 
 .referral-rewards-desc {
-  margin-top: 1em
+  margin-top: 1em;
 }
 
 .padding-left-small {
   padding-left: 0em !important;
-
 }
 
 .graphics {
-
 }
 .mobile-menu {
   display: none;
@@ -672,18 +669,17 @@ h4 {
 
 .footer {
   margin: 4em;
-  color: $theme-beige!important;
+  color: $theme-beige !important;
 
   a {
-    color: $theme-beige!important;
+    color: $theme-beige !important;
 
     &:hover,
     &:focus,
     &:active {
-      color: $theme-dark-yellow!important;
+      color: $theme-dark-yellow !important;
     }
   }
-
 }
 
 .footer-container {
@@ -705,7 +701,7 @@ h4 {
 
 .faq-contact-title,
 .faq-section-title {
-  border-bottom:6px solid $theme-black;
+  border-bottom: 6px solid $theme-black;
   padding-bottom: 8px;
 }
 
@@ -754,15 +750,15 @@ h4 {
 }
 
 .new-take-title {
-  width: 200px; 
+  width: 200px;
 }
 .new-take-title-container {
-  margin: 'auto';
-  padding-left: '4em';
+  margin: "auto";
+  padding-left: "4em";
 }
 
 .new-take-description {
-  margin: auto; 
+  margin: auto;
   padding-top: 1em;
   padding-right: 4em;
 }
@@ -772,21 +768,21 @@ h4 {
   padding-left: 4em !important;
   padding-right: 4em !important;
 }
-@media (max-width: 900px){
+@media (max-width: 900px) {
   .app-container {
     padding-left: 2em !important;
     padding-right: 2em !important;
   }
   body {
-    font-size: calc(.80rem + (4 * (100vw - 360px)) / 407) !important;
+    font-size: calc(0.8rem + (4 * (100vw - 360px)) / 407) !important;
   }
   li {
     line-height: 1.15;
-    font-size: calc(.80rem + (4 * (100vw - 360px)) / 407) !important;
+    font-size: calc(0.8rem + (4 * (100vw - 360px)) / 407) !important;
   }
   p {
     line-height: 1.25;
-    font-size: calc(.80rem + (4 * (100vw - 360px)) / 407) !important;
+    font-size: calc(0.8rem + (4 * (100vw - 360px)) / 407) !important;
   }
 
   h1 {
@@ -831,17 +827,17 @@ h4 {
   }
 
   .new-take-title {
-    width: 100%; 
+    width: 100%;
   }
   .new-take-title-container {
-    margin: 'auto';
-    padding-left: '0em';
+    margin: "auto";
+    padding-left: "0em";
   }
   .new-take-container {
     padding: 2em;
   }
   .new-take-description {
-    margin: auto; 
+    margin: auto;
     padding-top: 1em;
     padding-right: 0em;
   }
@@ -850,7 +846,7 @@ h4 {
     margin-top: -4em;
     background-color: $theme-yellow;
     padding: 2em;
-    border-radius: 32px; 
+    border-radius: 32px;
     padding-top: 4em;
   }
   .mobile-menu {
@@ -865,35 +861,35 @@ h4 {
   .neverland-header {
     height: 150vh;
   }
-  .neverland-he 0ader-img {
+  .neverland-header-img {
     width: 100%;
   }
 
-.faq-section {
-    padding-left: .5em;
-    padding-right: .5em;
+  .faq-section {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
   }
-.display-desktop {
-  display: none;
-}
-.display-mobile {
-  display: block;
-}
+  .display-desktop {
+    display: none;
+  }
+  .display-mobile {
+    display: block;
+  }
 
-.footer-logo {
-  max-width: 70px;
-  max-height: 78px;
-  margin-right: 2em;
-}
+  .footer-logo {
+    max-width: 70px;
+    max-height: 78px;
+    margin-right: 2em;
+  }
   .footer {
     margin: 1em;
   }
-    .neverland-header {
+  .neverland-header {
     background-color: $theme-yellow;
   }
   .desktop-menu {
     display: none;
-  } 
+  }
 
   .neverland-header-container {
     max-width: 80vw;
@@ -907,16 +903,14 @@ h4 {
     z-index: 100;
   }
   .mist {
-
   }
   .chairplant {
-
-  } 
+  }
   .chairplant_small {
     display: flex;
     position: absolute;
     width: 85vw;
-    z-index:100;
+    z-index: 100;
     top: 105vh;
     right: 0;
   }
@@ -927,7 +921,7 @@ h4 {
     top: 100vh;
     left: 10vw;
   }
-  .chairplant, 
+  .chairplant,
   .cloud {
     display: none;
   }
@@ -951,7 +945,7 @@ h4 {
     width: 100%;
   }
 }
-@media(min-width: 900px) and (max-width: 1200px) {
+@media (min-width: 900px) and (max-width: 1200px) {
   .mist {
     display: none;
   }
@@ -970,21 +964,21 @@ h4 {
   }
 }
 
-@media(min-width:1200px) {
+@media (min-width: 1200px) {
   body {
-    font-size: calc(1.0em + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(1em + (8 * (100vw - 1440px)) / 1119) !important;
   }
   p {
-    font-size: calc(1.0rem + (8 * (100vw - 1440px)) / 1119) !important;
-    line-height: 1.0;
+    font-size: calc(1rem + (8 * (100vw - 1440px)) / 1119) !important;
+    line-height: 1;
   }
   li {
-    font-size: calc(1.0rem + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(1rem + (8 * (100vw - 1440px)) / 1119) !important;
     line-height: 1.15;
   }
 
   h1 {
-    font-size: calc(3.0rem + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(3rem + (8 * (100vw - 1440px)) / 1119) !important;
   }
 
   h2 {
@@ -992,7 +986,7 @@ h4 {
   }
 
   h3 {
-    font-size: calc(2.0rem + (8 * (100vw - 1440px)) / 1119) !important;
+    font-size: calc(2rem + (8 * (100vw - 1440px)) / 1119) !important;
   }
   .neverland-header-img {
     width: 100%;
@@ -1002,15 +996,104 @@ h4 {
   }
 }
 
-@media(min-width:1400px) and (max-width:1800px) {
+@media (min-width: 1400px) and (max-width: 1800px) {
   .neverland-header {
     height: 125vh;
   }
-
 }
 
-@media(min-width:1800px) {
+@media (min-width: 1800px) {
   .neverland-header {
     height: 140vh;
+  }
+}
+
+/************************************************************************/
+/****************************** Algolia styles **************************/
+/************************************************************************/
+
+$formElementHeight: 65px;
+$basicOffset: 8px;
+
+.ais-SearchBox {
+  margin-bottom: $basicOffset * 2;
+  .ais-SearchBox-form {
+    display: flex;
+
+    .ais-SearchBox-input {
+      width: 575px;
+      height: $formElementHeight;
+      background-color: $theme-beige;
+      line-height: $formElementHeight;
+      border: none;
+      padding-left: $basicOffset;
+    }
+
+    .ais-SearchBox-submit {
+      width: 137px;
+      height: $formElementHeight;
+      margin-left: $basicOffset * 2;
+      padding: 0;
+
+      color: $theme-blue;
+      background-color: $theme-light-beige;
+      border: 1px solid $theme-blue;
+      border-radius: 50px;
+    }
+
+    // Do not show clear button
+    .ais-SearchBox-reset {
+      display: none;
+    }
+  }
+}
+
+.ais-Hits-list {
+  list-style: none;
+  padding: 0;
+}
+
+.ais-Pagination {
+  display: flex;
+  justify-content: end;
+
+  .ais-Pagination-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+
+    .ais-Pagination-item--firstPage {
+      display: none;
+    }
+
+    .ais-Pagination-item--previousPage,
+    .ais-Pagination-item--nextPage {
+      font-size: 3rem !important; // redefine algolia's important
+      background-color: $theme-beige;
+      background-color: #efe6d8;
+      padding: $basicOffset $basicOffset * 3;
+      padding-top: 0;
+
+      a {
+        font-size: 3rem !important; // redefine algolia's important
+      }
+    }
+    .ais-Pagination-item {
+      line-height: 4rem;
+      margin-right: $basicOffset * 2;
+
+      .ais-Pagination-link {
+        color: rgba(
+          68,
+          64,
+          63,
+          0.65
+        ) !important; // redefine algolia's important
+
+        &--selected {
+          color: rgb(68, 64, 63) !important; // redefine algolia's important
+        }
+      }
+    }
   }
 }

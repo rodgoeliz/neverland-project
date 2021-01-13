@@ -3,7 +3,8 @@ import { Box, Switch } from '@material-ui/core';
 import styled from "styled-components";
 
 const ToggleVisibilityStyled = styled(Box)`
-    width: 100px;
+    min-width: 150px; 
+    width: 150px; 
     display: flex;
     flex-direction: column;
     align-items: center;
