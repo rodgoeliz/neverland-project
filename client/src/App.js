@@ -43,6 +43,7 @@ import SellerOnboardingMainRoutingPage from "components/layouts/seller/onboardin
 import SellerDashboardMainPage from "components/layouts/seller/dashboard/SellerDashboardMainPage";
 import SellerDashboardShopPage from "components/layouts/seller/dashboard/SellerDashboardShopPage";
 import SellerLoadingPage from "components/layouts/seller/onboarding/SellerLoadingPage";
+import SellerLogoutPage from "components/layouts/seller/auth/SellerLogoutPage";
 import BrandStyles from 'components/BrandStyles';
 
 import store from './store/store';
@@ -186,6 +187,8 @@ class App extends Component {
                   <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/orders/:orderId" authenticated={this.state.authenticated} component={SellerDashboardSingleOrderPage} />
                   <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/products" authenticated={this.state.authenticated} component={SellerDashboardProductsPageContainer} />
                   <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/product/:productId" authenticated={this.state.authenticated} component={SellerDashboardAddOrEditProductPageContainer} />
+                  <PublicRoute exact loading={this.state.loading} store={store.store} path="/seller/logout" authenticated={this.state.authenticated} component={SellerLogoutPage} />
+
                   <Route exact path="/privacy" component={PrivacyPolicy} />
                   <Route exact path="/download/neverland" component={DownloadNeverland} />
                   <Route exact path="/waitlist/user" component={NeverlandWaitlist} />

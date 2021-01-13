@@ -147,7 +147,6 @@ class NButton extends Component {
   }
 
   render() {
-    console.log('isLoading', this.props.isLoading);
     const spinner = this.props.isLoading ? (
       <div style={styles.spinnerContainer}>
         <Spinner animation="border" variant="light" size="sm" />
@@ -155,8 +154,6 @@ class NButton extends Component {
     ) : null;
 
     let themeStyle = this.props.theme === 'secondary' ? styles.buttonSecondary : styles.button;
-    console.log("theme: ", this.props.theme, this.props.title)
-    console.log(themeStyle)
     if (this.props.disabled) {
       themeStyle = styles.buttonDisabled
     }

@@ -14,6 +14,8 @@ const productVariationSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'ProductVariationOption'
 	}]
+}, {
+  timestamps: true
 });
 
 const ProductVariation = mongoose.model('ProductVariation', productVariationSchema);

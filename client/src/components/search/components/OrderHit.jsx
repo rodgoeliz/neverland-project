@@ -8,9 +8,7 @@ export default class OrderHit extends React.Component{
    this.onClickOrder = this.onClickOrder.bind(this);
   }
 
-  onClickOrder() {
-    console.log("CLICK ORDEAR")
-  }
+  onClickOrder() { }
 
   render() {
     const { hit }  = this.props;

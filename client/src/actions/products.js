@@ -3,7 +3,6 @@ import actionTypes from 'constants/newActionTypes';
 import Api from 'lib/api';
 
 export const createTestProduct = () => async (dispatch) => {
-  console.log('inaction');
   dispatch({
     type: actionTypes.products.ADD_TEST_SELLER_PRODUCT,
     payload: {},
@@ -19,10 +18,10 @@ export const getProductSearchMetaData = () => async (dispatch) => {
         payload: response.data.payload
       });
     } else {
-      console.log("Error retrieving product search meta data: ", response.data.error)
+      // console.log("Error retrieving product search meta data: ", response.data.error)
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }
 
@@ -33,7 +32,6 @@ export const createProduct = ({ formData }) => async (dispatch) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log("product create response...");
     if (response.data.success) {
       dispatch({
         type: actionTypes.products.ADD_PRODUCT,
@@ -44,7 +42,7 @@ export const createProduct = ({ formData }) => async (dispatch) => {
         payload: { ...response.data.payload },
       });
     } else {
-      console.log('Error creating product', response);
+      // console.log('Error creating product', response);
     }
   } catch (error) {
     // throw HandleErrorMessage(error);
@@ -52,14 +50,13 @@ export const createProduct = ({ formData }) => async (dispatch) => {
 };
 
 export const loadProductsByTag = ({ limit, offset, tagId }) => async () => {
-  console.log('WARNING! loadProductsByTag does not trigger state change!');
   try {
     await Api.get(
       `api/product/getMany?tagId=${tagId}&offset=${offset}&limit=${limit}`,
     );
 
   } catch (error) {
-console.log(error);
+    // console.log(error);
   }
 };
 
@@ -81,7 +78,7 @@ export const updateProduct = ({ formData }) => async (dispatch) => {
         payload: { ...response.data.payload },
       });
     } else {
-      console.log('Error updating product', response);
+      // console.log('Error updating product', response);
     }
   } catch (error) {
     // throw HandleErrorMessage(error);
@@ -101,7 +98,7 @@ export const logRecentlyViewedProduct = ({ productId, userId }) => async (dispat
         payload: { ...response.data.payload },
       });
     } else {
-      console.log('logRecentlyViewedProduct error', response);
+      // console.log('logRecentlyViewedProduct error', response);
     }
   } catch (error) {
     // throw HandleErrorMessage(error);
@@ -113,7 +110,7 @@ export const getAllProductTags = () => async (dispatch) => {
     const response = await Api.get(`api/product/tags/getAll`);
 
     if (!response.data.success) {
-      console.log('Error in getAllProductTags', response);
+      // console.log('Error in getAllProductTags', response);
     } else {
       dispatch({
         type: actionTypes.products.SET_ALL_PRODUCT_TAGS,
@@ -128,7 +125,6 @@ export const getAllProductTags = () => async (dispatch) => {
 export const getProductById = (id) => async (dispatch) => {
   try {
     const response = await Api.get(`api/product/get?productId=${id}`);
-    console.log('response', response);
 
     if (response.data.success) {
       dispatch({
@@ -155,6 +151,6 @@ export const getProductList = () => async (dispatch) => {
       throw new Error({ message: 'getProductList failed' });
     }
   } catch (error) {
-    console.log("error getting product list: ", error);
+    // console.log("error getting product list: ", error);
   }
 }
