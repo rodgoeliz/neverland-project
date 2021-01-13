@@ -5,13 +5,16 @@ import styled from "styled-components";
 
 import arrow from "images/arrow.svg";
 
-
+// Background - fix for "responsive" designt
+// TODO: remove bg and make media queries for different screen resolutions
 const NavigationContainer = styled(Box)`
     height: 100%;
-    width: 100px;
+    min-width: 100px; 
+    width: 100px; 
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #FFFDFB;
 `
 
 export default function NavigationArrow({ to }) {

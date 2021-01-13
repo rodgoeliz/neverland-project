@@ -5,6 +5,7 @@ export default styled(Box)`
   display: flex;
   font-weight: 700;
   height: 100%;
-  min-width: 100px;
+  min-width: 150px; 
+  width: 150px; 
   align-items: center;
 `;

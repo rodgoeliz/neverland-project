@@ -4,7 +4,8 @@ import styled from "styled-components";
 
 const StatusContainerStyled = styled(Box)`
     background-color: rgba(159, 36, 88, 0.4);
-    width: 200px;
+    min-width: 150px; 
+    width: 150px; 
     display: flex;
     flex-direction: column;
     font-weight: 700;
@@ -19,6 +20,8 @@ const StatusLabelContent = styled(Box)`
     flex-grow: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
+    padding: ${props => props.theme.spacing.one}px
 `
 
 export default function ({ children }) {

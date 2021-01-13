@@ -13,6 +13,7 @@ import SellerDashboardAddOrEditProductPageContainer from "containers/seller/dash
 import SellerDashboardProductsPageContainer from 'containers/seller/dashboard/SellerDashboardProductsPageContainer';
 import SellerDashboardOrdersPageContainer from 'containers/seller/dashboard/SellerDashboardOrdersPageContainer';
 import SellerDashboardShippingPage from "components/layouts/seller/dashboard/SellerDashboardShippingPage";
+import SellerDashboardSingleOrderPage from 'components/layouts/seller/dashboard/SellerDashboardSingleOrderPage';
 
 import NeverlandHome from 'components/layouts/NeverlandHome';
 import NeverlandOurStory from 'components/layouts/NeverlandOurStory';
@@ -183,9 +184,11 @@ class App extends Component {
                   <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/product/add" authenticated={this.state.authenticated} component={AddProductView} />
                   <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shipping" authenticated={this.state.authenticated} component={SellerDashboardShippingPage} />
                   <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/orders" authenticated={this.state.authenticated} component={SellerDashboardOrdersPageContainer} />
+                  <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/orders/:orderId" authenticated={this.state.authenticated} component={SellerDashboardSingleOrderPage} />
                   <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/products" authenticated={this.state.authenticated} component={SellerDashboardProductsPageContainer} />
                   <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/product/:productId" authenticated={this.state.authenticated} component={SellerDashboardAddOrEditProductPageContainer} />
                   <PublicRoute exact loading={this.state.loading} store={store.store} path="/seller/logout" authenticated={this.state.authenticated} component={SellerLogoutPage} />
+
                   <Route exact path="/privacy" component={PrivacyPolicy} />
                   <Route exact path="/download/neverland" component={DownloadNeverland} />
                   <Route exact path="/waitlist/user" component={NeverlandWaitlist} />

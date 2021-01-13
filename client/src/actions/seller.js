@@ -1,5 +1,7 @@
-import actionTypes from 'constants/newActionTypes';
 
+import { saveAs } from 'file-saver';
+
+import actionTypes from 'constants/newActionTypes';
 import { sellerOnBoardingSteps } from "constants/onBoardingSteps";
 
 import Api from 'lib/api';
@@ -225,6 +227,20 @@ export const changeSellerPage = (page) => (dispatch) => {
   });
 };
 
+export const getOrderById = (orderId) => async (dispatch) => {
+  try {
+    const response = await Api.get(`/api/order/get?id=${orderId}`);
+    if (response.data.success) {
+      dispatch({
+        type: actionTypes.seller.UPDATE_SINGLE_ORDER,
+        payload: response.data.payload
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
 export const getAlgoliaSearchClient = () => {
   return searchClient;
@@ -252,3 +268,36 @@ export const getAlgoliaSellerProductIndex = () => {
   return 'neverland_products_prod';
 }
 
+
+export const createOrderPdf = ({ orderId, products, currentOrder }) => async () => {
+  try {
+    // Create file
+    const response = await Api.post(`/api/order/order-pdf?id=${orderId}`, {
+      orderId,
+      products,
+      currentOrder,
+      responseType: 'blob'
+    });
+
+    if (response.status === 200) {
+      // Download file
+      const orderFile = await Api.get(`/api/order/order-pdf?id=${orderId}`, {
+        name: 'BOB',
+        responseType: 'blob'
+      });
+
+      const orderPdf = new Blob(
+        [orderFile.data],
+        { type: 'application/pdf' }
+      );
+
+      saveAs(orderPdf, 'order.pdf');
+
+      // Delete order from backend
+      Api.delete(`/api/order/order-pdf?id=${orderId}`);
+    }
+
+  } catch (error) {
+    console.log(error);
+  }
+}

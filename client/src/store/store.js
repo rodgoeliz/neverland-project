@@ -27,6 +27,7 @@ const rootReducers = combineReducers({
   products,
   stores
 });
+
 const persistedReducer = persistReducer(persistConfig, rootReducers);
 const composeEnhancers = composeWithDevTools({});
 const store = createStore(

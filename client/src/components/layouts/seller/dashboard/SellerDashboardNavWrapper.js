@@ -74,7 +74,7 @@ export default function SellerDashboardNavWrapper({ children }) {
           Logout{' '}
         </Link>
       </div>
-      <div style={{ paddingLeft: '4em', paddingRight: '2em', paddingTop: '2em', marginBottom: '3em' }}>{children}</div>
+      <div style={{ paddingLeft: '4em', paddingRight: '4em', paddingTop: '2em', marginBottom: '3em' }}>{children}</div>
     </div>
   );
 }

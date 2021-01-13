@@ -41,7 +41,7 @@ export default function OrderDescription({ order, title, content }) {
   return (
     <OrderDescriptionContainer>
       <OrderText>
-        Order #: {order}
+        {order && `Order #: ${order}`}
       </OrderText>
       <TitleText>
         {title}

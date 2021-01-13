@@ -28,7 +28,7 @@ export default class OrderHit extends React.Component{
             <Status>
               {order.status} 
             </Status>
-            <NavigationArrow to='/home' />
+            <NavigationArrow to={`/seller/dashboard/orders/${order._id}`} />
       </RowContainer>
 
       )

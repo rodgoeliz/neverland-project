@@ -2,7 +2,8 @@ import React from 'react';
 import styled from "styled-components";
 
 const SoldAndQuantityContainer = styled.div`
-    width: 150px;
+    min-width: 150px; 
+    width: 150px; 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,8 +24,8 @@ const CounterBox = styled.div`
     background-color: ${props => props.type === 'sold' ? props.theme.color.green : props.theme.color.yellow};
     font-weight: 700;
     color: ${props => props.theme.color.lightBeige};
-    padding: ${props => props.theme.spacing.one/2}px;
-    border-radius: ${props => props.theme.spacing.one/2}px;
+    padding: ${props => props.theme.spacing.one / 2}px;
+    border-radius: ${props => props.theme.spacing.one / 2}px;
     margin-left:  ${props => props.theme.spacing.one}px;
 `
 
