@@ -54,8 +54,6 @@ export const deletePackageProfile = (packageProfileId) => async (dispatch) => {
       });
       return response.data.payload;
     } 
-      console.log("error deleting package..");
-    
   } catch (error) {
     console.log("Error deleting package profile", error);
   }
@@ -72,8 +70,6 @@ export const loadPackageProfiles = (storeId) => async (dispatch) => {
       });
       return response.data.payload;
     } 
-      console.log("error loading package profiles...")
-    
   } catch (error) {
     console.log("Loading package profiles ahs failed: ", error);
   }

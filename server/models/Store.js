@@ -45,7 +45,7 @@ const storeSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId, 
 		ref: 'User'
 	},
-});
+}, {timestamps: true});
 
 storeSchema.post('updateOne', async function() {
   //sync up with algolia

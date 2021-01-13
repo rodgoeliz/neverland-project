@@ -19,7 +19,7 @@ const styles = {
     maxWidth: '30vw',
     backgroundColor: BrandStyles.color.highContrastDarkBeige,
     paddingLeft: '3vw',
-    boxShadow: `4px 0px 64px ${BrandStyles.color.xdarkBeige}`,
+    boxShadow: `4px -30px 64px ${BrandStyles.color.xdarkBeige}`,
   },
   mainContainer: {
     display: 'flex',

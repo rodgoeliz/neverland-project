@@ -201,7 +201,18 @@ router.get(`/products/get/list`, async function (req, res, next) {
 			error: "Failed to find user: " + userId
 		});
 	}
-	let products = await Product.find({ vendorId: userId }).populate({ path: 'variationIds', populate: { path: 'optionIds' } }).populate('vendorId').populate('tagIds');
+	let products = await Product.find({ vendorId: userId })
+  .populate({ path: 'variationIds', populate: { path: 'optionIds' } })
+  .populate('categoryIds')
+  .populate({
+    path: 'storeId',
+    populate: {
+      path: 'userId',
+      model: 'User'
+    }
+  })
+  .populate('vendorId')
+  .populate('tagIds');
 	res.json({
 		success: true,
 		payload: products

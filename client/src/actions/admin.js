@@ -18,7 +18,6 @@ import {
 
 
 export const handleClickCreateNavigation = () => {
-	console.log("handle press create navigation")
 	return async () => {
 		const response = await fetch('/api/navigation/upload/file', {
 			method: "post"

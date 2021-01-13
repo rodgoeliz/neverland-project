@@ -169,7 +169,6 @@ class AddProductView extends Component {
       const { match: { params } } = this.props;
       passedProductId = params.productId;
     }
-    console.log("passed product id: ", passedProductId)
     if (passedProductId) {
       this.setState(
         {
@@ -177,7 +176,6 @@ class AddProductView extends Component {
         },
         async () => {
           const sellerProduct = await this.props.loadSellerProduct({ productId: passedProductId });
-          console.log("SELLER PRODUCT: ", sellerProduct)
           const transformedProductFD = transformProductToFormData(sellerProduct);
           this.setState({
             formData: transformedProductFD,
@@ -471,7 +469,6 @@ class AddProductView extends Component {
       }
     }
     formData = this.transformToFormData(this.state.formData, formData);
-    console.log("form data:", this.state.formData)
     // if we didn't assign a store, pull user store
     if (!this.state.formData.storeId) {
       formData.append('userId', this.props.user._id);
@@ -484,15 +481,16 @@ class AddProductView extends Component {
         const store = this.state.formData.storeId[0];
         if (typeof store === "object") {
           formData.append('storeId', store._id);
+          formData.append('userId', this.props.user._id);
         } else if (typeof store.storeId === "string") {
           formData.append('storeId', store)
-        }
-        if (typeof store.userId === "object") {
-          formData.append('vendorId', store.userId._id);
-          formData.append('userId', store.userId._id);
-        } else if (typeof store.userId === "string") {
-          formData.append('vendorId', store.userId);
-          formData.append('userId', store.userId);
+          if (typeof store.userId === "object") {
+            formData.append('vendorId', store.userId._id);
+            formData.append('userId', store.userId._id);
+          } else if (typeof store.userId === "string") {
+            formData.append('vendorId', store.userId);
+            formData.append('userId', store.userId);
+          }
         }
       }
     const existingProduct = this.state.product;
@@ -531,7 +529,6 @@ class AddProductView extends Component {
 
   onCloseView() {
     if (this.props.onClose) {
-      console.log("ON CLOSE function")
       this.props.onClose();
     } else {
       window.location.reload();

@@ -2,15 +2,14 @@ import React from 'react';
 
 import { OrderDescription, LabelContainer, NavigationArrow, RowContainer, Status, Image } from 'components/UI/Row'
 
+
 export default class ProductHit extends React.Component{
   constructor(props) {
    super(props);
    this.onClickProduct = this.onClickProduct.bind(this);
   }
 
-  onClickProduct() {
-    console.log("CLICK Product")
-  }
+  onClickProduct() {  }
 
   render() {
     const { hit }  = this.props;
