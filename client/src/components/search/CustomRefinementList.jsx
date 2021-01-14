@@ -5,7 +5,7 @@ import React from 'react'
 import NSelect from "components/UI/NSelect";
 
 /* eslint-disable */
-export default function CustomRefinementList({ items, refine }) {
+export default function CustomRefinementList({ items, refine, attribute }) {
     const handleChange = (selectedFilters) => {
       if (selectedFilters && selectedFilters.length > 0) {
         refine(selectedFilters[0].label);
@@ -23,11 +23,14 @@ export default function CustomRefinementList({ items, refine }) {
             return item.value[item.value.length - 1];
         }
     }
+   if (items && items.length == 0) {
+    return null;
+   }
    return <NSelect 
             items={items}
             itemIdKey="label"
             itemTitleKey="label"
             isSingleSelect
             onChangeItems={handleChange}
-            title="Status" />
+            title={attribute} />
 }

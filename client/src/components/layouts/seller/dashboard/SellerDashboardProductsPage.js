@@ -10,8 +10,9 @@ import SellerDashboardNavWrapper from 'components/layouts/seller/dashboard/Selle
 export default function SellerDashboardProductsPage({ indexName, searchClient }) {
     return (
         <SellerDashboardNavWrapper>
+            <h2>My Products</h2>
             <AlgoliaSearch
-                filterAttributes={["tagHandles"]}
+                filterAttributes={["tagIds.title"]}
                 hitComponent={ProductHit}
                 indexName={indexName}
                 searchClient={searchClient}

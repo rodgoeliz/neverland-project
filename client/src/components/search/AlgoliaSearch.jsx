@@ -34,7 +34,6 @@ export default class AlgoliaSearch extends React.Component {
     const hits = ResultsComponent
       ? <ResultsComponent> {hComp}  </ResultsComponent>
       : hComp;
-
     const refinementListComponents = filterAttributes ?
       filterAttributes.map((fAttr) => {
         return <RefinementList attribute={fAttr} />
