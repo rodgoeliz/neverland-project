@@ -243,6 +243,7 @@ export const getOrderById = (orderId) => async (dispatch) => {
 
 
 export const getAlgoliaSearchClient = () => {
+  console.log("SEARCH CLIENT...", searchClient)
   return searchClient;
 }
 

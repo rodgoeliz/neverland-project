@@ -10,7 +10,8 @@ import { ThemeProvider } from 'styled-components';
 import './App.scss';
 
 
-import SellerDashboardAddOrEditProductPageContainer from "containers/seller/dashboard/SellerDashboardAddOrEditProductPageContainer";
+import { SellerDashboardPaymentsPageContainer, SellerDashboardAddOrEditProductPageContainer} from "containers/seller/dashboard/";
+
 import SellerDashboardProductsPageContainer from 'containers/seller/dashboard/SellerDashboardProductsPageContainer';
 import SellerDashboardOrdersPageContainer from 'containers/seller/dashboard/SellerDashboardOrdersPageContainer';
 import SellerDashboardShippingPage from "components/layouts/seller/dashboard/SellerDashboardShippingPage";
@@ -111,6 +112,7 @@ class App extends Component {
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/orders/:orderId" authenticated={this.state.authenticated} component={SellerDashboardSingleOrderPage} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/products" authenticated={this.state.authenticated} component={SellerDashboardProductsPageContainer} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/product/:productId" authenticated={this.state.authenticated} component={SellerDashboardAddOrEditProductPageContainer} />
+                  <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/payments" authenticated={this.state.authenticated} component={SellerDashboardPaymentsPageContainer} />
                   <PublicRoute exact loading={this.state.loading} store={store.store} path="/seller/logout" authenticated={this.state.authenticated} component={SellerLogoutPage} />
                   <Route exact path="/privacy" component={PrivacyPolicy} />
                   <Route exact path="/download/neverland" component={DownloadNeverland} />

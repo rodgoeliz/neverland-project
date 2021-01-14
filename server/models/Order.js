@@ -28,7 +28,7 @@ const orderSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Store'
 	},
-	bundleId: {
+	bundleId: a{
 		type: Schema.Types.ObjectId,
 		ref: 'Bundle'
 	},
@@ -37,7 +37,8 @@ const orderSchema = new mongoose.Schema({
 		ref: 'OrderInvoice'
 	},
   status: String, // need-to-fulfill, shipped, delivered, paid-out
-  deliveredAt: Date
+  deliveredAt: Date,
+  paidOutAt: Date
 }, {timestamps: true});
 
 
