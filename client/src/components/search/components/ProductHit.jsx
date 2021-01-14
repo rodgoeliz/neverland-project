@@ -13,7 +13,6 @@ export default function ProductHit({hit, onClickProduct}) {
 
     return (
       <RowContainer onClick={onClickProduct}>
-        <LabelContainer labelText={product.createdAt}>
         <Image src={product.imageURLs && product.imageURLs[0]} />
         <OrderDescription
           order={product._id}
