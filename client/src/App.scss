@@ -1084,8 +1084,10 @@ $basicOffset: 8px;
       }
     }
     .ais-Pagination-item {
-      line-height: 4rem;
+      line-height: 3rem;
+      margin: auto;
       margin-right: $basicOffset * 2;
+      border-radius: 8px;
 
       .ais-Pagination-link {
         color: rgba(

@@ -6,32 +6,14 @@ import Layout from 'components/layouts/seller/dashboard/SellerDashboardPaymentsP
 
 import { getAlgoliaSearchClient, getAlgoliaSellerOrderIndex } from 'actions';
 
-class SellerDashboardPaymentsPageContainer extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state={
-      hello: ""
-    }
-    console.log(this.state)
-  }
-
-  componentDidMount() {
-    // For every update just fetch data for get seller products
-    // fetch data for orders that were paid out
-    // get total amount and the amount that is pending
-    // this.props.getSellerPayments(this.props.auth._id);
-  }
-
-
-  render() {
+function SellerDashboardPaymentsPageContainer({ auth }) {
     return (
       <Layout 
         searchClient={getAlgoliaSearchClient()}
         indexName={getAlgoliaSellerOrderIndex()}
+        sellerId={auth._id}
       />
     );
-  }
 }
 
 const mapStateToProps = state => ({
