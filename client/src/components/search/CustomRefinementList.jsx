@@ -23,7 +23,6 @@ export default function CustomRefinementList({ items, refine }) {
             return item.value[item.value.length - 1];
         }
     }
-    console.log("refinement itesm: ", items)
    return <NSelect 
             items={items}
             itemIdKey="label"
@@ -31,21 +30,4 @@ export default function CustomRefinementList({ items, refine }) {
             isSingleSelect
             onChangeItems={handleChange}
             title="Status" />
-
-    /*return (
-        <FormControl>
-            <InputLabel shrink id="refinements-label-id">
-                Status
-            </InputLabel>
-            <Select
-                labelId="refinements-label-id"
-                id="refinements-label-id"
-                onChange={handleChange}
-            >
-                {items.map((item, index) => (
-                    <MenuItem key={index} value={getLastItemValue(item)}>{item.label}</MenuItem>
-                ))}
-            </Select>
-        </FormControl>
-    )*/
 }

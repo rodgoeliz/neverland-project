@@ -8,5 +8,8 @@ export default styled(Box)`
   width: calc(100vw - 540px);
   display: flex;
   justify-content: space-between;
-  margin-bottom: ${props => props.theme.spacing.three}px
+  margin-bottom: ${props => props.theme.spacing.three}px;
+  &:hover {
+    cursor: pointer;
+  }
 `;

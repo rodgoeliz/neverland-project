@@ -7,6 +7,7 @@ import LabelContainer from './LabelContainer';
 import Status from './Status';
 import ToggleVisibility from './ToggleVisibility';
 import SoldAndQuantity from './SoldAndQuantity';
+import ProductDescription from './ProductDescription';
 
 export {
     Image,
@@ -18,4 +19,5 @@ export {
     Status,
     ToggleVisibility,
     SoldAndQuantity,
+    ProductDescription
 }

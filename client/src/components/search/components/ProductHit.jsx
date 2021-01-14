@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { OrderDescription, NavigationArrow, RowContainer, Image, ToggleVisibility, SoldAndQuantity } from 'components/UI/Row'
+import { ProductDescription, NavigationArrow, RowContainer, Image, ToggleVisibility, SoldAndQuantity } from 'components/UI/Row'
 import { toggleVisibility } from 'actions';
 
 export default function ProductHit({hit, onClickProduct}) {
@@ -13,10 +13,7 @@ export default function ProductHit({hit, onClickProduct}) {
     return (
       <RowContainer onClick={onClickProduct}>
         <Image src={product.imageURLs && product.imageURLs[0]} />
-        <OrderDescription
-          order={product._id}
-          title={product.title ? product.title : 'Product'}
-        />
+        <ProductDescription product={product} />
         <SoldAndQuantity quantity={product.inventoryAvailableToSell} sold={product.inventoryInStock} />
         <ToggleVisibility checked={product.isVisible} text='IS VISIBLE' toggleChecked={handleToggleVisibility} />
         <NavigationArrow to={`/seller/dashboard/product/${product._id}`} />

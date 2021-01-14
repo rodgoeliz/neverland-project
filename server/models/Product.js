@@ -76,7 +76,10 @@ productSchema.post('updateOne', async function() {
   //sync up with algolia
   const index = client.initIndex(getEnvVariable('ALGOLIA_PRODUCT_INDEX'));
   const docToUpdate = await this.model.findOne(this.getQuery());
-  await docToUpdate.populate('storeId').populate('tagIds').execPopulate();
+  await docToUpdate
+    .populate({path: 'variationIds', populate:{path: 'optionIds'}})
+    .populate('storeId')
+    .populate('tagIds').execPopulate();
   let tagHandles = [];
   for (var i in this.tagIds) {
     tagHandles.push(this.tagIds[i].handle);
@@ -97,7 +100,9 @@ productSchema.post('findOneAndUpdate', async function() {
   //sync up with algolia
   const index = client.initIndex(getEnvVariable('ALGOLIA_PRODUCT_INDEX'));
   const docToUpdate = await this.model.findOne(this.getQuery());
-  await docToUpdate.populate('storeId').populate('tagIds').execPopulate();
+  await docToUpdate
+    .populate({path: 'variationIds', populate:{path: 'optionIds'}})
+    .populate('storeId').populate('tagIds').execPopulate();
   let tagHandles = [];
   for (var i in docToUpdate.tagIds) {
     tagHandles.push(docToUpdate.tagIds[i].handle);
@@ -116,7 +121,10 @@ productSchema.post('findOneAndUpdate', async function() {
 productSchema.pre('save', async function(next) {
   //sync up with algolia
   const index = client.initIndex(getEnvVariable('ALGOLIA_PRODUCT_INDEX'));
-  await this.populate('storeId').populate('tagIds').execPopulate();
+  await this
+    .populate({path: 'variationIds', populate:{path: 'optionIds'}})
+    .populate('storeId')
+    .populate('tagIds').execPopulate();
   let tagHandles = [];
   for (var i in this.tagIds) {
     tagHandles.push(this.tagIds[i].handle);

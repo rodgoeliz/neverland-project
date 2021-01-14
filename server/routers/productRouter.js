@@ -78,13 +78,21 @@ router.get('/favorite/get/list', async function (req, res) {
 		});
 	}
 });
+
 router.get('/algolia/load', async function (req, res) {
-	console.log("Uploading orders to algolia....")
-	let orders = await Product.find({});
+	let orders = await Product.find({})
+    .populate({path: 'variationIds', populate:{path: 'optionIds'}})
+    .populate('storeId')
+    .populate('tagIds');
 	const transformedOrders = orders.map((order) => {
 		try {
 			let object = order.toObject();
+      let tagHandles = [];
+      for (var i in this.tagIds) {
+        tagHandles.push(this.tagIds[i].handle);
+      }
 			object.objectID = order._id;
+      object.tagHandles = tagHandles;
 			return object;
 		} catch (error) {
 			console.log(error)
