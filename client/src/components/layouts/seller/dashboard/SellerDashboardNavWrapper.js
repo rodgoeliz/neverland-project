@@ -1,7 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from "styled-components";
 
 import BrandStyles from 'components/BrandStyles';
+
+const MainContentWrapper = styled.div`
+  padding: 4em
+`;
 
 const styles = {
   container: {
@@ -74,7 +79,10 @@ export default function SellerDashboardNavWrapper({ children }) {
           Logout{' '}
         </Link>
       </div>
-      <div style={{ paddingLeft: '4em', paddingRight: '4em', paddingTop: '2em', marginBottom: '3em' }}>{children}</div>
+      {/* <div style={{ paddingLeft: '4em', paddingRight: '4em', paddingTop: '2em', marginBottom: '3em' }}>{children}</div> */}
+      <MainContentWrapper>
+        {children}
+      </MainContentWrapper>
     </div>
   );
 }

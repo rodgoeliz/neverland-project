@@ -10,7 +10,6 @@ export default function ProductHit({hit, onClickProduct}) {
     const handleToggleVisibility = (isVisible) => {
       dispatch(toggleVisibility(product._id, isVisible));
     }
-
     return (
       <RowContainer onClick={onClickProduct}>
         <Image src={product.imageURLs && product.imageURLs[0]} />

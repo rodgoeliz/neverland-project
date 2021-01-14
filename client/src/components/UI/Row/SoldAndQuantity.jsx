@@ -12,7 +12,7 @@ const SoldAndQuantityContainer = styled.div`
 const CounterContainer = styled.div`
     width: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     align-items: center;
     font-weight: 700;
     &:first-child {

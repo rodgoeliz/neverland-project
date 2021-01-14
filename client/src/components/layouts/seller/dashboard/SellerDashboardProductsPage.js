@@ -11,10 +11,11 @@ export default function SellerDashboardProductsPage({ indexName, searchClient })
     return (
         <SellerDashboardNavWrapper>
             <AlgoliaSearch
-                filterAttribute="tagHandles"
+                filterAttributes={["tagHandles"]}
                 hitComponent={ProductHit}
                 indexName={indexName}
                 searchClient={searchClient}
+                label="Products"
             />
         </SellerDashboardNavWrapper>
     );

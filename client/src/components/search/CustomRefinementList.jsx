@@ -1,9 +1,17 @@
 import React from 'react'
-import { Select, MenuItem, FormControl, InputLabel } from '@material-ui/core';
+
+// import { Select, MenuItem, FormControl, InputLabel } from '@material-ui/core';
+
+import NSelect from "components/UI/NSelect";
+
 /* eslint-disable */
 export default function CustomRefinementList({ items, refine }) {
-    const handleChange = (event) => {
-        refine([event.target.value]);
+    const handleChange = (selectedFilters) => {
+      if (selectedFilters && selectedFilters.length > 0) {
+        refine(selectedFilters[0].label);
+      } else if (selectedFilters && selectedFilters.length == 0) {
+        refine();
+      }
     }
 
     const getLastItemValue = (item) => {
@@ -15,8 +23,16 @@ export default function CustomRefinementList({ items, refine }) {
             return item.value[item.value.length - 1];
         }
     }
+    console.log("refinement itesm: ", items)
+   return <NSelect 
+            items={items}
+            itemIdKey="label"
+            itemTitleKey="label"
+            isSingleSelect
+            onChangeItems={handleChange}
+            title="Status" />
 
-    return (
+    /*return (
         <FormControl>
             <InputLabel shrink id="refinements-label-id">
                 Status
@@ -31,5 +47,5 @@ export default function CustomRefinementList({ items, refine }) {
                 ))}
             </Select>
         </FormControl>
-    )
+    )*/
 }

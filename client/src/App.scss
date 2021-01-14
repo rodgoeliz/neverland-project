@@ -1021,15 +1021,16 @@ $basicOffset: 8px;
     display: flex;
 
     .ais-SearchBox-input {
-      width: 575px;
-      height: $formElementHeight;
+      width: 400px;
+      min-height: 50px;
+      border-radius: 8px;
+      margin-top: 8px;
       background-color: $theme-beige;
-      line-height: $formElementHeight;
       border: none;
       padding-left: $basicOffset;
     }
 
-    .ais-SearchBox-submit {
+    /*.ais-SearchBox-submit {
       width: 137px;
       height: $formElementHeight;
       margin-left: $basicOffset * 2;
@@ -1039,8 +1040,12 @@ $basicOffset: 8px;
       background-color: $theme-light-beige;
       border: 1px solid $theme-blue;
       border-radius: 50px;
-    }
+    }*/
 
+    .ais-SearchBox-submit {
+      border: 0px;
+      background-color: transparent;
+    }
     // Do not show clear button
     .ais-SearchBox-reset {
       display: none;

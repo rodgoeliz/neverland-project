@@ -171,6 +171,9 @@ const styles = {
 
 class NSelectItem extends React.PureComponent {
   render() {
+    if (!this.props.item) {
+      return null;
+    }
     const isActive = this.props.isActive ? (
       <div style={itemStyles.activeItemIcon}>
         <FaRegCheckCircle style={BrandStyles.components.iconBlue} />
@@ -250,6 +253,7 @@ export default class NSelect extends Component {
       data: items.concat(newItems),
       newItems,
     };
+    console.log(this.state.data)
     this._renderItem = this._renderItem.bind(this);
     this._renderListHeader = this._renderListHeader.bind(this);
     this._showModal = this._showModal.bind(this);
@@ -323,6 +327,9 @@ export default class NSelect extends Component {
   }
 
   _renderItem({ item }) {
+    if (!item) {
+      return null;
+    }
     const { selectedItems } = this.state;
     let isActive = false;
     for (const idx in selectedItems) {
@@ -331,8 +338,8 @@ export default class NSelect extends Component {
         isActive = true;
       }
     }
-    const onItemPress = this.onItemPress.bind(this, item);
 
+    const onItemPress = this.onItemPress.bind(this, item);
     return (
       <NSelectItem
         style={styles.item}
@@ -500,11 +507,11 @@ export default class NSelect extends Component {
             <FlatList
               style={styles.list}
               ListHeaderComponent={searchEnabled ? this._renderListHeader : () => <div />}
-              keyExtractor={(item) => item[this.props.itemIdKey]}
+              keyExtractor={(item) => item ? item[this.props.itemIdKey] : ""}
               initialNumToRender={10}
               ItemSeparatorComponent={() => <div style={styles.itemSeparator} />}
               extraData={this.state}
-              data={this.state.data}
+              data={this.props.items.concat(this.props.newItems)}
               renderItem={this._renderItem}
             />
           </div>

@@ -14,6 +14,7 @@ const NavigationContainer = styled(Box)`
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 16px;
     background-color: #FFFDFB;
 `
 

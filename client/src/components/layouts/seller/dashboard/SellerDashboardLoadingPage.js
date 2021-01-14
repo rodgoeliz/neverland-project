@@ -1,25 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ClipLoader from 'react-spinners/ClipLoader';
+import styled from "styled-components";
 
-import BrandStyles from 'components/BrandStyles';
+import SellerDashboardNavWrapper from './SellerDashboardNavWrapper';
+
+const LoadingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 32px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 60vw;
+`;
 
 function SellerDashboardLoadingPage() {
-  const viewStyle = {
-    ...BrandStyles.components.onboarding.container,
-    paddingTop: 44,
-    alignItems: 'center',
-    flexDirection: 'column',
-  };
   return (
-    <div style={{width: '100%', height: '100%'}}>
-    <div style={viewStyle}>
-      {/* Add products */}
-      {/* Create a list of preview of products that are added and an add to list at the end */}
-      <div style={{ marginTop: 32, marginBottom: 32, maxWidth: 350 }}>
-        <span>Loading your dashboard...</span>
-      </div>
-    </div>
-    </div>
+    <SellerDashboardNavWrapper>
+        <LoadingContainer>
+          <ClipLoader />
+          <span>Loading your dashboard...</span>
+        </LoadingContainer>
+    </SellerDashboardNavWrapper>
   );
 }
 
