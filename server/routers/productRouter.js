@@ -1167,45 +1167,7 @@ router.get('/tags/all', async function (req, res, next) {
 	res.json(allProductTags);
 });
 
-<<<<<<< HEAD
-router.get('/get/list', async function(req, res, next) {
-  try {
-  	let allProducts = await Product.find({})
-      .populate({
-        path: 'storeId', 
-        populate: {
-          path: 'userId', 
-          model: 'User'
-      }})
-      .populate('userId')
-      .populate({
-        path: 'variationIds',
-        populate: {
-          path: 'optionIds'
-      }})
-      .populate('categoryIds')
-      .populate('tagIds')
-      .populate({
-        path: 'vendorId',
-        populate: [{
-          path: 'userId',
-          model: 'User'
-        }, {
-          path: 'storeId',
-          model: 'Store'
-        }]
-      })
-    	res.json({
-        success: true,
-        payload: allProducts
-      });
-  } catch (error) {
-    res.json({
-      success: false,
-      error: error
-    });
-  }
-=======
+
 router.get('/get/list', async function (req, res, next) {
 	try {
 		let allProducts = await Product.find({})
@@ -1244,7 +1206,6 @@ router.get('/get/list', async function (req, res, next) {
 			error: error
 		});
 	}
->>>>>>> add_toggle_visibility
 })
 
 module.exports = router;
