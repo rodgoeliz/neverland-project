@@ -1,3 +1,5 @@
+import { shippingPreferences } from 'constants/storeData';
+
 const PROCESSING_TIME_VALUES = [
   { id: 'twenty-four-hours', value: '24 Hrs' },
   { id: 'two-three-days', value: '2-3 days' },
@@ -6,7 +8,8 @@ const PROCESSING_TIME_VALUES = [
   { id: 'more-than-two-weeks', value: '2+ weeks' },
 ];
 
-export const transformProductToFormData = (product) => {
+export const transformProductToFormData = (currentStore, product) => {
+  console.log("STORE, Product: ", currentStore, product)
   let formData = {};
   const formDataBase = {
     productPhotos: [],
@@ -43,6 +46,11 @@ export const transformProductToFormData = (product) => {
   }
   const transformedProductPhotos = product.imageURLs.map((imageURL) => ({ sourceURL: imageURL }));
   const processingTime = getProcessingTime(product.processingTime);
+  let offerFreeShipping = product.offerFreeShipping ? product.offerFreeShipping : false;
+  if (currentStore && currentStore.shippingPreference === shippingPreferences.MANUAL) {
+    offerFreeShipping = true;
+  }
+
   formData = {
     title: product.title,
     description: product.description,
@@ -59,7 +67,7 @@ export const transformProductToFormData = (product) => {
     processingTime: processingTime ? [processingTime] : null,
     originZipCode: product.originZipCode,
     handlingFee: [product.handlingFee],
-    offerFreeShipping: product.offerFreeShipping ? product.offerFreeShipping : false,
+    offerFreeShipping,
     colors: product.colors,
     benefit: product.benefit,
     style: product.style,
@@ -80,6 +88,7 @@ export const transformProductToFormData = (product) => {
   if (product.inventoryInStock) {
     formData.productQuantity = product.inventoryInStock.toString();
   }
+  console.log("FORM DATA IN PRODUCT HELPER: ", formData)
   return {
     ...formDataBase,
     ...formData,

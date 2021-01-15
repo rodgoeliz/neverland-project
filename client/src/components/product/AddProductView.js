@@ -23,6 +23,7 @@ import isZipCodeValid from 'utils/zipcodeValidator';
 import isNumberValid from 'utils/numberValidator';
 import extractId from 'utils/extractId';
 
+
 import BaseInput from 'components/UI/BaseInput';
 import CheckBoxInput from 'components/UI/CheckBoxInput';
 import NSelect from 'components/UI/NSelect';
@@ -45,6 +46,7 @@ import { transformObjectToFormData, validateProductFormInput } from './utils';
 import ProductImageUploadInput from './ProductImageUploadInput';
 import UploadProductPhotosView from './UploadProductPhotosView';
 import AddProductVariationView from './AddProductVariationView';
+import FreeShippingCheckBox from './FreeShippingCheckBox';
 
 const PROCESSING_TIME_VALUES = [
   { id: 'twenty-four-hours', value: '24 Hrs' },
@@ -53,11 +55,6 @@ const PROCESSING_TIME_VALUES = [
   { id: 'one-two-weeks', value: '1-2 weeks' },
   { id: 'more-than-two-weeks', value: '2+ weeks' },
 ];
-
-const ColumnContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 
 const InputLabel = styled.label `
   font-weight: bold;
@@ -134,9 +131,10 @@ class AddProductView extends Component {
     // means we are editing the product;
     const loadedProduct = props.product;
     if (loadedProduct) {
-      updatedFormData = transformProductToFormData(loadedProduct);
+      console.log("STORES: ", this.props.currentStore)
+      updatedFormData = transformProductToFormData(this.props.currentStore, loadedProduct);
     }
-
+    console.log("updated form data for product: ", updatedFormData)
     this.state = {
       isProductVariantModalVisible: false,
       formData: updatedFormData,
@@ -199,7 +197,7 @@ class AddProductView extends Component {
         },
         async () => {
           const sellerProduct = await this.props.loadSellerProduct({ productId: passedProductId });
-          const transformedProductFD = transformProductToFormData(sellerProduct);
+          const transformedProductFD = transformProductToFormData(this.props.currentStore, sellerProduct);
           this.setState({
             formData: transformedProductFD,
             product: sellerProduct,
@@ -334,7 +332,8 @@ class AddProductView extends Component {
     }
   }
 
-  toggleSelection(key) {
+  toggleSelection(key, one, two) {
+    console.log("TOGGLE SELECTION: ", key, one, two)
     const newFormData = { ...this.state.formData };
     newFormData[key] = !newFormData[key];
     this.setState(
@@ -1147,6 +1146,7 @@ class AddProductView extends Component {
   }
 
   renderShippingAndFulfillment() {
+
     return (
       <div>
         <form>
@@ -1173,30 +1173,11 @@ class AddProductView extends Component {
             validate={isZipCodeValid}
             error={this.state.errors.originZipCode}
           />
-          <div
-            style={{
-              backgroundColor: BrandStyles.color.xlightBeige,
-              borderRadius: 8,
-              paddingLeft: 4,
-              paddingTop: 8,
-              paddingBottom: 8,
-              paddingRight: 4,
-            }}
-          >
-          <ColumnContainer>
-            <InputLabel>Offer Free Shipping <b>(Recommended)</b></InputLabel>
-            <InputDescription>
-              Offering free shipping can increase orders by <b>40% or more</b>. 
-              We recommend that you incorporate your average shipping price into the base price above if you use this option.
-            </InputDescription>
-          </ColumnContainer>
-          <CheckBoxInput
+          <FreeShippingCheckBox 
+            storeShippingPreference={this.props.currentStore.shippingPreference}
             value={this.state.formData.offerFreeShipping}
-            label="Offer Free Shipping"
-            onValueChange={this.toggleSelection.bind(this, 'offerFreeShipping')}
-            error={this.state.offerFreeShippingError}
-          />
-          </div>
+            onToggle={this.toggleSelection.bind(this, "offerFreeShipping")}
+            error={this.state.offerFreeShippingError} />
           <div style={{ height: 16 }} />
           <InputLabel>
             Item Weight
@@ -1384,6 +1365,7 @@ const mapStateToProps = (state) => ({
   allProductTags: state.seller.allProductTags,
   productSearchMetaDataTags: state.products.productSearchMetaDataTags,
   user: state.auth,
+  currentStore: state.stores.currentStore,
   stores: state.stores.stores,
 });
 

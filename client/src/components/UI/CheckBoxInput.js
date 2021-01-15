@@ -22,10 +22,10 @@ const styles = {
   },
 };
 
-export default function CheckBoxInput({ error, label, value, onValueChange }) {
+export default function CheckBoxInput({ error, label, value, disabled, onValueChange }) {
   return (
     <div style={styles.container}>
-      <input type="checkbox" style={styles.checkbox} checked={value} onChange={onValueChange} />
+      <input type="checkbox" style={styles.checkbox} checked={value} onChange={onValueChange} disabled={disabled} />
       <span style={styles.label}>{label}</span>
       <span>{error}</span>
     </div>
