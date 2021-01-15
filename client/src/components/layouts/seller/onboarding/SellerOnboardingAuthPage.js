@@ -70,7 +70,7 @@ class SellerOnboardingAuthPage extends Component {
       );
     }
     return (
-      <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center' }}>
+      <div style={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', backgroundColor: BrandStyles.color.beige }}>
         <div
           style={{
             display: 'flex',

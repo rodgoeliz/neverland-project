@@ -28,7 +28,7 @@ const orderSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Store'
 	},
-	bundleId: a{
+	bundleId: {
 		type: Schema.Types.ObjectId,
 		ref: 'Bundle'
 	},
@@ -36,7 +36,15 @@ const orderSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'OrderInvoice'
 	},
-  status: String, // need-to-fulfill, shipped, delivered, paid-out
+  trackingInfo: {
+    trackingId: String, 
+    carrier: String,
+  },
+  status: {
+    type:String, // need-to-fulfill, shipped, delivered, paid-out
+    enum: ['need-to-fulfill', 'shipped', 'delivered', 'paid-out'],
+    default: 'need-to-fulfill'
+  },
   deliveredAt: Date,
   paidOutAt: Date
 }, {timestamps: true});

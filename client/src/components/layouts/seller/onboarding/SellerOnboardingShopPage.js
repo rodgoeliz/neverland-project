@@ -221,7 +221,7 @@ class SellerOnboardingShopPage extends Component {
 
   render() {
     if (this.state.toNextStep) {
-      return <Redirect to="/seller/onboarding/products" />;
+      return <Redirect to="/seller/onboarding/shipping" />;
     }
     let shopOwnersInput = null;
     if (this.state.formData.isShopOwner === 'no') {

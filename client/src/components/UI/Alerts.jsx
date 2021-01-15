@@ -34,7 +34,7 @@ export default function Alerts() {
             </IconButton>
         )
     }
-
+    console.log("RENDER ERROR: ", messages)
     return (
         <AlertContainer>
             {messages.map(message => (

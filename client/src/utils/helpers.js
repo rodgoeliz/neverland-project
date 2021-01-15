@@ -2,7 +2,6 @@ import { sellerOnBoardingSteps, userOnBoardingSteps } from 'constants/onBoarding
 import screenNames from 'constants/screenNames';
 
 export const getNextOnBoardingStepId = (lastCompletedStepId, isSeller = false) => {
-  console.log('getNextOnBoardingStepId lastCompletedStepId', lastCompletedStepId, isSeller);
   if (isSeller) {
     switch (lastCompletedStepId) {
       case sellerOnBoardingSteps.SIGNUP_START:
@@ -10,6 +9,8 @@ export const getNextOnBoardingStepId = (lastCompletedStepId, isSeller = false) =
       case sellerOnBoardingSteps.SIGNUP_BASICS:
         return sellerOnBoardingSteps.SIGNUP_SHOP_BASICS;
       case sellerOnBoardingSteps.SIGNUP_SHOP_BASICS:
+        return sellerOnBoardingSteps.SIGNUP_SHIPPING;
+      case sellerOnBoardingSteps.SIGNUP_SHIPPING:
         return sellerOnBoardingSteps.SIGNUP_ADD_PRODUCTS;
       case sellerOnBoardingSteps.SIGNUP_ADD_PRODUCTS:
         return sellerOnBoardingSteps.SIGNUP_PAYMENT;

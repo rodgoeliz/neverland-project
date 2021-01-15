@@ -5,7 +5,8 @@ import actionTypes from 'constants/newActionTypes';
 const initialState = {
   stores: [],
   userIdToStoreCache: {},
-  packageProfiles: []
+  packageProfiles: [],
+  currentStore: {}
 }
 
 export default (state = initialState, action) => {
@@ -42,7 +43,12 @@ export default (state = initialState, action) => {
       filteredProfiles.push(action.payload);
       return {
         ...state,
-        packageProfils: filteredProfiles
+        packageProfiles: filteredProfiles
+      }
+    case actionTypes.store.UPDATE_SHIPPING_PREFERENCE:
+      return {
+        ...state,
+        currentStore: action.payload
       }
     case PURGE:
       return { ...initialState };

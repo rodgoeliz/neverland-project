@@ -84,7 +84,6 @@ router.post('/product/remove', async function (req, res) {
   await OrderProductItem.findOneAndDelete({ _id: productOrderItemId });
 
   const subtotal = await calculateBundleSubTotal(newBundle);
-  console.log("NEW SUBTOTAL AFTER REMOAL: ", subtotal)
   const buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
   const shippingMethod = await getFulfillmentMethod("usps", "priority");
   const shippingCharge = shippingMethod.price;
@@ -120,6 +119,50 @@ router.post('/product/remove', async function (req, res) {
   // find order Intent and remove the associated index with productOrderItemId
   // delete productOrderItemId 
   // return updated orderIntentId
+});
+
+router.post('/tracking/update', async function (req, res) {
+  const orderId = req.body.orderId;
+  const trackingNumber =  req.body.trackingNumber;
+  const trackingCarrier = req.body.trackingCarrier;
+  if (!trackingNumber) {
+    res.json({
+      success: false,
+      error: "Please provide correct tracking number."
+    });
+  }
+  if (!trackingCarrier) {
+    res.json({
+      success: false,
+      error: "Please provide accurate shipping carrier."
+    });
+  }
+  if (!orderId) {
+    res.json({
+      success: false,
+      error: "Please provide accurate order identifier."
+    });
+  }
+  try {
+    await Order.findOneAndUpdate(
+      {
+        _id:orderId
+      }, {
+        $set: {
+          trackingInfo: {
+            trackingId: trackingNumber,
+            carrier: trackingCarrier
+          }
+        } 
+      }, {
+        new: true
+      })
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error
+    });
+  }
 });
 
 router.post('/quantity/update', async function (req, res) {

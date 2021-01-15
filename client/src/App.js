@@ -42,6 +42,7 @@ import SellerOnboardingPaymentRoutingRoomPage from "components/layouts/seller/on
 import SellerOnboardingReAuthWebPage from "components/layouts/seller/onboarding/SellerOnboardingReAuthWebPage";
 import SellerOnboardingPendingActivationPage from "components/layouts/seller/onboarding/SellerOnboardingPendingActivationPage";
 import SellerOnboardingMainRoutingPage from "components/layouts/seller/onboarding/SellerOnboardingMainRoutingPage";
+import SellerOnboardingShippingProfilePage from "components/layouts/seller/onboarding/SellerOnboardingShippingProfilePage";
 import SellerDashboardMainPage from "components/layouts/seller/dashboard/SellerDashboardMainPage";
 import SellerDashboardShopPage from "components/layouts/seller/dashboard/SellerDashboardShopPage";
 import SellerLogoutPage from "components/layouts/seller/auth/SellerLogoutPage";
@@ -104,6 +105,7 @@ class App extends Component {
                   <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/products" authenticated={this.state.authenticated} component={SellerOnboardingAddProductsPage} />
                   <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/payment" authenticated={this.state.authenticated} component={SellerOnboardingPaymentPage} />
                   <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/activation-pending" authenticated={this.state.authenticated} component={SellerOnboardingPendingActivationPage} />
+                  <PrivateRoute exact loading={this.state.loading} path="/seller/onboarding/shipping" authenticated={this.state.authenticated} component={SellerOnboardingShippingProfilePage} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/main" authenticated={this.state.authenticated} component={SellerDashboardMainPage} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shop" authenticated={this.state.authenticated} component={SellerDashboardShopPage} />
                   <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/product/add" authenticated={this.state.authenticated} component={AddProductView} />

@@ -50,6 +50,42 @@ router.get('/algolia/load', async function (req, res) {
 
 
 /** PUBLIC METHODS **/
+router.post(`/shipping/update`, async function(req, res, next) {
+  const storeId = req.body.storeId;
+  const shippingPreference = req.body.shippingPreference;
+  if (!storeId) {
+    res.json({
+      success: false,
+      error: "[Shipping Preference] Please provide the store identifier."
+    });
+    return;
+  }
+  try {
+    const updatedStore = await Store.findOneAndUpdate(
+      {
+        _id: storeId
+      },
+      {
+        $set: {
+          shippingPreference: shippingPreference
+        }
+      }, 
+      {
+        new: true
+      }
+    );
+    res.json({
+      success: true,
+      payload: updatedStore 
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 router.post(`/update`, async function(req, res, next) {
   let storeId = req.body.storeId;
   let formData = req.body.formData;

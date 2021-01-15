@@ -86,12 +86,21 @@ class SellerSignupPage extends React.Component {
 
   redirectToNextStep() {}
 
+  /* eslint-disable */
   async onSubmitForm() {
     if (this.validateInput()) {
       this.setState({ isLoadingSubmitSignup: true });
-
+      const { onSignUpFirebase } = this.props;  
+      this.setState({ success: null, error: null, loading: true }); 
+      let data = this.state;
       try {
         // transform data
+        let transformedData = {         
+          email: data.email.email,  
+          password: data.password.password, 
+          isSellerOnboarding: this.state.isSellerOnboarding,  
+        };  
+        const success = await onSignUpFirebase(transformedData, 'default'); 
         this.setState({ toNextStep: true, isLoadingSubmitSignup: false });
         this.redirectToNextStep();
       } catch (error) {
@@ -202,10 +211,8 @@ class SellerSignupPage extends React.Component {
                     style={{
                       color: BrandStyles.color.beige,
                       fontWeight: 'bold',
-                    }}
-                  >
-                    {' '}
-                    Sign Up{' '}
+                    }}>
+                    Sign Up
                   </span>
                   {spinner}
                 </NButton>

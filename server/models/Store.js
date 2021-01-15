@@ -17,6 +17,11 @@ const storeSchema = new mongoose.Schema({
 	instagram: String,
 	facebook: String,
 	description: String,
+  shippingPreference: {
+    type: String, // specify if manual or shippo
+    enum: ['shippo', 'manual'],
+    default: 'shippo'
+  },
 	businessAddress: {
 		type: Schema.Types.ObjectId,
 		ref: 'Address'
