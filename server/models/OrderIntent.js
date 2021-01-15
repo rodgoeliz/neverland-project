@@ -35,6 +35,11 @@ const orderIntentSchema = new mongoose.Schema({
   },
   effectiveTaxRate: Number,
   surcharges: Number,
+  sellerSurcharge: Number,
+  shippoShipmentInfo: {
+    shipmentId: String,
+    ratesId: String
+  },
   shipping: Number,
   subtotal: Number,
   taxes: Number,

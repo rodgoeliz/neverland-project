@@ -19,8 +19,8 @@ const storeSchema = new mongoose.Schema({
 	description: String,
   shippingPreference: {
     type: String, // specify if manual or shippo
-    enum: ['shippo', 'manual'],
-    default: 'shippo'
+    enum: ['neverland-shippo', 'manual'],
+    default: 'neverland-shippo'
   },
 	businessAddress: {
 		type: Schema.Types.ObjectId,

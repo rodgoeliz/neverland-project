@@ -371,18 +371,35 @@ router.post('/intent/create', async function (req, res) {
   loadAllPromises.push(store);
   // if bundle is null, meaning we didn't load bundleId and we didn't have to create a bundle to 
   // wrap around product
-  loadAllPromises.push(await Bundle.findOne({ _id: bundleId }).populate('productIds')
-    .populate({ path: 'productOrderItemIds', populate: [{ path: 'productId' }, { path: 'selectedOptionIds' }] }));
+  loadAllPromises.push(await Bundle.findOne({ _id: bundleId })
+      .populate({
+        path: 'productOrderItemIds',
+        populate: [{path: 'productId'},{path: 'selectedOptionIds'}])
+      .populate({
+        path: 'storeId',
+        populate: [{
+          path: 'packageProfileIds'},{path: 'businessAddress'}]
+      });
+
   Promise.all(loadAllPromises).then(async (results) => {
-    let shippingAddress = results[0];
-    let paymentMethod = results[1];
-    let user = results[2];
-    let store = results[3];
-    let bundle = results[4];
-    let subtotal = await calculateBundleSubTotal(bundle);
-    let buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
-    let shippingMethod = await getFulfillmentMethod("usps", "priority");
-    let shippingCharge = shippingMethod.price;
+    const shippingAddress = results[0];
+    const paymentMethod = results[1];
+    const user = results[2];
+    const store = results[3];
+    const bundle = results[4];
+    const subtotal = await calculateBundleSubTotal(bundle);
+    const buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
+    // shipping is free for everyone right now
+    //const shippingChargeDetails = await calculateShippingFromBundle(bundle, store)
+    const shippingCharge = 0; //shippingCharge.shippingCost;
+    //const sellerSurcharge = shippingCharge.sellerSurcharge;
+    const shippoDetails = null;
+    if (shippingChargeDetails.shippo) {
+      shippoDetails = {
+        shipmentId: shippingChargeDetails.shippo.shipmentId,
+        ratesId: shippingChargeDetails.shippo.ratesId
+      }
+    }
     let taxSurcharge = await calculateTaxSurcharge(subtotal, shippingAddress, shippingCharge, store.address);
     let total = subtotal + buyerSurcharge + shippingCharge;
     let surcharge = buyerSurcharge + shippingCharge;
@@ -403,10 +420,12 @@ router.post('/intent/create', async function (req, res) {
       effectiveTaxRate: taxSurcharge.rate,
       paymentMethod: paymentMethod,
       surcharges: surcharge,
+      // TODO ADD LATER - shippo sellerSurcharge,
       buyerSurcharge: Math.round(buyerSurcharge),
       subtotal: subtotal,
       shipping: shippingCharge,
       taxes: taxSurcharge.taxAmount,
+      // TODO ADD LATER shippoDetails,
       taxableAmount: taxSurcharge.taxableAmount,
       total: total
     });

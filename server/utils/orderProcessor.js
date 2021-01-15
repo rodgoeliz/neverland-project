@@ -32,38 +32,9 @@ module.exports.getBuyerProtectionSurcharge = async (subtotal) => {
 }
 
 
-module.exports.calculateShippingFromBundle = async (orderi, bundleIdt) => {
-  console.log("HELLO..")
-  const order = await Order.findOne({_id: "5fe429e80d81e836cbb8192c"}).populate('shippingAddressId');
-  console.log(order)
-  let bundleId = "5fe4288cae054733f59b79ef";
-  const bundle = await Bundle.findOne({_id: bundleId})
-    .populate({
-      path: 'productOrderItemIds',
-      populate: 'productId'})
-    .populate({
-      path: 'storeId',
-      populate: [{
-        path: 'packageProfileIds'},{path: 'businessAddress'}]
-    });
-  let length, height, width = 0;
-  let weightLb, weightOz = 0;
-  let zipCodeOrigin = null;
-  var totalWeightOz = 0;
-  const binItems = [];
-
-  // create items to pack in bins and calculate total weight of order
-  bundle.productOrderItemIds.map((item) => {
-    const weightOz = item.productId.weightLb * 16 + item.productId.weightOz;
-    totalWeightOz += weightOz;
-    const newItem = new Item(item.productId.title, item.productId.lengthIn, item.productId.widthIn, item.productId.heightIn, weightOz);
-    binItems.push(newItem);
-  });
-
-  const validPackages = [];
-
+const getOptimalPackageFromProfile(packageProfiles, binItems) {
   // Test out different package profiles with our bin packing algorithm
-  bundle.storeId.packageProfileIds.map((packageProfile) => {
+  packageProfiles.map((packageProfile) => {
     const packer = new Packer();
     const newBin = new Bin(packageProfile.title, packageProfile.length, packageProfile.width, packageProfile.depth, 100*16);
     packer.addBin(newBin);
@@ -78,11 +49,10 @@ module.exports.calculateShippingFromBundle = async (orderi, bundleIdt) => {
   });
 
   var minPackageProfile = null;
-  const totalWeight = 0;
   if (validPackages.length == 0) {
     // then we didn't find any valid packages to ship in, so we try to do it by weight?
     // what is default shipping rate?
-    return bundle.storeId.flatShippingRate;
+    return null;
   } else {
     const maxVolume = Number.MAX_SAFE_INTEGER;
     validPackages.map((profile) => {
@@ -92,17 +62,47 @@ module.exports.calculateShippingFromBundle = async (orderi, bundleIdt) => {
       }
     });
   }
-  console.log("PACKAGE SIZE: ", minPackageProfile)
-  // if a valid packageexists, we get smallest dimension and call shippo with that.
-  // if it doesn't, we base it on weight...
 
-  // pull shipping address
-  // pull shop business address and ship zip code
-  // call shippo 
-  // get the priority rates, if priority rates don't exist, we do ground shipping
-  // create an intent to get that shippig label but do not get it yet..
-  // charge user for shipping and do not give to seller - we buy the shipping label on order confirmation
+  return minPackageProfile;
+}
 
+module.exports.calculateShippingFromBundle = async (bundle, store) => {
+  console.log("HELLO..")
+  const shippingPreference = store.shippingPreference;
+  if (shippingPreference == "manual") {
+    // always free shipping to consumer 
+    return {
+      shippingCost: 0,
+      sellerShippingSurcharge: 0
+    }
+  }
+  let length, height, width = 0;
+  let weightLb, weightOz = 0;
+  let zipCodeOrigin = null;
+  var totalWeightOz = 0;
+  const binItems = [];
+
+  // create items to pack in bins and calculate total weight of order
+  const paidShippingProducts = bundle.productOrderItemIds.filter((item) => {
+    return !item.offerFreeShipping;
+  });
+  let productsToCalcShippingFor = paidShippingProducts;
+  // means that all products have free shipping
+  if (paidShippingProducts.length == 0) {
+    // we need to calculate the shipping and request a label to be created but not charged
+    // we need to note that we will pay out seller less the shipping cost
+    productsToCalcShippingFor = bundle.productOrderItemIds;
+    return 0;
+  }
+  // calculate shipping for the rest of the products
+  productsToCalcShippingFor.map((item) => {
+    const weightOz = item.productId.weightLb * 16 + item.productId.weightOz;
+    totalWeightOz += weightOz;
+    const newItem = new Item(item.productId.title, item.productId.lengthIn, item.productId.widthIn, item.productId.heightIn, weightOz);
+    binItems.push(newItem);
+  });
+
+  var minPackageProfile = getOptimalPackageFromProfile(bundle.storeId.packageProfileIds, binItems);
 
   let shippingAddress = order.shippingAddressId;
   console.log("SHIP ADDreSS tO: ", shippingAddress)
@@ -160,8 +160,34 @@ module.exports.calculateShippingFromBundle = async (orderi, bundleIdt) => {
       }
     });
   }
+  let finalShippingRate = minRate;
+  if (minPackageProfile.length == 0) {
+    // still need to calculate cost and then charge the diff b/t flatshippingrate and the cost of shipping
+    // take minRate and flatShippingRate and if diff b/t them is positive, we take it away from take rate
+    finalShippingRate = bundle.storeId.flatShippingRate;
+  }
 
-  return minRate; 
+  // this means that seller has made free shipping for all products, so they are going to cover the cost of shipping.
+  if (paidShippingProducts.length == 0) {
+     // charge seller for the shipping in it's entirety
+     return {
+        shippingCost: 0,
+        sellerShippingSurcharge: finalShippingRate,
+        shippo: {
+          shipment: shipment.object_id,
+          rates: rates.object_id
+        }
+     };
+  }
+
+  return {
+    shippingCost: finalShippingRate,
+    sellerShippingSurcharge: 0,
+    shippo: {
+      shipment: shipment.object_id,
+      rates: rates.object_id
+    }
+  }
 }
 
 module.exports.getFulfillmentMethod = async (carrier, type) => {
