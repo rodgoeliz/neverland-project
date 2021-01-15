@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from "styled-components";
 
+import { formatPrice } from 'utils/display';
+
 const InvociceContainer = styled.div`
     display: flex;
     justify-content: end;
@@ -24,10 +26,10 @@ export default function Invoice({currency, subtotal, services, sh, total}) {
                 <strong>Total</strong>
             </Column>
             <Column>
-                <span>{currency} {subtotal}</span>
-                <span>{currency} {services}</span>
-                <span>{currency} {sh}</span>
-                <strong>{currency} {total}</strong>
+                <span>{(currency)} {formatPrice(subtotal)}</span>
+                <span>{(currency)} {formatPrice(services)}</span>
+                <span>{(currency)} {formatPrice(sh)}</span>
+                <strong>{currency} {formatPrice(total)}</strong>
             </Column>
         </InvociceContainer>
     )

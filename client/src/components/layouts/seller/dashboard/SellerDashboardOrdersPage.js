@@ -8,15 +8,15 @@ import OrderHit from 'components/search/components/OrderHit';
 
 import SellerDashboardNavWrapper from 'components/layouts/seller/dashboard/SellerDashboardNavWrapper';
 
-
+/*eslint-disable*/
 export default function SellerDashboardOrdersPage({ indexName, filterQuery, searchClient }) {
   return (
       <SellerDashboardNavWrapper>
           <AlgoliaSearch 
-            filterAttribute={["status" ]}
+            filterAttribute={["status"]}
             hitComponent={OrderHit} 
             indexName={indexName} 
-            filterQuery={filterQuery} 
+     //       filterQuery={filterQuery} 
             ResultsComponent={OrderResults}
             searchClient={searchClient} />
       </SellerDashboardNavWrapper>

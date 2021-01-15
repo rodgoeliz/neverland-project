@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 import arrow from "images/arrow.svg";
 
+
 // Background - fix for "responsive" designt
 // TODO: remove bg and make media queries for different screen resolutions
 const NavigationContainer = styled(Box)`
@@ -14,15 +15,19 @@ const NavigationContainer = styled(Box)`
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 16px;
+    border-radius: 0px 16px 16px 0px;
     background-color: #FFFDFB;
+    &:hover {
+      cursor: pointer;
+      background-color: #f5f1ed;
+    }
 `
 
 export default function NavigationArrow({ to }) {
   return (
     <Link to={to}>
       <NavigationContainer>
-        <img src={arrow} height="50px" alt="" />
+        <img src={arrow} height="24px" alt="" />
       </NavigationContainer>
     </Link>
   );

@@ -1,29 +1,42 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Typography } from '@material-ui/core';
+import styled from 'styled-components';
 
 import { createOrderPdf, getOrderById, getProductById } from 'actions';
+
 import { RowContainer, Image, OrderDescription, Price } from 'components/UI/Row';
 import Invoice from 'components/UI/Invoice';
 import ShippingDetails from 'components/UI/ShippingDetails';
 import NButton from 'components/UI/NButton';
 
+import { formatPrice } from 'utils/display';
+
 import SellerDashboardNavWrapper from './SellerDashboardNavWrapper';
 
+const HeaderRowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2em;
+  margin-bottom: 2em;
+`;
 
 // TODO: fix structure and export into single component beside this page
 const OrderDetails = ({ currentOrder, orderId }) => (
   <>
-    <Typography variant="h2" component="h2">
+    <p>
       Order# {orderId}
-    </Typography>
+    </p>
     <span>
       <b>Date:</b> {(new Date(currentOrder.updatedAt)).toLocaleDateString('en-US')}
     </span>
-    <Typography variant="h2" component="h2">
-      {currentOrder.billingAddress?.userId.name}
-    </Typography>
+    <h3>
+      <b>
+        {currentOrder.billingAddress?.userId.name}
+      </b>
+    </h3>
 
     {/* Shipping address */}
     <ShippingDetails {...currentOrder.billingAddress} />
@@ -46,42 +59,42 @@ export default function SellerDashboardSingleOrderPage() {
   useEffect(() =>
 
     // TODO: add logic of checking in store. Could be cached
-    currentOrder.bundleId?.productIds?.forEach(
-      (productId) => dispatch(getProductById(productId))
+    currentOrder.bundleId?.productOrderItemIds?.forEach(
+      (orderProductId) => dispatch(getProductById(orderProductId.productId._id))
     ), [currentOrder])
 
   const handlePrintInvoice = () => {
-    const products = currentOrder.bundleId.productIds.map(id => productsCache[id]);
+    const products = currentOrder.bundleId.productOrderItemIds.map(id => productsCache[id.productId._id]);
     dispatch(createOrderPdf({ orderId, products, currentOrder }));
   }
-
+  console.log("Current Order:", currentOrder)
   return (
     <SellerDashboardNavWrapper>
 
       {/* eslint-disable-next-line */}
       <Link to={'/seller/dashboard/orders'}>{'<< Back to orders'}</Link>
       <OrderDetails currentOrder={currentOrder} orderId={orderId} />
-
-      <Typography variant='h1' component='h2'>Products</Typography>
-      <NButton theme="secondary" title='Print invoice' onClick={handlePrintInvoice} />
+      <HeaderRowContainer>
+        <h3><b>Products</b></h3>
+        <NButton theme="secondary" size="x-small" title='Print invoice' onClick={handlePrintInvoice} />
+      </HeaderRowContainer>
 
       {/* Display products in order */}
-      {currentOrder.bundleId?.productIds.map((productId) => (
-
+      {currentOrder.bundleId?.productOrderItemIds?.map((orderProductId) => {
+        const { productId } = orderProductId;
         // Products data taken from products reducer, ids from order (seller reducer)
-        productsCache[productId] && (
+        return (
           <RowContainer key={productId}>
-            <Image src={productsCache[productId].imageURLs[0]} />
+            <Image src={productId.imageURLs[0]} />
             <OrderDescription
-              title={productsCache[productId].title}
-              content={[productsCache[productId].description]}
+              title={productId.title}
             />
             <Price flexGrow={1} >
-              {productsCache[productId].price.value} {productsCache[productId].price.currency}
+              {formatPrice(productId.price.value)} {productId.price.currency}
             </Price>
-          </RowContainer>
-        )
-      ))}
+          </RowContainer>)
+        }
+      )}
 
       {/* Invoice section */}
       <Invoice

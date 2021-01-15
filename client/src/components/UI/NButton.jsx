@@ -9,101 +9,79 @@ import styled from 'styled-components';
 import BrandStyles from 'components/BrandStyles';
 
 const HoverCursorWrapper = styled.div`
-  margin: 0 auto;
   &:hover {
     cursor: pointer;
   }
 `;
 
+const DisabledWrapper = styled.div`
+  border: 0px;
+  background-image: linear-gradient(to bottom right, rgb(196 192 183), rgb(168 159 140));
+  border-radius: 8px;
+  padding-top: ${props => (props.paddingFactor*8)}px;
+  padding-bottom: ${props => (props.paddingFactor*8)}px;
+  padding-right: ${props => (props.paddingFactor*16)}px;
+  padding-left: ${props => (props.paddingFactor*16)}px;
+  box-shadow: 0px 2px 4px rgb(196 192 183);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center';
+  &:hover: {
+      cursor: pointer;
+  };
+`;
+
+const PrimaryWrapper = styled.div`
+  border: ${BrandStyles.color.blue} 2px solid;
+  border-radius: 8px;
+  padding-top: ${props => (props.paddingFactor*4)}px;
+  padding-bottom: ${props => (props.paddingFactor*4)}px;
+  padding-right: ${props => (props.paddingFactor*8)}px;
+  padding-left: ${props => (props.paddingFactor*8)}px;
+  background-image: linear-gradient(to bottom right, ${BrandStyles.color.blue}, rgb(2 0 144));
+  box-shadow: 0px 2px 4px ${BrandStyles.color.blue};
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center';
+  &:hover: {
+      cursor: pointer;
+  };
+`;
+
+const SecondaryWrapper = styled.div`
+  border: ${BrandStyles.color.blue} 2px solid;
+  border-radius: 8px;
+  padding-top: ${props => (props.paddingFactor*4)}px;
+  padding-bottom: ${props => (props.paddingFactor*4)}px;
+  padding-right: ${props => (props.paddingFactor*8)}px;
+  padding-left: ${props => (props.paddingFactor*8)}px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center';
+  &:hover: {
+      cursor: pointer;
+  };
+`;
+
+const ButtonText = styled.span`
+  font-size: ${props => (props.fontSize)};
+  text-transform: uppercase;
+  font-weight: bold;
+  color: ${props => (props.theme === 'secondary' ? BrandStyles.color.blue : BrandStyles.color.beige)}
+`;
+
 const styles = {
-  buttonXSmall: {
-    maxHeight: 48, 
-  },
-  buttonSecondary: {
-    borderColor: BrandStyles.color.blue,
-    borderWidth: 2,
-    borderRadius: 8,
-    borderStyle: 'solid',
-    minHeight: 50,
-    marginTop: 4,
-    marginBottom: 4,
-    marginLeft: 16,
-    marginRight: 16,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
-  buttonDisabled: {
-    backgroundImage: `linear-gradient(to bottom right, rgb(196 192 183), rgb(168 159 140))`,
-    minHeight: 50,
-    marginTop: 4,
-    marginBottom: 4,
-    marginLeft: 16,
-    marginRight: 16,
-    borderRadius: 8,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '&:hover': {
-      cursor: 'pointer'
-    }
-  },
-  button: {
-    backgroundImage: `linear-gradient(to bottom right, ${BrandStyles.color.blue}, rgb(2 0 144))`,
-    minHeight: 50,
-    marginTop: 4,
-    marginBottom: 4,
-    marginLeft: 16,
-    marginRight: 16,
-    borderRadius: 8,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
-  linearGradient: {
-    flex: 1,
-    borderRadius: 32,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
-  contentContainer: {
+contentContainer: {
     paddingLeft: 16,
     paddingRight: 16,
     display: 'flex',
     flexDirection: 'row'
-  },
-  shadowButton: {
-    boxShadow: `0px 2px 4px ${BrandStyles.color.blue}`,
-  },
-  shadowButtonDisabled: {
-    boxShadow: `0px 2px 4px rgb(168 159 140)`
-  },
-  buttonTitleTextPrimary: {
-    color: BrandStyles.color.beige,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-  },
-  buttonTitleTextSecondary: {
-    color: BrandStyles.color.blue,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-  },
-  secondaryHorizontalPadding: {
-    paddingHorizontal: 32,
   },
   spinnerContainer: {
     height: 16,
@@ -130,20 +108,36 @@ class NButton extends Component {
     }
   };
 
-  getWidthStyle() {
-    switch (this.props.size) {
+  getPaddingFactor() {
+     switch(this.props.size) {
       case 'x-small':
-        const xSmallHeight = 48;
-        return { 
-          height: xSmallHeight,
-        }
-      default:
-        const defaultHeight = 60;
-       return {
-        height: defaultHeight,
-        width: 300
-       }
+        return 1;
+      case 'small': 
+        return 1.25;
+      case 'large':
+        return 2;
+      case 'medium':
+      default: 
+        return 1.5;
+    }   
+  }
+
+  getTextSize() {
+    switch(this.props.size) {
+      case 'x-small':
+        return '12px';
+      case 'small': 
+        return '16px';
+      case 'large':
+        return '24px';
+      case 'medium':
+      default: 
+        return 'inherit';
     }
+  }
+
+  getColor() {
+    return this.props.theme === 'primary' ? BrandStyles.color.beige : BrandStyles.color.blue;
   }
 
   render() {
@@ -153,50 +147,37 @@ class NButton extends Component {
       </div>
     ) : null;
 
-    let themeStyle = this.props.theme === 'secondary' ? styles.buttonSecondary : styles.button;
-    if (this.props.disabled) {
-      themeStyle = styles.buttonDisabled
-    }
-    let buttonStyles = themeStyle;
-    if (this.props.buttonStyle) {
-      buttonStyles = { ...buttonStyles, ...this.props.buttonStyle };
-    }
-    const widthStyle = this.getWidthStyle();
-    if (this.props.theme === 'secondary') {
-      buttonStyles = { ...buttonStyles, ...styles.secondaryHorizontalPadding };
-
-      return (
-        <HoverCursorWrapper style={widthStyle}>
-          <div style={{...buttonStyles, ...widthStyle}} {...this.props} onClick={this.onClick} disabled={this.props.disabled}>
-            <div style={styles.contentContainer}>
+    const buttonContent = <div style={styles.contentContainer}>
               {this.props.iconLeft}
-              <span style={styles.buttonTitleTextSecondary}>{this.props.title}</span>
+              <ButtonText theme={this.props.theme} fontSize={this.getTextSize()}>{this.props.title}</ButtonText>
               {this.props.iconRight}
               {spinner}
-            </div>
-          </div>
-        </HoverCursorWrapper>
-      );
-    }
+            </div>;
     if (this.props.disabled) {
-      buttonStyles = {...buttonStyles, ...styles.shadowButtonDisabled}
-    } else {
-      buttonStyles = {...buttonStyles, ...styles.shadowButton};
+      return (
+        <HoverCursorWrapper>
+          <DisabledWrapper paddingFactor={this.getPaddingFactor()}>
+            {buttonContent}
+          </DisabledWrapper>
+        </HoverCursorWrapper>
+        );
+    }
+    if (this.props.theme === 'secondary'){
+      return (
+        <HoverCursorWrapper>
+          <SecondaryWrapper paddingFactor={this.getPaddingFactor()}>
+            {buttonContent}
+          </SecondaryWrapper>
+        </HoverCursorWrapper>
+        );
     }
     return (
       <HoverCursorWrapper>
-        <div {...this.props} style={buttonStyles} onClick={this.onClick} disabled={this.props.disabled}>
-          <div style={{...styles.linearGradient, ...widthStyle}}>
-            <div style={styles.contentContainer}>
-              {this.props.iconLeft}
-              <span style={styles.buttonTitleTextPrimary}>{this.props.title}</span>
-              {this.props.iconRight}
-              {spinner}
-          </div>
-          </div>
-        </div>
-      </HoverCursorWrapper>
-    );
+        <PrimaryWrapper paddingFactor={this.getPaddingFactor()}>
+          {buttonContent}
+        </PrimaryWrapper>
+      </HoverCursorWrapper>);
+
   }
 }
 
