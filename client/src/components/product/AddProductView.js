@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import Switch from 'react-switch';
 // import ImagePicker from 'react-native-image-crop-picker';
 import { connect } from 'react-redux';
@@ -8,9 +9,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import Modal from 'react-modal';
 
 
-import { FaPhotoVideo, FaRegEdit } from 'react-icons/fa';
-
-import { GrFormClose } from 'react-icons/gr';
+import { FaRegEdit } from 'react-icons/fa';
 
 import searchMetaDataTags from 'constants/searchMetaDataTags.js';
 
@@ -21,10 +20,13 @@ import { transformProductToFormData } from 'utils/productHelpers';
 import isZipCodeValid from 'utils/zipcodeValidator';
 
 import isNumberValid from 'utils/numberValidator';
+import extractId from 'utils/extractId';
 
 import BaseInput from 'components/UI/BaseInput';
 import CheckBoxInput from 'components/UI/CheckBoxInput';
 import NSelect from 'components/UI/NSelect';
+import NButton from 'components/UI/NButton';
+
 
 import {
   clearSellerCurrentProductCache,
@@ -38,8 +40,9 @@ import {
 import { setOnBoardingStepId, logoutFirebase } from 'actions/auth';
 import { createProduct, createTestProduct, updateProduct, getProductSearchMetaData } from 'actions/products';
 
-import NButton from 'components/UI/NButton';
-
+import { transformObjectToFormData, validateProductFormInput } from './utils';
+import ProductImageUploadInput from './ProductImageUploadInput';
+import UploadProductPhotosView from './UploadProductPhotosView';
 import AddProductVariationView from './AddProductVariationView';
 
 const PROCESSING_TIME_VALUES = [
@@ -97,6 +100,7 @@ const styles = {
 // a
 
 class AddProductView extends Component {
+
   constructor(props) {
     super(props);
     let { variations } = props;
@@ -136,7 +140,7 @@ class AddProductView extends Component {
     this.saveProduct = this.saveProduct.bind(this);
   }
 
-  async initTags() {
+  async initProductProperties() {
     await this.props.loadAllTags();
     await this.props.loadAllCategories();
     await this.props.getProductSearchMetaData();
@@ -159,7 +163,7 @@ class AddProductView extends Component {
         {
           isLoading: true,
         },
-        this.initTags.bind(this),
+        this.initProductProperties.bind(this),
       );
     }
 
@@ -189,84 +193,15 @@ class AddProductView extends Component {
     }
   }
 
-  transformToFormData(jsonObj, formData) {
-    for (const key in jsonObj) {
-      switch (key) {
-        case 'variations':
-          formData.append(key, JSON.stringify(jsonObj[key]));
-          break;
-        case 'categories':
-        case 'productTags':
-          formData.append(key, JSON.stringify(jsonObj[key]));
-          break;
-        case 'description':
-        case 'handlingFee':
-        case 'itemHeightIn':
-        case 'itemWeightLb':
-        case 'itemLengthIn':
-        case 'itemWeightOz':
-        case 'itemWidthIn':
-        case 'originZipCode':
-        case 'productPrice':
-        case 'productQuantity':
-        case 'productSKU':
-        case 'title':
-          formData.append(key, jsonObj[key]);
-          break;
-        case 'storeId':
-          break;
-        case 'productPhotos':
-          formData.append(key, JSON.stringify(jsonObj[key]));
-          break;
-        case 'processingTime':
-          const processingTime = jsonObj[key];
-          if (processingTime.length > 0) {
-            formData.append(key, processingTime[0].id);
-          }
-          break;
-        case 'metaData.light':
-        case 'metaData.color':
-        case 'metaData.level':
-        case 'metaData.water-level':
-        case 'metaData.style':
-        case 'metaData.benefit':
-        case 'metaData.size':
-        case 'metaData':
-          if (key && jsonObj[key]) {
-            formData.append(key, JSON.stringify(jsonObj[key]));
-          }
-          break;
-        default:
-          formData.append(key, jsonObj[key]);
-          break;
-      }
-    }
-    return formData;
-  }
-
   updateFormData(formData) {
-    this.setState(
-      {
-        formData,
-      },
-      () => {
-        // this.props.onChange(this.state);
-      },
-    );
+    this.setState({ formData });
   }
 
   onChangeInput(key, value) {
     const newFormData = { ...this.state.formData };
     newFormData[key] = value;
     this.updateFormData(newFormData);
-    // this props on change product input
   }
-
-  onSaveProduct() {
-    this.onSubmitProduct();
-  }
-
-  onPressAddPhoto() {}
 
   addPhotosToFormData(photosArr) {
     const newFormData = { ...this.state.formData };
@@ -293,155 +228,15 @@ class AddProductView extends Component {
   }
 
   validateInput() {
-    const { errors } = this.state;
-    let isValid = true;
-    if (!this.state.formData) {
-      errors.root = 'Please complete the form.';
-      this.setState({ errors });
-      return false;
-    }
-    errors.root = '';
-
-    if (this.state.formData.isProductVariationsVisible) {
-      const { variations } = this.state.formData;
-      if (variations && variations.length === 0) {
-        errors.variations = 'Please add variations or toggle off.';
-        isValid = false;
-      } else {
-        errors.variations = '';
-      }
-    }
-
-    if (!this.state.formData.isProductVariationsVisible) {
-      const { productPrice } = this.state.formData;
-      if (!productPrice || productPrice.length < 1) {
-        errors.productPrice = 'Enter a valid price.';
-        isValid = false;
-      } else {
-        errors.productPrice = '';
-      }
-      const { productQuantity } = this.state.formData;
-      if (!productQuantity || productQuantity.length < 1) {
-        errors.productQuantity = 'Enter a valid quantity.';
-        isValid = false;
-      } else {
-        errors.productQuantity = '';
-      }
-      const { productSKU } = this.state.formData;
-      if (!productSKU || productSKU.length < 3) {
-        errors.productSKU = 'Enter a valid SKU.';
-        isValid = false;
-      } else {
-        errors.productSKU = '';
-      }
-    }
-
-    const { title } = this.state.formData;
-    if (!title || title.length < 3) {
-      errors.title = 'Please enter a title.';
-      isValid = false;
-    } else {
-      errors.title = '';
-    }
-
-    const { description } = this.state.formData;
-    if (!description || description.length === 0) {
-      errors.description = 'Please enter a description.';
-      isValid = false;
-    } else {
-      errors.description = '';
-    }
-
-    // productTags
-    const { productTags } = this.state.formData;
-    if (!productTags || productTags.length === 0) {
-      errors.productTags = 'Please select at least one product tag.';
-      isValid = false;
-    } else {
-      errors.productTags = '';
-    }
-    const { categories } = this.state.formData;
-    if (!categories || categories.length === 0) {
-      errors.categories = 'Please select at least one category.';
-      isValid = false;
-    } else {
-      errors.categories = '';
-    }
-
-    const { processingTime } = this.state.formData;
-    if (!processingTime || processingTime.length === 0) {
-      errors.processingTime = 'Please select a processing time.';
-      isValid = false;
-    } else {
-      errors.processingTime = '';
-    }
-
-    const { itemHeightIn } = this.state.formData;
-    if (!itemHeightIn || itemHeightIn.length === 0) {
-      errors.itemHeightIn = 'Please enter item height.';
-      isValid = false;
-    } else {
-      errors.itemHeightIn = '';
-    }
-    const { itemLengthIn } = this.state.formData;
-    if (!itemLengthIn || itemLengthIn.length === 0) {
-      errors.itemLengthIn = 'Please enter item length.';
-      isValid = false;
-    } else {
-      errors.itemLengthIn = '';
-    }
-    const { itemWeightLb } = this.state.formData;
-    if (!itemWeightLb || itemWeightLb.length === 0) {
-      errors.itemWeightLb = 'Please enter item weight.';
-      isValid = false;
-    } else {
-      errors.itemWeightLb = '';
-    }
-    const { itemWeightOz } = this.state.formData;
-    if (!itemWeightOz || itemWeightOz.length === 0) {
-      errors.itemWeightOz = 'Please enter item weight (oz).';
-      isValid = false;
-    } else {
-      errors.itemWeightOz = '';
-    }
-    const { itemWidthIn } = this.state.formData;
-    if (!itemWidthIn || itemWidthIn.length === 0) {
-      isValid = false;
-      errors.itemWidthIn = 'Please enter item width (in).';
-    } else {
-      errors.itemWidthIn = '';
-    }
-
-    const { productPhotos } = this.state.formData;
-    if (!productPhotos || productPhotos.length === 0) {
-      errors.productPhotos = 'Please select product photos.';
-      isValid = false;
-    } else {
-      errors.productPhotos = '';
-    }
-
-    const { originZipCode } = this.state.formData;
-    if (!originZipCode || originZipCode.length === 0) {
-      isValid = false;
-      errors.originZipCode = 'Please enter zip code.';
-    } else {
-      errors.originZipCode = '';
-    }
-    if (!isValid) {
-      errors.root = 'Please complete all required fields in the form.';
-      this.setState({ errors });
-      return false;
-    } 
-      errors.root = '';
-    
-
+    const validationResults = validateProductFormInput(this.state);
     this.setState(
       {
-        errors,
+        errors: validationResults.errors,
       },
-      () => { },
+      () => { 
+        return validationResults.isValid;
+      },
     );
-    return isValid;
   }
 
   async saveProduct() {
@@ -468,15 +263,11 @@ class AddProductView extends Component {
          }); */
       }
     }
-    formData = this.transformToFormData(this.state.formData, formData);
+    formData = transformObjectToFormData(this.state.formData, formData);
     // if we didn't assign a store, pull user store
     if (!this.state.formData.storeId) {
       formData.append('userId', this.props.user._id);
-      if (typeof this.props.user.storeId === 'string') {
-        formData.append('storeId', this.props.user.storeId);
-      } else if (typeof this.props.user.storeId === 'object') {
-        formData.append('storeId', this.props.user.storeId._id);
-      }
+      formData.append('storeId', extractId(this.props.user.storeId));
     } else if (this.state.formData.storeId && this.state.formData.storeId.length === 1) {
         const store = this.state.formData.storeId[0];
         if (typeof store === "object") {
@@ -484,13 +275,8 @@ class AddProductView extends Component {
           formData.append('userId', this.props.user._id);
         } else if (typeof store.storeId === "string") {
           formData.append('storeId', store)
-          if (typeof store.userId === "object") {
-            formData.append('vendorId', store.userId._id);
-            formData.append('userId', store.userId._id);
-          } else if (typeof store.userId === "string") {
-            formData.append('vendorId', store.userId);
-            formData.append('userId', store.userId);
-          }
+          formData.append('userId', extractId(store.userId));
+          formData.append('vendorId', extractId(store.userId));
         }
       }
     const existingProduct = this.state.product;
@@ -506,10 +292,6 @@ class AddProductView extends Component {
     this.onCloseView();
   }
 
-  async onSubmitProduct() {
-    this.saveProduct();
-  }
-
   onChange(formData) {
     const { errors } = this.state;
     for (const key in formData.formData) {
@@ -521,9 +303,7 @@ class AddProductView extends Component {
       {
         formData: formData.formData,
         errors,
-      },
-      () => {
-      },
+      }
     );
   }
 
@@ -590,124 +370,15 @@ class AddProductView extends Component {
   }
 
   renderImageUploadInput() {
-    return (
-      <div>
-        <label
-          htmlFor="file-upload"
-          style={{
-            border: `2px solid ${BrandStyles.color.blue}`,
-            borderRadius: 16,
-            display: 'inline-block',
-            padding: '8px 18px',
-            cursor: 'pointer',
-            color: BrandStyles.color.blue,
-            fontWeight: 'bold',
-          }}
-          className="custom-file-upload"
-        >
-          <i className="fa fa-cloud-upload" /> UPLOAD IMAGES
-        </label>
-        <input style={{ display: 'none' }} id="file-upload" type="file" onChange={this.onImageFileChange} multiple />
-      </div>
-    );
+    return <ProductImageUploadInput onImageFileChange={this.onImageFileChange} />;
   }
 
   renderChosenPhotos() {
     const photos = this.state.formData.productPhotosData;
-    const spanStyle = { ...BrandStyles.components.iconPlaceholder, marginBottom: 16, paddingTop: 16 };
-    if (!photos || photos.length === 0) {
-      return (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingTop: 32,
-            paddingBottom: 32,
-            borderRadius: 16,
-            margin: 16,
-            backgroundColor: BrandStyles.color.warmlightBeige,
-          }}
-        >
-          <FaPhotoVideo style={BrandStyles.components.iconPlaceholder} />
-          <span style={spanStyle}> Add photos to get started </span>
-          {this.renderImageUploadInput()}
-        </div>
-      );
-    }
-    const productPhotoViews = [];
-    const iconStyle = {
-      ...BrandStyles.components.iconPlaceholder,
-      color: BrandStyles.color.xdarkBeige,
-      fontSize: 24,
-      marginTop: -8,
-    };
-    photos.forEach((product) => {
-      productPhotoViews.push(
-        <div style={{ position: 'relative' }}>
-          <div
-            onClick={this.removeImageUrl.bind(this, product)}
-            style={{
-              position: 'absolute',
-              top: 10,
-              right: 16,
-              zIndex: 100,
-              padding: 2,
-              width: 28,
-              height: 28,
-              borderRadius: 100,
-              backgroundColor: BrandStyles.color.beige,
-              cursor: 'pointer',
-            }}
-          >
-            <GrFormClose style={iconStyle} />
-          </div>
-          <img
-            src={product.sourceURL ? product.sourceURL : product}
-            style={{
-              width: 200,
-              height: 200,
-              borderRadius: 16,
-              marginTop: 8,
-              marginRight: 8,
-            }}
-          />
-        </div>,
-      );
-    });
-    return (
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          textAlign: 'center',
-          paddingTop: 32,
-          paddingBottom: 32,
-          borderRadius: 16,
-          margin: 16,
-          backgroundColor: BrandStyles.color.xlightBeige,
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {productPhotoViews}
-        </div>
-        <span style={{ fontWeight: 'bold', marginTop: 16 }}> Add more images </span>
-        {this.renderImageUploadInput()}
-      </div>
-    );
+    return <UploadProductPhotosView 
+        photos={photos} 
+        onImageFileChange={this.onImageFileChange} 
+        onRemove={this.removeImageUrl.bind(this)} />;
   }
 
   onRequestProductVariantModalClose() {
@@ -754,14 +425,7 @@ class AddProductView extends Component {
     const newFormData = { ...this.state.formData };
     newFormData[key] = values;
 
-    this.setState(
-      {
-        formData: newFormData,
-      },
-      () => {
-        // this.props.onChange(this.state);
-      },
-    );
+    this.setState({ formData: newFormData });
   }
 
   renderProductVariantModalHeader() {
@@ -1629,7 +1293,7 @@ class AddProductView extends Component {
           }}
         >
           <NButton size="x-small" style={{ width: 64 }} title="Close" theme="secondary" onClick={this.onCloseView.bind(this)} />
-          <NButton size="x-small" style={{ width: 64 }} title="Save" onClick={this.onSaveProduct.bind(this)} />
+          <NButton size="x-small" style={{ width: 64 }} title="Save" onClick={this.saveProduct.bind(this)} />
         </div>
         <div
           enableResetScrollToCoords={false}

@@ -37,7 +37,6 @@ class SelelrOnboardingShippingProfilePage extends Component {
   }
 
   handleChange(event) {
-    console.log(event.target.name, event.target.checked)
     this.setState({
       shippingPreference: event.target.name
     }, () => {

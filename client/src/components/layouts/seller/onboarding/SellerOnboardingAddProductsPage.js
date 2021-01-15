@@ -19,11 +19,14 @@ import {
   clearTagsAndCategories,
   getSellerProducts,
 } from 'actions/seller';
+
 import { setOnBoardingStepId, logoutFirebase } from 'actions/auth';
+
 import { createProduct, createTestProduct, updateProduct } from 'actions/products';
 
+import AddProductView from 'components/product/AddProductView';
+
 import OnboardingImageWrapper from './OnboardingImageWrapper';
-import AddProductView from './AddProductView';
 import OnboardingHeader from './OnboardingHeader';
 import SellerLoadingPage from './SellerLoadingPage';
 

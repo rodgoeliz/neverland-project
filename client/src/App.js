@@ -29,7 +29,7 @@ import ProductAdminView from 'components/layouts/admin/ProductAdminView';
 import AddProductAdminView from 'components/layouts/admin/AddProductAdminView';
 import SellerOnboardingReAuth from "components/layouts/SellerOnboardingReAuth";
 import SellerOnboardingRouting from "components/layouts/SellerOnboardingRouting";
-import AddProductView from 'components/layouts/seller/onboarding/AddProductView';
+import AddProductView from 'components/product/AddProductView';
 import PrivacyPolicy from "components/layouts/PrivacyPolicy";
 import SellerOnboardingBasicsPage from "components/layouts/seller/onboarding/SellerOnboardingBasicsPage";
 import SellerSignupPage from "components/layouts/seller/onboarding/SellerSignupPage";

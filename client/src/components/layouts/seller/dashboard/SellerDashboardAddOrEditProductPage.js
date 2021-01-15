@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AddProductView from 'components/layouts/seller/onboarding/AddProductView';
+import AddProductView from 'components/product/AddProductView';
 
 class SellerDashboardAddOrEditProductPage extends React.Component {
 
