@@ -8,7 +8,7 @@ var Bundle = require('../models/Bundle');
 var Order = require('../models/Order');
 const shippo = require('shippo')(getEnvVariable('SHIPPO'));
 const taxjarClient = new Taxjar({
-	apiKey: process.env.TAXJAR_API_TOKEN
+  apiKey: process.env.TAXJAR_API_TOKEN
 });
 
 module.exports.getStripeFee = async (total) => {
@@ -16,27 +16,27 @@ module.exports.getStripeFee = async (total) => {
 }
 
 module.exports.getBuyerProtectionSurcharge = async (subtotal) => {
-	let buyerProtectionRules = rootConfig.surchargeRules.buyerProtection;
-	for (var i = 0; i < buyerProtectionRules.length; i++) {
-		let rule = buyerProtectionRules[i];
-		if (subtotal > rule.minThreshold && subtotal < rule.maxThreshold) {
-			let surcharge = rule.surcharge;
-			if (surcharge.type == "currency") {
-				return subtotal + surcharge.value;
-			} else if (surcharge.type = "percent") {
-				return subtotal * (surcharge.value/100);
-			}
-		}
-	}
-	return 0;
+  let buyerProtectionRules = rootConfig.surchargeRules.buyerProtection;
+  for (var i = 0; i < buyerProtectionRules.length; i++) {
+    let rule = buyerProtectionRules[i];
+    if (subtotal > rule.minThreshold && subtotal < rule.maxThreshold) {
+      let surcharge = rule.surcharge;
+      if (surcharge.type == "currency") {
+        return subtotal + surcharge.value;
+      } else if (surcharge.type = "percent") {
+        return subtotal * (surcharge.value / 100);
+      }
+    }
+  }
+  return 0;
 }
 
 
-const getOptimalPackageFromProfile(packageProfiles, binItems) {
+const getOptimalPackageFromProfile = (packageProfiles, binItems) => {
   // Test out different package profiles with our bin packing algorithm
   packageProfiles.map((packageProfile) => {
     const packer = new Packer();
-    const newBin = new Bin(packageProfile.title, packageProfile.length, packageProfile.width, packageProfile.depth, 100*16);
+    const newBin = new Bin(packageProfile.title, packageProfile.length, packageProfile.width, packageProfile.depth, 100 * 16);
     packer.addBin(newBin);
     binItems.map((binItem) => {
       packer.addItem(binItem);
@@ -56,7 +56,7 @@ const getOptimalPackageFromProfile(packageProfiles, binItems) {
   } else {
     const maxVolume = Number.MAX_SAFE_INTEGER;
     validPackages.map((profile) => {
-      const volume = profile.height*profile.width*profile.length;
+      const volume = profile.height * profile.width * profile.length;
       if (volume < maxVolume) {
         minPackageProfile = profile;
       }
@@ -123,7 +123,7 @@ module.exports.calculateShippingFromBundle = async (bundle, store) => {
     zip: storeAddress.addressZip,
     state: storeAddress.addressState,
     country: 'USA'
-  } 
+  }
 
   const parcel = {
     "length": minPackageProfile.length,
@@ -169,15 +169,15 @@ module.exports.calculateShippingFromBundle = async (bundle, store) => {
 
   // this means that seller has made free shipping for all products, so they are going to cover the cost of shipping.
   if (paidShippingProducts.length == 0) {
-     // charge seller for the shipping in it's entirety
-     return {
-        shippingCost: 0,
-        sellerShippingSurcharge: finalShippingRate,
-        shippo: {
-          shipment: shipment.object_id,
-          rates: rates.object_id
-        }
-     };
+    // charge seller for the shipping in it's entirety
+    return {
+      shippingCost: 0,
+      sellerShippingSurcharge: finalShippingRate,
+      shippo: {
+        shipment: shipment.object_id,
+        rates: rates.object_id
+      }
+    };
   }
 
   return {
@@ -191,12 +191,12 @@ module.exports.calculateShippingFromBundle = async (bundle, store) => {
 }
 
 module.exports.getFulfillmentMethod = async (carrier, type) => {
-	return rootConfig.fulfillmentOptions[carrier][type];
+  return rootConfig.fulfillmentOptions[carrier][type];
 }
 
 module.exports.calculateBundleSubTotal = async (bundle) => {
-	let subtotal = 0;
-  let productOrderItems = await OrderProductItem.find({_id: {$in: bundle.productOrderItemIds}})
+  let subtotal = 0;
+  let productOrderItems = await OrderProductItem.find({ _id: { $in: bundle.productOrderItemIds } })
     .populate('selectedOptionIds').populate('productId');
   let totalPrice = 0;
   // go through product order items
@@ -208,36 +208,37 @@ module.exports.calculateBundleSubTotal = async (bundle) => {
     }
     // go through options and add the additional pricing
     for (var i in productOrderItem.selectedOptionIds) {
-      let option = productOrderItem.selectedOptionIds[i] ;
+      let option = productOrderItem.selectedOptionIds[i];
       basePrice += parseFloat(option.price.value);
     }
-    
+
     // multiply by the quantity needed
     basePrice = basePrice * productOrderItem.quantity;
     totalPrice += basePrice;
   });
-	return totalPrice;
+  return totalPrice;
 }
 
 module.exports.calculateTaxSurcharge = async (bundleSubtotal, shippingAddress, shippingCharge) => {
-	//get tax rate through taxjar api
-return 0;
-	let taxSurcharge = await taxjarClient.taxForOrder({
-		from_country: 'US',
-		from_state: 'CA',
-		to_zip: shippingAddress.addressZip,
-		to_state: shippingAddress.addressState,
-		to_city: shippingAddress.addressCity,
-		to_street: shippingAddress.addressLine1,
-		to_country: 'US',
-		amount: bundleSubtotal,
-		shipping: shippingCharge
-	}).then((res) => {
-		return {
-			taxAmount: res.tax.amount_to_collect,
-			taxableAmount: res.tax.taxable_amount,
-			rate: res.tax.rate
-	}});
-	return taxSurcharge;
+  //get tax rate through taxjar api
+  return 0;
+  let taxSurcharge = await taxjarClient.taxForOrder({
+    from_country: 'US',
+    from_state: 'CA',
+    to_zip: shippingAddress.addressZip,
+    to_state: shippingAddress.addressState,
+    to_city: shippingAddress.addressCity,
+    to_street: shippingAddress.addressLine1,
+    to_country: 'US',
+    amount: bundleSubtotal,
+    shipping: shippingCharge
+  }).then((res) => {
+    return {
+      taxAmount: res.tax.amount_to_collect,
+      taxableAmount: res.tax.taxable_amount,
+      rate: res.tax.rate
+    }
+  });
+  return taxSurcharge;
 }
 
