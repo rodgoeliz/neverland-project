@@ -123,7 +123,7 @@ router.post('/product/remove', async function (req, res) {
 
 router.post('/tracking/update', async function (req, res) {
   const orderId = req.body.orderId;
-  const trackingNumber =  req.body.trackingNumber;
+  const trackingNumber = req.body.trackingNumber;
   const trackingCarrier = req.body.trackingCarrier;
   if (!trackingNumber) {
     res.json({
@@ -146,17 +146,17 @@ router.post('/tracking/update', async function (req, res) {
   try {
     await Order.findOneAndUpdate(
       {
-        _id:orderId
+        _id: orderId
       }, {
-        $set: {
-          trackingInfo: {
-            trackingId: trackingNumber,
-            carrier: trackingCarrier
-          }
-        } 
-      }, {
-        new: true
-      })
+      $set: {
+        trackingInfo: {
+          trackingId: trackingNumber,
+          carrier: trackingCarrier
+        }
+      }
+    }, {
+      new: true
+    })
   } catch (error) {
     res.json({
       success: false,
@@ -372,14 +372,18 @@ router.post('/intent/create', async function (req, res) {
   // if bundle is null, meaning we didn't load bundleId and we didn't have to create a bundle to 
   // wrap around product
   loadAllPromises.push(await Bundle.findOne({ _id: bundleId })
-      .populate({
-        path: 'productOrderItemIds',
-        populate: [{path: 'productId'},{path: 'selectedOptionIds'}])
-      .populate({
-        path: 'storeId',
-        populate: [{
-          path: 'packageProfileIds'},{path: 'businessAddress'}]
-      });
+    .populate({
+      path: 'productOrderItemIds',
+      populate: [{ path: 'productId' }, { path: 'selectedOptionIds' }]
+    })
+    .populate({
+      path: 'storeId',
+      populate: [{
+        path: 'packageProfileIds'
+      },
+      { path: 'businessAddress' }
+      ]
+    }));
 
   Promise.all(loadAllPromises).then(async (results) => {
     const shippingAddress = results[0];
