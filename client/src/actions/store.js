@@ -4,6 +4,11 @@ import { UI } from 'constants/ui';
 
 import Api from 'lib/api';
 
+export const setCurrentStore = (store) => ({
+  type: actionTypes.store.SET_CURRENT_STORE,
+  payload: store
+});
+
 export const updateStore = (storeId, formData) => async (dispatch) => {
   try {
     const response = await Api.post(`/api/store/update`, {

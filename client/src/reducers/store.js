@@ -45,6 +45,7 @@ export default (state = initialState, action) => {
         ...state,
         packageProfiles: filteredProfiles
       }
+    case actionTypes.store.SET_CURRENT_STORE:
     case actionTypes.store.UPDATE_SHIPPING_PREFERENCE:
       return {
         ...state,

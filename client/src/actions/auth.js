@@ -5,6 +5,9 @@ import { UI } from 'constants/ui';
 import Api from 'lib/api';
 import { auth } from 'services/firebase';
 import store from 'store/store';
+
+import { setCurrentStore } from './store';
+
 /**
  * Transform the endpoint data structure into our redux store format
  * @param {obj} data
@@ -81,6 +84,7 @@ export const loginFirebase = (data) => async (dispatch) => {
         if (response.data.success) {
           dispatch(setUser(response.data.payload));
           dispatch(setIsAuthorized(true));
+          dispatch(setCurrentStore(response.data.payload.storeId));
 
           return {
             success: true,

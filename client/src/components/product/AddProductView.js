@@ -8,6 +8,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 import Modal from 'react-modal';
 
+import styled from 'styled-components';
 
 import { FaRegEdit } from 'react-icons/fa';
 
@@ -52,6 +53,24 @@ const PROCESSING_TIME_VALUES = [
   { id: 'one-two-weeks', value: '1-2 weeks' },
   { id: 'more-than-two-weeks', value: '2+ weeks' },
 ];
+
+const ColumnContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const InputLabel = styled.label `
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 16px;
+  margin-left : 16px;
+`;
+
+const InputDescription = styled.label`
+  font-size: 12px;
+  margin-left: 16px;
+  max-width: 600px;
+`;
 
 const styles = {
   optionEditIcon: {
@@ -1131,6 +1150,7 @@ class AddProductView extends Component {
     return (
       <div>
         <form>
+
           <NSelect
             items={PROCESSING_TIME_VALUES}
             isSingleSelect
@@ -1153,24 +1173,37 @@ class AddProductView extends Component {
             validate={isZipCodeValid}
             error={this.state.errors.originZipCode}
           />
-          {/* <CheckBoxInput
+          <div
+            style={{
+              backgroundColor: BrandStyles.color.xlightBeige,
+              borderRadius: 8,
+              paddingLeft: 4,
+              paddingTop: 8,
+              paddingBottom: 8,
+              paddingRight: 4,
+            }}
+          >
+          <ColumnContainer>
+            <InputLabel>Offer Free Shipping <b>(Recommended)</b></InputLabel>
+            <InputDescription>
+              Offering free shipping can increase orders by <b>40% or more</b>. 
+              We recommend that you incorporate your average shipping price into the base price above if you use this option.
+            </InputDescription>
+          </ColumnContainer>
+          <CheckBoxInput
             value={this.state.formData.offerFreeShipping}
             label="Offer Free Shipping"
             onValueChange={this.toggleSelection.bind(this, 'offerFreeShipping')}
             error={this.state.offerFreeShippingError}
-          /> */}
+          />
+          </div>
           <div style={{ height: 16 }} />
-          <span
-            style={{
-              fontWeight: 'bold',
-              textAlign: 'center',
-              fontSize: 16,
-              marginBottom: 16,
-              marginLeft: 16,
-            }}
-          >
+          <InputLabel>
             Item Weight
-          </span>
+          </InputLabel>
+          <InputDescription>
+            We use this to calculate shipping rates.
+          </InputDescription>
           <div style={{ display: 'flex', flexDirection: 'row', marginTop: 16 }}>
             <BaseInput
               onChange={this.onChangeInput}
@@ -1193,17 +1226,13 @@ class AddProductView extends Component {
               error={this.state.errors.itemWeightOz}
             />
           </div>
-          <span
-            style={{
-              fontWeight: 'bold',
-              textAlign: 'center',
-              fontSize: 16,
-              marginBottom: 16,
-              marginLeft: 16,
-            }}
-          >
+          <InputLabel>
             Item Size (Packed)
-          </span>
+          </InputLabel>
+          <InputDescription>
+            This is the size of the item packed (excluding the box). We use this to calculate for a cart of items, which one of your boxes will be a good fit for shipment.
+            Please input the size of the item wrapped up and fully packaged within the box.
+          </InputDescription>
           <div style={{ display: 'flex', flexDirection: 'row', marginTop: 16 }}>
             <BaseInput
               onChange={this.onChangeInput}

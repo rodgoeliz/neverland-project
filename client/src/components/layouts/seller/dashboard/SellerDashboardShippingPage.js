@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
+import {FormLabel, FormControl, FormGroup, FormControlLabel, Checkbox} from "@material-ui/core";
 
 import NSelect from "components/UI/NSelect";
 import NButton from 'components/UI/NButton';
@@ -8,10 +10,19 @@ import EditableInput from "components/UI/EditableInput";
 import BaseInput from "components/UI/BaseInput";
 
 import { createPackageProfile, loadPackageProfiles, deletePackageProfile, updatePackageProfile } from 'actions/shipping';
+import { updateShippingPreference } from 'actions/store';
+
 import isNumberValid from "utils/numberValidator";
 import PACKAGE_PROFILES from 'constants/packageProfiles';
 
+import { NH3 } from 'components/UI/Headers';
+
 import SellerDashboardNavWrapper from './SellerDashboardNavWrapper';
+
+
+const FormContainer = styled.div`
+
+`;
 
 class SellerDashboardShippingPage extends React.Component {
 
@@ -21,6 +32,7 @@ class SellerDashboardShippingPage extends React.Component {
       edits: {},
       formData: {
       },
+      shippingPreference: props.store.currentStore.shippingPreference,
       existingProfiles: [],
       errors: {
         edits: {}
@@ -32,6 +44,7 @@ class SellerDashboardShippingPage extends React.Component {
     this._loadPackageProfiles = this._loadPackageProfiles.bind(this);
     this.onChangeBaseInput = this.onChangeBaseInput.bind(this);
     this.onPackageSizeSelect = this.onPackageSizeSelect.bind(this);
+    this.handleShippingProfileChange = this.handleShippingProfileChange.bind(this);
   }
 
   async _loadPackageProfiles() {
@@ -279,10 +292,11 @@ class SellerDashboardShippingPage extends React.Component {
       );
       return profile;
     });
+    const profileContent = profileViews.length === 0 ? <div> Add a new package profile above </div> : profileViews;
     return (
         <div style={BrandStyles.components.card.container}>
           <h4>Existing Package Profiles</h4>
-          {profileViews} 
+          {profileContent}
         </div>);
   }
 
@@ -360,7 +374,17 @@ class SellerDashboardShippingPage extends React.Component {
       )
   }
 
+  handleShippingProfileChange(event) {
+    this.setState({
+      shippingPreference: event.target.name
+    }, () => {
+      this.props.updateShippingPreference(this.props.store.currentStore._id, this.state.shippingPreference);
+    });
+  }
+
   render() {
+    console.log("STORE REDUX: ", this.props.store)
+    console.log("STTE : ", this.state);
     if (this.state.isLoading) {
       return (
         <SellerDashboardNavWrapper>
@@ -369,8 +393,36 @@ class SellerDashboardShippingPage extends React.Component {
     }
     return (
       <SellerDashboardNavWrapper>
+        <div>
+          <NH3> Shipping Preference </NH3>
+          <FormContainer>
+            <FormControl required component="fieldset">
+              <FormLabel component="legend">Pick one </FormLabel>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Checkbox checked={this.state.shippingPreference === "neverland-shippo"} onChange={this.handleShippingProfileChange} name="neverland-shippo"/>}
+                  label="Neverland Shipping (through Shippo)"
+                /> 
+                <p> 
+                  Neverland will handle generating shipping labels for priority shipping on your behalf through Shippo.
+                  You will be able to specify per-product if your buyer pays for shipping or whether you'd like to offer the shipping free for a product. If you offer the shipping for free, the shipping cost for the label will be subtracted from the order.
+                </p>
+                <FormControlLabel
+                  control={<Checkbox checked={this.state.shippingPreference === "manual"} onChange={this.handleShippingProfileChange} name="manual"/>}
+                  label="Manual (provide your own tracking)"
+                />
+                <p> 
+                  You are responsible for manually entering the tracking information for each order. This must happen in order to register an order to be paid out. 
+                  For this option, you must integrate the cost of shipping into your product price and all of your products will be marked as "Free Shipping". 
+                  In general, offering free shipping and incorporating the cost into your product price is recommended and has shown to result in more orders.
+                </p>
+              </FormGroup>
+            </FormControl>
+          </FormContainer>
+        </div>
+        <div style={{height: 64}} />
         <div style={{paddingRight: 32, paddingLef: 32}}>
-          <h3> Package Profiles </h3>
+          <NH3> Your Package Profiles </NH3>
           <p> Add your most commonly used package sizes and we'll automatically calculate which
           package you should use for a particular order. For each product, you specify it's total packed height, width, and length. If
           a customer orders multiple items, we will calculat the total height, width, and length and automatically select
@@ -387,6 +439,13 @@ class SellerDashboardShippingPage extends React.Component {
 
 const mapStateToProps = state => ({
     user: state.auth,
-    store: state.store
-  })
-export default connect(mapStateToProps, {createPackageProfile, loadPackageProfiles, deletePackageProfile, updatePackageProfile})(SellerDashboardShippingPage);
+    store: state.stores
+});
+const actions = {
+  createPackageProfile, 
+  loadPackageProfiles, 
+  deletePackageProfile, 
+  updatePackageProfile,
+  updateShippingPreference
+}
+export default connect(mapStateToProps, actions)(SellerDashboardShippingPage);

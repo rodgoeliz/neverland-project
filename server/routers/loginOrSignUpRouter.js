@@ -106,7 +106,8 @@ router.get('/get', async function(req, res, next) {
 	}  else if (email) {
 		query = {email}	;
 	}
-	let user = await User.findOne(query);
+	let user = await User.findOne(query).populate('storeId').populate('sellerProfile');
+  console.log("USER: ", user)
 	if (user) {
 		res.json({
 			success: true,
