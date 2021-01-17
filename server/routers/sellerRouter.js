@@ -35,7 +35,7 @@ router.get(`/product/categories/get`, async function (req, res, next) {
 	let categoryId = req.query.id;
 	let query = {};
 	try {
-		let categories = await NavigationItem.find(query);
+		let categories = await NavigationItem.find(query).populate('searchMetaDataKeys');
 		res.json({
 			success: true,
 			payload: categories

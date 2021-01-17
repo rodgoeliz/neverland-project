@@ -69,7 +69,11 @@ const productSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Store'
 	},
-  searchMetaData: Object
+  plantId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Plant'
+  },
+  searchMetaData: Object,
 });
 
 productSchema.post('updateOne', async function() {

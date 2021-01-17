@@ -19,6 +19,11 @@ const navigationItemSchema = new mongoose.Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'NavigationItem'
 	}],
+  searchMetaDataKeys:[{
+    type: Schema.Types.ObjectId,
+    ref: 'ProductSearchMetaData'
+  }],  // keys for meta-data that are allowed for this category
+  hasPlantAssoc: Boolean,
   imageURL: String,
 	mainTagHandle:String,
 	mainTagId: Schema.Types.ObjectId,
