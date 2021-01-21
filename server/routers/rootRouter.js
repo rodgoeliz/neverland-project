@@ -201,8 +201,6 @@ router.post('/test-data/init', async function (req, res, next) {
  Load navigation, default payment method, default billing address, default shipping address
  **/
 router.get('/init', async function (req, res, next) {
-  console.log("init app")
-
   let userId = req.query.userId;
   let menuHandle = req.query.menuHandle;
   let allInitPromises = [];

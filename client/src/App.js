@@ -109,6 +109,7 @@ class App extends Component {
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/main" authenticated={this.state.authenticated} component={SellerDashboardMainPage} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shop" authenticated={this.state.authenticated} component={SellerDashboardShopPage} />
                   <SellerRoute exact loading={this.state.loading} store={store.store} path="/seller/product/add" authenticated={this.state.authenticated} component={AddProductView} />
+                  <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/support" authenticated={this.state.authenticated} component={() => {window.location.href="https://enterneverland.zendesk.com/hc/en-us/requests/new"; return null;}} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/shipping" authenticated={this.state.authenticated} component={SellerDashboardShippingPage} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/orders" authenticated={this.state.authenticated} component={SellerDashboardOrdersPageContainer} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/orders/:orderId" authenticated={this.state.authenticated} component={SellerDashboardSingleOrderPage} />

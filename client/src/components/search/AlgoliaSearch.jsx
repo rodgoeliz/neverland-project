@@ -66,7 +66,7 @@ export default class AlgoliaSearch extends React.Component {
           refresh={this.state.refreshAlgolia}
           indexName={indexName}
           searchClient={searchClient}>
-          <div>
+          <div style={{display: 'flex', flexDirection: 'column'}}>
             <SearchBox showLoadingIndicator translations={{ placeholder: label ? `Search ${label}...` : '' }} submit={<NButton size="x-small" theme="secondary" title="SUBMIT"/>} />
           </div>
           <div>
