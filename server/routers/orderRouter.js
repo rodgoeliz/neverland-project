@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 require('dotenv').config();
 const mongoose = require('mongoose');
+const { getEnvVariable } = require("../utils/envWrapper");
 var Bundle = require('../models/Bundle');
 var PaymentMethod = require('../models/PaymentMethod');
 var Card = require('../models/Card');
@@ -9,24 +10,32 @@ var Address = require('../models/Address');
 var User = require('../models/User');
 var Store = require('../models/Store');
 var OrderInvoice = require('../models/OrderInvoice');
+const Logger = require('../utils/errorLogger');
 var OrderIntent = require('../models/OrderIntent');
 var Order = require('../models/Order');
 var OrderProductItem = require('../models/OrderProductItem');
 const pdf = require('html-pdf');
 const fs = require('fs');
 const orderTemplate = require('../documents/orderTemplate');
-const Logger = require('../utils/errorLogger');
 const algoliasearch = require("algoliasearch");
 const algoliaClient = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
-const { getEnvVariable } = require("../utils/envWrapper");
+const shippo = require('shippo')(getEnvVariable('SHIPPO'));
 
-const { getBuyerProtectionSurcharge, getStripeFee, calculateBundleSubTotal, getFulfillmentMethod, calculateTaxSurcharge } = require("../utils/orderProcessor");
+const { getBuyerProtectionSurcharge, getStripeFee, calculateBundleSubTotal, getFulfillmentMethod, calculateTaxSurcharge, generateOrderNumber } = require("../utils/orderProcessor");
 
 /** INTERNAL METHODS **/
 router.get('/algolia/load', async function (req, res) {
   console.log("Uploading orders to algolia....")
   let orders = await Order.find({})
     .populate('userId')
+    .populate({
+      path: 'bundleId',
+      populate: {
+        path: 'productOrderItemIds',
+        populate: {
+          path: 'productId'
+        }
+      }})
     .populate('orderInvoiceId')
     .populate('storeId')
     .populate({ path: 'paymentMethod', populate: 'billingAddress' })
@@ -119,6 +128,57 @@ router.post('/product/remove', async function (req, res) {
   // find order Intent and remove the associated index with productOrderItemId
   // delete productOrderItemId 
   // return updated orderIntentId
+});
+
+/* Cron job endpoint to check shipping status of orders and update
+ the ones that've been delivered */
+router.get('/tracking/job/status', async function(req, res) {
+  const allOrders = await Order.find({$or: [{status: 'need-to-fulfill'}, {status: 'shipped'}]});
+  let allShipmentPromises = [];
+  const orderIdToShipMap = {};
+  allShipmentPromises = allOrders.filter((order) => {
+      return order.trackingInfo && order.trackingInfo.trackingId && order.trackingInfo.carrier;
+  })
+  const orderIds = [];
+  try {
+    allShipmentPromises = allShipmentPromises.map(async (order) => {
+      orderIds.push(order._id);
+      const trackingNumber = order.trackingInfo.trackingId;
+      const carrier = order.trackingInfo.carrier;
+      orderIdToShipMap[order._id] = shippo.track.create({
+        carrier: carrier,
+        tracking_number: trackingNumber
+      });
+
+      return shippo.track.create({
+        carrier: carrier,
+        tracking_number: trackingNumber
+      });
+    });
+    const updateOrderPromises = [];
+    Promise.all(allShipmentPromises).then((results, idx) => {
+      results.map((shippingInfo, idx) => {
+        const orderId = orderIds[idx];
+        const trackingStatus = shippingInfo.tracking_status;
+        if (trackingStatus && trackingStatus.status == 'DELIVERED') {
+          updateOrderPromises.push(Order.findOneAndUpdate({_id: orderId}, 
+            {$set:
+                {
+                  status: 'delivered',
+                  deliveredAt: trackingStatus.object_updated
+                }
+            }, {new: true}));
+        }
+      });
+
+        // for all where status is delivered, we trigger the delivered hook.
+      Promise.all(updateOrderPromises).then((results, error) => {
+        res.json({success: true});
+      });
+    });
+  } catch(error) {
+    Logger.logError(error);
+  }
 });
 
 router.post('/tracking/update', async function (req, res) {
@@ -327,6 +387,9 @@ router.get('/get', async function (req, res) {
 });
 
 router.post('/intent/create', async function (req, res) {
+  console.log("intent/create")
+  try {
+
   let productId = req.body.productId;
   let bundleId = req.body.bundleId;
   let userId = req.body.userId;
@@ -360,13 +423,9 @@ router.post('/intent/create', async function (req, res) {
     bundleId = bundle._id;
   }
 
-  let loadAllPromises = [];
-  let shippingAddress = await Address.findOne({ _id: shippingAddressId });
-  let paymentMethod = await PaymentMethod.findOne({ _id: paymentMethodId }).populate('card').populate('billingAddress');
-  let user = await User.findOne({ _id: userId });
-  let store = await Store.findOne({ _id: storeId }).populate('store');
-  loadAllPromises.push(shippingAddress);
-  loadAllPromises.push(paymentMethod);
+  const user = await User.findOne({ _id: userId });
+  const store = await Store.findOne({ _id: storeId }).populate('store');
+  const loadAllPromises = [];
   loadAllPromises.push(user);
   loadAllPromises.push(store);
   // if bundle is null, meaning we didn't load bundleId and we didn't have to create a bundle to 
@@ -385,28 +444,42 @@ router.post('/intent/create', async function (req, res) {
       ]
     }));
 
+
+  let shippingAddress = null;
+  if (shippingAddressId) {
+    shippingAddress = await Address.findOne({ _id: shippingAddressId });
+  }
+  loadAllPromises.push(shippingAddress);
+  let paymentMethod = null;
+  if (paymentMethodId) {
+    paymentMethod = await PaymentMethod.findOne({ _id: paymentMethodId }).populate('card').populate('billingAddress');
+  }
+  loadAllPromises.push(paymentMethod);
+  console.log("PUSH ALL PROMISES")
   Promise.all(loadAllPromises).then(async (results) => {
-    const shippingAddress = results[0];
-    const paymentMethod = results[1];
-    const user = results[2];
-    const store = results[3];
-    const bundle = results[4];
+    const user = results[0];
+    const store = results[1];
+    const bundle = results[2];
+    const shippingAddress = results[3];
+    const paymentMethod = results[4];
     const subtotal = await calculateBundleSubTotal(bundle);
     const buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
+    console.log("calculated charges...")
     // shipping is free for everyone right now
     //const shippingChargeDetails = await calculateShippingFromBundle(bundle, store)
-    const shippingCharge = 0; //shippingCharge.shippingCost;
+   const shippingCharge = 0; //shippingCharge.shippingCost;
     //const sellerSurcharge = shippingCharge.sellerSurcharge;
     const shippoDetails = null;
-    if (shippingChargeDetails.shippo) {
+ /*   if (shippingChargeDetails.shippo) {
       shippoDetails = {
         shipmentId: shippingChargeDetails.shippo.shipmentId,
         ratesId: shippingChargeDetails.shippo.ratesId
       }
-    }
+    }*/
     let taxSurcharge = await calculateTaxSurcharge(subtotal, shippingAddress, shippingCharge, store.address);
     let total = subtotal + buyerSurcharge + shippingCharge;
     let surcharge = buyerSurcharge + shippingCharge;
+    console.log("Creating order intent obj...")
     let newOrderObject = new OrderIntent({
       createdAt: now,
       updatedAt: now,
@@ -433,7 +506,9 @@ router.post('/intent/create', async function (req, res) {
       taxableAmount: taxSurcharge.taxableAmount,
       total: total
     });
+    console.log("ORDER SAVINGS...")
     let newOrder = await newOrderObject.save();
+    console.log("ORDER INT#ENT:", newOrder)
     res.json({
       success: true,
       payload: {
@@ -443,6 +518,10 @@ router.post('/intent/create', async function (req, res) {
     })
 
   });
+
+  } catch (error) {
+    console.log(error)
+  }
 });
 
 router.post('/create', async function (req, res) {
@@ -454,7 +533,7 @@ router.post('/create', async function (req, res) {
       path: 'bundleId',
       populate: {
         path: 'productOrderItemIds',
-        populate: 'productIds'
+        populate: 'productId'
       }
     })
     .populate({ path: 'paymentMethod', populate: 'billingAddress' })
@@ -492,7 +571,6 @@ router.post('/create', async function (req, res) {
     total += taxSurcharge.taxAmount;
   }
   const sellerPayout = total - buyerSurcharge - stripeFee;
-  console.log("SELLER PAYOUT: ", sellerPayout)
   if (total == orderIntent.total) {
     try {
       let newOrderInvoice = new OrderInvoice({
@@ -513,11 +591,13 @@ router.post('/create', async function (req, res) {
         total: total
       });
       let orderInvoice = await newOrderInvoice.save();
+      const orderNumber = await generateOrderNumber();
       let newOrderObject = new Order({
         createdAt: now,
         updatedAt: now,
         userId: userId,
         sellerPayout,
+        orderNumber,
         bundleId: bundle._id,
         paymentMethod: paymentMethod,
         billingAddress: paymentMethod.billingAddress._id,
@@ -527,33 +607,50 @@ router.post('/create', async function (req, res) {
         status: "need-to-fulfill"
       });
       let newOrder = await newOrderObject.save();
-      let updatedOrder = await Order.findOne({ _id: newOrder._id })
-        .populate('paymentMethod')
-        .populate('billingAddress')
-        .populate('storeId')
-        .populate('orderInvoiceId')
-        .populate({
-          path: 'bundleId',
-          populate: {
-            path: 'productOrderItemIds',
-            populate: [{
-              path: 'productId'
-            }, {
-              path: 'selectedOptionIds'
-            }]
-          }
+        // update product sold
+      const productPromises = bundle.productOrderItemIds.map((productOrderItem) => {
+          const quantity = productOrderItem.quantity;
+          return Product.findOneAndUpdate({_id: productOrderItem.productId._id}, {
+            $inc: {
+              inventorySold: quantity,
+              inventoryInStock: -quantity,
+              inventoryAvailableToSell: -quantity
+            }
+          }, {
+            new: true
+          });
         });
-      // stripe create a new  connect payment
-      res.json({
-        success: true,
-        payload: updatedOrder
-      })
+      Promise.all(productPromises).then(async (results) => {
+        //updated product quantities
+        const updatedOrder = await Order.findOne({ _id: newOrder._id })
+          .populate('paymentMethod')
+          .populate('billingAddress')
+          .populate('storeId')
+          .populate('orderInvoiceId')
+          .populate({
+            path: 'bundleId',
+            populate: {
+              path: 'productOrderItemIds',
+              populate: [{
+                path: 'productId'
+              }, {
+                path: 'selectedOptionIds'
+              }]
+            }
+          });
+
+        // stripe create a new  connect payment
+        res.json({
+          success: true,
+          payload: updatedOrder
+        });
+      });
     } catch (error) {
       console.log(error);
       Logger.logError(error);
     }
   } else {
-    console.log("ORDER TOTAL DOESN't EQUAL INTENT ORDER TOTAL");
+    Logger.logError("[HIGH PRI] Order total doesn't equal order intent total: " + orderIntent._id);
   }
 });
 

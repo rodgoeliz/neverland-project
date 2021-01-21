@@ -155,7 +155,7 @@ class NButton extends Component {
             </div>;
     if (this.props.disabled) {
       return (
-        <HoverCursorWrapper>
+        <HoverCursorWrapper onClick={this.onClick.bind(this)}>
           <DisabledWrapper paddingFactor={this.getPaddingFactor()}>
             {buttonContent}
           </DisabledWrapper>
@@ -164,7 +164,7 @@ class NButton extends Component {
     }
     if (this.props.theme === 'secondary'){
       return (
-        <HoverCursorWrapper>
+        <HoverCursorWrapper onClick={this.onClick.bind(this)}>
           <SecondaryWrapper paddingFactor={this.getPaddingFactor()}>
             {buttonContent}
           </SecondaryWrapper>
@@ -172,7 +172,7 @@ class NButton extends Component {
         );
     }
     return (
-      <HoverCursorWrapper>
+      <HoverCursorWrapper onClick={this.onClick.bind(this)}>
         <PrimaryWrapper paddingFactor={this.getPaddingFactor()}>
           {buttonContent}
         </PrimaryWrapper>

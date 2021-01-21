@@ -1,17 +1,9 @@
 import React from 'react';
 
 import { OrderDescription, LabelContainer, NavigationArrow, Image, RowContainer, Price, Status } from 'components/UI/Row'
+import { formatPrice } from 'utils/display';
 
-export default class OrderHit extends React.Component{
-  constructor(props) {
-   super(props);
-   this.onClickOrder = this.onClickOrder.bind(this);
-  }
-
-  onClickOrder() { }
-
-  render() {
-    const { hit }  = this.props;
+export default function OrderHit({hit, onClickOrder}) {
     const order = hit;
     let image = null;
     if (order.bundleId?.productOrderItemIds && order.bundleId?.productOrderItemIds.length > 0) {
@@ -20,25 +12,23 @@ export default class OrderHit extends React.Component{
         image = <Image src={imageUrls[0]} />;
       }
     }
-    console.log("ORDER: ", order)
     return (
-      <RowContainer onClick={this.onClickOrder}>
-        <LabelContainer labelText={order.createdAt}>
+      <RowContainer onClick={onClickOrder}>
+        <LabelContainer labelText={order.createdAt} status={order.status} >
         { image }
         <OrderDescription
-          order={order._id}
+          order={order.orderNumber ? order.orderNumber : 'Order ID'}
           title={order.userId ? order.userId.name : 'User name'}
           />
             <Price>
-              {order.orderInvoiceId.price.value} {order.orderInvoiceId.price.currency}
+              {formatPrice(order.orderInvoiceId.price.value)} {order.orderInvoiceId.price.currency}
             </Price>
             </LabelContainer>
-            <Status>
+            <Status status={order.status}>
               {order.status} 
             </Status>
             <NavigationArrow to={`/seller/dashboard/orders/${order._id}`} />
       </RowContainer>
 
       )
-  }
 }

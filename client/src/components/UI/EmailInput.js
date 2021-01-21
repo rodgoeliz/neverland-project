@@ -54,7 +54,6 @@ export default class EmailInput extends React.Component {
       },
       () => {
         this.props.onChange('email', this.state);
-        console.log('Set error in validate input');
       },
     );
   }

@@ -16,7 +16,7 @@ export default function SellerDashboardOrdersPage({ indexName, filterQuery, sear
             filterAttribute={["status"]}
             hitComponent={OrderHit} 
             indexName={indexName} 
-     //       filterQuery={filterQuery} 
+            filterQuery={filterQuery} 
             ResultsComponent={OrderResults}
             searchClient={searchClient} />
       </SellerDashboardNavWrapper>

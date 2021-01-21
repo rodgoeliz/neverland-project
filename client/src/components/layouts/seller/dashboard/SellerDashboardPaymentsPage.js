@@ -40,7 +40,6 @@ const PayoutsListContainer = styled.div`
 export default function SellerDashboardPaymentPage({ indexName, searchClient, sellerId }) {
     const [tabIndex, setTabIndex] = useState(0);
     const handleChange = (event, index) => {
-      console.log("handleChange: ", index)
       setTabIndex(index);
     }
     let tabContent = <div>None</div>;

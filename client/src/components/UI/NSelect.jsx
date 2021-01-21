@@ -169,6 +169,7 @@ const styles = {
   },
 };
 
+/*eslint-disable*/
 class NSelectItem extends React.PureComponent {
   render() {
     if (!this.props.item) {
@@ -213,6 +214,9 @@ class NSelectItem extends React.PureComponent {
  */
 class NSelectedItem extends React.PureComponent {
   render() {
+    if (!this.props.item) {
+      return null;
+    }
     return (
       <div style={selectedItemStyles.container}>
         <span>{this.props.item[this.props.itemTitleKey]}</span>
@@ -253,7 +257,6 @@ export default class NSelect extends Component {
       data: items.concat(newItems),
       newItems,
     };
-    console.log(this.state.data)
     this._renderItem = this._renderItem.bind(this);
     this._renderListHeader = this._renderListHeader.bind(this);
     this._showModal = this._showModal.bind(this);
@@ -433,6 +436,20 @@ export default class NSelect extends Component {
     );
   }
 
+  _sortItems(items) {
+    return items.sort((itemA, itemB) => {
+      const titleA = itemA[this.props.itemTitleKey];
+      const titleB = itemB[this.props.itemTitleKey]
+      if (titleA < titleB) {
+        return -1;
+      } else if (titleA === titleB) {
+        return 0;
+      } else {
+        return 1;
+      }
+    });
+  }
+
   render() {
     let extraHeaderStyle = {};
     let selectedItemsStyle = styles.selectedItemsContainer;
@@ -473,7 +490,7 @@ export default class NSelect extends Component {
           </StyledTextButton>
         </div>
         <Modal
-          style={{ content: { borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige } }}
+          style={{overlay: {zIndex: 15000}, content: { borderRadius: 32, backgroundColor: BrandStyles.color.lightBeige, zIndex: 15000} }}
           animationType="slide"
           shouldCloseOnOverlayClick
           isOpen={this.state.isModalVisible}
@@ -511,7 +528,7 @@ export default class NSelect extends Component {
               initialNumToRender={10}
               ItemSeparatorComponent={() => <div style={styles.itemSeparator} />}
               extraData={this.state}
-              data={this.props.items.concat(this.props.newItems)}
+              data={this._sortItems(this.props.items.concat(this.props.newItems))}
               renderItem={this._renderItem}
             />
           </div>

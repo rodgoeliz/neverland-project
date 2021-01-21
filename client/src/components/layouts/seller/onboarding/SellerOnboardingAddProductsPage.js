@@ -51,6 +51,7 @@ class SellerOnboardingAddProductsPage extends Component {
   }
 
   async _loadSellerProducts() {
+    console.log("Load seller products for: ", this.props.user._id)
     await this.props.getSellerProducts(this.props.user._id);
     this.setState({isLoading: false});
   } 
@@ -175,8 +176,14 @@ class SellerOnboardingAddProductsPage extends Component {
                 <AddProductView onChange={this.onChange} onClose={this._closeModal} product={this.state.product} />
               </Modal>
             </div>
-            <NButton onClick={this.onPressAddProduct} title="Add product" />
-            {nextButton}
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              <div style={{display: 'flex', flexDirection: 'column', maxWidth: '400px', marginBottom: 16}}>
+                <div style={{marginBottom: 16, marginTop: 16}}>
+                  <NButton onClick={this.onPressAddProduct} title="Add product" />
+                </div>
+                {nextButton}
+              </div>
+            </div>
             <FlatList
               extraData={this.state}
               data={sellerProducts}

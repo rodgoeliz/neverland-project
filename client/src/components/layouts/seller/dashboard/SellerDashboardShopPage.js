@@ -167,7 +167,6 @@ class SellerDashboardShopPage extends React.Component {
     return (
       <SellerDashboardNavWrapper>
         <div style={{ maxWidth: '600px' }}>
-          Shop page
           <h2> My Shop Details </h2>
           <p>
             {' '}

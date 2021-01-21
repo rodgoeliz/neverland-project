@@ -43,7 +43,6 @@ export default (state = initialState, action) => {
 			return { ...state, createdTags: action.payload, isLoading: false }
 		case LOAD_PRODUCT_SUCCESS:
 			const product = action.payload;
-			console.log(product)
 			const transformedProductTags = product.tagIds.map((tag) => ({
 				label: tag.title,
 				value: tag._id

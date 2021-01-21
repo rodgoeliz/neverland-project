@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
 	handle: String,
 	inventoryAvailableToSell: Number,
 	inventoryInStock: Number,
+  inventorySold: Number,
 	isBackorder: Boolean,
 	isDeleted: Boolean,
 	isLowQuantity: Boolean,

@@ -35,20 +35,17 @@ export const updateStore = (storeId, formData) => async (dispatch) => {
 }
 
 export const updateShippingPreference = (storeId, shippingPreference) => async (dispatch) => {
-  console.log("updateShipping preference")
   try {
     const response = await Api.post(`/api/store/shipping/update`, {
       storeId,
       shippingPreference
     });
     if (response.data.success) {
-      console.log("response data success")
       dispatch({
         type: actionTypes.store.UPDATE_SHIPPING_PREFERENCE,
         payload: response.data.payload
       });
     } else {
-      console.log("response data fail", response.data)
       dispatch(showMessage({
         type: UI.MESSAGES.ERROR,
         text: response.data.error
@@ -56,7 +53,6 @@ export const updateShippingPreference = (storeId, shippingPreference) => async (
     }
     return response.data.success;
   } catch (error) {
-    console.log("ERROR: ", error)
     dispatch(showMessage({
       type:  UI.MESSAGES.ERROR,
       text: error.message
@@ -76,8 +72,10 @@ export const getStore = (userId) => async (dispatch) => {
       return response.data.payload;
     }
   } catch (error) {
-    // console.log(error)
-    // console.log(`Error retrieving store for user id: ${userId}`);
+    dispatch(showMessage({
+      type:  UI.MESSAGES.ERROR,
+      text: error.message
+    }));
   }
 }
 
@@ -90,9 +88,15 @@ export const getStores = () => async (dispatch) => {
         payload: response.data.payload
       });
     } else {
-      // console.log("Error retrieving stores...", response.data.error);
+      dispatch(showMessage({
+        type:  UI.MESSAGES.ERROR,
+        text: "Failed to fetch stores."
+      }));
     }
   } catch (error) {
-    // console.log(error);
+    dispatch(showMessage({
+      type:  UI.MESSAGES.ERROR,
+      text: error.message
+    }));
   }
 }

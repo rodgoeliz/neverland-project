@@ -35,6 +35,7 @@ const OrderDescriptionContainer = styled(Box)`
   justify-content: center;
   flex-grow: 1;
   overflow: hidden;
+  padding-left: 16px;
 `
 
 export default function OrderDescription({ order, title, content }) {

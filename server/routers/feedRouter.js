@@ -7,6 +7,7 @@ var SavedProducts = require('../models/SavedProducts');
 var RecentlyViewedProducts = require('../models/RecentlyViewedProducts');
 var NavigationMenu = require('../models/NavigationMenu');
 var NavigationItem = require('../models/NavigationItem');
+
 var ProductTag = require('../models/ProductTag');
 var Product = require('../models/Product');
 var ProductCollection = require('../models/ProductCollection');
@@ -21,6 +22,9 @@ const CONTEXTUAL_SECTION_PRODUCT_LIMIT = 15;
 // 3. Recently trending/global produccts
 // 4. Popular products in your area
 router.get('/feed/home', async function(req, res, next) {
+  try {
+
+  console.log("/feed/home")
   let userId = req.query.userId;
   // if no userId, then go to login
   let user = await User.findOne({_id: userId});
@@ -52,6 +56,22 @@ router.get('/feed/home', async function(req, res, next) {
       title: 'Recently Viewed',
     });
   }
+
+  let testproduct = await Product.find({}).limit(CONTEXTUAL_SECTION_PRODUCT_LIMIT);
+  let arvProducts = [];
+  for (var idx in testproduct) {
+    arvProducts.push(testproduct[idx]);
+  }
+  if (arvProducts && arvProducts.length > 0) {
+    //create a contextual section 
+    sections.push({
+      type: 'recentlyViewedSection',
+      items: arvProducts,
+      title: 'Popular in your area',
+    });
+  }
+
+
   let navigationMenu = await NavigationMenu.findOne({handle: 'main_menu'}).populate({path: 'navigationItemsTopLevel', populate: { path: 'children'}});
   //console.log("navigation menu", navigationMenu)
   let navigationSections = [];
@@ -91,7 +111,9 @@ router.get('/feed/home', async function(req, res, next) {
   }
 
   // find user plant interest 
+  console.log("plantinterests", user.plantInterests)
   let plantInterestTags = await ProductTag.find({handle: {$in: user.plantInterests}});
+  console.log("USER PLANT INTErEST TAGS: ", plantInterestTags)
   // get products for each tag
   for (var idx in plantInterestTags) {
     let tag = plantInterestTags[idx];
@@ -171,12 +193,14 @@ router.get('/feed/home', async function(req, res, next) {
       });
 
   }
-
   //console.log(sections)
   res.json({
     success: true,
     payload: sections
   });
+} catch (error) {
+  console.log(error) 
+}
 
 }) ;
 

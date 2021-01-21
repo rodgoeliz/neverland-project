@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Layout from 'components/layouts/seller/dashboard/SellerDashboardProductsPage';
@@ -26,15 +27,26 @@ class SellerDashboardProductsPageContainer extends React.Component {
     });
   }
 
+  onClickAddProducts = () => {
+    this.setState({
+      redirectTo: '/seller/dashboard/products/add'
+    });
+  }
+
   render() {
-    console.log(this.props.seller.productsCache)
+    if (this.state.redirectTo) {
+      return <Redirect to={this.state.redirectTo} />;
+    }
+    const refreshAlgolia = (this.props.location && this.props.location.state) ? this.props.location.state.refresh : false;
     const filterQuery = `vendorId:${this.props.auth._id}`;
-    // TEST QUERY: const filterQuery = `vendorId:5fc43c800147f800176841a3`;
+    // QUERY: const filterQuery = `vendorId:5fc43c800147f800176841a3`;
     return (
       <Layout
         searchClient={getAlgoliaSearchClient()}
         indexName={getAlgoliaSellerProductIndex()}
+        refreshAlgolia={refreshAlgolia}
         filterQuery={filterQuery}
+        onClickAddProduct={this.onClickAddProducts.bind(this)}
         changePage={this.changePage.bind(this)}
         sellerProducts={this.props.seller.productsCache}
         currentPage={this.state.currentPage}

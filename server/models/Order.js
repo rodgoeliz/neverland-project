@@ -6,7 +6,9 @@ const algoliasearch = require("algoliasearch");
 const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_ADMIN_KEY);
 
 const orderSchema = new mongoose.Schema({
+  objectID: String, // algolia
 	anonymousAccessToken: String,
+  orderNumber: String, // display order number for public
   sellerPayout: Number,
 	billingAddress: {
     type: Schema.Types.ObjectId,
@@ -72,6 +74,7 @@ orderSchema.post('updateOne', async function() {
 
 orderSchema.post('findOneAndUpdate', async function() {
   //sync up with algolia
+  console.log("HELLO")
   const index = client.initIndex(getEnvVariable('ALGOLIA_ORDER_INDEX'));
   const docToUpdate = await this.model.findOne(this.getQuery());
   await docToUpdate

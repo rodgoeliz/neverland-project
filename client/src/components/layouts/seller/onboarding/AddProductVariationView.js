@@ -180,9 +180,7 @@ class AddProductVariationView extends Component {
   }
 
   onPressCreateNewOption(variationSlug) {
-    console.log('variationSlug', variationSlug)
     const newOption = this.getOptionInput(variationSlug, 'createNewOption');
-    console.log("NEW OPtiON: ", newOption)
     if (!newOption) {
       return;
     }
@@ -255,12 +253,10 @@ class AddProductVariationView extends Component {
         optionInput = variant[key];
       }
     });
-    console.log("variantslug/key in getoptioninput ", variantSlug, key, optionInput)
     return optionInput;
   }
 
   onChangeOptionInput(variantSlug, key, newOptionValue) {
-    console.log("onchangeoptioninput: ", variantSlug, key, newOptionValue)
     const newFormData = { ...this.state.formData };
     const updatedVariants = newFormData.variations.map((variant) => {
       if (variant.handle === variantSlug) {

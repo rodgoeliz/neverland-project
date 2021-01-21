@@ -21,7 +21,6 @@ class SellerDashboardAddOrEditProductPageContainer extends React.Component {
   }
 
   onClose() {
-    console.log("redirect to...")
     this.setState({
       redirectTo: '/seller/dashboard/products'
     })
@@ -29,7 +28,10 @@ class SellerDashboardAddOrEditProductPageContainer extends React.Component {
 
   render() {
     if (this.state.redirectTo) {
-      return <Redirect push to={this.state.redirectTo} />;
+      return <Redirect push to={{
+        pathname: this.state.redirectTo,
+        state: {refresh: true}
+      }} />;
     }
     return <Layout onClose={this.onClose} productId={this.state.productId} />
   }

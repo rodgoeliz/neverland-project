@@ -5,10 +5,6 @@ import SellerLoadingPage from "components/layouts/seller/onboarding/SellerLoadin
 
 
 export default function SellerRoute({ component: Component, exact, authenticated, path, store, isAdmin, loading, ...rest }) {
-  if (!path.contains("/seller/dashboard")) {
-    return (<div>test</div>);
-  }
-
   if (loading) {
     return (<SellerLoadingPage />);
   }

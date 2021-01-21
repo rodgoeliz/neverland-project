@@ -39,8 +39,7 @@ export default function SoldAndQuantity({ sold, quantity }) {
                 </CounterBox>
             </CounterContainer>
             <CounterContainer>
-                QUANTITY
-
+               INVENTORY 
                 <CounterBox>
                     {quantity}
                 </CounterBox>

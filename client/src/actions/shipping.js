@@ -1,4 +1,6 @@
+import { showMessage } from 'actions/ui';
 import actionTypes from 'constants/newActionTypes';
+import { UI } from 'constants/ui';
 import Api from 'lib/api';
 
 const transformUpdateProfileData = (packageProfileId, input) => {
@@ -39,8 +41,15 @@ export const updatePackageProfile = (packageProfileId, input) => async (dispatch
       });
       return response.data.payload;
     }  
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: "Error updating a package profile."
+    }));
   } catch (error) {
-    console.log("error updating profile: ", error)
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: error.message
+    }));
   }
 }
 
@@ -54,8 +63,15 @@ export const deletePackageProfile = (packageProfileId) => async (dispatch) => {
       });
       return response.data.payload;
     } 
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: "Error deleting a package profile."
+    }));
   } catch (error) {
-    console.log("Error deleting package profile", error);
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: error.message
+    }));
   }
 }
 
@@ -71,7 +87,10 @@ export const loadPackageProfiles = (storeId) => async (dispatch) => {
       return response.data.payload;
     } 
   } catch (error) {
-    console.log("Loading package profiles ahs failed: ", error);
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: error.message
+    }));
   }
 }
 
@@ -86,9 +105,15 @@ export const createPackageProfile = (input) => async (dispatch) => {
       });
       return response.data.payload;
     } 
-      console.log("error creating a package profile");
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: "Error creating a package profile."
+    }));
     
   } catch (error) {
-    console.log("error creating package profile", error);
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: error.message
+    }));
   }
 };

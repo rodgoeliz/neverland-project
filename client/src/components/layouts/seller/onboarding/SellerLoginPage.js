@@ -56,7 +56,6 @@ class SellerLoginPage extends React.Component {
   validateInput() {
     let isValid = true;
     if (this.state.email === '') {
-      console.log('email is empty');
       this.setState({
         emailError: 'Please enter a valid e-mail.',
       });
@@ -88,6 +87,12 @@ class SellerLoginPage extends React.Component {
   }
 
   redirectToNextStep() {
+    if (this.props.auth.isProfileComplete && this.props.auth.isActive) {
+      this.setState({
+        nextPath: '/seller/dashboard/products'
+      });
+      return;
+    }
     this.setState({
       nextPath: '/seller/onboarding/products',
     });
@@ -110,7 +115,7 @@ class SellerLoginPage extends React.Component {
           this.setState({ isSubmitting: false, loginErrorCode: response.data }, () => {
           });
         } else {
-          let nextPath = '/seller/onboarding/main';
+          let nextPath = '/seller/dashboard/products';
           if (this.props && this.props.location && this.props.location.state) {
             nextPath = this.props.location.state.from;
           }
@@ -250,6 +255,7 @@ class SellerLoginPage extends React.Component {
                   isLoading={this.state.isSubmitting}
                   title="Login"
                   onClick={() => {
+                    console.log("ON LICK")
                     this.onSubmitForm();
                   }}
                 />

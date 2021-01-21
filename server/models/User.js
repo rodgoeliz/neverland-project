@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
 	updatedAt: Date,
 	username: String,
 	email: String,
+  objectID: String, // algolia
 	firebaseUID: String,
 	stripeCustomerID: String,
   sendBirdUserID: String,

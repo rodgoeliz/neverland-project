@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const plantSchema = new mongoose.Schema({
 	createdAt: Date,
 	title: String,
+  subtitle: String,
   imageURLs: [String],
   handle: String,
 	hardinessZone: {

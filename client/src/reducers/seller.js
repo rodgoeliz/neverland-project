@@ -5,7 +5,7 @@ import actionTypes from 'constants/newActionTypes';
 export const initialState = {
   accountLinks: {},
   currentProduct: {},
-  productsCache: [],
+  productsCache: {},
   allProductTags: [],
   allProductCategories: [],
   ordersCache: [],
@@ -23,7 +23,7 @@ const sellerReducer = (state = initialState, action) => {
     case actionTypes.seller.GET_SELLER_PRODUCTS:
       return {
         ...state,
-        productsCache: action.payload
+        productsCache: []
       };
     case actionTypes.seller.SET_ALL_PRODUCTS:
       return {

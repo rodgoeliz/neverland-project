@@ -34,6 +34,10 @@ const BrandStyles = {
   transparentColor: {
     maroon: 'rgba(158, 36, 87, 0.5)',
     maroon10: 'rgba(158, 36, 87, 0.25)',
+    maroonStatus: 'rgba(159, 36, 88, .40)',
+    yellowStatus: 'rgba(220,188,77, .40)',
+    greenStatus: 'rgba(71, 113 , 56 , .49)',
+    blueStatus: 'rgba(30, 29, 205, .40)'
   },
   components: {
     card: {

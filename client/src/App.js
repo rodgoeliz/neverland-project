@@ -113,6 +113,7 @@ class App extends Component {
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/orders" authenticated={this.state.authenticated} component={SellerDashboardOrdersPageContainer} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/orders/:orderId" authenticated={this.state.authenticated} component={SellerDashboardSingleOrderPage} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/products" authenticated={this.state.authenticated} component={SellerDashboardProductsPageContainer} />
+                  <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/products/add" authenticated={this.state.authenticated} component={SellerDashboardAddOrEditProductPageContainer} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/product/:productId" authenticated={this.state.authenticated} component={SellerDashboardAddOrEditProductPageContainer} />
                   <SellerDashboardRoute exact loading={this.state.loading} store={store.store} path="/seller/dashboard/payments" authenticated={this.state.authenticated} component={SellerDashboardPaymentsPageContainer} />
                   <PublicRoute exact loading={this.state.loading} store={store.store} path="/seller/logout" authenticated={this.state.authenticated} component={SellerLogoutPage} />

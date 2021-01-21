@@ -1,8 +1,10 @@
-
 import { saveAs } from 'file-saver';
+
+import { showMessage } from 'actions/ui';
 
 import actionTypes from 'constants/newActionTypes';
 import { sellerOnBoardingSteps } from "constants/onBoardingSteps";
+import { UI } from 'constants/ui';
 
 import Api from 'lib/api';
 
@@ -43,12 +45,7 @@ export const onSubmitStep = ({ stepId, formData, userId }) => async (dispatch) =
   }
 }
 
-export const getSellerOrders = (sellerId) => async (dispatch) => {
-  console.log(sellerId)
-  dispatch({
-    type: actionTypes.seller.GET_SELLER_PRODUCTS,
-    payload: {}
-  })
+export const getSellerOrders = () => async () => {
 }
 
 export const getSellerProducts = (sellerId) => async (dispatch) => {
@@ -63,7 +60,10 @@ export const getSellerProducts = (sellerId) => async (dispatch) => {
       payload: response.data.payload
     });
   } catch (error) {
-    console.log(error);
+      dispatch(showMessage({ 
+        type: UI.MESSAGES.ERROR, 
+        text: error.message
+      }));
   }
 }
 
@@ -77,7 +77,10 @@ export const getSellerAccountLinks = ({ sellerId }) => async (dispatch) => {
       });
     }
   } catch (error) {
-    console.log(error);
+      dispatch(showMessage({ 
+        type: UI.MESSAGES.ERROR, 
+        text: error.message
+      }));
   }
 };
 
@@ -109,6 +112,7 @@ export const setAllProductTags = (tags) => ({
   type: actionTypes.seller.SET_ALL_PRODUCT_TAGS,
   payload: [...tags],
 });
+
 export const clearTagsAndCategories = () => async (dispatch) => {
   dispatch({
     type: actionTypes.seller.CLEAR_TAGS_AND_CATEGORIES,
@@ -123,11 +127,16 @@ export const loadAllProductCategories = () => async (dispatch) => {
       dispatch(setAllProductCategories(response.data.payload));
     } else {
       // handle error message
-      console.log('loadAllProductCategories error', response);
+      dispatch(showMessage({ 
+        type: UI.MESSAGES.ERROR, 
+        text: `Error loading product categories.`
+      }));
     }
   } catch (error) {
-    console.log('loadAllProductCategories', error)
-    // throw HandleErrorMessage(error);
+      dispatch(showMessage({ 
+        type: UI.MESSAGES.ERROR, 
+        text: error.message
+      }));
   }
 };
 
@@ -140,10 +149,16 @@ export const loadAllProductTags = () => async (dispatch) => {
       dispatch(setAllProductTags(response.data.payload));
     } else {
       //  handle error message
-      console.log('loadAllProductTags error', response);
+      dispatch(showMessage({ 
+        type: UI.MESSAGES.ERROR, 
+        text: `Error loading product tags.`
+      }));
     }
   } catch (error) {
-    console.log(error)
+      dispatch(showMessage({ 
+        type: UI.MESSAGES.ERROR, 
+        text: error.message
+      }));
   }
 };
 
@@ -164,18 +179,27 @@ export const loadSellerProduct = ({ productId }) => async (dispatch, getState) =
     if (response.data.success) {
       dispatch(setCurrentProduct(response.data.payload));
       return response.data.payload;
-    }
+    } 
+      dispatch(showMessage({ 
+        type: UI.MESSAGES.ERROR, 
+        text: `Error loading product.`
+      }));
   } catch (error) {
-    console.log('//error getting productid', error)
-    // throw HandleErrorMessage(error);
+      dispatch(showMessage({ 
+        type: UI.MESSAGES.ERROR, 
+        text: error.message
+      }));
   }
 };
 
-export const checkSellerPaymentOnBoardingStatus = ({ stripeId }) => async () => {
+export const checkSellerPaymentOnBoardingStatus = ({ stripeId }) => async (dispatch) => {
   try {
     await Api.get(`/api/seller/onboarding/getPaymentStatus?stripeId=${stripeId}`);
   } catch (error) {
-    console.log(error);
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: error.message
+   }));
   }
 };
 
@@ -186,10 +210,16 @@ export const getProductsForSeller = ({ sellerId }) => async (dispatch) => {
     if (response.data.success) {
       dispatch(setAllProducts(response.data.payload));
     } else {
-      console.log('getProductsForSeller ERROR', response);
+      dispatch(showMessage({ 
+        type: UI.MESSAGES.ERROR, 
+        text: "Error getting products for seller."
+      }));
     }
   } catch (error) {
-    // throw HandleErrorMessage(error);
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: error.message
+    }));
   }
 };
 
@@ -204,7 +234,10 @@ export const toggleVisibility = (productId, isVisible) => async (dispatch) => {
       dispatch(updateProduct(response.data.payload));
     }
   } catch (error) {
-    console.log(error);
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: error.message
+    }));
   }
 };
 
@@ -214,7 +247,10 @@ export const clearAccountLinks = () => async (dispatch) => {
       type: actionTypes.seller.CLEAR_ACCOUNT_LINKS,
     });
   } catch (error) {
-    console.log(error);
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: error.message
+    }));
   }
 };
 
@@ -236,18 +272,19 @@ export const getOrderById = (orderId) => async (dispatch) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: error.message
+    }));
   }
 };
 
 
 export const getAlgoliaSearchClient = () => {
-  console.log("SEARCH CLIENT...", searchClient)
   return searchClient;
 }
 
 export const getAlgoliaSellerOrderIndex = () => {
-  console.log('node_env', process.env.NODE_ENV === 'development', (!process.env.NODE_ENV || process.env.NODE_NEV === 'development'))
   if (!process.env.NODE_ENV) {
     return 'neverland_order_test';
   }
@@ -258,7 +295,6 @@ export const getAlgoliaSellerOrderIndex = () => {
 }
 
 export const getAlgoliaSellerProductIndex = () => {
-  console.log('node_env', process.env.NODE_ENV === 'development', (!process.env.NODE_ENV || process.env.NODE_NEV === 'development'))
   if (!process.env.NODE_ENV) {
     return 'dev_neverland_products';
   }
@@ -269,7 +305,7 @@ export const getAlgoliaSellerProductIndex = () => {
 }
 
 
-export const createOrderPdf = ({ orderId, products, currentOrder }) => async () => {
+export const createOrderPdf = ({ orderId, products, currentOrder }) => async (dispatch) => {
   try {
     // Create file
     const response = await Api.post(`/api/order/order-pdf?id=${orderId}`, {
@@ -298,6 +334,9 @@ export const createOrderPdf = ({ orderId, products, currentOrder }) => async () 
     }
 
   } catch (error) {
-    console.log(error);
+    dispatch(showMessage({ 
+      type: UI.MESSAGES.ERROR, 
+      text: error.message
+    }));
   }
 }

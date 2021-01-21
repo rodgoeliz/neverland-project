@@ -27,7 +27,10 @@ const bundleSchema = new mongoose.Schema({
 			type: Schema.Types.ObjectId,
 			ref: 'Product'
 		}
-	]
+	],
+  objectID: String // algolia
+}, {
+  timestamps: true
 });
 
 const Bundle = mongoose.model('Bundle', bundleSchema);

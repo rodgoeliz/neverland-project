@@ -131,10 +131,8 @@ class AddProductView extends Component {
     // means we are editing the product;
     const loadedProduct = props.product;
     if (loadedProduct) {
-      console.log("STORES: ", this.props.currentStore)
       updatedFormData = transformProductToFormData(this.props.currentStore, loadedProduct);
     }
-    console.log("updated form data for product: ", updatedFormData)
     this.state = {
       isProductVariantModalVisible: false,
       formData: updatedFormData,
@@ -256,12 +254,22 @@ class AddProductView extends Component {
     );
   }
 
+  async validateAndSaveProduct() {
+    const validationResults = validateProductFormInput(this.state);
+    this.setState(
+      {
+        errors: validationResults.errors,
+      },
+      () => { 
+        if (validationResults.isValid) {
+          this.saveProduct();
+        }
+      },
+    );
+  }
+
   async saveProduct() {
-    const valid = this.validateInput();
-    if (!valid) {
-      return;
-    }
-    this.setState({ isSavingProduct: true });
+     this.setState({ isSavingProduct: true });
 
     let currentProduct = this.props.product ? this.props.product : this.props.currentSellerProduct;
     if (!currentProduct && this.state.product) {
@@ -283,30 +291,34 @@ class AddProductView extends Component {
     formData = transformObjectToFormData(this.state.formData, formData);
     // if we didn't assign a store, pull user store
     if (!this.state.formData.storeId) {
-      formData.append('userId', this.props.user._id);
       formData.append('storeId', extractId(this.props.user.storeId));
+      formData.append('vendorId', this.props.user._id);
+      formData.append('userId', this.props.user._id);
     } else if (this.state.formData.storeId && this.state.formData.storeId.length === 1) {
         const store = this.state.formData.storeId[0];
         if (typeof store === "object") {
           formData.append('storeId', store._id);
           formData.append('userId', this.props.user._id);
+          formData.append('vendorId', this.props.user._id);
+          console.log("Appended vendor id in store === object: ", this.props.user._id)
         } else if (typeof store.storeId === "string") {
           formData.append('storeId', store)
           formData.append('userId', extractId(store.userId));
           formData.append('vendorId', extractId(store.userId));
+          console.log("Appended vendor id in store.storeId === string: ", store.userId)
         }
       }
     const existingProduct = this.state.product;
     if (existingProduct) {
       formData.append('productId', existingProduct._id);
-      await this.props.updateProduct({ formData });
-      this.onCloseView();
+       await this.props.updateProduct({ formData });
+       this.onCloseView();
       return;
     }
 
     await this.props.createProduct({ formData });
-    this.setState({ isSavingProduct: false });
-    this.onCloseView();
+     this.setState({ isSavingProduct: false });
+     this.onCloseView();
   }
 
   onChange(formData) {
@@ -332,8 +344,7 @@ class AddProductView extends Component {
     }
   }
 
-  toggleSelection(key, one, two) {
-    console.log("TOGGLE SELECTION: ", key, one, two)
+  toggleSelection(key) {
     const newFormData = { ...this.state.formData };
     newFormData[key] = !newFormData[key];
     this.setState(
@@ -1303,7 +1314,7 @@ class AddProductView extends Component {
           }}
         >
           <NButton size="x-small" style={{ width: 64 }} title="Close" theme="secondary" onClick={this.onCloseView.bind(this)} />
-          <NButton size="x-small" style={{ width: 64 }} title="Save" onClick={this.saveProduct.bind(this)} />
+          <NButton size="x-small" style={{ width: 64 }} title="Save" onClick={this.validateAndSaveProduct.bind(this)} />
         </div>
         <div
           enableResetScrollToCoords={false}

@@ -161,7 +161,6 @@ class SellerOnboardingShopPage extends Component {
     const { isShopOwner } = this.state.formData;
     if (isShopOwner === 'no') {
       if (!shopOwnerName || shopOwnerName === '' || !isFullNameValid(shopOwnerName)) {
-        console.log('shopOwnerName not valid');
         this.setState({
           shopOwnerNameError: 'Please enter a valid full name.',
         });
@@ -186,7 +185,6 @@ class SellerOnboardingShopPage extends Component {
       this.setState({
         shopTitleError: 'Shop title must be longer than 4 characters',
       });
-      console.log('TITLE NOT VALID');
       isValid = false;
     } else {
       this.setState({
@@ -195,7 +193,6 @@ class SellerOnboardingShopPage extends Component {
     }
 
     if (!sDesc || sDesc.length < 30) {
-      console.log('desc not valid');
       this.setState({
         shopDescriptionError: 'Please provide more details about your shop.',
       });
@@ -207,8 +204,6 @@ class SellerOnboardingShopPage extends Component {
     }
 
     if (!isWebsiteValid(sWebsite)) {
-      console.log('website not valid');
-
       isValid = false;
     }
     isValid = this.validateAddressInfo();

@@ -11,6 +11,19 @@ const taxjarClient = new Taxjar({
   apiKey: process.env.TAXJAR_API_TOKEN
 });
 
+module.exports.generateOrderNumber = async () => {
+  let now = Date.now().toString();
+  now += now + Math.floor(Math.random() + 10);
+  let orderNumber = [now.slice(0,4), now.slice(4, 10), now.slice(10, 14)].join('-');
+  const orderNumExists = await Order.findOne({orderNumber});
+  // try one more time
+  if (orderNumExists) {
+    now += now + Math.floor(Math.random() + 10);
+    orderNumber = [now.slice(0,4), now.slice(4, 10), now.slice(10, 14)].join('-');
+  }
+  return orderNumber;
+}
+
 module.exports.getStripeFee = async (total) => {
   return Math.round(total * .029);
 }

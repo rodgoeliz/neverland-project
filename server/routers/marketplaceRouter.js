@@ -17,6 +17,8 @@ var mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
 
 const CONTEXTUAL_SECTION_PRODUCT_LIMIT = 15;
 router.get('/feed/home', async function(req, res, next) {
+  try {
+
 	let userId = req.query.userId;
 	// if no userId, then go to login
 	console.log("Get home feed", userId)
@@ -56,8 +58,20 @@ router.get('/feed/home', async function(req, res, next) {
 			title: 'Recently Viewed',
 		});
 	}
+  let testproduct = await Product.find({}).limit(CONTEXTUAL_SECTION_PRODUCT_LIMIT);
+  let arvProducts = [];
+  for (var idx in testproduct) {
+    arvProducts.push(testproduct[idx]);
+  }
+  if (arvProducts && arvProducts.length > 0) {
+    //create a contextual section 
+    sections.push({
+      type: 'recentlyViewedSection',
+      items: arvProducts,
+      title: 'Popular in your area',
+    });
+  }
 	let navigationMenu = await NavigationMenu.findOne({handle: 'main_menu'}).populate({path: 'navigationItemsTopLevel', populate: { path: 'children'}});
-  console.log("NAVIGATION MENU, navigationMenu", navigationMenu)
 	let navigationSections = [];
 	// navigation sections with children is an array of arrays
 	let navigationSectionsWithChildren = {};
@@ -104,7 +118,7 @@ router.get('/feed/home', async function(req, res, next) {
 			sections.push({
 				type: 'userInterestSection',
 				items: tagPlantInterestProducts,
-				title: tag.title,
+				title: `Because you liked ${tag.title}`,
         handle: tag.handle,
 				typeId: tag._id
 			});
@@ -185,10 +199,20 @@ router.get('/feed/home', async function(req, res, next) {
 
 	}
 
+  sections.push({
+    type: 'shopCollectionSection',
+    items: stores,
+    title: 'Stores near you',
+    typeId: 'stores-near-you'
+  });
+
 	res.json({
 		success: true,
 		payload: sections
 	});
+} catch (error) {
+  ErrorLog
+}
 
 }) ;
 

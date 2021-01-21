@@ -9,7 +9,6 @@ const PROCESSING_TIME_VALUES = [
 ];
 
 export const transformProductToFormData = (currentStore, product) => {
-  console.log("STORE, Product: ", currentStore, product)
   let formData = {};
   const formDataBase = {
     productPhotos: [],
@@ -88,7 +87,6 @@ export const transformProductToFormData = (currentStore, product) => {
   if (product.inventoryInStock) {
     formData.productQuantity = product.inventoryInStock.toString();
   }
-  console.log("FORM DATA IN PRODUCT HELPER: ", formData)
   return {
     ...formDataBase,
     ...formData,

@@ -399,14 +399,14 @@ class SellerDashboardShippingPage extends React.Component {
             <FormControl required component="fieldset">
               <FormLabel component="legend">Pick one </FormLabel>
               <FormGroup>
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={<Checkbox checked={this.state.shippingPreference === "neverland-shippo"} onChange={this.handleShippingProfileChange} name="neverland-shippo"/>}
                   label="Neverland Shipping (through Shippo)"
                 /> 
                 <p> 
                   Neverland will handle generating shipping labels for priority shipping on your behalf through Shippo.
                   You will be able to specify per-product if your buyer pays for shipping or whether you'd like to offer the shipping free for a product. If you offer the shipping for free, the shipping cost for the label will be subtracted from the order.
-                </p>
+                </p> */}
                 <FormControlLabel
                   control={<Checkbox checked={this.state.shippingPreference === "manual"} onChange={this.handleShippingProfileChange} name="manual"/>}
                   label="Manual (provide your own tracking)"

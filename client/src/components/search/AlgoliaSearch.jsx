@@ -17,22 +17,42 @@ import LoadingIndicator from "./components/LoadingIndicator";
 const RefinementList = connectRefinementList(CustomRefinementList);
 
 export default class AlgoliaSearch extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
-
+        refreshAlgolia: props.refreshAlgolia ? props.refreshAlgolia: false,
     }
     if (props.searchClient) {
       props.searchClient.clearCache();
     }
+    this.handleRefreshAlgolia = this.handleRefreshAlgolia.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.state.refreshAlgolia) {
+      this.setState({ refreshAlgolia: false });
+    }
+  }
+
+  handleRefreshAlgolia = () => {
+    setTimeout(() => { 
+      this.setState({
+        refreshAlgolia: true,
+      }, () => {
+        this.setState({ refreshAlgolia: false });
+      });
+      }, 1000);
   }
 
   render() {
     const { indexName, searchClient, filterQuery, hitComponent, filterAttributes, hitsPerPage, ResultsComponent, label} = this.props;
-    searchClient.clearCache()
-    const hComp = <Hits hitComponent={hitComponent} />
+    const HitComponent = ({hit}) => {
+      return hitComponent({hit, onRefreshAlgolia: this.handleRefreshAlgolia});
+    }
+    const hComp = <Hits hitComponent={HitComponent} />
     const hits = ResultsComponent
-      ? <ResultsComponent> {hComp}  </ResultsComponent>
+      ? <ResultsComponent onRefreshAlgolia={this.handleRefreshAlgolia}> {hComp}  </ResultsComponent>
       : hComp;
     const refinementListComponents = filterAttributes ?
       filterAttributes.map((fAttr) => {
@@ -43,6 +63,7 @@ export default class AlgoliaSearch extends React.Component {
     return (
       <div>
         <InstantSearch
+          refresh={this.state.refreshAlgolia}
           indexName={indexName}
           searchClient={searchClient}>
           <div>

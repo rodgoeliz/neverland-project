@@ -13,8 +13,8 @@ class SellerDashboardAddOrEditProductPage extends React.Component {
     // todo add on go back or on close function
     return (
       <AddProductView 
-      onClose={this.props.onClose}
-      productId={this.props.productId} />)
+        onClose={this.props.onClose}
+        productId={this.props.productId} />)
   }
 }
 

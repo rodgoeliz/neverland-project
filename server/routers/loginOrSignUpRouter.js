@@ -106,8 +106,7 @@ router.get('/get', async function(req, res, next) {
 	}  else if (email) {
 		query = {email}	;
 	}
-	let user = await User.findOne(query).populate('storeId').populate('sellerProfile');
-  console.log("USER: ", user)
+	const user = await User.findOne(query).populate('storeId').populate('sellerProfile');
 	if (user) {
 		res.json({
 			success: true,
@@ -457,6 +456,7 @@ router.post('/upload/file', async function(req, res, next) {
 	Promise.allSettled(allFilePromises).then(function(date, err) {
 	});
 });
+
 router.post('/join', async function(req, res, next) {
 	let email = req.body.email;
 	let inviter = req.body.inviter;

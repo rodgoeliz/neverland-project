@@ -2,8 +2,10 @@ import React from 'react';
 import { Box } from '@material-ui/core';
 import styled from "styled-components";
 
+import {getStatusColor} from './styles/order';
+
 const StatusContainerStyled = styled(Box)`
-    background-color: rgba(159, 36, 88, 0.4);
+    background-color: ${props => getStatusColor(props.status)};
     min-width: 150px; 
     width: 150px; 
     display: flex;
@@ -24,10 +26,10 @@ const StatusLabelContent = styled(Box)`
     padding: ${props => props.theme.spacing.one}px
 `
 
-export default function ({ children }) {
+export default function ({ status, children }) {
     return (
-        <StatusContainerStyled>
-            <StatusLabelStyled>
+        <StatusContainerStyled status={status}>
+            <StatusLabelStyled status={status}>
                 STATUS
             </StatusLabelStyled>
             <StatusLabelContent>
