@@ -9,7 +9,7 @@ import NButton from 'components/UI/NButton';
 import SellerDashboardNavWrapper from 'components/layouts/seller/dashboard/SellerDashboardNavWrapper';
 
 
-export default function SellerDashboardProductsPage({ indexName, filterQuery, searchClient, onClickAddProduct }) {
+export default function SellerDashboardProductsPage({ indexName, filterQuery, refreshAlgolia, searchClient, onClickAddProduct }) {
     return (
         <SellerDashboardNavWrapper>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -18,6 +18,7 @@ export default function SellerDashboardProductsPage({ indexName, filterQuery, se
           </div>
             <AlgoliaSearch
                 filterAttributes={["tagIds.title"]}
+                refreshAlgolia={refreshAlgolia}
                 filterQuery={filterQuery}
                 hitComponent={ProductHit}
                 indexName={indexName}

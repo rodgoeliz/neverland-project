@@ -12,9 +12,12 @@ class SellerDashboardAddOrEditProductPage extends React.Component {
   render() {
     // todo add on go back or on close function
     return (
+      <div style={{minHeight:'80vh'}}>
       <AddProductView 
         onClose={this.props.onClose}
-        productId={this.props.productId} />)
+        productId={this.props.productId} />
+      </div>
+      )
   }
 }
 

@@ -293,7 +293,7 @@ export const getAlgoliaSellerOrderIndex = () => {
   }
   return 'neverland_order_prod';
 }
-
+/*eslint-disable*/
 export const getAlgoliaSellerProductIndex = () => {
   if (!process.env.NODE_ENV) {
     return 'dev_neverland_products';
