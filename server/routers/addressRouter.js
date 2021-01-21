@@ -21,7 +21,7 @@ router.post('/update', async function(req, res, next) {
 	let existingAddress = await Address.findOne({_id: addressId});
   if (saveAsDefault) {
     const defaultAddresses = await Address.find({userId: userId, isDefault: true});
-    defaultAddresses.map((address) => {
+    defaultAddresses.map(async (address) => {
       await Address.findOneAndUpdate({_id: address._id}, {$set: {isDefault: false}});
     })
   }
