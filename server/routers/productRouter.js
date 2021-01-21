@@ -427,7 +427,6 @@ router.post('/seller/create', async function (req, res, next) {
 	try {
 		const files = Object.values(req.files)
 		let formData = req.body;
-    console.log("FORM DATA: ", req.body)
 		let quantity = formData.productQuantity;
 		let price = formData.productPrice;
 		let sku = formData.productSKU;
