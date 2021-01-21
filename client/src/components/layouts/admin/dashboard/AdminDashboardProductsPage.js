@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Redirect from 'react-router-dom':
+import { Redirect } from 'react-router-dom';
 
 import AlgoliaSearch from 'components/search/AlgoliaSearch';
 
@@ -10,7 +10,7 @@ import NButton from 'components/UI/NButton';
 
 import AdminDashboardNavWrapper from 'components/layouts/admin/dashboard/AdminDashboardNavWrapper';
 
-
+/*eslint-disable*/
 export default function AdminDashboardProductsPage({ indexName, refreshAlgolia, searchClient, onClickAddProduct }) {
     const [redirectTo, setRedirectTo] = useState(null);
 

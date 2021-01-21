@@ -117,6 +117,7 @@ export const onSignUpFirebase = (data, type) => async (dispatch) => {
   const transformedData = transformData(data, type);
   try {
     if (type === 'default') {
+      await store.persistor.purge();
       const firebaseResponse = await auth().createUserWithEmailAndPassword(
         data.email,
         data.password,
