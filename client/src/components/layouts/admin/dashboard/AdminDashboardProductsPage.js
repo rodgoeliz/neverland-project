@@ -15,12 +15,12 @@ export default function AdminDashboardProductsPage({ indexName, refreshAlgolia, 
     const [redirectTo, setRedirectTo] = useState(null);
 
     //const refreshAlgolia = (this.props.location && this.props.location.state) ? this.props.location.state.refresh : false;
-    const filterQuery = `vendorId:${this.props.auth._id}`;
+    const filterQuery = ``;
     if (redirectTo) {
       return <Redirect to={redirectTo} />;
     }
     return (
-        <SellerDashboardNavWrapper>
+        <AdminDashboardNavWrapper>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
             <h2>My Products</h2>
             <NButton size='x-small' title='Add a new product' theme="secondary" onClick={onClickAddProduct} />
@@ -33,7 +33,7 @@ export default function AdminDashboardProductsPage({ indexName, refreshAlgolia, 
                 searchClient={searchClient}
                 label="Products"
             />
-        </SellerDashboardNavWrapper>
+        </AdminDashboardNavWrapper>
     );
 }
 

@@ -48,6 +48,7 @@ import SellerDashboardShopPage from "components/layouts/seller/dashboard/SellerD
 import SellerLogoutPage from "components/layouts/seller/auth/SellerLogoutPage";
 
 import AdminDashboardProductsPage from "components/layouts/admin/dashboard/AdminDashboardProductsPage";
+import AdminDashboardOrdersPage from "components/layouts/admin/dashboard/AdminDashboardOrdersPage";
 
 import BrandStyles from "components/BrandStyles";
 
@@ -96,7 +97,8 @@ class App extends Component {
                   <Route exact path="/adminTwo" component={NeverlandOurStory} />
                   <AdminRoute exact path="/admin/product" store={store.store} component={ProductAdminView} />
                   <AdminRoute exact path="/admin/product/:productId" store={store.store} component={AddProductAdminView} />
-                  <AdminRoute exact path="/admin/dashboard/products" component={AdminDashboardProductsPage} />
+                  <AdminRoute exact path="/admin/dashboard/products" store={store.store} component={AdminDashboardProductsPage} />
+                  <AdminRoute exact path="/admin/dashboard/orders" store={store.store} component={AdminDashboardOrdersPage} />
                   <Route exact path="/admin/product/new" component={AddProductAdminView} />
                   <Route exact path="/story" component={NeverlandOurStory} />
                   <PublicRoute exact path="/seller/onboarding/signup" authenticated={this.state.authenticated} component={SellerSignupPage} />
