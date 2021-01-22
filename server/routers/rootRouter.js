@@ -269,10 +269,6 @@ router.get('/init', async function (req, res, next) {
     let allPaymentMethods = results[4];
     let allOrders = results[5];
     let user = results[6]
-    console.log("Orders")
-    console.log(allOrders)
-    console.log("USER is profile complete: ", user.isProfileComplete)
-    console.log("Onboarding step id: ", user.onboardingStepId)
     res.json({
       success: true,
       payload: {

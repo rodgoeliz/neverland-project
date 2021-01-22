@@ -110,6 +110,7 @@ router.get('/feed/home', async function(req, res, next) {
 
 	// find user plant interest 
 	let plantInterestTags = await ProductTag.find({handle: {$in: user.plantInterests}});
+  plantInterestTags=[{_id: '5f5f1ee0a22400e29ee4fe13', title: 'Pots', handle:'pots'}, {_id: '5f5f1ee0a22400e29ee4fe06', title: 'Indoor House Plants', handle:'indoor-houseplants'}];
 	// get products for each tag
 	for (var idx in plantInterestTags) {
 		let tag = plantInterestTags[idx];

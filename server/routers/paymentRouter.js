@@ -199,6 +199,7 @@ router.post('/stripe/confirm-payment-method-and-payment', async function(req, re
   const orderId = req.body.orderId;
   try {
     const paymentIntentConfirmation = await stripe.paymentIntents.confirm(paymentIntentId, {payment_method: paymentMethodId});
+    console.log("ORDER ID: ", orderId)
     await Order.findOneAndUpdate(
       {_id: orderId}, 
       {
@@ -233,10 +234,6 @@ router.post('/stripe/create-payment-intent', async function(req, res, next) {
   let orderTotal = Math.round(orderIntent.total);
   let buyerSurcharge = Math.round(orderIntent.buyerSurcharge);
   let stripeFeeSurcharge = Math.round(orderTotal * .029);
-  console.log(orderTotal)
-  console.log("ORDER INTENT TOTAL: ", orderTotal)
-  console.log("ORDER BUYER SURCHARGE: ", buyerSurcharge)
-  console.log("STRIPE FEE: ", stripeFeeSurcharge)
   // get vendor for product
   // get their stripe account connected id
   let sellerStripeAccountId = orderIntent.vendorId.sellerProfile.stripeUID;

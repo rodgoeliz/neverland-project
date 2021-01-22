@@ -74,9 +74,9 @@ orderSchema.post('updateOne', async function() {
 
 orderSchema.post('findOneAndUpdate', async function() {
   //sync up with algolia
-  console.log("HELLO")
   const index = client.initIndex(getEnvVariable('ALGOLIA_ORDER_INDEX'));
   const docToUpdate = await this.model.findOne(this.getQuery());
+  console.log("order find one and update:", docToUpdate);
   await docToUpdate
     .populate('userId')
     .populate('orderInvoiceId')
