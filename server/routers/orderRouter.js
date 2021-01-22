@@ -13,6 +13,7 @@ var OrderInvoice = require('../models/OrderInvoice');
 const Logger = require('../utils/errorLogger');
 var OrderIntent = require('../models/OrderIntent');
 var Order = require('../models/Order');
+var Product = require('../models/Product');
 var OrderProductItem = require('../models/OrderProductItem');
 const pdf = require('html-pdf');
 const fs = require('fs');
@@ -526,7 +527,8 @@ router.post('/intent/create', async function (req, res) {
 
 router.post('/create', async function (req, res) {
   // order intent
-  let orderIntentId = req.body.orderIntentId;
+  console.log("Create Order Intent: ", req.body)
+  const orderIntentId = req.body.orderIntentId;
   const orderIntent = await OrderIntent.findOne({ _id: orderIntentId })
     .populate('shippingAddressId')
     .populate({
@@ -551,8 +553,8 @@ router.post('/create', async function (req, res) {
   let now = new Date();
   // Load shipping address, payment method, user, paymentMethod
   let loadAllPromises = [];
-  const shippingAddress = orderIntent.shippingAddressId;
-  const paymentMethod = orderIntent.paymentMethod;
+  const shippingAddress = await Address.findOne({_id: req.body.shippingAddressId});
+  const paymentMethod = await PaymentMethod.findOne({_id: req.body.paymentMethodId});
   const user = orderIntent.userId;
   const store = orderIntent.storeId;
   const bundle = orderIntent.bundleId;
@@ -561,7 +563,7 @@ router.post('/create', async function (req, res) {
   const subtotal = await calculateBundleSubTotal(bundle);
   const buyerSurcharge = await getBuyerProtectionSurcharge(subtotal)
   const shippingMethod = await getFulfillmentMethod("usps", "priority");
-  const shippingCharge = shippingMethod.price;
+  const shippingCharge = 0;
   const taxSurcharge = await calculateTaxSurcharge(subtotal, shippingAddress, shippingCharge, store.address);
   const total = subtotal + buyerSurcharge + shippingCharge;
   const stripeFee = await getStripeFee(total);
@@ -571,6 +573,7 @@ router.post('/create', async function (req, res) {
     total += taxSurcharge.taxAmount;
   }
   const sellerPayout = total - buyerSurcharge - stripeFee;
+  console.log("TOTAL: ", total, orderIntent.total)
   if (total == orderIntent.total) {
     try {
       let newOrderInvoice = new OrderInvoice({
@@ -590,6 +593,7 @@ router.post('/create', async function (req, res) {
         taxableAmount: taxSurcharge.taxableAmount,
         total: total
       });
+      console.log("NEW OrDER INVOCIE: ", newOrderInvoice)
       let orderInvoice = await newOrderInvoice.save();
       const orderNumber = await generateOrderNumber();
       let newOrderObject = new Order({
@@ -621,10 +625,12 @@ router.post('/create', async function (req, res) {
           });
         });
       Promise.all(productPromises).then(async (results) => {
+        console.log("UPdated product quantities...", results)
         //updated product quantities
         const updatedOrder = await Order.findOne({ _id: newOrder._id })
           .populate('paymentMethod')
           .populate('billingAddress')
+          .populate('shippingAddressId')
           .populate('storeId')
           .populate('orderInvoiceId')
           .populate({
@@ -638,7 +644,7 @@ router.post('/create', async function (req, res) {
               }]
             }
           });
-
+          console.log("updated order...", updatedOrder)
         // stripe create a new  connect payment
         res.json({
           success: true,
@@ -650,6 +656,10 @@ router.post('/create', async function (req, res) {
       Logger.logError(error);
     }
   } else {
+    res.json({
+      success: false,
+      error: "Order total doesn't match intent total."
+    });
     Logger.logError("[HIGH PRI] Order total doesn't equal order intent total: " + orderIntent._id);
   }
 });

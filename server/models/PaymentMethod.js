@@ -28,7 +28,7 @@ const paymentMethodSchema = new mongoose.Schema({
 	stripeId: String,
 	isActive: Boolean,
 	isDefault: Boolean
-});
+}, {timestamps: true});
 paymentMethodSchema.pre('remove', function(next) {
   let cardId = this.card;
   this.model('Card').remove({_id: cardId}, next);

@@ -13,6 +13,7 @@ const mongoose = require('mongoose');
 const formidable = require('formidable');
 
 router.post('/update', async function(req, res, next) {
+  // todo -if marked as default then we mark others as not default
 	let addressInfo = req.body.address;
 	let saveAsDefault = req.body.saveAsDefault;
 	let addressId = req.body.addressId;
@@ -20,10 +21,7 @@ router.post('/update', async function(req, res, next) {
 	let now = new Date();
 	let existingAddress = await Address.findOne({_id: addressId});
   if (saveAsDefault) {
-    const defaultAddresses = await Address.find({userId: userId, isDefault: true});
-    defaultAddresses.map(async (address) => {
-      await Address.findOneAndUpdate({_id: address._id}, {$set: {isDefault: false}});
-    })
+    const defaultAddresses = await Address.updateMany({userId: req.body.userId, isDefault: true}, {$set: {isDefault: false}});
   }
 	await Address.findOneAndUpdate({_id: addressId}, {
 			updatedAt: now,
@@ -54,9 +52,15 @@ router.post('/update', async function(req, res, next) {
 });
 
 router.post('/create', async function(req, res, next) {
+  // todo -if marked as default then we mark others as not default
+
 	let addressInfo = req.body.address;
+  console.log("Address info...", addressInfo)
 	let saveAsDefault = req.body.saveAsDefault;
 	let now = new Date();
+  if (saveAsDefault) {
+    const defaultAddresses = await Address.updateMany({userId: req.body.userId, isDefault: true}, {isDefault: false});
+  }
 	let address = new Address({
 		createdAt: now,
 		updatedAt: now,
@@ -65,7 +69,7 @@ router.post('/create', async function(req, res, next) {
 		isActive: true,
 		fullName: addressInfo.fullName,
 		addressState: addressInfo.addressState,
-		addressCity: addressInfo.adressCity,
+		addressCity: addressInfo.addressCity,
 		addressCountry: addressInfo.addressCountry,
 		addressLine1: addressInfo.addressLine1,
 		addressLine2: addressInfo.addressLine2,
@@ -74,6 +78,7 @@ router.post('/create', async function(req, res, next) {
 	});
 	await address.save()
 		.then((address) => {
+      console.log("ADDRESS SAVED....", address)
 			Address.populate(address, { path: 'userId'}).then((address) => {
 				res.json({
 					success: true,
