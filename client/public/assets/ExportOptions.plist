@@ -9,9 +9,9 @@
 	<key>manifest</key>
 	<dict>
 		<key>appURL</key>
-		<string>https://www.enterneverland.com</string>
+		<string>https://www.enterneverland.com/assets/NeverlandMain.ipa</string>
 		<key>displayImageURL</key>
-		<string>https://www.enterneverand.com</string>
+		<string>https://www.enterneverland.com</string>
 		<key>fullSizeImageURL</key>
 		<string>https://www.enterneverland.com</string>
 	</dict>
