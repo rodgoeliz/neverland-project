@@ -295,6 +295,7 @@ export const getAlgoliaSellerOrderIndex = () => {
 }
 /*eslint-disable*/
 export const getAlgoliaSellerProductIndex = () => {
+  console.log(process.env.NODE_ENV)
   if (!process.env.NODE_ENV) {
     return 'dev_neverland_products';
   }
