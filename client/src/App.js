@@ -106,7 +106,7 @@ class App extends Component {
               <Layout className="App">
                 <Switch>
                   <Route exact path="/" component={NeverlandHome} />
-                  <Route exact path="/admin/download" component={NeverlandApp} />
+                  <Route exact path="/admin/app/download/latest" component={NeverlandApp} />
                   <AdminRoute exact path="/admin" store={store.store} component={AdminPage} />
                   <Route exact path="/adminTwo" component={NeverlandOurStory} />
                   <AdminRoute exact path="/admin/product" store={store.store} component={ProductAdminView} />
