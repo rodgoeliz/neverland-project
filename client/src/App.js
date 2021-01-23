@@ -23,6 +23,7 @@ import SellerDashboardShippingPage from "components/layouts/seller/dashboard/Sel
 import SellerDashboardSingleOrderPage from 'components/layouts/seller/dashboard/SellerDashboardSingleOrderPage';
 
 import NeverlandHome from 'components/layouts/NeverlandHome';
+import NeverlandApp from 'components/layouts/NeverlandApp';
 import NeverlandOurStory from 'components/layouts/NeverlandOurStory';
 import NeverlandWaitlist from "components/layouts/NeverlandWaitlist";
 import NeverlandFAQ from "components/layouts/NeverlandFAQ";
@@ -105,6 +106,7 @@ class App extends Component {
               <Layout className="App">
                 <Switch>
                   <Route exact path="/" component={NeverlandHome} />
+                  <Route exact path="/admin/download" component={NeverlandApp} />
                   <AdminRoute exact path="/admin" store={store.store} component={AdminPage} />
                   <Route exact path="/adminTwo" component={NeverlandOurStory} />
                   <AdminRoute exact path="/admin/product" store={store.store} component={ProductAdminView} />
