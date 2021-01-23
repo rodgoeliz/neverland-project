@@ -1,38 +1,24 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
-import { OrderDescription, LabelContainer, NavigationArrow, RowContainer, Price, Status } from 'components/UI/Row'
+import { ProductDescription, NavigationArrow, RowContainer, Image, ToggleVisibility, SoldAndQuantity } from 'components/UI/Row'
+import { toggleVisibility } from 'actions';
 
-export default class UserHit extends React.Component{
-  constructor(props) {
-   super(props);
-   this.onClickOrder = this.onClickOrder.bind(this);
-  }
-
-  onClickUser() {
-    console.log("CLICK ORDEAR")
-  }
-
-  render() {
-    const { hit }  = this.props;
-    const order = hit;
+export default function UserHit({hit, onClickProduct, isLoading, onRefreshAlgolia}) {
+    const product = hit;
+    const dispatch = useDispatch();
+    const handleToggleVisibility = (isVisible) => {
+      dispatch(toggleVisibility(product._id, isVisible));
+      onRefreshAlgolia();
+    }
     return (
-      <RowContainer onClick={this.onClickOrder}>
-        <LabelContainer labelText={order.createdAt}>
-        {/* <Image src={product.imageURLs[0]} /> */}
-        <OrderDescription
-          order={order._id}
-          title={order.userId ? order.userId.name : 'User name'}
-          />
-            <Price>
-              {order.orderInvoiceId.price.value} {order.orderInvoiceId.price.currency}
-            </Price>
-            </LabelContainer>
-            <Status>
-              {order.status} 
-            </Status>
-            <NavigationArrow to='/home' />
+      <RowContainer onClick={onClickProduct}>
+        <Image src={product.imageURLs && product.imageURLs[0]} />
+        <ProductDescription product={product} />
+        <SoldAndQuantity quantity={product.inventoryAvailableToSell} sold={product.inventorySold ? product.inventorySold : 0} />
+        <ToggleVisibility checked={product.isVisible} text='IS VISIBLE' toggleChecked={handleToggleVisibility} />
+        {isLoading}
+        <NavigationArrow to={`/admin/dashboard/user/${product._id}`} />
       </RowContainer>
-
-      )
-  }
+    )
 }

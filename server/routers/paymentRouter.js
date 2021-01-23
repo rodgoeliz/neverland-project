@@ -54,7 +54,6 @@ router.get('/stripe/seller/payouts', async function(req, res) {
       payload: payouts
     });
 } catch (error) {
-  console.log(error)
   Logger.logError(error);
   res.json({
     success: false,
@@ -65,7 +64,6 @@ router.get('/stripe/seller/payouts', async function(req, res) {
 
 router.get('/stripe/seller/payout/approve', async function(req, res, next) {
   let sellerLogId = req.query.sellerPayoutLogId;
-  console.log("APPROVE SELLER LOG ID: ", sellerLogId)
   try {
     const sellerPayoutLog = await SellerPayoutLog
       .findOne({_id: sellerLogId})
@@ -93,7 +91,6 @@ router.get('/stripe/seller/payout/approve', async function(req, res, next) {
       });
   } catch (error) {
     Logger.logError(error);
-    console.log(error)
     res.json({
       success: false,
       error: "Couldn't approve payout: " + sellerLogId
@@ -121,14 +118,11 @@ router.get('/stripe/seller/payout/process', async function(req, res, next) {
   let today = new Date(); // subtract 3 days
   today.setHours(0,0,0,0);
   let threeDaysAgoStartDate = new Date(); // subtract 3 days
-  console.log(threeDaysAgoStartDate)
   threeDaysAgoStartDate.setHours(0,0,0,0);
   threeDaysAgoStartDate.setDate(threeDaysAgoStartDate.getDate()-4);
   let threeDaysAgoEndDate = new Date(); // subtract 3 days
   threeDaysAgoEndDate.setHours(23,59,59,999);
   threeDaysAgoEndDate.setDate(threeDaysAgoEndDate.getDate()-4);
-  console.log("NOW: ", today)
-  console.log("FIND ORDERS DELIVERED BETWEEN: ", threeDaysAgoStartDate, threeDaysAgoEndDate)
   try {
     const pendingPayoutOrders = await Order.find({$and :
       [
@@ -148,10 +142,8 @@ router.get('/stripe/seller/payout/process', async function(req, res, next) {
         .populate({path: 'storeId', populate: {path: 'userId', populate: 'sellerProfile'}}).exec());
     });
     Promise.all(updatePayoutPromises).then(async (results) => {
-      console.log("RESULATS FOR ODERS: ", results)
       let sellerLogPromises = [];
       results.map((order) => {
-        console.log("ORDER: ", order)
         try {
         let newSellerPayoutLog = new SellerPayoutLog({
           payoutAmount: order.sellerPayout,
@@ -163,10 +155,9 @@ router.get('/stripe/seller/payout/process', async function(req, res, next) {
         });
         sellerLogPromises.push(newSellerPayoutLog.save());
       } catch (error) {
-        console.log(error)
+        Logger.logError(error);
       }
       });
-      console.log("SELELR LOG PROMISES: ", sellerLogPromises.length)
       Promise.all(sellerLogPromises).then(async (results) => {
         res.json({
           success: true,
@@ -175,7 +166,6 @@ router.get('/stripe/seller/payout/process', async function(req, res, next) {
       });
     });
   } catch(error) {
-    console.log("ERROR: ", error)
     Logger.logError(error);
     res.json({
       success: false,
@@ -208,7 +198,6 @@ router.post('/stripe/confirm-payment-method-and-payment', async function(req, re
           stripeAmount: paymentIntentConfirmation.amount
         }
     });
-    console.log("PAYMENT INTENT", paymentIntentConfirmation)
     res.json({
       success: true,
       payload: paymentIntentConfirmation
@@ -233,10 +222,6 @@ router.post('/stripe/create-payment-intent', async function(req, res, next) {
   let orderTotal = Math.round(orderIntent.total);
   let buyerSurcharge = Math.round(orderIntent.buyerSurcharge);
   let stripeFeeSurcharge = Math.round(orderTotal * .029);
-  console.log(orderTotal)
-  console.log("ORDER INTENT TOTAL: ", orderTotal)
-  console.log("ORDER BUYER SURCHARGE: ", buyerSurcharge)
-  console.log("STRIPE FEE: ", stripeFeeSurcharge)
   // get vendor for product
   // get their stripe account connected id
   let sellerStripeAccountId = orderIntent.vendorId.sellerProfile.stripeUID;
@@ -303,7 +288,6 @@ router.get('/get/default', async function(req, res, next) {
 });
 
 router.post('/method/update', async function(req, res, next) {
-  console.log(req.body)
 	let paymentMethodId = req.body.paymentMethodId;
 	let updates = req.body.cardUpdates;
 	let billingAddressUpdates = req.body.billingAddressUpdates;
@@ -320,7 +304,6 @@ router.post('/method/update', async function(req, res, next) {
 		Promise.all(updatePromises).then(async (results) => {
 			await PaymentMethod.findOne({_id: paymentMethodId}).populate('card').populate('billingAddress')
 			.then((paymentMethod) => {
-        console.log("UPDATED PAYMENT METHOD", paymentMethod)
 				res.json({
 					success: true,
 					payload: paymentMethod
@@ -349,7 +332,6 @@ router.post('/method/delete', async function(req, res, next) {
   let paymentMethodId = req.body.paymentMethodId;
   try {
     await PaymentMethod.remove({_id: paymentMethodId});
-    console.log(paymentMethodId)
     res.json({
       success: true,
       payload: paymentMethodId
@@ -391,7 +373,6 @@ router.post('/method/create', async function(req, res, next) {
     {customer: user.stripeCustomerID}
   );
 
-  console.log("Create payment method", paymentMethod, process.env.STRIPE_SECRET_KEY)
 	if (existingAddress == null) {
 		existingAddress = new Address({
 			createdAt: now,
@@ -404,6 +385,7 @@ router.post('/method/create', async function(req, res, next) {
 			addressLine1: billingAddress.addressLine1,
 			addressLine2: billingAddress.addressLine2,
 			addressZip: billingAddress.addressZip,
+      name: paymentMethod.name
 		});
 
 	}

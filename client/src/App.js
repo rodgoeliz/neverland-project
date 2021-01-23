@@ -10,7 +10,12 @@ import { ThemeProvider } from 'styled-components';
 import './App.scss';
 
 
+import AdminDashboardUsersPage from "components/layouts/admin/dashboard/AdminDashboardUsersPage";
+
+import AdminDashboardStoresPage from "components/layouts/admin/dashboard/AdminDashboardStoresPage";
+
 import { SellerDashboardPaymentsPageContainer, SellerDashboardAddOrEditProductPageContainer} from "containers/seller/dashboard/";
+
 
 import SellerDashboardProductsPageContainer from 'containers/seller/dashboard/SellerDashboardProductsPageContainer';
 import SellerDashboardOrdersPageContainer from 'containers/seller/dashboard/SellerDashboardOrdersPageContainer';
@@ -47,7 +52,12 @@ import SellerDashboardMainPage from "components/layouts/seller/dashboard/SellerD
 import SellerDashboardShopPage from "components/layouts/seller/dashboard/SellerDashboardShopPage";
 import SellerLogoutPage from "components/layouts/seller/auth/SellerLogoutPage";
 
+import AdminDashboardLoginPage from "components/layouts/admin/dashboard/AdminDashboardLoginPage";
+
+
+
 import AdminDashboardProductsPage from "components/layouts/admin/dashboard/AdminDashboardProductsPage";
+
 import AdminDashboardOrdersPage from "components/layouts/admin/dashboard/AdminDashboardOrdersPage";
 
 import BrandStyles from "components/BrandStyles";
@@ -70,6 +80,7 @@ class App extends Component {
   componentDidMount() {
     auth().onAuthStateChanged((user) => {
       if (user) {
+        console.log("SET STATE>...", user)
         this.setState({
           authenticated: true,
           loading: false
@@ -84,6 +95,7 @@ class App extends Component {
   }
 
   render() {
+    console.log("Re render app....")
     AOS.init();
     return (
       <Provider store={store.store}>
@@ -97,8 +109,11 @@ class App extends Component {
                   <Route exact path="/adminTwo" component={NeverlandOurStory} />
                   <AdminRoute exact path="/admin/product" store={store.store} component={ProductAdminView} />
                   <AdminRoute exact path="/admin/product/:productId" store={store.store} component={AddProductAdminView} />
-                  <AdminRoute exact path="/admin/dashboard/products" store={store.store} component={AdminDashboardProductsPage} />
-                  <AdminRoute exact path="/admin/dashboard/orders" store={store.store} component={AdminDashboardOrdersPage} />
+                  <AdminRoute exact path="/admin/dashboard/products" loading={this.state.loading} authenticated={this.state.authenticated} store={store.store} component={AdminDashboardProductsPage} />
+                  <AdminRoute exact path="/admin/dashboard/orders" loading={this.state.loading} authenticated={this.state.authenticated}store={store.store} component={AdminDashboardOrdersPage} />
+                  <AdminRoute exact path="/admin/dashboard/stores" loading={this.state.loading} authenticated={this.state.authenticated}store={store.store} component={AdminDashboardStoresPage} />
+                  <AdminRoute exact path="/admin/dashboard/users" loading={this.state.loading} authenticated={this.state.authenticated}store={store.store} component={AdminDashboardUsersPage} />
+                  <AdminRoute exact path="/admin/dashboard/login" authenticated={this.state.authenticated}store={store.store} component={AdminDashboardLoginPage} />
                   <Route exact path="/admin/product/new" component={AddProductAdminView} />
                   <Route exact path="/story" component={NeverlandOurStory} />
                   <PublicRoute exact path="/seller/onboarding/signup" authenticated={this.state.authenticated} component={SellerSignupPage} />
