@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Redirect } from 'react-router-dom';
 
@@ -10,15 +10,23 @@ import NButton from 'components/UI/NButton';
 
 import AdminDashboardNavWrapper from 'components/layouts/admin/dashboard/AdminDashboardNavWrapper';
 
+import { getAlgoliaSearchClient, getAlgoliaSellerProductIndex } from 'actions';
+
 /*eslint-disable*/
-export default function AdminDashboardProductsPage({ indexName, refreshAlgolia, searchClient, onClickAddProduct }) {
+export default function AdminDashboardProductsPage({ }) {
     const [redirectTo, setRedirectTo] = useState(null);
 
     //const refreshAlgolia = (this.props.location && this.props.location.state) ? this.props.location.state.refresh : false;
     const filterQuery = ``;
+
+    const onClickAddProduct = () => {
+     setRedirectTo('/admin/dashboard/products/add');
+    }
+
     if (redirectTo) {
       return <Redirect to={redirectTo} />;
     }
+
     return (
         <AdminDashboardNavWrapper>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -27,10 +35,10 @@ export default function AdminDashboardProductsPage({ indexName, refreshAlgolia, 
           </div>
             <AlgoliaSearch
                 filterAttributes={["tagIds.title"]}
-                refreshAlgolia={refreshAlgolia}
+                refreshAlgolia={true}
                 hitComponent={ProductHit}
-                indexName={indexName}
-                searchClient={searchClient}
+                indexName={getAlgoliaSellerProductIndex()}
+                searchClient={getAlgoliaSearchClient()}
                 label="Products"
             />
         </AdminDashboardNavWrapper>

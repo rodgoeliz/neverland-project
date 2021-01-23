@@ -1,14 +1,17 @@
 import React from "react";
+import { connect } from "react-redux";
+
 import { Redirect, Route } from "react-router-dom";
 
 import SellerLoadingPage from "components/layouts/seller/onboarding/SellerLoadingPage";
 
-export default function AdminRoute({ component: Component, authenticated, store, loading, ...rest }) {
+function AdminRoute({ component: Component, authenticated, store, loading, ...rest }) {
   if (loading) {
     return (<SellerLoadingPage />);
   }
   let isAdmin = false;
   const state = store.getState();
+  console.log("ADMINROUTE....", authenticated, state.auth)
   if (state) {
     isAdmin = state.auth ? state.auth.isAdmin : false;
   }
@@ -26,4 +29,9 @@ export default function AdminRoute({ component: Component, authenticated, store,
     />
   )
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+export default connect(mapStateToProps, null, null, {pure: false})(AdminRoute);
 

@@ -51,24 +51,25 @@ export default function AdminDashboardNavWrapper({ children }) {
         </div>
         <br />
         <br />
-        <Link style={styles.navItem} to="/admin/dashboard/shipping">
-          Shipping & Packaging
-        </Link>
         <Link style={styles.navItem} to="/admin/dashboard/orders">
           {' '}
-          My Orders{' '}
+          Orders{' '}
         </Link>
         <Link style={styles.navItem} to="/admin/dashboard/products">
           {' '}
-          My Products{' '}
+          Products{' '}
         </Link>
-        <Link style={styles.navItem} to="/admin/dashboard/shop">
+        <Link style={styles.navItem} to="/admin/dashboard/stores">
           {' '}
-          My Shop{' '}
+          Stores{' '}
         </Link>
-        <Link style={styles.navItem} to="/admin/dashboard/payments">
+        <Link style={styles.navItem} to="/admin/dashboard/users">
           {' '}
-          My Payments & Payouts{' '}
+          Users{' '}
+        </Link>
+        <Link style={styles.navItem} to="/admin/dashboard/sellers">
+          {' '}
+          Sellers{' '}
         </Link>
         <Link style={styles.navItem} to="/seller/logout">
           {' '}

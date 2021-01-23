@@ -7,6 +7,7 @@ import AlgoliaSearch from 'components/search/AlgoliaSearch';
 import OrderHit from 'components/search/components/OrderHit';
 
 import AdminDashboardNavWrapper from 'components/layouts/admin/dashboard/AdminDashboardNavWrapper';
+import { getAlgoliaSearchClient, getAlgoliaSellerOrderIndex } from 'actions';
 
 /*eslint-disable*/
 export default function AdminDashboardOrdersPage({ indexName, filterQuery, searchClient }) {
@@ -15,10 +16,10 @@ export default function AdminDashboardOrdersPage({ indexName, filterQuery, searc
           <AlgoliaSearch 
             filterAttribute={["status"]}
             hitComponent={OrderHit} 
-            indexName={indexName} 
+            indexName={getAlgoliaSellerOrderIndex()} 
             filterQuery={filterQuery} 
             ResultsComponent={OrderResults}
-            searchClient={searchClient} />
+            searchClient={getAlgoliaSearchClient()} />
       </AdminDashboardNavWrapper>
   );
 }

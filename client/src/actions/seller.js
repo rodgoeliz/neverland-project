@@ -284,6 +284,27 @@ export const getAlgoliaSearchClient = () => {
   return searchClient;
 }
 
+export const getAlgoliaSellerStoreIndex = () => {
+  if (!process.env.NODE_ENV) {
+    return 'neverland_store_test';
+  }
+  if (process.env.NODE_ENV === 'development') {
+    return 'neverland_store_test';
+  }
+  return 'neverland_store_prod';
+}
+
+export const getAlgoliaUserIndex = () => {
+  if (!process.env.NODE_ENV) {
+    return 'neverland_user_test';
+  }
+  if (process.env.NODE_ENV === 'development') {
+    return 'neverland_user_test';
+  }
+  return 'neverland_user_prod';
+
+}
+
 export const getAlgoliaSellerOrderIndex = () => {
   if (!process.env.NODE_ENV) {
     return 'neverland_order_test';
@@ -295,7 +316,6 @@ export const getAlgoliaSellerOrderIndex = () => {
 }
 /*eslint-disable*/
 export const getAlgoliaSellerProductIndex = () => {
-  console.log(process.env.NODE_ENV)
   if (!process.env.NODE_ENV) {
     return 'dev_neverland_products';
   }

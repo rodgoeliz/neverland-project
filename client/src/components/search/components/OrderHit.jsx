@@ -7,7 +7,7 @@ export default function OrderHit({hit, onClickOrder}) {
     const order = hit;
     let image = null;
     if (order.bundleId?.productOrderItemIds && order.bundleId?.productOrderItemIds.length > 0) {
-      const imageUrls = order.bundleId.productOrderItemIds[0].productId.imageURLs;
+      const imageUrls = order.bundleId?.productOrderItemIds[0]?.productId?.imageURLs;
       if (imageUrls && imageUrls.length > 0) {
         image = <Image src={imageUrls[0]} />;
       }
